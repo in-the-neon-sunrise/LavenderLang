@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">LavenderLang</string>
+    <string name="new_language">Новый язык</string>
+    <string name="stupid_text">Сочувствуем.</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="p">P</string>
+    <string name="i">I</string>
+    <string name="dictionary">Dictionary</string>
+    <string name="writing">Writing</string>
+    <string name="punctuation">Punctuation</string>
+    <string name="grammar">Grammar</string>
+    <string name="word_formation">Word formation</string>
+    <string name="russian_alphabet">а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я</string>
+</resources>

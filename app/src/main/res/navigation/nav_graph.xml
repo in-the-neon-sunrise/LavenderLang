@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainActivity">
+
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.lavenderlang.MainActivity"
+        android:label="start_activity"
+        tools:layout="@layout/start_activity" />
+    <activity
+        android:id="@+id/languageActivity"
+        android:name="com.lavenderlang.LanguageActivity"
+        android:label="language_activity"
+        tools:layout="@layout/language_activity" />
+    <action
+        android:id="@+id/action_global_languageActivity2"
+        app:destination="@id/languageActivity" />
+    <activity
+        android:id="@+id/informationActivity"
+        android:name="com.lavenderlang.InformationActivity"
+        android:label="information_activity"
+        tools:layout="@layout/information_activity" />
+    <action
+        android:id="@+id/action_global_informationActivity"
+        app:destination="@id/informationActivity" />
+</navigation>
