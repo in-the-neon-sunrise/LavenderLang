@@ -26,7 +26,6 @@ data class ResultAttrs(
     var immutableAttrs : ArrayList<Int> = arrayListOf()
 )
 
-
 val serializer : Serializer = Serializer()
 var languages : MutableMap<Int, LanguageEntity> = serializer.readAllLanguages()
 var nextLanguageId : Int = serializer.getMaxLanguageId()
@@ -37,6 +36,8 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
 
+        languages[0] = LanguageEntity(0, "AAA")
+        ++nextLanguageId
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
         }

@@ -1,4 +1,4 @@
-package com.lavenderlang.backend
+package com.lavenderlang.backend.service
 
 import kotlin.collections.ArrayList
 
@@ -12,5 +12,3 @@ val rusMood : ArrayList<String> = arrayListOf("изъявительное", "п�
 val rusType : ArrayList<String> = arrayListOf("совершенный", "несовершенный")
 val rusVoice : ArrayList<String> = arrayListOf("действительный", "страдательный")
 val rusDegreeOfComparison : ArrayList<String> = arrayListOf("положительная", "сравнительная", "превосходная")
-val rusRank : ArrayList<String> = arrayListOf("личные", "возвратные", "притяжательные", "указательные",
-    "вопросительные", "относительные", "определительные", "неопределенные", "отрицательные")

@@ -15,7 +15,7 @@ import android.widget.ListView
 import android.widget.RadioButton
 import android.widget.Spinner
 import android.widget.TextView
-import com.lavenderlang.backend.*
+import com.lavenderlang.backend.service.*
 
 
 class GrammarActivity : Activity() {
