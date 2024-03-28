@@ -71,13 +71,13 @@ class MainActivity : Activity() {
     override fun onResume() {
         super.onResume()
         val listLanguages : ListView = findViewById(R.id.listLanguages)
-        val adapter: ArrayAdapter<Language> = ArrayAdapter(this, android.R.layout.simple_list_item_1, Languages.languages)
+        val adapter: ArrayAdapter<LanguageEntity> = ArrayAdapter(this, android.R.layout.simple_list_item_1, languages.values.toList())
         listLanguages.adapter = adapter
         adapter.notifyDataSetChanged()
         listLanguages.onItemClickListener =
             AdapterView.OnItemClickListener { parent, itemClicked, position, id ->
                 val intent = Intent(this@MainActivity, LanguageActivity::class.java)
-                intent.putExtra("lang", position)
+                intent.putExtra("lang", languages[position]?.languageId)
                 startActivity(intent)
             }
     }

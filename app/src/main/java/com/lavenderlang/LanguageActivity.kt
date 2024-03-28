@@ -8,11 +8,14 @@ import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
+import com.lavenderlang.backend.dao.language.LanguageDao
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 
 
 class LanguageActivity: Activity() {
     companion object{
         var id_lang: Int = 0
+        val languageDao: LanguageDaoImpl = LanguageDaoImpl()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,15 +73,15 @@ class LanguageActivity: Activity() {
         val editDescription: EditText = findViewById(R.id.editDescription)
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
-                Languages.languages.add(Language("-"))
-                id_lang=Languages.languages.size-1;
+                languageDao.createLanguage("-", "")
+                id_lang= nextLanguageId;
             }
             else -> {
                 id_lang=lang
-                editLanguageName.setText(Languages.languages[id_lang].name)
+                editLanguageName.setText(languages[id_lang]?.name)
             }
         }
-        if(Languages.languages[id_lang].description != "") editDescription.setText(Languages.languages[id_lang].description)
+        if(languages[id_lang]?.description != "") editDescription.setText(languages[id_lang]?.description)
 
         //check changing
         editLanguageName.addTextChangedListener(object : TextWatcher {
@@ -87,7 +90,7 @@ class LanguageActivity: Activity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                Languages.languages[id_lang].name=editLanguageName.text.toString()
+                languageDao.changeName(languages[id_lang]!!, editLanguageName.text.toString())
             }
         })
         editDescription.addTextChangedListener(object : TextWatcher {
@@ -96,7 +99,7 @@ class LanguageActivity: Activity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                Languages.languages[id_lang].description=editDescription.text.toString()
+                languageDao.changeDescription(languages[id_lang]!!, editDescription.text.toString())
             }
         })
     }
