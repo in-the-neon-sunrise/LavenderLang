@@ -12,6 +12,10 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
+import com.chaquo.python.PyException
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 
 
 class MainActivity : Activity() {
@@ -19,6 +23,19 @@ class MainActivity : Activity() {
         //activity creation
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
+
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this))
+        }
+        val py = Python.getInstance()
+        val module = py.getModule("pm2")
+        try {
+            val res = module.callAttr("test").toString()
+            Toast.makeText(this, res, Toast.LENGTH_LONG).show()
+        }
+        catch (e: PyException) {
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+        }
 
         //button new lang listener
         val buttonNewLang: Button = findViewById(R.id.buttonNewLang)

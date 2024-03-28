@@ -5,7 +5,7 @@ import kotlin.collections.ArrayList
 val rusGender : ArrayList<String> = arrayListOf("мужской", "женский", "средний")
 val rusNumber : ArrayList<String> = arrayListOf("единственное", "множественное")
 var rusCase : ArrayList<String> = arrayListOf("именительный", "родительный", "дательный", "винительный",
-    "творительный", "предложеный")
+    "творительный", "предложный")
 val rusTime : ArrayList<String> = arrayListOf("настоящее", "прошедшее", "будущее")
 val rusPerson : ArrayList<String> = arrayListOf("первое", "второе", "третье")
 val rusMood : ArrayList<String> = arrayListOf("изъявительное", "повелительное", "условное")
