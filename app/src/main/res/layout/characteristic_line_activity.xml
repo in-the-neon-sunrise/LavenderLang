@@ -27,8 +27,8 @@
         app:layout_constraintStart_toEndOf="@+id/editTextNameAttribute"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <CheckBox
-        android:id="@+id/checkBoxInf"
+    <RadioButton
+        android:id="@+id/radioButtonInf"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
