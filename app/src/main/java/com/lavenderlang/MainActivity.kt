@@ -16,7 +16,20 @@ import android.widget.Toast
 import com.chaquo.python.PyException
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.backend.service.Serializer
 
+data class ResultAttrs(
+    var partOfSpeech : String = "",
+    var mutableAttrs : ArrayList<Int> = arrayListOf(),
+    var immutableAttrs : ArrayList<Int> = arrayListOf()
+)
+
+
+val serializer : Serializer = Serializer()
+var languages : MutableMap<Int, LanguageEntity> = serializer.readAllLanguages()
+var nextLanguageId : Int = serializer.getMaxLanguageId()
 
 class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,9 +41,11 @@ class MainActivity : Activity() {
             Python.start(AndroidPlatform(this))
         }
         val py = Python.getInstance()
-        val module = py.getModule("pm2")
+        val module = py.getModule("pm3")
         try {
-            val res = module.callAttr("test").toString()
+            val res = module.callAttr("getWrappedAttrs", "кошечки").toString()
+            val m = ObjectMapper()
+            m.readValue(res, ResultAttrs::class.java)
             Toast.makeText(this, res, Toast.LENGTH_LONG).show()
         }
         catch (e: PyException) {
