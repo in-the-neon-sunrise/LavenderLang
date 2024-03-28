@@ -19,9 +19,11 @@ class LanguageDaoImpl(private val serializer : Serializer = Serializer(),
 ) : LanguageDao {
     override fun changeName(language : LanguageEntity, newName : String) {
         language.name = newName
+        serializer.saveAllLanguages()
     }
     override fun changeDescription(language : LanguageEntity, newDescription: String) {
         language.description = newDescription
+        serializer.saveAllLanguages()
     }
 
     override fun changeLetters(language: LanguageEntity, newLetters: String) {
@@ -38,6 +40,7 @@ class LanguageDaoImpl(private val serializer : Serializer = Serializer(),
     }
     override fun createLanguage(name: String, description: String): LanguageEntity {
         languages[nextLanguageId] = LanguageEntity(nextLanguageId, name, description)
+        serializer.saveAllLanguages()
         return languages[nextLanguageId++]!!
     }
 }
