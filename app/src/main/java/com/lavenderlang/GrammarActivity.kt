@@ -103,8 +103,14 @@ class GrammarActivity : Activity() {
         adapterDegreeOfComparison.notifyDataSetChanged()
 
 
-        //button
-
+        //button new grammar rule listener
+        val buttonNewRule: Button = findViewById(R.id.buttonNewGrammarRule)
+        buttonNewRule.setOnClickListener {
+            val intent = Intent(this@GrammarActivity, GrammarRuleActivity::class.java)
+            intent.putExtra("lang", -1)
+            intent.putExtra("grammarRule", -1)
+            startActivity(intent)
+        }
 
         //list of rules
         //вот здесь нужно стринги поменять на нормальные правила
