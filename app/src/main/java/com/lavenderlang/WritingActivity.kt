@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
+import com.lavenderlang.LanguageActivity.Companion.languageDao
 
 class WritingActivity : Activity() {
     companion object{
@@ -45,7 +46,7 @@ class WritingActivity : Activity() {
 
         //letters
         val editTextLetters: EditText = findViewById(R.id.editLetters)
-        editTextLetters.setText(Languages.languages[id_lang].stringLetters())
+        editTextLetters.setText(languages[id_lang]?.letters)
 
         //check changing
         editTextLetters.addTextChangedListener(object : TextWatcher {
@@ -54,13 +55,13 @@ class WritingActivity : Activity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                Languages.languages[LanguageActivity.id_lang].setLetters(editTextLetters.text.toString())
+                languageDao.changeLetters(languages[LanguageActivity.id_lang]!!, (editTextLetters.text.toString()))
             }
         })
 
         //symbols
         val editTextSymbols: EditText = findViewById(R.id.editSymbols)
-        editTextLetters.setText("hello")
+        editTextLetters.setText(languages[id_lang]?.puncSymbols)
 
         //check changing
         editTextSymbols.addTextChangedListener(object : TextWatcher {
@@ -69,7 +70,7 @@ class WritingActivity : Activity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                //Languages.languages[LanguageActivity.id_lang].setLetters(editTextLetters.text.toString())
+                languageDao.changePunctuationSymbols(languages[LanguageActivity.id_lang]!!, (editTextSymbols.text.toString()))
             }
         })
     }

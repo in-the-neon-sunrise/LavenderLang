@@ -6,28 +6,31 @@ import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.languages
 import java.io.File
 
-class Serializer {
+class Serializer(path: String = "") {
+    private var dir : String = ""
     init {
-        val folder = File("src\\main\\data")
-        if (!folder.exists()) {
-            try {
-                folder.mkdirs()
-            } catch (_: Exception) {
-            }
-        }
+        dir = "$path\\data"
+        val folder = File(dir)
+        if (!folder.exists()) folder.mkdirs()
     }
 
     companion object {
         val mapper = ObjectMapper()
     }
 
+    fun createDir() : String {
+        val folder = File("$dir\\data")
+        if (!folder.exists()) return folder.mkdirs().toString()
+        return "already there"
+    }
+
     fun updateMaxLanguageId(newId : Int = getMaxLanguageId() + 1) {
-        val jsonFile = File("src\\main\\data\\maxLanguageId.json")
+        val jsonFile = File("$dir\\maxLanguageId.json")
         mapper.writeValue(jsonFile, newId)
     }
 
     fun getMaxLanguageId(): Int {
-        val jsonFile = File("src\\main\\data\\maxLanguageId.json")
+        val jsonFile = File("$dir\\maxLanguageId.json")
         if (!jsonFile.exists()) {
             return 0
         }
@@ -36,7 +39,7 @@ class Serializer {
     }
 
     fun saveLanguage(languageId : Int) {
-        val jsonFile = File("src\\main\\data\\language$languageId.json")
+        val jsonFile = File("$dir\\language$languageId.json")
         try {
             mapper.writeValue(jsonFile, languages[languageId])
         }
@@ -50,7 +53,7 @@ class Serializer {
     }
 
     fun readLanguage(languageId: Int) : LanguageEntity {
-        val jsonFile = File("src\\main\\data\\language$languageId.json")
+        val jsonFile = File("$dir\\language$languageId.json")
         try {
             return mapper.readValue(jsonFile, LanguageEntity::class.java)
         }

@@ -73,11 +73,11 @@ class LanguageActivity: Activity() {
         val editDescription: EditText = findViewById(R.id.editDescription)
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
+                id_lang = nextLanguageId
                 languageDao.createLanguage("-", "")
-                id_lang= nextLanguageId;
             }
             else -> {
-                id_lang=lang
+                id_lang = lang
                 editLanguageName.setText(languages[id_lang]?.name)
             }
         }

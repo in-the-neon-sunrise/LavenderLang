@@ -19,6 +19,7 @@ import com.chaquo.python.android.AndroidPlatform
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.Serializer
+import java.io.File
 
 data class ResultAttrs(
     var partOfSpeech : String = "",
@@ -26,10 +27,9 @@ data class ResultAttrs(
     var immutableAttrs : ArrayList<Int> = arrayListOf()
 )
 
-
-val serializer : Serializer = Serializer()
-var languages : MutableMap<Int, LanguageEntity> = serializer.readAllLanguages()
-var nextLanguageId : Int = serializer.getMaxLanguageId()
+var serializer : Serializer = Serializer()
+var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
+var nextLanguageId : Int = 0
 
 class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,34 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
 
-        if (!Python.isStarted()) {
+        var dir = getExternalFilesDirs(null)[0].absolutePath + "\\data"
+        serializer = Serializer(getExternalFilesDirs(null)[0].absolutePath)
+        languages = serializer.readAllLanguages()
+        nextLanguageId = serializer.getMaxLanguageId()
+        Toast.makeText(this, serializer.createDir(), Toast.LENGTH_LONG).show()
+        var f = File("${getExternalFilesDirs(null)[0].absolutePath}\\data\\a.txt")
+        //f.writeText("aaa")
+        Toast.makeText(this, f.readText(), Toast.LENGTH_LONG).show()
+        f = File("$dir\\language0.json")
+        val jsonFile = File("$dir\\language0.json")
+        try {
+            Serializer.mapper.writeValue(jsonFile, languages[0])
+        }
+        catch (e : Exception) {
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+        }
+        /*languages[0] = LanguageEntity(0, "AAA")
+        ++nextLanguageId
+        serializer.saveAllLanguages()
+        val folder = File(getExternalFilesDirs(null)[0].absolutePath+"\\data")
+        if (folder.exists()) Toast.makeText(this, folder.absolutePath, Toast.LENGTH_LONG).show()
+        if (!folder.exists()) {
+            Toast.makeText(this, "well", Toast.LENGTH_LONG).show()
+            if (!folder.mkdirs()) Toast.makeText(this, "no way", Toast.LENGTH_LONG).show()
+        }
+        Toast.makeText(this, languages.toString(), Toast.LENGTH_LONG).show()*/
+
+        /*if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
         }
         val py = Python.getInstance()
@@ -50,7 +77,7 @@ class MainActivity : Activity() {
         }
         catch (e: PyException) {
             Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-        }
+        }*/
 
         //button new lang listener
         val buttonNewLang: Button = findViewById(R.id.buttonNewLang)
