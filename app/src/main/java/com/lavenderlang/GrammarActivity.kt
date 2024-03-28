@@ -15,6 +15,8 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
+import com.lavenderlang.GrammarActivity.Companion.id_lang
 import com.lavenderlang.backend.*
 
 
@@ -84,15 +86,15 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<A
         if(attribute.rusId<0) spinnerRus.setSelection(0)
         else spinnerRus.setSelection(attribute.rusId)
 
-        /*spinnerRus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>,
-                                        view: View, position: Int, id: Long) {
-                attribute.rusId=position
+        spinnerRus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
+                Languages.attributesGender[position].rusId=positionSpinner;
             }
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                attribute.rusId=0
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                Languages.attributesGender[position].rusId=-1;
             }
-        }*/
+        }
 
         //checkbox is working
         val checkBoxInf: CheckBox = newView.findViewById(R.id.checkBoxInf)
