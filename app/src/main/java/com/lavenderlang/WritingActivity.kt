@@ -55,13 +55,13 @@ class WritingActivity : Activity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changeLetters(languages[LanguageActivity.id_lang]!!, (editTextLetters.text.toString()))
+                languageDao.changeLetters(languages[id_lang]!!, (editTextLetters.text.toString()))
             }
         })
 
         //symbols
         val editTextSymbols: EditText = findViewById(R.id.editSymbols)
-        editTextLetters.setText(languages[id_lang]?.puncSymbols)
+        editTextSymbols.setText(languages[id_lang]?.puncSymbols)
 
         //check changing
         editTextSymbols.addTextChangedListener(object : TextWatcher {
@@ -70,7 +70,7 @@ class WritingActivity : Activity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changePunctuationSymbols(languages[LanguageActivity.id_lang]!!, (editTextSymbols.text.toString()))
+                languageDao.changePunctuationSymbols(languages[id_lang]!!, (editTextSymbols.text.toString()))
             }
         })
     }

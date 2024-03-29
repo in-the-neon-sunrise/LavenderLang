@@ -3,8 +3,12 @@ package com.lavenderlang
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 
 class GrammarRuleActivity: Activity() {
@@ -33,6 +37,16 @@ class GrammarRuleActivity: Activity() {
         super.onResume()
 
         val editMasc: EditText = findViewById(R.id.editMasc)
+
+        val spinnerGender: Spinner=findViewById(R.id.spinnerGender)
+        val spinnerNumber: Spinner=findViewById(R.id.spinnerNumber)
+
+
+
+
+
+
+
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
                 val intent = Intent(this@GrammarRuleActivity, GrammarActivity::class.java)
@@ -53,13 +67,47 @@ class GrammarRuleActivity: Activity() {
                 editMasc.setText(Languages.rules[id_rule])
             }
         }
-        /*val spinnerRus: Spinner = newView.findViewById(R.id.spinnerRusAttribute)
+        val spinnerPartOfSpeech: Spinner = findViewById(R.id.spinnerPartOfSpeech)
         val spinnerAdapter: ArrayAdapter<String>
-        when(idAttribute){
-            0->{
-                spinnerAdapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, rusGender)
+        spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf(
+            "NOUN",
+            "VERB",
+            "ADJECTIVE",
+            "ADVERB",
+            "PARTICIPLE",
+            "VERBPARTICIPLE",
+            "PRONOUN",
+            "NUMERAL",
+            "FUNCPART"))
+
+        spinnerPartOfSpeech.adapter = spinnerAdapter
+        spinnerAdapter.notifyDataSetChanged()
+        if(true/*если нет части речи (новое правило)*/) spinnerPartOfSpeech.setSelection(0)
+        else spinnerPartOfSpeech.setSelection(0/*поставить id части речи*/)
+
+        //переменная для id части речи
+        var idPart=0
+
+        spinnerPartOfSpeech.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parentSpinner: AdapterView<*>?,
+                itemSpinner: View?,
+                positionSpinner: Int,
+                idSpinner: Long
+            ) {
+                //поменять id части речиLanguages.attributesGender[positionAttribute].rusId = positionSpinner;
+                when(idPart){
+                    0->{
+                        spinnerGender.visibility=View.VISIBLE
+                        spinnerNumber.visibility=View.GONE
+                    }
+                }
             }
-        }*/
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //что-нибудь поставить
+            }
+        }
 
     }
 }
