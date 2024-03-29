@@ -107,7 +107,7 @@ class GrammarActivity : Activity() {
         val buttonNewRule: Button = findViewById(R.id.buttonNewGrammarRule)
         buttonNewRule.setOnClickListener {
             val intent = Intent(this@GrammarActivity, GrammarRuleActivity::class.java)
-            intent.putExtra("lang", -1)
+            intent.putExtra("lang", id_lang)
             intent.putExtra("grammarRule", -1)
             startActivity(intent)
         }
@@ -118,6 +118,16 @@ class GrammarActivity : Activity() {
         val adapterGrammarRules: ArrayAdapter<String> = GrammarRuleAdapter(this, Languages.rules)
         listGrammarRules.adapter = adapterGrammarRules
         adapterGrammarRules.notifyDataSetChanged()
+
+        //click listener
+        listGrammarRules.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, itemClicked, position, id ->
+                val intent = Intent(this@GrammarActivity, GrammarRuleActivity::class.java)
+                intent.putExtra("lang", id_lang)
+                intent.putExtra("grammarRule", position)
+
+                startActivity(intent)
+            }
     }
 }
 private class AttributeAdapter(context: Context, listOfAttributes: MutableList<Attribute>, idListAttribute: Int) :

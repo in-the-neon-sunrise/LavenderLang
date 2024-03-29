@@ -28,6 +28,7 @@
         <activity android:name=".PunctuationActivity" />
         <activity android:name=".WritingActivity" />
         <activity android:name=".WordFormationActivity" />
+        <activity android:name=".GrammarRuleActivity" />
     </application>
 
 </manifest>
