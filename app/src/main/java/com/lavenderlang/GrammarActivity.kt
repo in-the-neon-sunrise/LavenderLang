@@ -103,14 +103,21 @@ class GrammarActivity : Activity() {
         adapterDegreeOfComparison.notifyDataSetChanged()
 
 
-        //button
-
+        //button new grammar rule listener
+        val buttonNewRule: Button = findViewById(R.id.buttonNewGrammarRule)
+        buttonNewRule.setOnClickListener {
+            val intent = Intent(this@GrammarActivity, GrammarRuleActivity::class.java)
+            intent.putExtra("lang", -1)
+            intent.putExtra("grammarRule", -1)
+            startActivity(intent)
+        }
 
         //list of rules
+        //вот здесь нужно стринги поменять на нормальные правила
         val listGrammarRules : ListView = findViewById(R.id.listViewGrammarRules)
-        val adapterGrammarRules: ArrayAdapter<Attribute> = AttributeAdapter(this, Languages.attributesGender, 0)
-        listGender.adapter = adapterGender
-        adapterGender.notifyDataSetChanged()
+        val adapterGrammarRules: ArrayAdapter<String> = GrammarRuleAdapter(this, Languages.rules)
+        listGrammarRules.adapter = adapterGrammarRules
+        adapterGrammarRules.notifyDataSetChanged()
     }
 }
 private class AttributeAdapter(context: Context, listOfAttributes: MutableList<Attribute>, idListAttribute: Int) :
@@ -252,17 +259,19 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<A
 private class GrammarRuleAdapter(context: Context, listOfRules: MutableList<String>) :
     ArrayAdapter<String>(context, R.layout.grammar_rule_line_activity, listOfRules) {
 
-    override fun getView(positionAttribute: Int, convertView: View?, parent: ViewGroup): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var newView = convertView
-        //val attribute: Attribute? = getItem(positionAttribute)
+        val grammarRule: String? = getItem(position)
         if (newView == null) {
-            newView = LayoutInflater.from(context).inflate(R.layout.characteristic_line_activity, null)
+            newView = LayoutInflater.from(context).inflate(R.layout.grammar_rule_line_activity, null)
         }
 
-        //edittext is visible
-        val editTextName: EditText = newView!!.findViewById(R.id.editTextNameAttribute)
-        //(editTextName as TextView).text = attribute!!.name
+        //textview is visible
+        val unchangeableAttributes: TextView = newView!!.findViewById(R.id.textViewUnchangeableAttributes)
+        val changeableAttributes: TextView = newView!!.findViewById(R.id.textViewChangeableAttributes)
+        unchangeableAttributes.text = grammarRule
+        changeableAttributes.text = grammarRule
 
 
 

@@ -16,6 +16,7 @@ class Languages {
         fun add(name: String) {
             languages.add(Language(name))
         }
+        var rules = mutableListOf<String>("потанцуем gjl ptktyjq keyjq ult ndjz leif jnjqltn yf gjrjq", "под зеленой луной")
         var idGenderInf=2;
         var attributesGender=mutableListOf<Attribute>(
             Attribute("female", TypeOfAttribute.Gender, true, 1),
