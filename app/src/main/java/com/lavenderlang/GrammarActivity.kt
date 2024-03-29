@@ -15,7 +15,10 @@ import android.widget.ListView
 import android.widget.RadioButton
 import android.widget.Spinner
 import android.widget.TextView
+import com.lavenderlang.backend.entity.help.Characteristic
+import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.service.*
+import java.util.SortedSet
 
 
 class GrammarActivity : Activity() {
@@ -58,47 +61,47 @@ class GrammarActivity : Activity() {
 
         //list of genders
         val listGender : ListView = findViewById(R.id.listViewGender)
-        val adapterGender: ArrayAdapter<Attribute> = AttributeAdapter(this, Languages.attributesGender, 0)
+        val adapterGender: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsGender.values.toMutableList(), 0)
         listGender.adapter = adapterGender
         adapterGender.notifyDataSetChanged()
         //list of numbers
         val listNumber : ListView = findViewById(R.id.listViewNumber)
-        val adapterNumber: ArrayAdapter<Attribute> = AttributeAdapter(this, Languages.attributesNumber, 1)
+        val adapterNumber: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsNumber.values.toMutableList(), 1)
         listNumber.adapter = adapterNumber
         adapterNumber.notifyDataSetChanged()
         //list of cases
         val listCases : ListView = findViewById(R.id.listViewCase)
-        val adapterCases: ArrayAdapter<Attribute> = AttributeAdapter(this, Languages.attributesCase, 2)
+        val adapterCases: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsCase.values.toMutableList(), 2)
         listCases.adapter = adapterCases
         adapterCases.notifyDataSetChanged()
         //list of times
         val listTimes : ListView = findViewById(R.id.listViewTime)
-        val adapterTimes: ArrayAdapter<Attribute> = AttributeAdapter(this, Languages.attributesTime, 3)
+        val adapterTimes: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsTime.values.toMutableList(), 3)
         listTimes.adapter = adapterTimes
         adapterTimes.notifyDataSetChanged()
         //list of persons
         val listPersons : ListView = findViewById(R.id.listViewPerson)
-        val adapterPersons: ArrayAdapter<Attribute> = AttributeAdapter(this, Languages.attributesPerson, 4)
+        val adapterPersons: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsPerson.values.toMutableList(), 4)
         listPersons.adapter = adapterPersons
         adapterPersons.notifyDataSetChanged()
         //list of moods
         val listMoods : ListView = findViewById(R.id.listViewMood)
-        val adapterMoods: ArrayAdapter<Attribute> = AttributeAdapter(this, Languages.attributesMood, 5)
+        val adapterMoods: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsMood.values.toMutableList(), 5)
         listMoods.adapter = adapterMoods
         adapterMoods.notifyDataSetChanged()
         //list of types
         val listTypes : ListView = findViewById(R.id.listViewType)
-        val adapterTypes: ArrayAdapter<Attribute> = AttributeAdapter(this, Languages.attributesType, 6)
+        val adapterTypes: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsType.values.toMutableList(), 6)
         listTypes.adapter = adapterTypes
         adapterTypes.notifyDataSetChanged()
         //list of voices
         val listVoices : ListView = findViewById(R.id.listViewVoice)
-        val adapterVoices: ArrayAdapter<Attribute> = AttributeAdapter(this, Languages.attributesVoice, 7)
+        val adapterVoices: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsVoice.values.toMutableList(), 7)
         listVoices.adapter = adapterVoices
         adapterVoices.notifyDataSetChanged()
         //list of voices
         val listDegreeOfComparison : ListView = findViewById(R.id.listViewDegreeOfComparison)
-        val adapterDegreeOfComparison: ArrayAdapter<Attribute> = AttributeAdapter(this, Languages.attributesDegreeOfComparison, 8)
+        val adapterDegreeOfComparison: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList(), 8)
         listDegreeOfComparison.adapter = adapterDegreeOfComparison
         adapterDegreeOfComparison.notifyDataSetChanged()
 
@@ -115,7 +118,7 @@ class GrammarActivity : Activity() {
         //list of rules
         //вот здесь нужно стринги поменять на нормальные правила
         val listGrammarRules : ListView = findViewById(R.id.listViewGrammarRules)
-        val adapterGrammarRules: ArrayAdapter<String> = GrammarRuleAdapter(this, Languages.rules)
+        val adapterGrammarRules: ArrayAdapter<GrammarRuleEntity> = GrammarRuleAdapter(this, languages[id_lang]!!.grammar.grammarRules.toMutableList())
         listGrammarRules.adapter = adapterGrammarRules
         adapterGrammarRules.notifyDataSetChanged()
 
@@ -130,14 +133,14 @@ class GrammarActivity : Activity() {
             }
     }
 }
-private class AttributeAdapter(context: Context, listOfAttributes: MutableList<Attribute>, idListAttribute: Int) :
-    ArrayAdapter<Attribute>(context, R.layout.characteristic_line_activity, listOfAttributes) {
+private class AttributeAdapter(context: Context, listOfAttributes: MutableList<Characteristic>, idListAttribute: Int) :
+    ArrayAdapter<Characteristic>(context, R.layout.characteristic_line_activity, listOfAttributes) {
     var idAttribute = idListAttribute
 
     override fun getView(positionAttribute: Int, convertView: View?, parent: ViewGroup): View {
 
         var newView = convertView
-        val attribute: Attribute? = getItem(positionAttribute)
+        val attribute: Characteristic? = getItem(positionAttribute)
         if (newView == null) {
             newView = LayoutInflater.from(context).inflate(R.layout.characteristic_line_activity, null)
         }
@@ -181,38 +184,38 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<A
         }
         spinnerRus.adapter = spinnerAdapter
         spinnerAdapter.notifyDataSetChanged()
-        if(attribute.rusId<0) spinnerRus.setSelection(0)
-        else spinnerRus.setSelection(attribute.rusId)
+
+        spinnerRus.setSelection(attribute.russianId)
 
         spinnerRus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
                 when(idAttribute){
                     0->{
-                        Languages.attributesGender[positionAttribute].rusId=positionSpinner;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].russianId=positionSpinner;
                     }
                     1->{
-                        Languages.attributesNumber[positionAttribute].rusId=positionSpinner;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].russianId=positionSpinner;
                     }
                     2->{
-                        Languages.attributesCase[positionAttribute].rusId=positionSpinner;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].russianId=positionSpinner;
                     }
                     3->{
-                        Languages.attributesTime[positionAttribute].rusId=positionSpinner;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].russianId=positionSpinner;
                     }
                     4->{
-                        Languages.attributesPerson[positionAttribute].rusId=positionSpinner;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].russianId=positionSpinner;
                     }
                     5->{
-                        Languages.attributesMood[positionAttribute].rusId=positionSpinner;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].russianId=positionSpinner;
                     }
                     6->{
-                        Languages.attributesType[positionAttribute].rusId=positionSpinner;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].russianId=positionSpinner;
                     }
                     7->{
-                        Languages.attributesVoice[positionAttribute].rusId=positionSpinner;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].russianId=positionSpinner;
                     }
                     else->{
-                        Languages.attributesDegreeOfComparison[positionAttribute].rusId=positionSpinner;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].russianId=positionSpinner;
                     }
 
                 }
@@ -221,31 +224,31 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<A
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 when(idAttribute){
                     0->{
-                        Languages.attributesGender[positionAttribute].rusId=-1;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].russianId=0;
                     }
                     1->{
-                        Languages.attributesNumber[positionAttribute].rusId=-1;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].russianId=0;
                     }
                     2->{
-                        Languages.attributesCase[positionAttribute].rusId=-1;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].russianId=0;
                     }
                     3->{
-                        Languages.attributesTime[positionAttribute].rusId=-1;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].russianId=0;
                     }
                     4->{
-                        Languages.attributesPerson[positionAttribute].rusId=-1;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].russianId=0;
                     }
                     5->{
-                        Languages.attributesMood[positionAttribute].rusId=-1;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].russianId=0;
                     }
                     6->{
-                        Languages.attributesType[positionAttribute].rusId=-1;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].russianId=0;
                     }
                     7->{
-                        Languages.attributesVoice[positionAttribute].rusId=-1;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].russianId=0;
                     }
                     else->{
-                        Languages.attributesDegreeOfComparison[positionAttribute].rusId=-1;
+                        languages[GrammarActivity.id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].russianId=0;
                     }
                 }
             }
@@ -266,13 +269,13 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<A
     }
 }
 
-private class GrammarRuleAdapter(context: Context, listOfRules: MutableList<String>) :
-    ArrayAdapter<String>(context, R.layout.grammar_rule_line_activity, listOfRules) {
+private class GrammarRuleAdapter(context: Context, listOfRules: MutableList<GrammarRuleEntity>) :
+    ArrayAdapter<GrammarRuleEntity>(context, R.layout.grammar_rule_line_activity, listOfRules) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var newView = convertView
-        val grammarRule: String? = getItem(position)
+        val grammarRule: GrammarRuleEntity? = getItem(position)
         if (newView == null) {
             newView = LayoutInflater.from(context).inflate(R.layout.grammar_rule_line_activity, null)
         }
@@ -280,8 +283,8 @@ private class GrammarRuleAdapter(context: Context, listOfRules: MutableList<Stri
         //textview is visible
         val unchangeableAttributes: TextView = newView!!.findViewById(R.id.textViewUnchangeableAttributes)
         val changeableAttributes: TextView = newView!!.findViewById(R.id.textViewChangeableAttributes)
-        unchangeableAttributes.text = grammarRule
-        changeableAttributes.text = grammarRule
+        unchangeableAttributes.text = grammarRule.toString()
+        changeableAttributes.text = grammarRule.toString()
 
 
 
