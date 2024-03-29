@@ -1,7 +1,10 @@
 package com.lavenderlang.backend.service
 
+import com.chaquo.python.Python
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.lavenderlang.backend.entity.help.Attributes
+import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.languages
 import java.io.File
@@ -16,6 +19,17 @@ class Serializer(path: String = "") {
 
     companion object {
         val mapper = ObjectMapper()
+    }
+
+    fun f(): String {
+        val py = Python.getInstance()
+        val module = py.getModule("pm3")
+        val r = mutableMapOf<Attributes, Int>(Attributes.NUMBER to 1, Attributes.CASE to 3)
+        return module.callAttr(
+            "inflectAttrs", "кошечка",
+            PartOfSpeech.NOUN.toString(),
+            r.values.toString()
+        ).toString()
     }
 
     fun serialize(language: LanguageEntity) : String {

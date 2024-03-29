@@ -5,19 +5,15 @@ import com.lavenderlang.backend.entity.word.IWordEntity
 
 // всякая нормальная редактура masc, position, transformation, etc.
 interface MascDao {
-    fun addPartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech);
-    fun deletePartOfSpeech(masc : MascEntity, partOfSpeech : PartOfSpeech) : Boolean;
+    fun changePartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech);
     fun addAttribute(masc : MascEntity, attribute : Attributes, ind : Int);
     fun deleteAttribute(masc: MascEntity, attribute: Attributes, ind : Int) : Boolean;
     fun updateRegex(masc : MascEntity, newRegex : String);
     fun fits(masc : MascEntity, word : IWordEntity) : Boolean;
 }
 class MascDaoImpl : MascDao {
-    override fun addPartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech) {
-        masc.partsOfSpeech.add(partOfSpeech)
-    }
-    override fun deletePartOfSpeech(masc : MascEntity, partOfSpeech : PartOfSpeech) : Boolean {
-        return masc.partsOfSpeech.remove(partOfSpeech)
+    override fun changePartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech) {
+        masc.partsOfSpeech = partOfSpeech
     }
     override fun addAttribute(masc : MascEntity, attribute : Attributes, ind : Int) {
         if (masc.attrs.contains(attribute)) {
@@ -34,7 +30,7 @@ class MascDaoImpl : MascDao {
         masc.regex = newRegex
     }
     override fun fits(masc : MascEntity, word : IWordEntity) : Boolean {
-        if (!masc.partsOfSpeech.contains(word.partOfSpeech)) return false
+        if (masc.partsOfSpeech != word.partOfSpeech) return false
         for (attr in masc.attrs.keys) {
             var check = false;
             for (ind in masc.attrs[attr]!!) {

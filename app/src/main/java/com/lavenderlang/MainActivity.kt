@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
         /*val languageRepository = LanguageRepository()
         languageRepository.languages.observe(this
         ) { languageItemList ->
@@ -57,10 +56,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        languageRepository.loadAllLanguagesFromDB(this, this)*/
+        languageRepository.loadAllLanguagesFromDB(this, this)
+         */
 
-
-
+        /*if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this))
+        }*/
+        //Toast.makeText(this, serializer.f(), Toast.LENGTH_LONG).show()
 
         /*if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))

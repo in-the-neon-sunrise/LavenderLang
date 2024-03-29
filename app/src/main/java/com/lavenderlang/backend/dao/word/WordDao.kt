@@ -1,5 +1,7 @@
 package com.lavenderlang.backend.dao.word
 
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.rule.*
@@ -7,18 +9,54 @@ import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.languages
 
 interface WordDao {
-    fun grammarTransform(word : IWordEntity, args : MutableMap<Attributes, Int>) : IWordEntity;
-    // возвращают новый не изменяя ориг
+    fun grammarTransformByAttrs(word : IWordEntity, args : MutableMap<Attributes, Int>) : IWordEntity;
+    fun grammarTransformByRule(word : IWordEntity, rule: GrammarRuleEntity) : IWordEntity;
     fun wordFormationTransform(word : IWordEntity, args : MutableMap<Attributes, Int>) : IWordEntity;
-    fun wordFormationTransformBySpecificRule(word : IWordEntity, rule : WordFormationRuleEntity) : IWordEntity;
+    fun wordFormationTransformByRule(word : IWordEntity, rule : WordFormationRuleEntity) : IWordEntity;
     fun updateWord(word : IWordEntity, newWord : String);
     fun updateTranslation(word : IWordEntity, newTranslation : String);
     fun updateImmutableArg(word : IWordEntity, attribute: Attributes, newId : Int) : Boolean;
 }
 
 class WordDaoImpl : WordDao {
-    override fun grammarTransform(word: IWordEntity, args: MutableMap<Attributes, Int>): IWordEntity {
-        val transformedWord : IWordEntity = when (word) {
+    override fun grammarTransformByRule(word: IWordEntity, rule: GrammarRuleEntity): IWordEntity {
+        val transformedWord: IWordEntity = when (word) {
+            is NounEntity -> word.copy()
+            is VerbEntity -> word.copy()
+            is AdjectiveEntity -> word.copy()
+            is AdverbEntity -> word.copy()
+            is ParticipleEntity -> word.copy()
+            is VerbParticipleEntity -> word.copy()
+            is PronounEntity -> word.copy()
+            is NumeralEntity -> word.copy()
+            is FuncPartEntity -> word.copy()
+            else -> throw Error() // какую-нибудь красивую
+        }
+        val newWord = rule.transformation.addToBeginning + word.word.slice(
+            IntRange(
+                rule.transformation.delFromBeginning,
+                word.word.length - rule.transformation.delFromEnd - 1
+            )
+        ) +
+                rule.transformation.addToEnd
+        transformedWord.word = newWord
+        for (attr in rule.mutableAttrs.keys) {
+            transformedWord.mutableAttrs[attr] = rule.mutableAttrs[attr]!!
+        }
+
+        val py = Python.getInstance()
+        val module = py.getModule("pm3")
+        val res = module.callAttr(
+            "inflectAttrs", word.word,
+            word.partOfSpeech.toString(),
+            transformedWord.mutableAttrs.values.toString()
+        ).toString()
+        transformedWord.translation = res
+
+        return transformedWord
+    }
+    override fun grammarTransformByAttrs(word: IWordEntity, args: MutableMap<Attributes, Int>): IWordEntity {
+        val transformedWord: IWordEntity = when (word) {
             is NounEntity -> word.copy()
             is VerbEntity -> word.copy()
             is AdjectiveEntity -> word.copy()
@@ -42,19 +80,10 @@ class WordDaoImpl : WordDao {
                     }
                 }
                 if (!check) continue
-                val newWord = rule.transformation.addToBeginning + word.word.slice(
-                    IntRange(rule.transformation.delFromBeginning,
-                        word.word.length - rule.transformation.delFromEnd - 1)) +
-                        rule.transformation.addToEnd
-                transformedWord.word = newWord
-                transformedWord.translation = word.translation // это ложь, тут нам должна помочь pymorphy3
-                for (attr in args.keys) {
-                    transformedWord.mutableAttrs[attr] = args[attr]!!
-                }
-                return transformedWord
+                return grammarTransformByRule(word, rule)
             }
         }
-        throw Error() // but like pretty error... Not Found??
+        return transformedWord
     }
 
     override fun wordFormationTransform(word: IWordEntity, args: MutableMap<Attributes, Int>): IWordEntity {
@@ -97,7 +126,7 @@ class WordDaoImpl : WordDao {
         throw Error() // but like pretty error... Not Found??
     }
 
-    override fun wordFormationTransformBySpecificRule(word: IWordEntity, rule: WordFormationRuleEntity) : IWordEntity {
+    override fun wordFormationTransformByRule(word: IWordEntity, rule: WordFormationRuleEntity) : IWordEntity {
         val transformedWord : IWordEntity = when (word) {
             is NounEntity -> word.copy()
             is VerbEntity -> word.copy()

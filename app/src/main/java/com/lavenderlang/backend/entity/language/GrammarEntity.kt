@@ -2,6 +2,7 @@ package com.lavenderlang.backend.entity.language
 
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.rule.*
+import com.lavenderlang.backend.entity.word.IWordEntity
 import java.util.SortedSet
 
 data class GrammarEntity(
@@ -71,5 +72,6 @@ data class GrammarEntity(
         0 to Characteristic(languageId, 0, Attributes.DEGREEOFCOMPARISON, "положительная", 0, true),
         1 to Characteristic(languageId, 1, Attributes.DEGREEOFCOMPARISON, "сравнительная", 1),
         2 to Characteristic(languageId, 2, Attributes.DEGREEOFCOMPARISON, "превосходная", 2)
-    )
+    ),
+    var fullDict : ArrayList<IWordEntity> = arrayListOf()
 )

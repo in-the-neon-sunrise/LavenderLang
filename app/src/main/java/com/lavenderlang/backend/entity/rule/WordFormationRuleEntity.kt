@@ -10,5 +10,5 @@ data class WordFormationRuleEntity(
     var description: String = ""
 ) : IRuleEntity, Comparable<WordFormationRuleEntity> {
     override fun compareTo(other: WordFormationRuleEntity): Int = compareValuesBy(this, other,
-        { it.masc.partsOfSpeech.size } , { -it.masc.attrs.size }, { -it.masc.regex.length })
+       { -it.masc.attrs.size }, { -it.masc.regex.length })
 }

@@ -10,7 +10,6 @@ data class GrammarRuleEntity(
 ) : IRuleEntity, Comparable<GrammarRuleEntity> {
     override fun compareTo(other: GrammarRuleEntity): Int =
         compareValuesBy(this, other,
-            { it.masc.partsOfSpeech.size },
             { -it.masc.attrs.size },
             { -it.masc.regex.length })
 }

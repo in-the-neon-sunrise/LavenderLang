@@ -24,7 +24,7 @@ class DictionaryDaoImpl : DictionaryDao {
         val mascHandler = MascDaoImpl()
         for (rule in languages[dictionary.languageId]!!.grammar.wordFormationRules) {
             if (mascHandler.fits(rule.masc, word)) {
-                possibleWords.add(wordHandler.wordFormationTransformBySpecificRule(word, rule))
+                possibleWords.add(wordHandler.wordFormationTransformByRule(word, rule))
             }
         }
         return possibleWords
