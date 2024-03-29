@@ -97,7 +97,7 @@ def getAttrs(word):
         if tag.gender in genders:
             immutableAttrs[0] = genders.index(tag.gender)
         
-        return ['NOUN', mutableAttrs, immutableAttrs]
+        return ['NOUN', inf, mutableAttrs, immutableAttrs]
 
     if 'VERB' in tag or 'INFN' in tag:
         mutableAttrs = [0, 0, 0, 0, 0]
@@ -118,7 +118,7 @@ def getAttrs(word):
         if tag.voice in voices:
             immutableAttrs[1] = voices.index(tag.voice)
 
-        return ['VERB', mutableAttrs, immutableAttrs]
+        return ['VERB', inf, mutableAttrs, immutableAttrs]
 
 
     if 'ADJF' in tag or 'ADJS' in tag or 'COMP' in tag:
@@ -135,13 +135,13 @@ def getAttrs(word):
         elif 'COMP' in tag:
             mutableAttrs[3] = 1
             
-        return ['ADJECTIVE', mutableAttrs, immutableAttrs]
+        return ['ADJECTIVE', inf, mutableAttrs, immutableAttrs]
         
     if 'ADVB' in tag or 'PRED' in tag:
         mutableAttrs = []
         immutableAttrs = []
         
-        return ['ADVERB', mutableAttrs, immutableAttrs]
+        return ['ADVERB', inf, mutableAttrs, immutableAttrs]
 
     if 'PRTF' in tag or 'PRTS' in tag:
         mutableAttrs = [0, 0, 0, 0]
@@ -160,7 +160,7 @@ def getAttrs(word):
         if tag.voice in voices:
             immutableAttrs[1] = voices.index(tag.voice)
             
-        return ['PARTICIPLE', mutableAttrs, immutableAttrs]
+        return ['PARTICIPLE', inf, mutableAttrs, immutableAttrs]
         
     if 'GRND' in tag:
         mutableAttrs = []
@@ -168,7 +168,7 @@ def getAttrs(word):
         if tag.aspect in types:
             immutableAttrs[0] = types.index(tag.aspect)
             
-        return ['VERBPARTICIPLE', mutableAttrs, immutableAttrs]
+        return ['VERBPARTICIPLE', inf, mutableAttrs, immutableAttrs]
 
     if 'NPRO' in tag:
         mutableAttrs = [0, 0]
@@ -181,23 +181,24 @@ def getAttrs(word):
         if tag.gender in genders:
             immutableAttrs[0] = genders.index(tag.gender)
        
-        return ["PRONOUN", mutableAttrs, immutableAttrs]
+        return ["PRONOUN", inf, mutableAttrs, immutableAttrs]
 
     if 'NUMR' in tag:
         mutableAttrs = []
         immutableAttrs = []
         
-        return ['NUMERAL', mutableAttrs, immutableAttrs]
+        return ['NUMERAL', inf, mutableAttrs, immutableAttrs]
 
     else:
         mutableAttrs = []
         immutableAttrs = []
         
-        return ['FUNCPART', mutableAttrs, immutableAttrs]
+        return ['FUNCPART', inf, mutableAttrs, immutableAttrs]
 
 
 def wrapAttrs(attrs):
-    res = '{"partOfSpeech":"' + attrs[0] + '","mutableAttrs":'
+    res = '{"partOfSpeech":"' + attrs[0] + ',"inf":'
+    res += '"' + attrs[1] + '"' + '","mutableAttrs":'
     res += ''.join(str(attrs[1]).split()) + ',"immutableAttrs":'
     res += ''.join(str(attrs[2]).split()) + '}'
     return res

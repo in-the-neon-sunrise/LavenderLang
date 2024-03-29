@@ -24,12 +24,6 @@ import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.Serializer
 import java.io.File
 
-data class ResultAttrs(
-    var partOfSpeech : String = "",
-    var mutableAttrs : ArrayList<Int> = arrayListOf(),
-    var immutableAttrs : ArrayList<Int> = arrayListOf()
-)
-
 var serializer : Serializer = Serializer()
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
 var nextLanguageId : Int = 0
