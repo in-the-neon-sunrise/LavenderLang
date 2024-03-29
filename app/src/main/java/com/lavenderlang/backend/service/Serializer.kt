@@ -18,6 +18,24 @@ class Serializer(path: String = "") {
         val mapper = ObjectMapper()
     }
 
+    fun serialize(language: LanguageEntity) : String {
+        return try {
+            mapper.writeValueAsString(language)
+        } catch (e : Exception) {
+            println(e.message)
+            throw LanguageNotFoundException("")
+        }
+    }
+
+    fun deserialize(languageString: String) : LanguageEntity {
+        try {
+            return mapper.readValue(languageString, LanguageEntity::class.java)
+        } catch (e : Exception) {
+            println(e.message)
+            throw LanguageNotFoundException("")
+        }
+    }
+
     fun createDir() : String {
         val folder = File("$dir\\data")
         if (!folder.exists()) return folder.mkdirs().toString()
@@ -45,6 +63,7 @@ class Serializer(path: String = "") {
         }
         catch (e : Exception) {
             println(e.message)
+            throw LanguageNotFoundException("")
         }
     }
 

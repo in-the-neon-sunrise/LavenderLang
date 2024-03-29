@@ -13,10 +13,13 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
 import com.chaquo.python.PyException
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.Serializer
 import java.io.File
@@ -31,7 +34,7 @@ var serializer : Serializer = Serializer()
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
 var nextLanguageId : Int = 0
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         //activity creation
         super.onCreate(savedInstanceState)
@@ -39,30 +42,25 @@ class MainActivity : Activity() {
 
         var dir = getExternalFilesDirs(null)[0].absolutePath + "\\data"
         serializer = Serializer(getExternalFilesDirs(null)[0].absolutePath)
-        languages = serializer.readAllLanguages()
-        nextLanguageId = serializer.getMaxLanguageId()
-        Toast.makeText(this, serializer.createDir(), Toast.LENGTH_LONG).show()
-        var f = File("${getExternalFilesDirs(null)[0].absolutePath}\\data\\a.txt")
-        //f.writeText("aaa")
-        Toast.makeText(this, f.readText(), Toast.LENGTH_LONG).show()
-        f = File("$dir\\language0.json")
-        val jsonFile = File("$dir\\language0.json")
-        try {
-            Serializer.mapper.writeValue(jsonFile, languages[0])
+        languages = mutableMapOf(0 to LanguageEntity(0, "a", "aa"))
+        nextLanguageId = 1
+
+
+
+
+        /*val languageRepository = LanguageRepository()
+        languageRepository.languages.observe(this
+        ) { languageItemList ->
+            run {
+                for (e in languageItemList) {
+                    languages[e.id] = serializer.deserialize(e.lang)
+                }
+            }
         }
-        catch (e : Exception) {
-            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-        }
-        /*languages[0] = LanguageEntity(0, "AAA")
-        ++nextLanguageId
-        serializer.saveAllLanguages()
-        val folder = File(getExternalFilesDirs(null)[0].absolutePath+"\\data")
-        if (folder.exists()) Toast.makeText(this, folder.absolutePath, Toast.LENGTH_LONG).show()
-        if (!folder.exists()) {
-            Toast.makeText(this, "well", Toast.LENGTH_LONG).show()
-            if (!folder.mkdirs()) Toast.makeText(this, "no way", Toast.LENGTH_LONG).show()
-        }
-        Toast.makeText(this, languages.toString(), Toast.LENGTH_LONG).show()*/
+        languageRepository.loadAllLanguagesFromDB(this, this)*/
+
+
+
 
         /*if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
@@ -97,6 +95,21 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+
+
+        /*var languageRepository = LanguageRepository()
+        languageRepository.languages.observe(this
+        ) { languageItemList ->
+            {
+                var languageItem = languageItemList[0]
+                // add it to languages
+            }
+        }
+        languageRepository.loadLanguageFromDB(this, this, 0)*/
+
+
+
+
         val listLanguages : ListView = findViewById(R.id.listLanguages)
         val adapter: ArrayAdapter<LanguageEntity> = ArrayAdapter(this, android.R.layout.simple_list_item_1, languages.values.toList())
         listLanguages.adapter = adapter
