@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.kapt")
     id("com.chaquo.python")
 }
 
@@ -62,6 +63,6 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     // Room Database
     implementation("androidx.room:room-runtime:2.5.1")
-    annotationProcessor("androidx.room:room-compiler:2.5.1")
+    kapt("androidx.room:room-compiler:2.5.1")
 
 }

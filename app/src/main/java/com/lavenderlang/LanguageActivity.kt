@@ -74,7 +74,7 @@ class LanguageActivity: Activity() {
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
                 id_lang = nextLanguageId
-                languageDao.createLanguage("-", "")
+                languageDao.createLanguage("-", "", this)
             }
             else -> {
                 id_lang = lang

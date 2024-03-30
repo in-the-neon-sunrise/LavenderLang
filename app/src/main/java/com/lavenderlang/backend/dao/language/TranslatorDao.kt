@@ -78,13 +78,19 @@ class TranslatorDaoImpl: TranslatorDao {
         var res = ""
         for (word in words) {
             var check = false
-            for (w in language.grammar.fullDict) {
-                if (word == w.word) {
-                    res += "${translateWordFromConlang(language, w)} "
+            for (origW in language.dictionary.fullDict.keys) {
+                if (word == origW.word) {
+                    res += "${translateWordFromConlang(language, origW)} "
                     check = true
                 }
+                for (w in language.dictionary.fullDict[origW]!!) {
+                    if (word == w.word) {
+                        res += "${translateWordFromConlang(language, w)} "
+                        check = true
+                    }
+                }
+                if (!check) res += "$word "
             }
-            if (!check) res += "$word "
         }
         return res
     }
@@ -165,14 +171,7 @@ class TranslatorDaoImpl: TranslatorDao {
         val words = text.split(" ")
         var res = ""
         for (word in words) {
-            var check = false
-            for (w in language.grammar.fullDict) {
-                if (word == w.word) {
-                    res += "${translateWordFromConlang(language, w)} "
-                    check = true
-                }
-            }
-            if (!check) res += "$word "
+            res += translateWordToConlang(language, word)
         }
         return res
     }

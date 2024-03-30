@@ -4,10 +4,15 @@ import com.chaquo.python.Python
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lavenderlang.backend.entity.help.Attributes
+import com.lavenderlang.backend.entity.help.Characteristic
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
+import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.languages
 import java.io.File
+import java.util.SortedSet
 
 class Serializer(path: String = "") {
     private var dir : String = ""
@@ -24,7 +29,7 @@ class Serializer(path: String = "") {
     fun f(): String {
         val py = Python.getInstance()
         val module = py.getModule("pm3")
-        val r = mutableMapOf<Attributes, Int>(Attributes.NUMBER to 1, Attributes.CASE to 3)
+        val r = mutableMapOf(Attributes.NUMBER to 1, Attributes.CASE to 3)
         return module.callAttr(
             "inflectAttrs", "кошечка",
             PartOfSpeech.NOUN.toString(),
@@ -32,9 +37,36 @@ class Serializer(path: String = "") {
         ).toString()
     }
 
-    fun serialize(language: LanguageEntity) : String {
+    fun serializeGrammarRules(rules: SortedSet<GrammarRuleEntity>) : String {
         return try {
-            mapper.writeValueAsString(language)
+            mapper.writeValueAsString(rules)
+        } catch (e : Exception) {
+            println(e.message)
+            throw LanguageNotFoundException("")
+        }
+    }
+
+    fun serializeWordFormationRules(rules: SortedSet<WordFormationRuleEntity>) : String {
+        return try {
+            mapper.writeValueAsString(rules)
+        } catch (e : Exception) {
+            println(e.message)
+            throw LanguageNotFoundException("")
+        }
+    }
+
+    fun serializeVars(vars: MutableMap<Int, Characteristic>) : String {
+        return try {
+            mapper.writeValueAsString(vars)
+        } catch (e : Exception) {
+            println(e.message)
+            throw LanguageNotFoundException("")
+        }
+    }
+
+    fun serializeNextIds(nextIds: MutableMap<Attributes, Int>) : String {
+        return try {
+            mapper.writeValueAsString(nextIds)
         } catch (e : Exception) {
             println(e.message)
             throw LanguageNotFoundException("")
@@ -44,6 +76,33 @@ class Serializer(path: String = "") {
     fun deserialize(languageString: String) : LanguageEntity {
         try {
             return mapper.readValue(languageString, LanguageEntity::class.java)
+        } catch (e : Exception) {
+            println(e.message)
+            throw LanguageNotFoundException("")
+        }
+    }
+
+    fun serializeFullDict(fullDict: MutableMap<IWordEntity, MutableList<IWordEntity>>) : String {
+        return try {
+            mapper.writeValueAsString(fullDict)
+        } catch (e : Exception) {
+            println(e.message)
+            throw LanguageNotFoundException("")
+        }
+    }
+
+    fun serializeDict(dict: ArrayList<IWordEntity>) : String {
+        return try {
+            mapper.writeValueAsString(dict)
+        } catch (e : Exception) {
+            println(e.message)
+            throw LanguageNotFoundException("")
+        }
+    }
+
+    fun serializeLanguage(language: LanguageEntity) : String {
+        return try {
+            mapper.writeValueAsString(language)
         } catch (e : Exception) {
             println(e.message)
             throw LanguageNotFoundException("")

@@ -16,40 +16,36 @@ interface GrammarDao {
     fun deleteGrammarRule(grammar : GrammarEntity, rule : GrammarRuleEntity) : Boolean;
     fun addWordFormationRule(grammar : GrammarEntity, rule: WordFormationRuleEntity);
     fun deleteWordFormationRule(grammar : GrammarEntity, rule : WordFormationRuleEntity) : Boolean;
-    fun delMadeByRule(grammar: GrammarEntity, rule: GrammarRuleEntity);
-    fun addMadeByRule(grammar: GrammarEntity, rule: GrammarRuleEntity);
 }
 
 class GrammarDaoImpl(val wordHandler : WordDaoImpl = WordDaoImpl()) : GrammarDao {
     override fun addOption(grammar: GrammarEntity, option: Characteristic) {
-        val map: MutableMap<Int, Characteristic> = when (option.type) {
-            Attributes.GENDER -> grammar.varsGender
-            Attributes.NUMBER -> grammar.varsNumber
-            Attributes.CASE -> grammar.varsCase
-            Attributes.TIME -> grammar.varsTime
-            Attributes.PERSON -> grammar.varsPerson
-            Attributes.MOOD -> grammar.varsMood
-            Attributes.TYPE -> grammar.varsType
-            Attributes.VOICE -> grammar.varsVoice
-            Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison
+        when (option.type) {
+            Attributes.GENDER -> grammar.varsGender[grammar.nextIds[option.type]!!] = option
+            Attributes.NUMBER -> grammar.varsNumber[grammar.nextIds[option.type]!!] = option
+            Attributes.CASE -> grammar.varsCase[grammar.nextIds[option.type]!!] = option
+            Attributes.TIME -> grammar.varsTime[grammar.nextIds[option.type]!!] = option
+            Attributes.PERSON -> grammar.varsPerson[grammar.nextIds[option.type]!!] = option
+            Attributes.MOOD -> grammar.varsMood[grammar.nextIds[option.type]!!] = option
+            Attributes.TYPE -> grammar.varsType[grammar.nextIds[option.type]!!] = option
+            Attributes.VOICE -> grammar.varsVoice[grammar.nextIds[option.type]!!] = option
+            Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison[grammar.nextIds[option.type]!!] = option
         }
-        map[grammar.nextIds[option.type]!!] = option
         grammar.nextIds[option.type] = grammar.nextIds[option.type]!! + 1
     }
 
     override fun deleteOption(grammar: GrammarEntity, option: Characteristic) {
-        val map: MutableMap<Int, Characteristic> = when (option.type) {
-            Attributes.GENDER -> grammar.varsGender
-            Attributes.NUMBER -> grammar.varsNumber
-            Attributes.CASE -> grammar.varsCase
-            Attributes.TIME -> grammar.varsTime
-            Attributes.PERSON -> grammar.varsPerson
-            Attributes.MOOD -> grammar.varsMood
-            Attributes.TYPE -> grammar.varsType
-            Attributes.VOICE -> grammar.varsVoice
-            Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison
+        when (option.type) {
+            Attributes.GENDER -> grammar.varsGender.remove(option.characteristicId)
+            Attributes.NUMBER -> grammar.varsNumber.remove(option.characteristicId)
+            Attributes.CASE -> grammar.varsCase.remove(option.characteristicId)
+            Attributes.TIME -> grammar.varsTime.remove(option.characteristicId)
+            Attributes.PERSON -> grammar.varsPerson.remove(option.characteristicId)
+            Attributes.MOOD -> grammar.varsMood.remove(option.characteristicId)
+            Attributes.TYPE -> grammar.varsType.remove(option.characteristicId)
+            Attributes.VOICE -> grammar.varsVoice.remove(option.characteristicId)
+            Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison.remove(option.characteristicId)
         }
-        map.remove(option.characteristicId)
     }
 
     override fun updateOption(
@@ -94,31 +90,5 @@ class GrammarDaoImpl(val wordHandler : WordDaoImpl = WordDaoImpl()) : GrammarDao
         rule: WordFormationRuleEntity
     ): Boolean {
         return grammar.wordFormationRules.remove(rule)
-    }
-
-    override fun delMadeByRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
-        val mascHandler = MascDaoImpl()
-        for (word in grammar.fullDict) {
-            if (mascHandler.fits(rule.masc, word)) {
-                var check = true
-                for (attr in rule.mutableAttrs.keys) {
-                    if (!word.mutableAttrs.contains(attr) || rule.mutableAttrs[attr] != word.mutableAttrs[attr]) {
-                        check = false
-                        break
-                    }
-                }
-                if (!check) continue
-                grammar.fullDict.remove(word)
-            }
-        }
-    }
-    override fun addMadeByRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
-        val mascHandler = MascDaoImpl()
-        val wordHandler = WordDaoImpl()
-        for (word in languages[grammar.languageId]!!.dictionary.dict) {
-            if (mascHandler.fits(rule.masc, word)) {
-                grammar.fullDict.add(wordHandler.grammarTransformByRule(word, rule))
-            }
-        }
     }
 }

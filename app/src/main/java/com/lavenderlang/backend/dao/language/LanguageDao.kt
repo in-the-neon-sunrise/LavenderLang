@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.language
 
+import android.content.Context
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
@@ -10,8 +11,9 @@ interface LanguageDao {
     fun changeDescription(language : LanguageEntity, newDescription: String);
     fun changeLetters(language : LanguageEntity, newLetters : String);
     fun changePunctuationSymbols(language : LanguageEntity, newSymbols : String);
-    fun copyLanguage(language : LanguageEntity) : LanguageEntity;
-    fun createLanguage(name : String, description: String) : LanguageEntity;
+    fun copyLanguage(language : LanguageEntity, context: Context) : LanguageEntity;
+    fun createLanguage(name : String, description: String, context: Context) : LanguageEntity;
+    fun deleteLanguage(language : LanguageEntity, context: Context);
 }
 class LanguageDaoImpl(private val serializer : Serializer = Serializer(),
                       val dictHandler : DictionaryDaoImpl = DictionaryDaoImpl(),
@@ -19,9 +21,6 @@ class LanguageDaoImpl(private val serializer : Serializer = Serializer(),
 ) : LanguageDao {
     override fun changeName(language : LanguageEntity, newName : String) {
         language.name = newName
-        //val languageRepository = LanguageRepository()
-        //languageRepository.insertLanguage(language.languageId, serializer.serialize(language))
-        //languageRepository.updateLanguage(language.id, serializer.serializeLanguage(language))
     }
     override fun changeDescription(language : LanguageEntity, newDescription: String) {
         language.description = newDescription
@@ -35,13 +34,15 @@ class LanguageDaoImpl(private val serializer : Serializer = Serializer(),
         language.puncSymbols = newSymbols
     }
 
-    override fun copyLanguage(language : LanguageEntity) : LanguageEntity {
+    override fun copyLanguage(language: LanguageEntity, context: Context): LanguageEntity {
         serializer.updateMaxLanguageId()
         return language.copy(languageId = serializer.getMaxLanguageId() - 1, name = language.name + " копия")
     }
-    override fun createLanguage(name: String, description: String): LanguageEntity {
+    override fun createLanguage(name: String, description: String, context: Context): LanguageEntity {
         languages[nextLanguageId] = LanguageEntity(nextLanguageId, name, description)
-        //serializer.saveAllLanguages()
         return languages[nextLanguageId++]!!
+    }
+    override fun deleteLanguage(language: LanguageEntity, context: Context) {
+        languages.remove(language.languageId)
     }
 }

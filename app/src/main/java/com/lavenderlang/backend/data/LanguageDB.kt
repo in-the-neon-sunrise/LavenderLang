@@ -19,5 +19,5 @@ abstract class LanguageDB : RoomDatabase() {
             return instance!!
         }
     }
-    abstract var languageDao : LanguageDao
+    abstract fun languageDao() : LanguageDao
 }

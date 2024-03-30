@@ -73,5 +73,4 @@ data class GrammarEntity(
         1 to Characteristic(languageId, 1, Attributes.DEGREEOFCOMPARISON, "сравнительная", 1),
         2 to Characteristic(languageId, 2, Attributes.DEGREEOFCOMPARISON, "превосходная", 2)
     ),
-    var fullDict : ArrayList<IWordEntity> = arrayListOf()
 )
