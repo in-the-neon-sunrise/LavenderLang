@@ -34,12 +34,14 @@ class GrammarRuleActivity: Activity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            this.finish()
+            val intent = Intent(this@GrammarRuleActivity, GrammarActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
             val intent = Intent(this@GrammarRuleActivity, InformationActivity::class.java)
-            intent.putExtra("lang", GrammarRuleActivity.id_lang)
+            intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
     }

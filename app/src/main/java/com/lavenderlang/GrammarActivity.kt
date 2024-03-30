@@ -12,18 +12,19 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
-import android.widget.RadioButton
 import android.widget.Spinner
 import android.widget.TextView
+import com.lavenderlang.backend.dao.language.GrammarDaoImpl
+import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.Characteristic
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.service.*
-import java.util.SortedSet
 
 
 class GrammarActivity : Activity() {
     companion object{
         var id_lang: Int = 0
+        val grammarDao = GrammarDaoImpl()
     }
 
 
@@ -34,7 +35,9 @@ class GrammarActivity : Activity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            this.finish()
+            val intent = Intent(this@GrammarActivity, LanguageActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -64,6 +67,14 @@ class GrammarActivity : Activity() {
         val adapterGender: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsGender.values.toMutableList(), 0)
         listGender.adapter = adapterGender
         adapterGender.notifyDataSetChanged()
+
+        val buttonNewGender: Button = findViewById(R.id.buttonNewGender)
+        buttonNewGender.setOnClickListener {
+            val newGender = Characteristic(id_lang, languages[id_lang]!!.grammar.nextIds[Attributes.GENDER]?: 0)
+            grammarDao.addOption(languages[id_lang]!!.grammar, newGender)
+            adapterGender.notifyDataSetChanged()
+        }
+
         //list of numbers
         val listNumber : ListView = findViewById(R.id.listViewNumber)
         val adapterNumber: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsNumber.values.toMutableList(), 1)
@@ -131,6 +142,64 @@ class GrammarActivity : Activity() {
 
                 startActivity(intent)
             }
+    }
+    fun updateAdapter(idCharacteristic: Int) {
+        when(idCharacteristic){
+            0->{
+                val listCharacteristic : ListView = findViewById(R.id.listViewGender)
+                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsGender.values.toMutableList(), 0)
+                listCharacteristic.adapter = adapterCharacteristic
+                adapterCharacteristic.notifyDataSetChanged()
+            }
+            1->{
+                val listCharacteristic : ListView = findViewById(R.id.listViewNumber)
+                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsNumber.values.toMutableList(), 1)
+                listCharacteristic.adapter = adapterCharacteristic
+                adapterCharacteristic.notifyDataSetChanged()
+            }
+            2->{
+                val listCharacteristic : ListView = findViewById(R.id.listViewCase)
+                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsCase.values.toMutableList(), 2)
+                listCharacteristic.adapter = adapterCharacteristic
+                adapterCharacteristic.notifyDataSetChanged()
+            }
+            3->{
+                val listCharacteristic : ListView = findViewById(R.id.listViewTime)
+                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsTime.values.toMutableList(), 3)
+                listCharacteristic.adapter = adapterCharacteristic
+                adapterCharacteristic.notifyDataSetChanged()
+            }
+            4->{
+                val listCharacteristic : ListView = findViewById(R.id.listViewPerson)
+                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsPerson.values.toMutableList(), 4)
+                listCharacteristic.adapter = adapterCharacteristic
+                adapterCharacteristic.notifyDataSetChanged()
+            }
+            5->{
+                val listCharacteristic : ListView = findViewById(R.id.listViewMood)
+                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsMood.values.toMutableList(), 5)
+                listCharacteristic.adapter = adapterCharacteristic
+                adapterCharacteristic.notifyDataSetChanged()
+            }
+            6->{
+                val listCharacteristic : ListView = findViewById(R.id.listViewType)
+                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsType.values.toMutableList(), 6)
+                listCharacteristic.adapter = adapterCharacteristic
+                adapterCharacteristic.notifyDataSetChanged()
+            }
+            7->{
+                val listCharacteristic : ListView = findViewById(R.id.listViewVoice)
+                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsVoice.values.toMutableList(), 7)
+                listCharacteristic.adapter = adapterCharacteristic
+                adapterCharacteristic.notifyDataSetChanged()
+            }
+            else->{
+                val listCharacteristic : ListView = findViewById(R.id.listViewDegreeOfComparison)
+                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList(), 8)
+                listCharacteristic.adapter = adapterCharacteristic
+                adapterCharacteristic.notifyDataSetChanged()
+            }
+        }
     }
 }
 private class AttributeAdapter(context: Context, listOfAttributes: MutableList<Characteristic>, idListAttribute: Int) :
@@ -254,16 +323,58 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
             }
         }
 
-        //checkbox is working
-        val radioButtonInf: RadioButton = newView.findViewById(R.id.radioButtonInf)
-        //radioButtonInf.isChecked = false
-        if(positionAttribute == 0) radioButtonInf.setChecked(false)
-        if(Languages.idGenderInf == positionAttribute) radioButtonInf.setChecked(true)
-
-        radioButtonInf.setOnCheckedChangeListener { buttonView, isChecked ->
-            //Languages.attributesGender[positionAttrubute].isInf = isChecked
-            if (isChecked) Languages.idGenderInf = positionAttribute;
+        //button del is working
+        val buttonDel: Button = newView.findViewById(R.id.buttonDel)
+        if(positionAttribute==0){
+            buttonDel.visibility=View.GONE
         }
+        else{
+            buttonDel.visibility=View.VISIBLE
+        }
+        val grammarDao = GrammarDaoImpl()
+        buttonDel.setOnClickListener {
+            when(idAttribute){
+                0->{
+                    grammarDao.deleteOption(languages[GrammarActivity.id_lang]!!.grammar,
+                        languages[GrammarActivity.id_lang]!!.grammar.varsGender[languages[GrammarActivity.id_lang]!!.grammar.varsGender.keys.toMutableList()[positionAttribute]]!!)
+                    (context as GrammarActivity).updateAdapter(idAttribute)
+                }
+                1->{
+                    languages[GrammarActivity.id_lang]!!.grammar.varsNumber.remove(languages[GrammarActivity.id_lang]!!.grammar.varsNumber.keys.toMutableList()[positionAttribute])
+                    (context as GrammarActivity).updateAdapter(idAttribute)
+                }
+                2->{
+                    languages[GrammarActivity.id_lang]!!.grammar.varsCase.remove(languages[GrammarActivity.id_lang]!!.grammar.varsCase.keys.toMutableList()[positionAttribute])
+                    (context as GrammarActivity).updateAdapter(idAttribute)
+                }
+                3->{
+                    languages[GrammarActivity.id_lang]!!.grammar.varsTime.remove(languages[GrammarActivity.id_lang]!!.grammar.varsTime.keys.toMutableList()[positionAttribute])
+                    (context as GrammarActivity).updateAdapter(idAttribute)
+                }
+                4-> {
+                    languages[GrammarActivity.id_lang]!!.grammar.varsPerson.remove(languages[GrammarActivity.id_lang]!!.grammar.varsPerson.keys.toMutableList()[positionAttribute])
+                    (context as GrammarActivity).updateAdapter(idAttribute)
+                }
+                5->{
+                    languages[GrammarActivity.id_lang]!!.grammar.varsMood.remove(languages[GrammarActivity.id_lang]!!.grammar.varsMood.keys.toMutableList()[positionAttribute])
+                    (context as GrammarActivity).updateAdapter(idAttribute)
+                }
+                6-> {
+                    languages[GrammarActivity.id_lang]!!.grammar.varsType.remove(languages[GrammarActivity.id_lang]!!.grammar.varsType.keys.toMutableList()[positionAttribute])
+                    (context as GrammarActivity).updateAdapter(idAttribute)
+                }
+                7->{
+
+                    languages[GrammarActivity.id_lang]!!.grammar.varsVoice.remove(languages[GrammarActivity.id_lang]!!.grammar.varsVoice.keys.toMutableList()[positionAttribute])
+                    (context as GrammarActivity).updateAdapter(idAttribute)
+                }
+                else-> {
+                    languages[GrammarActivity.id_lang]!!.grammar.varsDegreeOfComparison.remove(languages[GrammarActivity.id_lang]!!.grammar.varsDegreeOfComparison.keys.toMutableList()[positionAttribute])
+                    (context as GrammarActivity).updateAdapter(idAttribute)
+                }
+            }
+        }
+
 
         return newView
     }
@@ -285,8 +396,6 @@ private class GrammarRuleAdapter(context: Context, listOfRules: MutableList<Gram
         val changeableAttributes: TextView = newView!!.findViewById(R.id.textViewChangeableAttributes)
         unchangeableAttributes.text = grammarRule.toString()
         changeableAttributes.text = grammarRule.toString()
-
-
 
         return newView
     }

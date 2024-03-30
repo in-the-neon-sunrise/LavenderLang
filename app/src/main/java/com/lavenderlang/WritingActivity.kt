@@ -20,7 +20,9 @@ class WritingActivity : Activity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            this.finish()
+            val intent = Intent(this@WritingActivity, LanguageActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{

@@ -24,7 +24,8 @@ class LanguageActivity: Activity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            this.finish()
+            val intent = Intent(this@LanguageActivity, MainActivity::class.java)
+            startActivity(intent)
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -74,7 +75,8 @@ class LanguageActivity: Activity() {
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
                 id_lang = nextLanguageId
-                languageDao.createLanguage("-", "", this)
+                languageDao.createLanguage(id_lang.toString(), "", this)
+                editLanguageName.setText(languages[id_lang]?.name)
             }
             else -> {
                 id_lang = lang
