@@ -66,6 +66,13 @@ class LanguageActivity: Activity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
+
+        //bottom navigation menu
+        val buttonTranslator: Button = findViewById(R.id.buttonTranslator)
+        buttonTranslator.setOnClickListener {
+            val intent = Intent(this@LanguageActivity, TranslatorActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
