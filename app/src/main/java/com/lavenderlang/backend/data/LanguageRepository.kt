@@ -33,12 +33,20 @@ class LanguageRepository {
         }
     }
 
-
-    fun insertLanguage(context: Context, id: Int, language: LanguageEntity) {
+    fun insertLanguage(context: Context, id: Int, language: String) {
         val languageDB: LanguageDB = LanguageDB.getInstance(context)
         val languageDao: LanguageDao = languageDB.languageDao()
 
-        val languageItem = LanguageItem(id, serializer.serializeLanguage(language))
+        val languageItem = LanguageItem(id, language)
         languageDao.insert(languageItem)
+    }
+
+    fun deleteLanguage(context: Context, id: Int) {
+        val languageDB: LanguageDB = LanguageDB.getInstance(context)
+        val languageDao: LanguageDao = languageDB.languageDao()
+
+        Thread {
+            languageDao.deleteById(id)
+        }.start()
     }
 }

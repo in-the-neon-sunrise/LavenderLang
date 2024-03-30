@@ -10,6 +10,7 @@ import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.data.LanguageRepository
 
 
 class LanguageActivity: Activity() {
@@ -75,7 +76,7 @@ class LanguageActivity: Activity() {
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
                 id_lang = nextLanguageId
-                languageDao.createLanguage(id_lang.toString(), "", this)
+                languageDao.createLanguage(id_lang.toString(), "")
                 editLanguageName.setText(languages[id_lang]?.name)
             }
             else -> {
@@ -105,6 +106,11 @@ class LanguageActivity: Activity() {
             }
         })
     }
-
-
+    override fun onPause() {
+        super.onPause()
+        val languageRepository = LanguageRepository()
+        Thread {
+            languageRepository.insertLanguage(this, id_lang, serializer.serializeLanguage(languages[id_lang]!!))
+        }.start()
+    }
 }

@@ -1,14 +1,17 @@
 package com.lavenderlang.backend.dao.language
 
+import android.content.Context
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.word.WordDaoImpl
+import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.languages
+import com.lavenderlang.serializer
 
 interface DictionaryDao {
-    fun addWord(dictionary: DictionaryEntity, word : IWordEntity);
+    fun addWord(dictionary: DictionaryEntity, word : IWordEntity, context: Context);
     fun deleteWord(dictionary: DictionaryEntity, word : IWordEntity);
     fun createWordFromExisting(dictionary: DictionaryEntity, word : IWordEntity) : ArrayList<IWordEntity>;
     fun delMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity);
@@ -19,7 +22,7 @@ interface DictionaryDao {
     fun updateMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) : Boolean;
 }
 class DictionaryDaoImpl : DictionaryDao {
-    override fun addWord(dictionary: DictionaryEntity, word : IWordEntity) {
+    override fun addWord(dictionary: DictionaryEntity, word : IWordEntity, context: Context) {
         dictionary.dict.add(word)
     }
     override fun deleteWord(dictionary: DictionaryEntity, word : IWordEntity) {
@@ -40,7 +43,7 @@ class DictionaryDaoImpl : DictionaryDao {
     override fun delMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity) {
         val mascHandler = MascDaoImpl()
         for (word in dictionary.fullDict.keys) {
-            if (mascHandler.fits(rule.masc, word)) {
+            if (mascHandler.fits(rule.masc, serializer.deserializeWord(word))) {
                 for (w in dictionary.fullDict[word]!!) {
                     var check = true
                     for (attr in rule.mutableAttrs.keys) {

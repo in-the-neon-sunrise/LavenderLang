@@ -31,27 +31,22 @@ class MainActivity : AppCompatActivity() {
         //nextLanguageId = 1
 
         val languageRepository = LanguageRepository()
-        val lang = LanguageEntity(0, "a", "aa")
-        Thread { languageRepository.insertLanguage(this, 0, lang)}.start()
-
-
-
-
-        //Thread { languageRepository.insertLanguage(this, 2, serializer.serialize(lang))}.start()
         languageRepository.languages.observe(this
         ) { languageItemList ->
             run {
+                Toast.makeText(this, "starting", Toast.LENGTH_LONG).show()
                 for (e in languageItemList) {
                     languages[e.id] = serializer.deserialize(e.lang)
                     nextLanguageId = e.id + 1
-                    Toast.makeText(this, languages[e.id]!!.toString(), Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this, languages[e.id]!!.toString(), Toast.LENGTH_LONG).show()
                 }
             }
         }
+        languageRepository.loadAllLanguagesFromDB(this, this)
 
 
         Toast.makeText(this, languages.size.toString(), Toast.LENGTH_LONG).show()
-        for (lan in languages.keys) Toast.makeText(this, languages[lan]!!.toString(), Toast.LENGTH_LONG).show()
+        //for (lan in languages.keys) Toast.makeText(this, languages[lan]!!.toString(), Toast.LENGTH_LONG).show()
 
 
 
@@ -93,6 +88,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
         languageRepository.loadLanguageFromDB(this, this, 0)*/
+        val languageRepository = LanguageRepository()
+        languageRepository.languages.observe(this
+        ) { languageItemList ->
+            run {
+                //Toast.makeText(this, "starting", Toast.LENGTH_LONG).show()
+                for (e in languageItemList) {
+                    languages[e.id] = serializer.deserialize(e.lang)
+                    nextLanguageId = e.id + 1
+                    //Toast.makeText(this, languages[e.id]!!.toString(), Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+        languageRepository.loadAllLanguagesFromDB(this, this)
 
 
 
@@ -108,5 +116,13 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
     }
-
+    override fun onPause() {
+        super.onPause()
+        val languageRepository = LanguageRepository()
+        for (lang in languages.keys) {
+            Thread {
+                languageRepository.insertLanguage(this, lang, serializer.serializeLanguage(languages[lang]!!))
+            }.start()
+        }
+    }
 }

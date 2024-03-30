@@ -2,7 +2,24 @@ package com.lavenderlang.backend.entity.word
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonSerializer
+import com.fasterxml.jackson.databind.KeyDeserializer
+import com.fasterxml.jackson.databind.SerializerProvider
 import com.lavenderlang.backend.entity.help.*
+
+class IWordEntityKeySerializer : JsonSerializer<IWordEntity>() {
+    override fun serialize(value: IWordEntity, gen: JsonGenerator, serializers: SerializerProvider) {
+        gen.writeFieldName(value.word)
+    }
+}
+
+class IWordEntityKeyDeserializer : KeyDeserializer() {
+    override fun deserializeKey(key: String, ctxt: DeserializationContext): IWordEntity {
+        return NounEntity(word = key)
+    }
+}
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,

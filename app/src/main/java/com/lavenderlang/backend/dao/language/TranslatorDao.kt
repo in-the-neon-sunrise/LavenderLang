@@ -10,6 +10,7 @@ import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.service.ResultAttrs
 import com.lavenderlang.languages
+import com.lavenderlang.serializer
 
 interface TranslatorDao {
     fun rusToConlangAttr(language: LanguageEntity, attr: Attributes, id: Int) : Int
@@ -78,12 +79,13 @@ class TranslatorDaoImpl: TranslatorDao {
         var res = ""
         for (word in words) {
             var check = false
-            for (origW in language.dictionary.fullDict.keys) {
+            for (serializedOrigW in language.dictionary.fullDict.keys) {
+                val origW = serializer.deserializeWord(serializedOrigW)
                 if (word == origW.word) {
                     res += "${translateWordFromConlang(language, origW)} "
                     check = true
                 }
-                for (w in language.dictionary.fullDict[origW]!!) {
+                for (w in language.dictionary.fullDict[serializedOrigW]!!) {
                     if (word == w.word) {
                         res += "${translateWordFromConlang(language, w)} "
                         check = true

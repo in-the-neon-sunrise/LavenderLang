@@ -7,9 +7,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.LanguageActivity.Companion.languageDao
+import com.lavenderlang.backend.data.LanguageRepository
 
-class WritingActivity : Activity() {
+class WritingActivity : AppCompatActivity() {
     companion object{
         var id_lang: Int = 0
     }
@@ -35,6 +37,9 @@ class WritingActivity : Activity() {
     override fun onResume() {
         super.onResume()
         //how it was started?
+
+
+
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
                 val intent = Intent(this@WritingActivity, LanguageActivity::class.java)
@@ -75,5 +80,12 @@ class WritingActivity : Activity() {
                 languageDao.changePunctuationSymbols(languages[id_lang]!!, (editTextSymbols.text.toString()))
             }
         })
+    }
+    override fun onPause() {
+        super.onPause()
+        val languageRepository = LanguageRepository()
+        Thread {
+        languageRepository.insertLanguage(this,
+            LanguageActivity.id_lang, serializer.serializeLanguage(languages[LanguageActivity.id_lang]!!))}.start()
     }
 }

@@ -16,4 +16,8 @@ data class VerbEntity(
         Attributes.TYPE to 0,
         Attributes.VOICE to 0),
     override var partOfSpeech: PartOfSpeech = PartOfSpeech.VERB
-) : IWordEntity
+) : IWordEntity {
+    override fun toString(): String {
+        return com.lavenderlang.serializer.serializeWord(this as IWordEntity)
+    }
+}

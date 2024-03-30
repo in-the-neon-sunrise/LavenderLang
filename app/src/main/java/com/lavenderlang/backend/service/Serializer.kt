@@ -78,7 +78,16 @@ class Serializer(path: String = "") {
             return mapper.readValue(languageString, LanguageEntity::class.java)
         } catch (e : Exception) {
             println(e.message)
-            throw LanguageNotFoundException("")
+            throw LanguageNotFoundException(e.message!!)
+        }
+    }
+
+    fun deserializeWord(wordString: String) : IWordEntity {
+        try {
+            return mapper.readValue(wordString, IWordEntity::class.java)
+        } catch (e : Exception) {
+            println(e.message)
+            throw LanguageNotFoundException(e.message!!)
         }
     }
 
@@ -94,6 +103,15 @@ class Serializer(path: String = "") {
     fun serializeDict(dict: ArrayList<IWordEntity>) : String {
         return try {
             mapper.writeValueAsString(dict)
+        } catch (e : Exception) {
+            println(e.message)
+            throw LanguageNotFoundException("")
+        }
+    }
+
+    fun serializeWord(word: IWordEntity) : String {
+        return try {
+            mapper.writeValueAsString(word)
         } catch (e : Exception) {
             println(e.message)
             throw LanguageNotFoundException("")
