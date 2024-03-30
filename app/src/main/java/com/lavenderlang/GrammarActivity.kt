@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.Characteristic
@@ -72,6 +73,7 @@ class GrammarActivity : Activity() {
         buttonNewGender.setOnClickListener {
             val newGender = Characteristic(id_lang, languages[id_lang]!!.grammar.nextIds[Attributes.GENDER]?: 0)
             grammarDao.addOption(languages[id_lang]!!.grammar, newGender)
+            Toast.makeText(this, languages[id_lang]!!.grammar.nextIds.toString(), Toast.LENGTH_LONG).show()
             adapterGender.notifyDataSetChanged()
         }
 
