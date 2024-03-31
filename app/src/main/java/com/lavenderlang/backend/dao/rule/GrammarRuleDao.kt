@@ -7,6 +7,7 @@ interface GrammarRuleDao : RuleDao {
     fun addAtr(rule: GrammarRuleEntity, attr : Attributes, ind : Int);
     fun deleteAttr(rule: GrammarRuleEntity, attr : Attributes, ind : Int);
     fun updateTransformation(rule : GrammarRuleEntity, newTransformation: TransformationEntity);
+    fun updateMutableAttrs(rule : GrammarRuleEntity, newAttrs: MutableMap<Attributes, Int>);
 }
 class GrammarRuleDaoImpl : GrammarRuleDao {
     override fun updateMasc(rule : IRuleEntity, newMasc : MascEntity) {
@@ -20,5 +21,10 @@ class GrammarRuleDaoImpl : GrammarRuleDao {
     }
     override fun updateTransformation(rule : GrammarRuleEntity, newTransformation: TransformationEntity) {
         rule.transformation = newTransformation
+    }
+
+    override fun updateMutableAttrs(rule: GrammarRuleEntity, newAttrs: MutableMap<Attributes, Int>
+    ) {
+        rule.mutableAttrs = newAttrs
     }
 }
