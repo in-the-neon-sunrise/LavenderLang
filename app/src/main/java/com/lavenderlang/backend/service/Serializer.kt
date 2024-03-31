@@ -91,7 +91,7 @@ class Serializer(path: String = "") {
         }
     }
 
-    fun serializeFullDict(fullDict: MutableMap<IWordEntity, MutableList<IWordEntity>>) : String {
+    fun serializeFullDict(fullDict: MutableMap<String, ArrayList<IWordEntity>>) : String {
         return try {
             mapper.writeValueAsString(fullDict)
         } catch (e : Exception) {

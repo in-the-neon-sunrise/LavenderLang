@@ -24,8 +24,8 @@ interface DictionaryDao {
 class DictionaryDaoImpl : DictionaryDao {
     override fun addWord(dictionary: DictionaryEntity, word : IWordEntity) {
         dictionary.dict.add(word)
-        dictionary.fullDict[serializer.serializeWord(word)] = arrayListOf(word)
-        //Пофиксить строку сверху!!ааа
+        dictionary.fullDict["${word.word}:${word.translation}"] = arrayListOf(word)
+        //Пофиксить строку сверху!!
     }
     override fun deleteWord(dictionary: DictionaryEntity, word : IWordEntity) {
         dictionary.dict.remove(word)
@@ -44,23 +44,24 @@ class DictionaryDaoImpl : DictionaryDao {
 
     override fun delMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity) {
         val mascHandler = MascDaoImpl()
-        for (word in dictionary.fullDict.keys) {
-            if (mascHandler.fits(rule.masc, serializer.deserializeWord(word))) {
-                for (w in dictionary.fullDict[word]!!) {
-                    var check = true
-                    for (attr in rule.mutableAttrs.keys) {
-                        if (!w.mutableAttrs.contains(attr) || rule.mutableAttrs[attr] != w.mutableAttrs[attr]) {
-                            check = false
-                            break
-                        }
+        val partOfSpeech = rule.masc.partsOfSpeech
+        for (wordAndTranslation in dictionary.fullDict.keys) {
+            for (word in dictionary.fullDict[wordAndTranslation]!!) {
+                if (word.partOfSpeech != partOfSpeech) break
+                if (!mascHandler.fits(rule.masc, word)) continue
+                var check = true
+                for (attr in rule.mutableAttrs.keys) {
+                    if (!word.mutableAttrs.contains(attr) || rule.mutableAttrs[attr] != word.mutableAttrs[attr]) {
+                        check = false
+                        break
                     }
-                    if (!check) continue
-                    dictionary.fullDict[word]!!.remove(w)
                 }
-
+                if (!check) continue
+                dictionary.fullDict[wordAndTranslation]!!.remove(word)
             }
         }
     }
+
     override fun addMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity) {
         val mascHandler = MascDaoImpl()
         val wordHandler = WordDaoImpl()

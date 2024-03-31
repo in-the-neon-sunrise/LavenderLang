@@ -77,8 +77,14 @@ def inflectAttrs(word, partOfSpeech, attrs):
             res.append(genders[attrs[2]])
         if attrs[3] < len(cases):
             res.append(cases[attrs[3]])
+
+    inflected_word = w
+    for attr in res:
+        new_inflected_word = inflected_word.inflect(set([attr]))
+        if new_inflected_word != None:
+            inflected_word = new_inflected_word
     
-    return 'более ' * int(comp) + w.inflect(set(res)).word
+    return 'более ' * int(comp) + inflected_word.word
 
 
 def getAttrs(word):
@@ -197,10 +203,10 @@ def getAttrs(word):
 
 
 def wrapAttrs(attrs):
-    res = '{"partOfSpeech":"' + attrs[0] + ',"inf":'
-    res += '"' + attrs[1] + '"' + '","mutableAttrs":'
-    res += ''.join(str(attrs[1]).split()) + ',"immutableAttrs":'
-    res += ''.join(str(attrs[2]).split()) + '}'
+    res = '{"partOfSpeech":"' + attrs[0] + '","inf":'
+    res += '"' + attrs[1] + '","mutableAttrs":'
+    res += ''.join(str(attrs[2]).split()) + ',"immutableAttrs":'
+    res += ''.join(str(attrs[3]).split()) + '}'
     return res
 
 

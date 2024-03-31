@@ -10,15 +10,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 import com.lavenderlang.backend.data.LanguageItem
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
+import com.lavenderlang.backend.service.ResultAttrs
 import com.lavenderlang.backend.service.Serializer
 
 var serializer : Serializer = Serializer()
@@ -53,9 +57,80 @@ class MainActivity : AppCompatActivity() {
             "заплакать",
             partOfSpeech = PartOfSpeech.VERB
         )
+        val word3 = VerbEntity(
+            0,
+            "ccc",
+            "красивый",
+            partOfSpeech = PartOfSpeech.ADJECTIVE
+        )
         dict.addWord(languages[0]!!.dictionary, word1)
         dict.addWord(languages[0]!!.dictionary, word2)
+        dict.addWord(languages[0]!!.dictionary, word3)
+        languages[0]!!.dictionary.fullDict["${word1.word}:${word1.translation}"]!!.add(
+            NounEntity(
+                0,
+                "aab",
+                "кошечки",
+                immutableAttrs = mutableMapOf(Attributes.GENDER to 1),
+                mutableAttrs = mutableMapOf(
+                    Attributes.NUMBER to 1,
+                    Attributes.CASE to 0),
+                partOfSpeech = PartOfSpeech.NOUN
+            )
+        )
+        languages[0]!!.dictionary.fullDict["${word3.word}:${word3.translation}"]!!.add(
+            NounEntity(
+                0,
+                "ccd",
+                "красивые",
+                immutableAttrs = mutableMapOf(),
+                mutableAttrs = mutableMapOf(Attributes.GENDER to 0,
+                    Attributes.NUMBER to 1,
+                    Attributes.CASE to 0,
+                    Attributes.DEGREEOFCOMPARISON to 0),
+                partOfSpeech = PartOfSpeech.ADJECTIVE
+            )
+        )
 
+        /*val trans = TranslatorDaoImpl()
+        val py = Python.getInstance()
+        val module = py.getModule("pm3")
+
+        //Toast.makeText(this, languages[0]!!.dictionary.fullDict[Pair("aaa", "кошечка")]!![0].translation, Toast.LENGTH_LONG).show()
+
+        //Toast.makeText(this, module.callAttr("getWrappedAttrs", "кошечки").toString(), Toast.LENGTH_LONG).show()
+        Toast.makeText(this, trans.translateWordToConlang(languages[0]!!, module.callAttr("getWrappedAttrs", "красивые").toString()), Toast.LENGTH_LONG).show()
+        //Toast.makeText(this, languages[0]!!.dictionary.fullDict["ccc:красивый"]!![1].mutableAttrs.toString(), Toast.LENGTH_LONG).show()
+
+
+
+        val wrappedAttrs = module.callAttr("getWrappedAttrs", "красивые").toString()
+        val m = ObjectMapper()
+        val attrs = m.readValue(wrappedAttrs, ResultAttrs::class.java)
+        val rusMutAttrs = trans.mutableAttrsToNormalForm(attrs)
+        val rusImmutAttrs = trans.immutableAttrsToNormalForm(attrs)
+        val mutAttrs = mutableMapOf<Attributes, Int>()
+        val immutAttrs = mutableMapOf<Attributes, Int>()
+        for (attr in rusMutAttrs.keys) {
+            mutAttrs[attr] = trans.rusToConlangAttr(languages[0]!!, attr, rusMutAttrs[attr]!!)
+        }
+        for (attr in rusImmutAttrs.keys) {
+            immutAttrs[attr] = trans.rusToConlangAttr(languages[0]!!, attr, rusImmutAttrs[attr]!!)
+        }
+        Toast.makeText(this, rusMutAttrs.toString(), Toast.LENGTH_LONG).show()
+        Toast.makeText(this, mutAttrs.toString(), Toast.LENGTH_LONG).show()
+
+        var res: String
+        for (key in languages[0]!!.dictionary.fullDict.keys) {
+            if (key.split(":")[1] != attrs.inf) continue
+            res = key.split(":")[0]
+            for (word in languages[0]!!.dictionary.fullDict[key]!!) {
+                if (word.mutableAttrs == mutAttrs) {
+                    res = word.word
+                    break
+                }
+            }
+        }*/
 
 
 

@@ -9,6 +9,7 @@ import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.service.ResultAttrs
+import com.lavenderlang.backend.service.WordNotFoundException
 import com.lavenderlang.languages
 import com.lavenderlang.serializer
 
@@ -79,15 +80,17 @@ class TranslatorDaoImpl: TranslatorDao {
         var res = ""
         for (word in words) {
             var check = false
-            for (serializedOrigW in language.dictionary.fullDict.keys) {
-                for (w in language.dictionary.fullDict[serializedOrigW]!!) {
+            for (key in language.dictionary.fullDict.keys) {
+                if (check) break
+                for (w in language.dictionary.fullDict[key]!!) {
                     if (word == w.word) {
                         res += "${translateWordFromConlang(language, w)} "
-                        check = true//кошечка
+                        check = true
+                        break
                     }
                 }
-                if (!check) res += "$word "
             }
+            if (!check) res += "$word "
         }
         return res
     }
@@ -127,8 +130,8 @@ class TranslatorDaoImpl: TranslatorDao {
             PartOfSpeech.ADJECTIVE -> return mutableMapOf(
                 Attributes.GENDER to attrs.mutableAttrs[0],
                 Attributes.NUMBER to attrs.mutableAttrs[1],
-                Attributes.CASE to attrs.mutableAttrs[1],
-                Attributes.DEGREEOFCOMPARISON to attrs.mutableAttrs[1])
+                Attributes.CASE to attrs.mutableAttrs[2],
+                Attributes.DEGREEOFCOMPARISON to attrs.mutableAttrs[3])
             PartOfSpeech.PARTICIPLE -> return mutableMapOf(
                 Attributes.TIME to attrs.mutableAttrs[0],
                 Attributes.NUMBER to attrs.mutableAttrs[1],
@@ -143,8 +146,6 @@ class TranslatorDaoImpl: TranslatorDao {
 
     override fun translateWordToConlang(language: LanguageEntity, wrappedAttrs: String): String {
         val m = ObjectMapper()
-        val wordHandler = WordDaoImpl()
-        var res = ""
         val attrs = m.readValue(wrappedAttrs, ResultAttrs::class.java)
         val rusMutAttrs = mutableAttrsToNormalForm(attrs)
         val rusImmutAttrs = immutableAttrsToNormalForm(attrs)
@@ -156,12 +157,20 @@ class TranslatorDaoImpl: TranslatorDao {
         for (attr in rusImmutAttrs.keys) {
             immutAttrs[attr] = rusToConlangAttr(language, attr, rusImmutAttrs[attr]!!)
         }
-        for (w in language.dictionary.dict) {
-            if (w.word == attrs.inf) {
-                res += " ${wordHandler.grammarTransformByAttrs(w, mutAttrs)}"
+
+        var res: String
+        for (key in language.dictionary.fullDict.keys) {
+            if (key.split(":")[1] != attrs.inf) continue
+            res = key.split(":")[0]
+            for (word in language.dictionary.fullDict[key]!!) {
+                if (word.mutableAttrs == mutAttrs) {
+                    res = word.word
+                    break
+                }
             }
+            return res
         }
-        return res
+        throw WordNotFoundException("Word not found")
     }
 
     override fun translateTextToConlang(language: LanguageEntity, text: String): String {
@@ -171,8 +180,12 @@ class TranslatorDaoImpl: TranslatorDao {
         val module = py.getModule("pm3")
 
         for (word in words) {
-            val attrs = module.callAttr("getWrappedAttrs", word)
-            res += translateWordToConlang(language, attrs.toString())
+            val attrs = module.callAttr("getWrappedAttrs", word).toString()
+            res += try {
+                " ${translateWordToConlang(language, attrs)}"
+            } catch (e: WordNotFoundException) {
+                " $word"
+            }
         }
         return res
     }
