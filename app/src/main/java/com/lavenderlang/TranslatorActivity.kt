@@ -15,14 +15,12 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.lavenderlang.backend.dao.language.TranslatorDao
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
-import com.lavenderlang.backend.entity.help.Characteristic
 
 class TranslatorActivity : AppCompatActivity() {
     companion object{
         var id_lang = 0
-        var isOnConlang = true
+        var translationOnConlang = false
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,26 +52,23 @@ class TranslatorActivity : AppCompatActivity() {
         spinner.adapter = adapterLanguages
         adapterLanguages.notifyDataSetChanged()
 
-        radiobutton.isChecked = true
+        radiobutton.isChecked = true//перевод с конланга
         radiogroup.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId==0) isOnConlang=false
-            else isOnConlang=true
-            translate()
+            if (checkedId==radiobutton.id) translationOnConlang=false
+            else translationOnConlang=true
         }
 
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, item: View?, position: Int, id: Long) {
                 id_lang = position
-                translate()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 id_lang = 0
-                translate()
             }
         }
 
-        edittext.addTextChangedListener(object : TextWatcher {
+        /*edittext.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 translate()
             }
@@ -81,7 +76,11 @@ class TranslatorActivity : AppCompatActivity() {
             }
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
-        })
+        })*/
+        val buttonTranslate: Button = findViewById(R.id.buttonTranslate)
+        buttonTranslate.setOnClickListener {
+            translate()
+        }
     }
     fun translate(){
         val edittext: EditText = findViewById(R.id.editTextText)
@@ -91,8 +90,7 @@ class TranslatorActivity : AppCompatActivity() {
         var input_text: String = edittext.text.toString()
 
         val translatorDao = TranslatorDaoImpl()
-        // For some reason it always translates from conlang :(
-        if (isOnConlang) {
+        if (!translationOnConlang) {
             textview.setText(
                 translatorDao.translateTextFromConlang(languages[clever_index_of_language]!!, input_text))
         } else {
