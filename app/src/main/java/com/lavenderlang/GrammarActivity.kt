@@ -17,6 +17,7 @@ import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.GrammarActivity.Companion.clever_id_lang
 import com.lavenderlang.GrammarActivity.Companion.grammarDao
 import com.lavenderlang.GrammarActivity.Companion.id_lang
@@ -27,7 +28,7 @@ import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.service.*
 
 
-class GrammarActivity : Activity() {
+class GrammarActivity: AppCompatActivity() {
     companion object{
         var id_lang: Int = 0
         var clever_id_lang = languages.keys.toMutableList()[id_lang]
