@@ -45,6 +45,8 @@ def inflectAttrs(word, partOfSpeech, attrs):
             res.append(cases[attrs[1]])
     
     elif partOfSpeech == 'VERB':
+        if attrs[5] == 0:
+            return w.normal_form
         if attrs[0] < len(times):
             res.append(times[attrs[0]])
         if attrs[1] < len(numbers):
@@ -106,7 +108,12 @@ def getAttrs(word):
         return ['NOUN', inf, mutableAttrs, immutableAttrs]
 
     if 'VERB' in tag or 'INFN' in tag:
-        mutableAttrs = [0, 0, 0, 0, 0]
+        if 'INFN' in tag:
+            mutableAttrs = [0, 0, 0, 0, 0, 0]
+            immutableAttrs = [0, 0]
+            return ['VERB', inf, mutableAttrs, immutableAttrs]
+
+        mutableAttrs = [0, 0, 0, 0, 0, 1]
         immutableAttrs = [0, 0]
         if tag.tense in times:
             mutableAttrs[0] = times.index(tag.tense)

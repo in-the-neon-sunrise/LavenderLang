@@ -2,7 +2,6 @@ package com.lavenderlang.backend.dao.language
 
 import com.chaquo.python.Python
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.lavenderlang.backend.dao.word.WordDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.Characteristic
 import com.lavenderlang.backend.entity.help.PartOfSpeech
@@ -10,21 +9,20 @@ import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.service.ResultAttrs
 import com.lavenderlang.backend.service.WordNotFoundException
-import com.lavenderlang.languages
-import com.lavenderlang.serializer
 
-interface TranslatorDao {
+interface TranslatorHelperDao {
     fun rusToConlangAttr(language: LanguageEntity, attr: Attributes, id: Int) : Int
     fun conlangToRusAttr(language: LanguageEntity, attr: Attributes, id: Int) : Int
-    fun translateWordFromConlang(language: LanguageEntity, word: IWordEntity) : String;
-    fun translateTextFromConlang(language: LanguageEntity, text: String) : String;
-    fun immutableAttrsToNormalForm(attrs: ResultAttrs) : MutableMap<Attributes, Int>;
-    fun mutableAttrsToNormalForm(attrs: ResultAttrs) : MutableMap<Attributes, Int>;
-    fun translateWordToConlang(language: LanguageEntity, wrappedAttrs: String) : String;
-    fun translateTextToConlang(language: LanguageEntity, text: String) : String
+    fun translateWordFromConlang(language: LanguageEntity, word: IWordEntity) : String
+    fun translateWordToConlang(language: LanguageEntity, wrappedAttrs: String): String
+    fun immutableAttrsToNormalForm(attrs: ResultAttrs) : MutableMap<Attributes, Int>
+    fun mutableAttrsToNormalForm(attrs: ResultAttrs) : MutableMap<Attributes, Int>
+    fun capitalizeWord(word: String) : String {
+        return word[0].uppercaseChar() + word.substring(1)
+    }
 }
 
-class TranslatorDaoImpl: TranslatorDao {
+class TranslatorHelperDaoImpl : TranslatorHelperDao {
     //problem with multiple links to one russian attribute: we will find only first mention
     override fun rusToConlangAttr(language: LanguageEntity, attr: Attributes, id: Int): Int {
         val vars : MutableMap<Int, Characteristic> = when (attr) {
@@ -37,6 +35,7 @@ class TranslatorDaoImpl: TranslatorDao {
             Attributes.TYPE -> language.grammar.varsType
             Attributes.VOICE -> language.grammar.varsVoice
             Attributes.DEGREEOFCOMPARISON -> language.grammar.varsDegreeOfComparison
+            Attributes.ISINFINITIVE -> return id
         }
         for (option in vars.keys) {
             if (vars[option]!!.russianId == id) return vars[option]!!.characteristicId
@@ -56,45 +55,12 @@ class TranslatorDaoImpl: TranslatorDao {
                 Attributes.TYPE -> language.grammar.varsType[id]!!.russianId
                 Attributes.VOICE -> language.grammar.varsVoice[id]!!.russianId
                 Attributes.DEGREEOFCOMPARISON -> language.grammar.varsDegreeOfComparison[id]!!.russianId
+                Attributes.ISINFINITIVE -> id
             }
         } catch (e: Exception) {
             0
         }
     }
-
-    override fun translateWordFromConlang(language: LanguageEntity, word: IWordEntity): String {
-        val py = Python.getInstance()
-        val module = py.getModule("pm3")
-        val russianMutableAttrs: ArrayList<Int> = arrayListOf()
-        for (attr in word.mutableAttrs.keys) {
-            russianMutableAttrs.add(conlangToRusAttr(language, attr, word.mutableAttrs[attr]!!))
-        }
-        return module.callAttr(
-            "inflectAttrs", word.translation,
-            word.partOfSpeech.toString(),
-            russianMutableAttrs.toString()
-        ).toString()
-    }
-    override fun translateTextFromConlang(language: LanguageEntity, text: String): String {
-        val words = text.split(" ")
-        var res = ""
-        for (word in words) {
-            var check = false
-            for (key in language.dictionary.fullDict.keys) {
-                if (check) break
-                for (w in language.dictionary.fullDict[key]!!) {
-                    if (word == w.word) {
-                        res += "${translateWordFromConlang(language, w)} "
-                        check = true
-                        break
-                    }
-                }
-            }
-            if (!check) res += "$word "
-        }
-        return res
-    }
-
     override fun immutableAttrsToNormalForm(attrs: ResultAttrs) : MutableMap<Attributes, Int> {
         val partOfSpeech = attrs.partOfSpeech
         when(partOfSpeech) {
@@ -126,7 +92,8 @@ class TranslatorDaoImpl: TranslatorDao {
                 Attributes.NUMBER to attrs.mutableAttrs[1],
                 Attributes.GENDER to attrs.mutableAttrs[2],
                 Attributes.PERSON to attrs.mutableAttrs[3],
-                Attributes.MOOD to attrs.mutableAttrs[4])
+                Attributes.MOOD to attrs.mutableAttrs[4],
+                Attributes.ISINFINITIVE to attrs.mutableAttrs[5])
             PartOfSpeech.ADJECTIVE -> return mutableMapOf(
                 Attributes.GENDER to attrs.mutableAttrs[0],
                 Attributes.NUMBER to attrs.mutableAttrs[1],
@@ -143,7 +110,19 @@ class TranslatorDaoImpl: TranslatorDao {
             else -> return mutableMapOf()
         }
     }
-
+    override fun translateWordFromConlang(language: LanguageEntity, word: IWordEntity): String {
+        val py = Python.getInstance()
+        val module = py.getModule("pm3")
+        val russianMutableAttrs: ArrayList<Int> = arrayListOf()
+        for (attr in word.mutableAttrs.keys) {
+            russianMutableAttrs.add(conlangToRusAttr(language, attr, word.mutableAttrs[attr]!!))
+        }
+        return module.callAttr(
+            "inflectAttrs", word.translation,
+            word.partOfSpeech.toString(),
+            russianMutableAttrs.toString()
+        ).toString()
+    }
     override fun translateWordToConlang(language: LanguageEntity, wrappedAttrs: String): String {
         val m = ObjectMapper()
         val attrs = m.readValue(wrappedAttrs, ResultAttrs::class.java)
@@ -173,21 +152,95 @@ class TranslatorDaoImpl: TranslatorDao {
         throw WordNotFoundException("Word not found")
     }
 
-    override fun translateTextToConlang(language: LanguageEntity, text: String): String {
-        val words = text.split(" ")
+}
+
+interface TranslatorDao {
+    fun translateTextFromConlang(language: LanguageEntity, text: String) : String
+    fun translateTextToConlang(language: LanguageEntity, text: String) : String
+}
+
+class TranslatorDaoImpl(val helper: TranslatorHelperDaoImpl = TranslatorHelperDaoImpl()) : TranslatorDao {
+
+    override fun translateTextFromConlang(language: LanguageEntity, text: String): String {
+        val delimiters = language.puncSymbols + " "
+        var curWord = ""
         var res = ""
+        for (letter in text) {
+            if (delimiters.contains(letter)) {
+                if (curWord != "") {
+                    var check = false
+                    for (key in language.dictionary.fullDict.keys) {
+                        if (check) break
+                        for (w in language.dictionary.fullDict[key]!!) {
+                            if (curWord.lowercase() == w.word) {
+                                var translatedWord = helper.translateWordFromConlang(language, w)
+                                if (curWord[0].isUpperCase()) translatedWord = helper.capitalizeWord(translatedWord)
+                                res += translatedWord
+                                check = true
+                                break
+                            }
+                        }
+                    }
+                    if (!check) res += curWord
+                    curWord = ""
+                }
+                res += letter
+            } else {
+                curWord += letter
+            }
+        }
+        if (curWord != "") {
+            var check = false
+            for (key in language.dictionary.fullDict.keys) {
+                if (check) break
+                for (w in language.dictionary.fullDict[key]!!) {
+                    if (curWord.lowercase() == w.word) {
+                        var translatedWord = helper.translateWordFromConlang(language, w)
+                        if (curWord[0].isUpperCase()) translatedWord = helper.capitalizeWord(translatedWord)
+                        res += translatedWord
+                        check = true
+                        break
+                    }
+                }
+            }
+            if (!check) res += curWord
+        }
+        return res
+    }
+    override fun translateTextToConlang(language: LanguageEntity, text: String): String {
         val py = Python.getInstance()
         val module = py.getModule("pm3")
 
-        for (word in words) {
-            val attrs = module.callAttr("getWrappedAttrs", word).toString()
+        val delimiters = language.puncSymbols + " "
+        var curWord = ""
+        var res = ""
+        for (letter in text) {
+            if (delimiters.contains(letter)) {
+                if (curWord != "") {
+                    val attrs = module.callAttr("getWrappedAttrs", curWord).toString()
+                    res += try {
+                        var translatedWord = helper.translateWordToConlang(language, attrs)
+                        if (curWord[0].isUpperCase()) translatedWord = helper.capitalizeWord(translatedWord)
+                        translatedWord
+                    } catch (e: WordNotFoundException) {
+                        curWord
+                    }
+                }
+                curWord = ""
+                res += letter
+            }
+            else curWord += letter
+        }
+        if (curWord != "") {
+            val attrs = module.callAttr("getWrappedAttrs", curWord).toString()
             res += try {
-                " ${translateWordToConlang(language, attrs)}"
+                var translatedWord = helper.translateWordToConlang(language, attrs)
+                if (curWord[0].isUpperCase()) translatedWord = helper.capitalizeWord(translatedWord)
+                translatedWord
             } catch (e: WordNotFoundException) {
-                " $word"
+                curWord
             }
         }
         return res
     }
-
 }

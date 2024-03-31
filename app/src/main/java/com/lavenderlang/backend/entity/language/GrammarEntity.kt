@@ -73,4 +73,9 @@ data class GrammarEntity(
         1 to Characteristic(languageId, 1, Attributes.DEGREEOFCOMPARISON, "сравнительная", 1),
         2 to Characteristic(languageId, 2, Attributes.DEGREEOFCOMPARISON, "превосходная", 2)
     ),
+    // not shown to the user
+    var varsIsInfinitive : MutableMap<Int, Characteristic> = mutableMapOf(
+        0 to Characteristic(languageId, 0, Attributes.ISINFINITIVE, "инфинитив", 0, true),
+        1 to Characteristic(languageId, 1, Attributes.ISINFINITIVE, "не инфинитив", 1)
+    )
 )

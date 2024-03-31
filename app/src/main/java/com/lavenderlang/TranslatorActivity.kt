@@ -1,6 +1,5 @@
 package com.lavenderlang
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -14,11 +13,13 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.backend.dao.language.TranslatorDao
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 import com.lavenderlang.backend.entity.help.Characteristic
 
-class TranslatorActivity : Activity() {
+class TranslatorActivity : AppCompatActivity() {
     companion object{
         var id_lang = 0
         var isOnConlang = true
@@ -60,6 +61,7 @@ class TranslatorActivity : Activity() {
             translate()
         }
 
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, item: View?, position: Int, id: Long) {
                 id_lang = position
@@ -89,6 +91,7 @@ class TranslatorActivity : Activity() {
         var input_text: String = edittext.text.toString()
 
         val translatorDao = TranslatorDaoImpl()
+        // For some reason it always translates from conlang :(
         if (isOnConlang) {
             textview.setText(
                 translatorDao.translateTextFromConlang(languages[clever_index_of_language]!!, input_text))

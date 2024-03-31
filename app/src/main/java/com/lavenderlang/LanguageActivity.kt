@@ -7,10 +7,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 
 

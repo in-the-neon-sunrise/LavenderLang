@@ -30,6 +30,7 @@ class GrammarDaoImpl(val wordHandler : WordDaoImpl = WordDaoImpl()) : GrammarDao
             Attributes.TYPE -> grammar.varsType[grammar.nextIds[option.type]!!] = option
             Attributes.VOICE -> grammar.varsVoice[grammar.nextIds[option.type]!!] = option
             Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison[grammar.nextIds[option.type]!!] = option
+            Attributes.ISINFINITIVE -> return
         }
         grammar.nextIds[option.type] = grammar.nextIds[option.type]!! + 1
     }
@@ -45,6 +46,7 @@ class GrammarDaoImpl(val wordHandler : WordDaoImpl = WordDaoImpl()) : GrammarDao
             Attributes.TYPE -> grammar.varsType.remove(option.characteristicId)
             Attributes.VOICE -> grammar.varsVoice.remove(option.characteristicId)
             Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison.remove(option.characteristicId)
+            Attributes.ISINFINITIVE -> return
         }
     }
 
@@ -63,6 +65,7 @@ class GrammarDaoImpl(val wordHandler : WordDaoImpl = WordDaoImpl()) : GrammarDao
             Attributes.TYPE -> grammar.varsType
             Attributes.VOICE -> grammar.varsVoice
             Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison
+            Attributes.ISINFINITIVE -> return false
         }
         if (!map.contains(optionId)) return false
         map[optionId] = newOption

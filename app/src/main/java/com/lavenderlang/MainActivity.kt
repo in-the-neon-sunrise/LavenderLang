@@ -92,49 +92,22 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        /*val trans = TranslatorDaoImpl()
+        val trans = TranslatorDaoImpl()
         val py = Python.getInstance()
         val module = py.getModule("pm3")
 
-        //Toast.makeText(this, languages[0]!!.dictionary.fullDict[Pair("aaa", "кошечка")]!![0].translation, Toast.LENGTH_LONG).show()
+        /*Toast.makeText(this, languages[0]!!.dictionary.fullDict[Pair("aaa", "кошечка")]!![0].translation, Toast.LENGTH_LONG).show()
 
         //Toast.makeText(this, module.callAttr("getWrappedAttrs", "кошечки").toString(), Toast.LENGTH_LONG).show()
         Toast.makeText(this, trans.translateWordToConlang(languages[0]!!, module.callAttr("getWrappedAttrs", "красивые").toString()), Toast.LENGTH_LONG).show()
         //Toast.makeText(this, languages[0]!!.dictionary.fullDict["ccc:красивый"]!![1].mutableAttrs.toString(), Toast.LENGTH_LONG).show()
-
-
-
-        val wrappedAttrs = module.callAttr("getWrappedAttrs", "красивые").toString()
-        val m = ObjectMapper()
-        val attrs = m.readValue(wrappedAttrs, ResultAttrs::class.java)
-        val rusMutAttrs = trans.mutableAttrsToNormalForm(attrs)
-        val rusImmutAttrs = trans.immutableAttrsToNormalForm(attrs)
-        val mutAttrs = mutableMapOf<Attributes, Int>()
-        val immutAttrs = mutableMapOf<Attributes, Int>()
-        for (attr in rusMutAttrs.keys) {
-            mutAttrs[attr] = trans.rusToConlangAttr(languages[0]!!, attr, rusMutAttrs[attr]!!)
-        }
-        for (attr in rusImmutAttrs.keys) {
-            immutAttrs[attr] = trans.rusToConlangAttr(languages[0]!!, attr, rusImmutAttrs[attr]!!)
-        }
-        Toast.makeText(this, rusMutAttrs.toString(), Toast.LENGTH_LONG).show()
-        Toast.makeText(this, mutAttrs.toString(), Toast.LENGTH_LONG).show()
-
-        var res: String
-        for (key in languages[0]!!.dictionary.fullDict.keys) {
-            if (key.split(":")[1] != attrs.inf) continue
-            res = key.split(":")[0]
-            for (word in languages[0]!!.dictionary.fullDict[key]!!) {
-                if (word.mutableAttrs == mutAttrs) {
-                    res = word.word
-                    break
-                }
-            }
-        }*/
-
-
-
-
+        Toast.makeText(this, languages[0]!!.puncSymbols, Toast.LENGTH_LONG).show()
+        Toast.makeText(this,
+            trans.translateTextFromConlang(languages[0]!!, "bbb, aaa! bbb aaa"),
+            Toast.LENGTH_LONG).show()
+        Toast.makeText(this,
+            trans.translateTextToConlang(languages[0]!!, "Кошечки (и собачки) заплакали!"),
+            Toast.LENGTH_LONG).show()*/
 
 
         //button new lang listener

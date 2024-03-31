@@ -11,7 +11,8 @@ data class VerbEntity(
         Attributes.NUMBER to 0,
         Attributes.GENDER to 0,
         Attributes.PERSON to 0,
-        Attributes.MOOD to 0),
+        Attributes.MOOD to 0,
+        Attributes.ISINFINITIVE to 0),
     override var immutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(
         Attributes.TYPE to 0,
         Attributes.VOICE to 0),
