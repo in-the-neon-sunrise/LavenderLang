@@ -69,7 +69,7 @@ class TranslatorDaoImpl: TranslatorDao {
             russianMutableAttrs.add(conlangToRusAttr(language, attr, word.mutableAttrs[attr]!!))
         }
         return module.callAttr(
-            "inflectAttrs", word.word,
+            "inflectAttrs", word.translation,
             word.partOfSpeech.toString(),
             russianMutableAttrs.toString()
         ).toString()
@@ -80,15 +80,10 @@ class TranslatorDaoImpl: TranslatorDao {
         for (word in words) {
             var check = false
             for (serializedOrigW in language.dictionary.fullDict.keys) {
-                val origW = serializer.deserializeWord(serializedOrigW)
-                if (word == origW.word) {
-                    res += "${translateWordFromConlang(language, origW)} "
-                    check = true
-                }
                 for (w in language.dictionary.fullDict[serializedOrigW]!!) {
                     if (word == w.word) {
                         res += "${translateWordFromConlang(language, w)} "
-                        check = true
+                        check = true//кошечка
                     }
                 }
                 if (!check) res += "$word "
@@ -163,7 +158,7 @@ class TranslatorDaoImpl: TranslatorDao {
         }
         for (w in language.dictionary.dict) {
             if (w.word == attrs.inf) {
-                res += wordHandler.grammarTransformByAttrs(w, mutAttrs)
+                res += " ${wordHandler.grammarTransformByAttrs(w, mutAttrs)}"
             }
         }
         return res
@@ -172,8 +167,12 @@ class TranslatorDaoImpl: TranslatorDao {
     override fun translateTextToConlang(language: LanguageEntity, text: String): String {
         val words = text.split(" ")
         var res = ""
+        val py = Python.getInstance()
+        val module = py.getModule("pm3")
+
         for (word in words) {
-            res += translateWordToConlang(language, word)
+            val attrs = module.callAttr("getWrappedAttrs", word)
+            res += translateWordToConlang(language, attrs.toString())
         }
         return res
     }

@@ -11,7 +11,7 @@ import com.lavenderlang.languages
 import com.lavenderlang.serializer
 
 interface DictionaryDao {
-    fun addWord(dictionary: DictionaryEntity, word : IWordEntity, context: Context);
+    fun addWord(dictionary: DictionaryEntity, word : IWordEntity);
     fun deleteWord(dictionary: DictionaryEntity, word : IWordEntity);
     fun createWordFromExisting(dictionary: DictionaryEntity, word : IWordEntity) : ArrayList<IWordEntity>;
     fun delMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity);
@@ -22,8 +22,10 @@ interface DictionaryDao {
     fun updateMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) : Boolean;
 }
 class DictionaryDaoImpl : DictionaryDao {
-    override fun addWord(dictionary: DictionaryEntity, word : IWordEntity, context: Context) {
+    override fun addWord(dictionary: DictionaryEntity, word : IWordEntity) {
         dictionary.dict.add(word)
+        dictionary.fullDict[serializer.serializeWord(word)] = arrayListOf(word)
+        //Пофиксить строку сверху!!ааа
     }
     override fun deleteWord(dictionary: DictionaryEntity, word : IWordEntity) {
         dictionary.dict.remove(word)
@@ -64,13 +66,13 @@ class DictionaryDaoImpl : DictionaryDao {
         val wordHandler = WordDaoImpl()
         for (word in dictionary.dict) {
             if (mascHandler.fits(rule.masc, word)) {
-
+                TODO()
             }
         }
     }
 
     override fun updateMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity): Boolean {
-        TODO("Not yet implemented")
+        TODO()
     }
 
     override fun delMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {

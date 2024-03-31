@@ -14,6 +14,8 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TextView
+import com.lavenderlang.backend.dao.language.TranslatorDao
+import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 import com.lavenderlang.backend.entity.help.Characteristic
 
 class TranslatorActivity : Activity() {
@@ -86,6 +88,13 @@ class TranslatorActivity : Activity() {
         var clever_index_of_language: Int = languages.keys.toMutableList()[id_lang]
         var input_text: String = edittext.text.toString()
 
-        textview.setText(input_text)
+        val translatorDao = TranslatorDaoImpl()
+        if (isOnConlang) {
+            textview.setText(
+                translatorDao.translateTextFromConlang(languages[clever_index_of_language]!!, input_text))
+        } else {
+            textview.setText(
+                translatorDao.translateTextToConlang(languages[clever_index_of_language]!!, input_text))
+        }
     }
 }

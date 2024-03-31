@@ -1,11 +1,13 @@
 package com.lavenderlang.backend.dao.language
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
 import com.lavenderlang.nextLanguageId
+import com.lavenderlang.serializer
 
 interface LanguageDao {
     fun changeName(language : LanguageEntity, newName : String);
@@ -17,10 +19,23 @@ interface LanguageDao {
     fun deleteLanguage(language : LanguageEntity);
     fun updateLanguage(language : LanguageEntity, context: Context);
 }
-class LanguageDaoImpl(private val serializer : Serializer = Serializer(),
-                      val dictHandler : DictionaryDaoImpl = DictionaryDaoImpl(),
-                      val grammarHandler : GrammarDaoImpl = GrammarDaoImpl()
+class LanguageDaoImpl(private val serializer : Serializer = Serializer()
 ) : LanguageDao {
+    companion object {
+        fun getLanguagesFromDB(context: AppCompatActivity) {
+            val languageRepository = LanguageRepository()
+            languageRepository.languages.observe(context
+            ) { languageItemList ->
+                run {
+                    for (e in languageItemList) {
+                        languages[e.id] = serializer.deserialize(e.lang)
+                        if (nextLanguageId <= e.id) nextLanguageId = e.id + 1
+                    }
+                }
+            }
+            languageRepository.loadAllLanguagesFromDB(context, context)
+        }
+    }
     override fun changeName(language : LanguageEntity, newName : String) {
         language.name = newName
     }

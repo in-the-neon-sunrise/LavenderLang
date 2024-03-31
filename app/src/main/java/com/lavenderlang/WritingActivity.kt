@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.LanguageActivity.Companion.languageDao
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 
 class WritingActivity : AppCompatActivity() {
@@ -18,6 +19,8 @@ class WritingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.writing_activity)
+
+        LanguageDaoImpl.getLanguagesFromDB(this)
 
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
@@ -38,7 +41,7 @@ class WritingActivity : AppCompatActivity() {
         super.onResume()
         //how it was started?
 
-
+        LanguageDaoImpl.getLanguagesFromDB(this)
 
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {

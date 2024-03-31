@@ -7,13 +7,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 
 
-class LanguageActivity: Activity() {
+class LanguageActivity: AppCompatActivity() {
     companion object{
         var id_lang: Int = 0
         val languageDao: LanguageDaoImpl = LanguageDaoImpl()
@@ -21,6 +22,8 @@ class LanguageActivity: Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.language_activity)
+
+        LanguageDaoImpl.getLanguagesFromDB(this)
 
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
@@ -77,6 +80,9 @@ class LanguageActivity: Activity() {
 
     override fun onResume() {
         super.onResume()
+
+        LanguageDaoImpl.getLanguagesFromDB(this)
+
         //how it was started?
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)

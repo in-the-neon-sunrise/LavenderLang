@@ -10,9 +10,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.data.LanguageItem
 import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.entity.help.Attributes
+import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.backend.entity.word.NounEntity
+import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.service.Serializer
 
 var serializer : Serializer = Serializer()
@@ -25,39 +31,36 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
 
-        var dir = getExternalFilesDirs(null)[0].absolutePath + "\\data"
-        serializer = Serializer(getExternalFilesDirs(null)[0].absolutePath)
-        //languages = mutableMapOf(0 to LanguageEntity(0, "a", "aa"))
-        //nextLanguageId = 1
-
-        val languageRepository = LanguageRepository()
-        languageRepository.languages.observe(this
-        ) { languageItemList ->
-            run {
-                Toast.makeText(this, "starting", Toast.LENGTH_LONG).show()
-                for (e in languageItemList) {
-                    languages[e.id] = serializer.deserialize(e.lang)
-                    nextLanguageId = e.id + 1
-                    //Toast.makeText(this, languages[e.id]!!.toString(), Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-        languageRepository.loadAllLanguagesFromDB(this, this)
-
-
-        Toast.makeText(this, languages.size.toString(), Toast.LENGTH_LONG).show()
-        //for (lan in languages.keys) Toast.makeText(this, languages[lan]!!.toString(), Toast.LENGTH_LONG).show()
-
-
-
-        /*if (!Python.isStarted()) {
-            Python.start(AndroidPlatform(this))
-        }*/
-        //Toast.makeText(this, serializer.f(), Toast.LENGTH_LONG).show()
+        LanguageDaoImpl.getLanguagesFromDB(this)
 
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
         }
+
+        languages[0] = LanguageEntity(0, "lol", "Ne rусский язык")
+
+        val dict = DictionaryDaoImpl()
+        val word1 = NounEntity(
+            0,
+            "aaa",
+            "кошечка",
+            immutableAttrs = mutableMapOf(Attributes.GENDER to 1),
+            partOfSpeech = PartOfSpeech.NOUN
+        )
+        val word2 = VerbEntity(
+            0,
+            "bbb",
+            "заплакать",
+            partOfSpeech = PartOfSpeech.VERB
+        )
+        dict.addWord(languages[0]!!.dictionary, word1)
+        dict.addWord(languages[0]!!.dictionary, word2)
+
+
+
+
+
+
 
         //button new lang listener
         val buttonNewLang: Button = findViewById(R.id.buttonNewLang)
@@ -78,31 +81,10 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        LanguageDaoImpl.getLanguagesFromDB(this)
 
-        /*var languageRepository = LanguageRepository()
-        languageRepository.languages.observe(this
-        ) { languageItemList ->
-            {
-                var languageItem = languageItemList[0]
-                // add it to languages
-            }
-        }
-        languageRepository.loadLanguageFromDB(this, this, 0)*/
-        val languageRepository = LanguageRepository()
-        languageRepository.languages.observe(this
-        ) { languageItemList ->
-            run {
-                //Toast.makeText(this, "starting", Toast.LENGTH_LONG).show()
-                for (e in languageItemList) {
-                    languages[e.id] = serializer.deserialize(e.lang)
-                    nextLanguageId = e.id + 1
-                    //Toast.makeText(this, languages[e.id]!!.toString(), Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-        languageRepository.loadAllLanguagesFromDB(this, this)
-
-
+        //val languageRepository = LanguageRepository()
+        //for (e in languages.keys) languageRepository.deleteLanguage(this, e)
 
 
         val listLanguages : ListView = findViewById(R.id.listLanguages)

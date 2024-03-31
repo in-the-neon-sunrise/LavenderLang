@@ -5,14 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 
-class DictionaryActivity : Activity() {
+class DictionaryActivity : AppCompatActivity() {
     companion object{
         var id_lang: Int = 0
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dictionary_activity)
+
+        LanguageDaoImpl.getLanguagesFromDB(this)
 
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
@@ -30,7 +34,10 @@ class DictionaryActivity : Activity() {
     }
     override fun onResume() {
         super.onResume()
-        //how it was started?
+
+        LanguageDaoImpl.getLanguagesFromDB(this)
+
+        //how it was started?ааа кошечка
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
                 val intent = Intent(this@DictionaryActivity, LanguageActivity::class.java)
