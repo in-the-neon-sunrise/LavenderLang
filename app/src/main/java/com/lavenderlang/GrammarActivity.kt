@@ -1,11 +1,8 @@
 package com.lavenderlang
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +16,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.GrammarActivity.Companion.clever_id_lang
-import com.lavenderlang.GrammarActivity.Companion.grammarDao
-import com.lavenderlang.GrammarActivity.Companion.id_lang
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.Characteristic
+import com.lavenderlang.backend.entity.help.CharacteristicEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.service.*
 
@@ -72,13 +67,13 @@ class GrammarActivity: AppCompatActivity() {
 
         //list of genders
         val listGender : ListView = findViewById(R.id.listViewGender)
-        val adapterGender: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsGender.values.toMutableList(), 0)
+        val adapterGender: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsGender.values.toMutableList(), 0)
         listGender.adapter = adapterGender
         adapterGender.notifyDataSetChanged()
 
         val buttonNewGender: Button = findViewById(R.id.buttonNewGender)
         buttonNewGender.setOnClickListener {
-            val newGender = Characteristic(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.GENDER]?: 0, Attributes.GENDER)
+            val newGender = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.GENDER]?: 0, Attributes.GENDER)
             grammarDao.addOption(languages[clever_id_lang]!!.grammar, newGender)
             Toast.makeText(this, languages[clever_id_lang]!!.grammar.nextIds.toString(), Toast.LENGTH_LONG).show()
             adapterGender.notifyDataSetChanged()
@@ -86,42 +81,42 @@ class GrammarActivity: AppCompatActivity() {
 
         //list of numbers
         val listNumber : ListView = findViewById(R.id.listViewNumber)
-        val adapterNumber: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsNumber.values.toMutableList(), 1)
+        val adapterNumber: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsNumber.values.toMutableList(), 1)
         listNumber.adapter = adapterNumber
         adapterNumber.notifyDataSetChanged()
         //list of cases
         val listCases : ListView = findViewById(R.id.listViewCase)
-        val adapterCases: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsCase.values.toMutableList(), 2)
+        val adapterCases: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsCase.values.toMutableList(), 2)
         listCases.adapter = adapterCases
         adapterCases.notifyDataSetChanged()
         //list of times
         val listTimes : ListView = findViewById(R.id.listViewTime)
-        val adapterTimes: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsTime.values.toMutableList(), 3)
+        val adapterTimes: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsTime.values.toMutableList(), 3)
         listTimes.adapter = adapterTimes
         adapterTimes.notifyDataSetChanged()
         //list of persons
         val listPersons : ListView = findViewById(R.id.listViewPerson)
-        val adapterPersons: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsPerson.values.toMutableList(), 4)
+        val adapterPersons: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsPerson.values.toMutableList(), 4)
         listPersons.adapter = adapterPersons
         adapterPersons.notifyDataSetChanged()
         //list of moods
         val listMoods : ListView = findViewById(R.id.listViewMood)
-        val adapterMoods: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsMood.values.toMutableList(), 5)
+        val adapterMoods: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsMood.values.toMutableList(), 5)
         listMoods.adapter = adapterMoods
         adapterMoods.notifyDataSetChanged()
         //list of types
         val listTypes : ListView = findViewById(R.id.listViewType)
-        val adapterTypes: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsType.values.toMutableList(), 6)
+        val adapterTypes: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsType.values.toMutableList(), 6)
         listTypes.adapter = adapterTypes
         adapterTypes.notifyDataSetChanged()
         //list of voices
         val listVoices : ListView = findViewById(R.id.listViewVoice)
-        val adapterVoices: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsVoice.values.toMutableList(), 7)
+        val adapterVoices: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsVoice.values.toMutableList(), 7)
         listVoices.adapter = adapterVoices
         adapterVoices.notifyDataSetChanged()
         //list of voices
         val listDegreeOfComparison : ListView = findViewById(R.id.listViewDegreeOfComparison)
-        val adapterDegreeOfComparison: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList(), 8)
+        val adapterDegreeOfComparison: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList(), 8)
         listDegreeOfComparison.adapter = adapterDegreeOfComparison
         adapterDegreeOfComparison.notifyDataSetChanged()
 
@@ -155,69 +150,69 @@ class GrammarActivity: AppCompatActivity() {
         when(idCharacteristic){
             0->{
                 val listCharacteristic : ListView = findViewById(R.id.listViewGender)
-                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsGender.values.toMutableList(), 0)
-                listCharacteristic.adapter = adapterCharacteristic
-                adapterCharacteristic.notifyDataSetChanged()
+                val adapterCharacteristicEntity: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsGender.values.toMutableList(), 0)
+                listCharacteristic.adapter = adapterCharacteristicEntity
+                adapterCharacteristicEntity.notifyDataSetChanged()
             }
             1->{
                 val listCharacteristic : ListView = findViewById(R.id.listViewNumber)
-                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsNumber.values.toMutableList(), 1)
-                listCharacteristic.adapter = adapterCharacteristic
-                adapterCharacteristic.notifyDataSetChanged()
+                val adapterCharacteristicEntity: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsNumber.values.toMutableList(), 1)
+                listCharacteristic.adapter = adapterCharacteristicEntity
+                adapterCharacteristicEntity.notifyDataSetChanged()
             }
             2->{
                 val listCharacteristic : ListView = findViewById(R.id.listViewCase)
-                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsCase.values.toMutableList(), 2)
-                listCharacteristic.adapter = adapterCharacteristic
-                adapterCharacteristic.notifyDataSetChanged()
+                val adapterCharacteristicEntity: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsCase.values.toMutableList(), 2)
+                listCharacteristic.adapter = adapterCharacteristicEntity
+                adapterCharacteristicEntity.notifyDataSetChanged()
             }
             3->{
                 val listCharacteristic : ListView = findViewById(R.id.listViewTime)
-                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsTime.values.toMutableList(), 3)
-                listCharacteristic.adapter = adapterCharacteristic
-                adapterCharacteristic.notifyDataSetChanged()
+                val adapterCharacteristicEntity: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsTime.values.toMutableList(), 3)
+                listCharacteristic.adapter = adapterCharacteristicEntity
+                adapterCharacteristicEntity.notifyDataSetChanged()
             }
             4->{
                 val listCharacteristic : ListView = findViewById(R.id.listViewPerson)
-                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsPerson.values.toMutableList(), 4)
-                listCharacteristic.adapter = adapterCharacteristic
-                adapterCharacteristic.notifyDataSetChanged()
+                val adapterCharacteristicEntity: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsPerson.values.toMutableList(), 4)
+                listCharacteristic.adapter = adapterCharacteristicEntity
+                adapterCharacteristicEntity.notifyDataSetChanged()
             }
             5->{
                 val listCharacteristic : ListView = findViewById(R.id.listViewMood)
-                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsMood.values.toMutableList(), 5)
-                listCharacteristic.adapter = adapterCharacteristic
-                adapterCharacteristic.notifyDataSetChanged()
+                val adapterCharacteristicEntity: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsMood.values.toMutableList(), 5)
+                listCharacteristic.adapter = adapterCharacteristicEntity
+                adapterCharacteristicEntity.notifyDataSetChanged()
             }
             6->{
                 val listCharacteristic : ListView = findViewById(R.id.listViewType)
-                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsType.values.toMutableList(), 6)
-                listCharacteristic.adapter = adapterCharacteristic
-                adapterCharacteristic.notifyDataSetChanged()
+                val adapterCharacteristicEntity: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsType.values.toMutableList(), 6)
+                listCharacteristic.adapter = adapterCharacteristicEntity
+                adapterCharacteristicEntity.notifyDataSetChanged()
             }
             7->{
                 val listCharacteristic : ListView = findViewById(R.id.listViewVoice)
-                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsVoice.values.toMutableList(), 7)
-                listCharacteristic.adapter = adapterCharacteristic
-                adapterCharacteristic.notifyDataSetChanged()
+                val adapterCharacteristicEntity: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsVoice.values.toMutableList(), 7)
+                listCharacteristic.adapter = adapterCharacteristicEntity
+                adapterCharacteristicEntity.notifyDataSetChanged()
             }
             else->{
                 val listCharacteristic : ListView = findViewById(R.id.listViewDegreeOfComparison)
-                val adapterCharacteristic: ArrayAdapter<Characteristic> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList(), 8)
-                listCharacteristic.adapter = adapterCharacteristic
-                adapterCharacteristic.notifyDataSetChanged()
+                val adapterCharacteristicEntity: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList(), 8)
+                listCharacteristic.adapter = adapterCharacteristicEntity
+                adapterCharacteristicEntity.notifyDataSetChanged()
             }
         }
     }
 }
-private class AttributeAdapter(context: Context, listOfAttributes: MutableList<Characteristic>, idListAttribute: Int) :
-    ArrayAdapter<Characteristic>(context, R.layout.characteristic_line_activity, listOfAttributes) {
+private class AttributeAdapter(context: Context, listOfAttributes: MutableList<CharacteristicEntity>, idListAttribute: Int) :
+    ArrayAdapter<CharacteristicEntity>(context, R.layout.characteristic_line_activity, listOfAttributes) {
     var idAttribute = idListAttribute
 
     override fun getView(positionAttribute: Int, convertView: View?, parent: ViewGroup): View {
 
         var newView = convertView
-        val attribute: Characteristic? = getItem(positionAttribute)
+        val attribute: CharacteristicEntity? = getItem(positionAttribute)
         if (newView == null) {
             newView = LayoutInflater.from(context).inflate(R.layout.characteristic_line_activity, null)
         }

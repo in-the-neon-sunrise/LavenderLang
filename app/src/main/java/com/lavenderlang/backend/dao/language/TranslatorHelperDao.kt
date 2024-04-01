@@ -2,7 +2,7 @@ package com.lavenderlang.backend.dao.language
 
 import android.util.Log
 import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.Characteristic
+import com.lavenderlang.backend.entity.help.CharacteristicEntity
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.ResultAttrs
@@ -23,7 +23,7 @@ interface TranslatorHelperDao {
 class TranslatorHelperDaoImpl : TranslatorHelperDao {
     //problem with multiple links to one russian attribute: we will find only first mention
     override fun rusToConlangAttr(language: LanguageEntity, attr: Attributes, id: Int): Int {
-        val vars : MutableMap<Int, Characteristic> = when (attr) {
+        val vars : MutableMap<Int, CharacteristicEntity> = when (attr) {
             Attributes.GENDER -> language.grammar.varsGender
             Attributes.NUMBER -> language.grammar.varsNumber
             Attributes.CASE -> language.grammar.varsCase

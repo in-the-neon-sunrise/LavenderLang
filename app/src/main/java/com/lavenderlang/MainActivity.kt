@@ -7,30 +7,23 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
-import com.lavenderlang.backend.dao.language.TranslatorHelperDaoImpl
-import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
-import com.lavenderlang.backend.data.LanguageItem
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.Characteristic
+import com.lavenderlang.backend.entity.help.CharacteristicEntity
 import com.lavenderlang.backend.entity.help.MascEntity
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
-import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
-import com.lavenderlang.backend.service.ResultAttrs
 import com.lavenderlang.backend.service.Serializer
 
 var serializer : Serializer = Serializer()
@@ -94,10 +87,10 @@ class MainActivity : AppCompatActivity() {
         val py = Python.getInstance()
         val module = py.getModule("pm3")
         val TAG = "meowmeow"
-        grammarHandler.addOption(languages[0]!!.grammar, Characteristic(
+        grammarHandler.addOption(languages[0]!!.grammar, CharacteristicEntity(
             0, languages[0]!!.grammar.nextIds[Attributes.GENDER]!!, Attributes.GENDER, "полосатые деревья", 2)
         )
-        grammarHandler.addOption(languages[0]!!.grammar, Characteristic(
+        grammarHandler.addOption(languages[0]!!.grammar, CharacteristicEntity(
         0, languages[0]!!.grammar.nextIds[Attributes.GENDER]!!, Attributes.GENDER, "деревья в клеточку", 2)
         )
         Log.d(TAG, languages[0]!!.grammar.varsGender.toString())

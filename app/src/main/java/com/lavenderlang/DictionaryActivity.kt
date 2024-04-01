@@ -48,7 +48,7 @@ class DictionaryActivity : AppCompatActivity() {
 
         LanguageDaoImpl.getLanguagesFromDB(this)
 
-        //how it was started?ааа кошечка
+        //how it was started?
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
                 val intent = Intent(this@DictionaryActivity, LanguageActivity::class.java)

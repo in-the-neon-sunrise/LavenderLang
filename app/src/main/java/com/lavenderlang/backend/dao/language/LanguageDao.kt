@@ -12,12 +12,14 @@ import com.lavenderlang.serializer
 interface LanguageDao {
     fun changeName(language : LanguageEntity, newName : String)
     fun changeDescription(language : LanguageEntity, newDescription: String)
-    fun changeLetters(language : LanguageEntity, newLetters : String)
     fun changePunctuationSymbols(language : LanguageEntity, newSymbols : String)
     fun copyLanguage(language : LanguageEntity) : LanguageEntity
     fun createLanguage(name : String, description: String) : LanguageEntity
     fun deleteLanguage(id : Int)
     fun updateLanguage(language : LanguageEntity, context: Context)
+    fun downloadLanguageJson(language : LanguageEntity)
+    fun downloadLanguagePDF(language : LanguageEntity)
+    fun getLanguageFromFile(path: String) : LanguageEntity
 }
 class LanguageDaoImpl(private val serializer : Serializer = Serializer()
 ) : LanguageDao {
@@ -58,10 +60,6 @@ class LanguageDaoImpl(private val serializer : Serializer = Serializer()
         language.description = newDescription
     }
 
-    override fun changeLetters(language: LanguageEntity, newLetters: String) {
-        language.letters = newLetters
-    }
-
     override fun changePunctuationSymbols(language: LanguageEntity, newSymbols: String) {
         language.puncSymbols = newSymbols
     }
@@ -84,5 +82,17 @@ class LanguageDaoImpl(private val serializer : Serializer = Serializer()
         Thread {
             languageRepository.updateLanguage(context, language.languageId, serializer.serializeLanguage(language))
         }.start()
+    }
+
+    override fun downloadLanguageJson(language: LanguageEntity) {
+        TODO("Not yet implemented")
+    }
+
+    override fun downloadLanguagePDF(language: LanguageEntity) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLanguageFromFile(path: String): LanguageEntity {
+        TODO("Not yet implemented")
     }
 }

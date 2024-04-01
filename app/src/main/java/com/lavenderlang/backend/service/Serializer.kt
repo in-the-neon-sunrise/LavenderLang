@@ -4,7 +4,7 @@ import com.chaquo.python.Python
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.Characteristic
+import com.lavenderlang.backend.entity.help.CharacteristicEntity
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
@@ -55,7 +55,7 @@ class Serializer(path: String = "") {
         }
     }
 
-    fun serializeVars(vars: MutableMap<Int, Characteristic>) : String {
+    fun serializeVars(vars: MutableMap<Int, CharacteristicEntity>) : String {
         return try {
             mapper.writeValueAsString(vars)
         } catch (e : Exception) {

@@ -1,6 +1,6 @@
 package com.lavenderlang.backend.entity.help
 
-data class Characteristic(
+data class CharacteristicEntity(
     val languageId: Int = 0,
     val characteristicId : Int = 0,
     var type: Attributes = Attributes.TYPE,

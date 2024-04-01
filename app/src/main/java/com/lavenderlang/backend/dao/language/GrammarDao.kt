@@ -1,16 +1,14 @@
 package com.lavenderlang.backend.dao.language
 
-import com.lavenderlang.backend.dao.help.MascDaoImpl
-import com.lavenderlang.backend.dao.word.WordDaoImpl
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.entity.rule.*
 import com.lavenderlang.languages
 
 interface GrammarDao {
-    fun addOption(grammar : GrammarEntity, option : Characteristic)
-    fun deleteOption(grammar : GrammarEntity, option : Characteristic)
-    fun updateOption(grammar : GrammarEntity, optionId: Int, newOption: Characteristic)
+    fun addOption(grammar : GrammarEntity, option : CharacteristicEntity)
+    fun deleteOption(grammar : GrammarEntity, option : CharacteristicEntity)
+    fun updateOption(grammar : GrammarEntity, optionId: Int, newOption: CharacteristicEntity)
     fun updateBase(grammar : GrammarEntity, newBase : Int)
     fun addGrammarRule(grammar : GrammarEntity, rule: GrammarRuleEntity)
     fun deleteGrammarRule(grammar : GrammarEntity, rule : GrammarRuleEntity)
@@ -19,7 +17,7 @@ interface GrammarDao {
 }
 
 class GrammarDaoImpl : GrammarDao {
-    override fun addOption(grammar: GrammarEntity, option: Characteristic) {
+    override fun addOption(grammar: GrammarEntity, option: CharacteristicEntity) {
         when (option.type) {
             Attributes.GENDER -> grammar.varsGender[grammar.nextIds[option.type]!!] = option
             Attributes.NUMBER -> grammar.varsNumber[grammar.nextIds[option.type]!!] = option
@@ -35,7 +33,7 @@ class GrammarDaoImpl : GrammarDao {
         grammar.nextIds[option.type] = grammar.nextIds[option.type]!! + 1
     }
 
-    override fun deleteOption(grammar: GrammarEntity, option: Characteristic) {
+    override fun deleteOption(grammar: GrammarEntity, option: CharacteristicEntity) {
         when (option.type) {
             Attributes.GENDER -> grammar.varsGender.remove(option.characteristicId)
             Attributes.NUMBER -> grammar.varsNumber.remove(option.characteristicId)
@@ -53,9 +51,9 @@ class GrammarDaoImpl : GrammarDao {
     override fun updateOption(
         grammar: GrammarEntity,
         optionId: Int,
-        newOption: Characteristic
+        newOption: CharacteristicEntity
     ) {
-        val map: MutableMap<Int, Characteristic> = when (newOption.type) {
+        val map: MutableMap<Int, CharacteristicEntity> = when (newOption.type) {
             Attributes.GENDER -> grammar.varsGender
             Attributes.NUMBER -> grammar.varsNumber
             Attributes.CASE -> grammar.varsCase

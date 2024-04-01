@@ -1,16 +1,7 @@
 package com.lavenderlang.backend.dao.language
 
-import android.util.Log
-import com.chaquo.python.Python
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.Characteristic
-import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.entity.word.IWordEntity
-import com.lavenderlang.backend.service.ResultAttrs
 import com.lavenderlang.backend.service.WordNotFoundException
-import com.lavenderlang.serializer
 
 
 interface TranslatorDao {
