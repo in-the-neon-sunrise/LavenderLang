@@ -8,6 +8,9 @@ data class GrammarRuleEntity(
     var mutableAttrs: MutableMap<Attributes, Int> = mutableMapOf(), // то куда мы трансформируемся
     var transformation: TransformationEntity = TransformationEntity()
 ) : IRuleEntity, Comparable<GrammarRuleEntity> {
+    init {
+        if (masc.partsOfSpeech == PartOfSpeech.VERB) mutableAttrs[Attributes.ISINFINITIVE] = 1
+    }
     override fun compareTo(other: GrammarRuleEntity): Int =
         compareValuesBy(this, other,
             { -it.masc.attrs.size },

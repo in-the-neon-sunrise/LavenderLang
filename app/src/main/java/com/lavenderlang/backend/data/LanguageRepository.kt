@@ -45,8 +45,22 @@ class LanguageRepository {
         val languageDB: LanguageDB = LanguageDB.getInstance(context)
         val languageDao: LanguageDao = languageDB.languageDao()
 
-        Thread {
-            languageDao.deleteById(id)
-        }.start()
+        languageDao.deleteById(id)
+    }
+
+    /*fun deleteLanguage(context: Context, id: Int, language: String) {
+        val languageDB: LanguageDB = LanguageDB.getInstance(context)
+        val languageDao: LanguageDao = languageDB.languageDao()
+
+        val languageItem = LanguageItem(id, language)
+        languageDao.delete(languageItem)
+    }*/
+
+    fun updateLanguage(context: Context, id: Int, language: String) {
+        val languageDB: LanguageDB = LanguageDB.getInstance(context)
+        val languageDao: LanguageDao = languageDB.languageDao()
+
+        val languageItem = LanguageItem(id, language)
+        languageDao.update(languageItem)
     }
 }

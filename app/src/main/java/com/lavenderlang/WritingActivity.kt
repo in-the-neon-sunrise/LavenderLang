@@ -13,14 +13,14 @@ import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 
 class WritingActivity : AppCompatActivity() {
-    companion object{
+    companion object {
         var id_lang: Int = 0
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.writing_activity)
 
-        LanguageDaoImpl.getLanguagesFromDB(this)
+        LanguageDaoImpl.getLanguageFromDB(this, id_lang)
 
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
@@ -41,7 +41,7 @@ class WritingActivity : AppCompatActivity() {
         super.onResume()
         //how it was started?
 
-        LanguageDaoImpl.getLanguagesFromDB(this)
+        LanguageDaoImpl.getLanguageFromDB(this, id_lang)
 
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {

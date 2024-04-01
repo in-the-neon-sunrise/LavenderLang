@@ -25,7 +25,7 @@ class LanguageActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.language_activity)
 
-        LanguageDaoImpl.getLanguagesFromDB(this)
+        LanguageDaoImpl.getLanguageFromDB(this, id_lang)
 
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
@@ -83,7 +83,7 @@ class LanguageActivity: AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        LanguageDaoImpl.getLanguagesFromDB(this)
+        //LanguageDaoImpl.getLanguagesFromDB(this)
 
         //how it was started?
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
@@ -93,6 +93,11 @@ class LanguageActivity: AppCompatActivity() {
                 id_lang = nextLanguageId
                 languageDao.createLanguage(id_lang.toString(), "")
                 editLanguageName.setText(languages[id_lang]?.name)
+
+                val languageRepository = LanguageRepository()
+                Thread {
+                    languageRepository.insertLanguage(this, id_lang, serializer.serializeLanguage(languages[id_lang]!!))
+                }.start()
             }
             else -> {
                 id_lang = lang
@@ -123,9 +128,10 @@ class LanguageActivity: AppCompatActivity() {
     }
     override fun onPause() {
         super.onPause()
+
         val languageRepository = LanguageRepository()
         Thread {
-            languageRepository.insertLanguage(this, id_lang, serializer.serializeLanguage(languages[id_lang]!!))
+            languageRepository.updateLanguage(this, id_lang, serializer.serializeLanguage(languages[id_lang]!!))
         }.start()
     }
 }

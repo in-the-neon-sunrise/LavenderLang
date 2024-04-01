@@ -10,14 +10,14 @@ import com.lavenderlang.nextLanguageId
 import com.lavenderlang.serializer
 
 interface LanguageDao {
-    fun changeName(language : LanguageEntity, newName : String);
-    fun changeDescription(language : LanguageEntity, newDescription: String);
-    fun changeLetters(language : LanguageEntity, newLetters : String);
-    fun changePunctuationSymbols(language : LanguageEntity, newSymbols : String);
-    fun copyLanguage(language : LanguageEntity) : LanguageEntity;
-    fun createLanguage(name : String, description: String) : LanguageEntity;
-    fun deleteLanguage(language : LanguageEntity);
-    fun updateLanguage(language : LanguageEntity, context: Context);
+    fun changeName(language : LanguageEntity, newName : String)
+    fun changeDescription(language : LanguageEntity, newDescription: String)
+    fun changeLetters(language : LanguageEntity, newLetters : String)
+    fun changePunctuationSymbols(language : LanguageEntity, newSymbols : String)
+    fun copyLanguage(language : LanguageEntity) : LanguageEntity
+    fun createLanguage(name : String, description: String) : LanguageEntity
+    fun deleteLanguage(id : Int)
+    fun updateLanguage(language : LanguageEntity, context: Context)
 }
 class LanguageDaoImpl(private val serializer : Serializer = Serializer()
 ) : LanguageDao {
@@ -35,9 +35,24 @@ class LanguageDaoImpl(private val serializer : Serializer = Serializer()
             }
             languageRepository.loadAllLanguagesFromDB(context, context)
         }
+        fun getLanguageFromDB(context: AppCompatActivity, id: Int) {
+            val languageRepository = LanguageRepository()
+            languageRepository.languages.observe(context
+            ) { languageItemList ->
+                run {
+                    for (e in languageItemList) {
+                        languages[e.id] = serializer.deserialize(e.lang)
+                        if (nextLanguageId <= e.id) nextLanguageId = e.id + 1
+                    }
+                }
+            }
+            languageRepository.loadLanguageFromDB(context, context, id)
+
+        }
     }
     override fun changeName(language : LanguageEntity, newName : String) {
         language.name = newName
+
     }
     override fun changeDescription(language : LanguageEntity, newDescription: String) {
         language.description = newDescription
@@ -59,15 +74,15 @@ class LanguageDaoImpl(private val serializer : Serializer = Serializer()
         languages[nextLanguageId] = LanguageEntity(nextLanguageId, name, description)
         return languages[nextLanguageId++]!!
     }
-    override fun deleteLanguage(language: LanguageEntity) {
-        languages.remove(language.languageId)
+    override fun deleteLanguage(id: Int) {
+        languages.remove(id)
         //delete from db!!
     }
 
     override fun updateLanguage(language: LanguageEntity, context: Context) {
         val languageRepository = LanguageRepository()
         Thread {
-            languageRepository.insertLanguage(context, language.languageId, serializer.serializeLanguage(language))
+            languageRepository.updateLanguage(context, language.languageId, serializer.serializeLanguage(language))
         }.start()
     }
 }

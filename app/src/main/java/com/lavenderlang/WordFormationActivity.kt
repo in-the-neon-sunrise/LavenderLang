@@ -4,14 +4,18 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 
-class WordFormationActivity : Activity() {
+class WordFormationActivity : AppCompatActivity() {
     companion object{
         var id_lang: Int = 0
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.word_formation_activity)
+
+        LanguageDaoImpl.getLanguageFromDB(this, id_lang)
 
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
@@ -30,6 +34,7 @@ class WordFormationActivity : Activity() {
     override fun onResume() {
         super.onResume()
         //how it was started?
+        LanguageDaoImpl.getLanguageFromDB(this, id_lang)
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
                 val intent = Intent(this@WordFormationActivity, LanguageActivity::class.java)
@@ -37,8 +42,9 @@ class WordFormationActivity : Activity() {
             }
 
             else -> {
-                WordFormationActivity.id_lang = lang
+                id_lang = lang
             }
         }
     }
+
 }

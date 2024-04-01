@@ -3,6 +3,7 @@ package com.lavenderlang.backend.dao.word
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.lavenderlang.backend.dao.help.MascDaoImpl
+import com.lavenderlang.backend.dao.language.TranslatorHelperDaoImpl
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.rule.*
 import com.lavenderlang.backend.entity.word.*
@@ -44,12 +45,19 @@ class WordDaoImpl : WordDao {
             transformedWord.mutableAttrs[attr] = rule.mutableAttrs[attr]!!
         }
 
+        val translatorHelper = TranslatorHelperDaoImpl()
+        val russianMutAttrs = arrayListOf<Int>()
+        for (attr in transformedWord.mutableAttrs.keys) {
+            russianMutAttrs.add(translatorHelper.conlangToRusAttr(
+                languages[transformedWord.languageId]!!, attr, transformedWord.mutableAttrs[attr]!!)
+            )
+        }
         val py = Python.getInstance()
         val module = py.getModule("pm3")
         val res = module.callAttr(
-            "inflectAttrs", word.word,
+            "inflectAttrs", word.translation,
             word.partOfSpeech.toString(),
-            transformedWord.mutableAttrs.values.toString()
+            russianMutAttrs.toString()
         ).toString()
         transformedWord.translation = res
 
@@ -71,17 +79,16 @@ class WordDaoImpl : WordDao {
         val mascHandler = MascDaoImpl();
         val grammar = languages[word.languageId]!!.grammar
         for (rule in grammar.grammarRules) {
-            if (mascHandler.fits(rule.masc, word)) {
-                var check = true
-                for (attr in args.keys) {
-                    if (!rule.mutableAttrs.contains(attr) || rule.mutableAttrs[attr]!! != args[attr]) {
-                        check = false
-                        break
-                    }
+            if (!mascHandler.fits(rule.masc, word)) continue
+            var check = true
+            for (attr in args.keys) {
+                if (!rule.mutableAttrs.contains(attr) || rule.mutableAttrs[attr]!! != args[attr]) {
+                    check = false
+                    break
                 }
-                if (!check) continue
-                return grammarTransformByRule(word, rule)
             }
+            if (!check) continue
+            return grammarTransformByRule(word, rule)
         }
         return transformedWord
     }
@@ -102,26 +109,29 @@ class WordDaoImpl : WordDao {
         val mascHandler = MascDaoImpl();
         val grammar = languages[word.languageId]!!.grammar
         for (rule in grammar.wordFormationRules) {
-            if (mascHandler.fits(rule.masc, word)) {
-                var check = true
-                for (attr in args.keys) {
-                    if (!rule.immutableAttrs.contains(attr) || rule.immutableAttrs[attr]!! != args[attr]) {
-                        check = false
-                        break
-                    }
+            if (!mascHandler.fits(rule.masc, word)) continue
+            var check = true
+            for (attr in args.keys) {
+                if (!rule.immutableAttrs.contains(attr) || rule.immutableAttrs[attr]!! != args[attr]) {
+                    check = false
+                    break
                 }
-                if (!check) continue
-                val newWord = rule.transformation.addToBeginning + word.word.slice(
-                    IntRange(rule.transformation.delFromBeginning,
-                        word.word.length - rule.transformation.delFromEnd - 1)) +
-                        rule.transformation.addToEnd
-                transformedWord.word = newWord
-                transformedWord.translation = "Введите перевод" // мы сами "кошечка" из "кошка" не образуем
-                for (attr in args.keys) {
-                    transformedWord.immutableAttrs[attr] = args[attr]!!
-                }
-                return transformedWord
             }
+            if (!check) continue
+            val newWord = rule.transformation.addToBeginning + word.word.slice(
+                IntRange(
+                    rule.transformation.delFromBeginning,
+                    word.word.length - rule.transformation.delFromEnd - 1
+                )
+            ) +
+                    rule.transformation.addToEnd
+            transformedWord.word = newWord
+            transformedWord.translation =
+                "Введите перевод" // мы сами "кошечка" из "кошка" не образуем
+            for (attr in args.keys) {
+                transformedWord.immutableAttrs[attr] = args[attr]!!
+            }
+            return transformedWord
         }
         throw Error() // but like pretty error... Not Found??
     }

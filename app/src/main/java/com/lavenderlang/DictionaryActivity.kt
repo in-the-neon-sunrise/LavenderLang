@@ -20,7 +20,7 @@ import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
 
 class DictionaryActivity : AppCompatActivity() {
-    companion object{
+    companion object {
         var id_lang: Int = 0
     }
     override fun onCreate(savedInstanceState: Bundle?) {

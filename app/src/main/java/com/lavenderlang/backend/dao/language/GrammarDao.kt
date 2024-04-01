@@ -8,17 +8,17 @@ import com.lavenderlang.backend.entity.rule.*
 import com.lavenderlang.languages
 
 interface GrammarDao {
-    fun addOption(grammar : GrammarEntity, option : Characteristic);
-    fun deleteOption(grammar : GrammarEntity, option : Characteristic);
-    fun updateOption(grammar : GrammarEntity, optionId: Int, newOption: Characteristic) : Boolean;
-    fun updateBase(grammar : GrammarEntity, newBase : Int);
-    fun addGrammarRule(grammar : GrammarEntity, rule: GrammarRuleEntity);
-    fun deleteGrammarRule(grammar : GrammarEntity, rule : GrammarRuleEntity) : Boolean;
-    fun addWordFormationRule(grammar : GrammarEntity, rule: WordFormationRuleEntity);
-    fun deleteWordFormationRule(grammar : GrammarEntity, rule : WordFormationRuleEntity) : Boolean;
+    fun addOption(grammar : GrammarEntity, option : Characteristic)
+    fun deleteOption(grammar : GrammarEntity, option : Characteristic)
+    fun updateOption(grammar : GrammarEntity, optionId: Int, newOption: Characteristic)
+    fun updateBase(grammar : GrammarEntity, newBase : Int)
+    fun addGrammarRule(grammar : GrammarEntity, rule: GrammarRuleEntity)
+    fun deleteGrammarRule(grammar : GrammarEntity, rule : GrammarRuleEntity)
+    fun addWordFormationRule(grammar : GrammarEntity, rule: WordFormationRuleEntity)
+    fun deleteWordFormationRule(grammar : GrammarEntity, rule : WordFormationRuleEntity)
 }
 
-class GrammarDaoImpl(val wordHandler : WordDaoImpl = WordDaoImpl()) : GrammarDao {
+class GrammarDaoImpl : GrammarDao {
     override fun addOption(grammar: GrammarEntity, option: Characteristic) {
         when (option.type) {
             Attributes.GENDER -> grammar.varsGender[grammar.nextIds[option.type]!!] = option
@@ -54,7 +54,7 @@ class GrammarDaoImpl(val wordHandler : WordDaoImpl = WordDaoImpl()) : GrammarDao
         grammar: GrammarEntity,
         optionId: Int,
         newOption: Characteristic
-    ): Boolean {
+    ) {
         val map: MutableMap<Int, Characteristic> = when (newOption.type) {
             Attributes.GENDER -> grammar.varsGender
             Attributes.NUMBER -> grammar.varsNumber
@@ -65,11 +65,11 @@ class GrammarDaoImpl(val wordHandler : WordDaoImpl = WordDaoImpl()) : GrammarDao
             Attributes.TYPE -> grammar.varsType
             Attributes.VOICE -> grammar.varsVoice
             Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison
-            Attributes.ISINFINITIVE -> return false
+            Attributes.ISINFINITIVE -> return
         }
-        if (!map.contains(optionId)) return false
+        if (!map.contains(optionId)) return
         map[optionId] = newOption
-        return true
+        return
     }
 
     override fun updateBase(grammar: GrammarEntity, newBase: Int) {
@@ -78,20 +78,19 @@ class GrammarDaoImpl(val wordHandler : WordDaoImpl = WordDaoImpl()) : GrammarDao
 
     override fun addGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
         grammar.grammarRules.add(rule)
+        DictionaryHelperDaoImpl().addMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
     }
 
-    override fun deleteGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity): Boolean {
-        return grammar.grammarRules.remove(rule)
+    override fun deleteGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
+        grammar.grammarRules.remove(rule)
+        DictionaryHelperDaoImpl().delMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
     }
 
     override fun addWordFormationRule(grammar: GrammarEntity, rule: WordFormationRuleEntity) {
         grammar.wordFormationRules.add(rule)
     }
 
-    override fun deleteWordFormationRule(
-        grammar: GrammarEntity,
-        rule: WordFormationRuleEntity
-    ): Boolean {
-        return grammar.wordFormationRules.remove(rule)
+    override fun deleteWordFormationRule(grammar: GrammarEntity, rule: WordFormationRuleEntity) {
+        grammar.wordFormationRules.remove(rule)
     }
 }

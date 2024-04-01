@@ -2,6 +2,7 @@ package com.lavenderlang
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -12,13 +13,20 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
+import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
+import com.lavenderlang.backend.dao.language.TranslatorHelperDaoImpl
+import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.data.LanguageItem
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.Attributes
+import com.lavenderlang.backend.entity.help.Characteristic
+import com.lavenderlang.backend.entity.help.MascEntity
 import com.lavenderlang.backend.entity.help.PartOfSpeech
+import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
@@ -66,49 +74,34 @@ class MainActivity : AppCompatActivity() {
         dict.addWord(languages[0]!!.dictionary, word1)
         dict.addWord(languages[0]!!.dictionary, word2)
         dict.addWord(languages[0]!!.dictionary, word3)
-        languages[0]!!.dictionary.fullDict["${word1.word}:${word1.translation}"]!!.add(
-            NounEntity(
-                0,
-                "aab",
-                "кошечки",
-                immutableAttrs = mutableMapOf(Attributes.GENDER to 1),
-                mutableAttrs = mutableMapOf(
-                    Attributes.NUMBER to 1,
-                    Attributes.CASE to 0),
-                partOfSpeech = PartOfSpeech.NOUN
-            )
+        val grammarHandler = GrammarDaoImpl()
+        val rule = GrammarRuleEntity(
+            0, MascEntity(
+                PartOfSpeech.NOUN, mutableMapOf(Attributes.GENDER to arrayListOf(1))
+            ), mutableMapOf(Attributes.NUMBER to 1),
+            TransformationEntity(0, 1, "", "b")
         )
-        languages[0]!!.dictionary.fullDict["${word3.word}:${word3.translation}"]!!.add(
-            NounEntity(
-                0,
-                "ccd",
-                "красивые",
-                immutableAttrs = mutableMapOf(),
-                mutableAttrs = mutableMapOf(Attributes.GENDER to 0,
-                    Attributes.NUMBER to 1,
-                    Attributes.CASE to 0,
-                    Attributes.DEGREEOFCOMPARISON to 0),
-                partOfSpeech = PartOfSpeech.ADJECTIVE
-            )
+        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule)
+        val rule1 = GrammarRuleEntity(
+            0, MascEntity(
+                PartOfSpeech.VERB, mutableMapOf()
+            ), mutableMapOf(Attributes.NUMBER to 1),
+            TransformationEntity(0, 1, "", "d")
         )
+        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule1)
 
         val trans = TranslatorDaoImpl()
         val py = Python.getInstance()
         val module = py.getModule("pm3")
-
-        /*Toast.makeText(this, languages[0]!!.dictionary.fullDict[Pair("aaa", "кошечка")]!![0].translation, Toast.LENGTH_LONG).show()
-
-        //Toast.makeText(this, module.callAttr("getWrappedAttrs", "кошечки").toString(), Toast.LENGTH_LONG).show()
-        Toast.makeText(this, trans.translateWordToConlang(languages[0]!!, module.callAttr("getWrappedAttrs", "красивые").toString()), Toast.LENGTH_LONG).show()
-        //Toast.makeText(this, languages[0]!!.dictionary.fullDict["ccc:красивый"]!![1].mutableAttrs.toString(), Toast.LENGTH_LONG).show()
-        Toast.makeText(this, languages[0]!!.puncSymbols, Toast.LENGTH_LONG).show()
-        Toast.makeText(this,
-            trans.translateTextFromConlang(languages[0]!!, "bbb, aaa! bbb aaa"),
-            Toast.LENGTH_LONG).show()
-        Toast.makeText(this,
-            trans.translateTextToConlang(languages[0]!!, "Кошечки (и собачки) заплакали!"),
-            Toast.LENGTH_LONG).show()*/
-
+        val TAG = "meowmeow"
+        grammarHandler.addOption(languages[0]!!.grammar, Characteristic(
+            0, languages[0]!!.grammar.nextIds[Attributes.GENDER]!!, Attributes.GENDER, "полосатые деревья", 2)
+        )
+        grammarHandler.addOption(languages[0]!!.grammar, Characteristic(
+        0, languages[0]!!.grammar.nextIds[Attributes.GENDER]!!, Attributes.GENDER, "деревья в клеточку", 2)
+        )
+        Log.d(TAG, languages[0]!!.grammar.varsGender.toString())
+        Log.d(TAG, languages[0]!!.grammar.nextIds.toString())
 
         //button new lang listener
         val buttonNewLang: Button = findViewById(R.id.buttonNewLang)
@@ -129,10 +122,20 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        LanguageDaoImpl.getLanguagesFromDB(this)
+        //LanguageDaoImpl.getLanguagesFromDB(this)
 
-        //val languageRepository = LanguageRepository()
-        //for (e in languages.keys) languageRepository.deleteLanguage(this, e)
+        /*val languageRepository = LanguageRepository()
+        if (languages.containsKey(1)) {
+            LanguageDaoImpl().deleteLanguage(1)
+            Thread {
+                languageRepository.deleteLanguage(this, 1)
+            }.start()
+        }
+        for (e in languages.keys) {
+            Thread {
+                languageRepository.deleteLanguage(this, e)
+            }.start()
+        }*/
 
 
         val listLanguages : ListView = findViewById(R.id.listLanguages)
