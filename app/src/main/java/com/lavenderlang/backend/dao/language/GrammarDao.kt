@@ -27,8 +27,8 @@ class GrammarDaoImpl : GrammarDao {
             Attributes.MOOD -> grammar.varsMood[grammar.nextIds[option.type]!!] = option
             Attributes.TYPE -> grammar.varsType[grammar.nextIds[option.type]!!] = option
             Attributes.VOICE -> grammar.varsVoice[grammar.nextIds[option.type]!!] = option
-            Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison[grammar.nextIds[option.type]!!] = option
-            Attributes.ISINFINITIVE -> return
+            Attributes.DEGREE_OF_COMPARISON -> grammar.varsDegreeOfComparison[grammar.nextIds[option.type]!!] = option
+            Attributes.IS_INFINITIVE -> return
         }
         grammar.nextIds[option.type] = grammar.nextIds[option.type]!! + 1
     }
@@ -43,8 +43,8 @@ class GrammarDaoImpl : GrammarDao {
             Attributes.MOOD -> grammar.varsMood.remove(option.characteristicId)
             Attributes.TYPE -> grammar.varsType.remove(option.characteristicId)
             Attributes.VOICE -> grammar.varsVoice.remove(option.characteristicId)
-            Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison.remove(option.characteristicId)
-            Attributes.ISINFINITIVE -> return
+            Attributes.DEGREE_OF_COMPARISON -> grammar.varsDegreeOfComparison.remove(option.characteristicId)
+            Attributes.IS_INFINITIVE -> return
         }
     }
 
@@ -62,8 +62,8 @@ class GrammarDaoImpl : GrammarDao {
             Attributes.MOOD -> grammar.varsMood
             Attributes.TYPE -> grammar.varsType
             Attributes.VOICE -> grammar.varsVoice
-            Attributes.DEGREEOFCOMPARISON -> grammar.varsDegreeOfComparison
-            Attributes.ISINFINITIVE -> return
+            Attributes.DEGREE_OF_COMPARISON -> grammar.varsDegreeOfComparison
+            Attributes.IS_INFINITIVE -> return
         }
         if (!map.contains(optionId)) return
         map[optionId] = newOption

@@ -6,8 +6,8 @@ enum class PartOfSpeech {
     ADJECTIVE,
     ADVERB,
     PARTICIPLE,
-    VERBPARTICIPLE,
+    VERB_PARTICIPLE,
     PRONOUN,
     NUMERAL,
-    FUNCPART
+    FUNC_PART
 }

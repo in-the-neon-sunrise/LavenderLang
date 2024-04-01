@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
             "красивый",
             partOfSpeech = PartOfSpeech.ADJECTIVE
         )
+        languages[0]!!.letters = "a b c"
         dict.addWord(languages[0]!!.dictionary, word1)
         dict.addWord(languages[0]!!.dictionary, word2)
         dict.addWord(languages[0]!!.dictionary, word3)

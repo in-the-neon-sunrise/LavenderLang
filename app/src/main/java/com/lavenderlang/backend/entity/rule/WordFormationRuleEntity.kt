@@ -6,9 +6,9 @@ data class WordFormationRuleEntity(
     override val languageId : Int = 0,
     override var masc : MascEntity = MascEntity(), // а тут требования все еще
     var immutableAttrs: MutableMap<Attributes, Int> = mutableMapOf(), // что хотим получить
-    var transformation: TransformationEntity = TransformationEntity(),
+    override var transformation: TransformationEntity = TransformationEntity(),
     var description: String = ""
-) : IRuleEntity, Comparable<WordFormationRuleEntity> {
+): IRuleEntity, Comparable<WordFormationRuleEntity> {
     override fun compareTo(other: WordFormationRuleEntity): Int = compareValuesBy(this, other,
        { -it.masc.attrs.size }, { -it.masc.regex.length })
 }

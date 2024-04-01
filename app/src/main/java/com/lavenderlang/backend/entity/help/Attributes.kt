@@ -9,6 +9,6 @@ enum class Attributes {
     MOOD,
     TYPE,
     VOICE,
-    DEGREEOFCOMPARISON,
-    ISINFINITIVE
+    DEGREE_OF_COMPARISON,
+    IS_INFINITIVE
 }

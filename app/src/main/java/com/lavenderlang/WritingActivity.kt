@@ -65,7 +65,8 @@ class WritingActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changeLetters(languages[id_lang]!!, (editTextLetters.text.toString()))
+                //!!!
+                //languageDao.changeLetters(languages[id_lang]!!, (editTextLetters.text.toString()))
             }
         })
 

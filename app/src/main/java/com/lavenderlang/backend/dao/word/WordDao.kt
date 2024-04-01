@@ -1,7 +1,6 @@
 package com.lavenderlang.backend.dao.word
 
 import com.chaquo.python.Python
-import com.chaquo.python.android.AndroidPlatform
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorHelperDaoImpl
@@ -169,10 +168,10 @@ class WordDaoImpl : WordDao {
             PartOfSpeech.ADJECTIVE -> (word as AdjectiveEntity).copy()
             PartOfSpeech.ADVERB -> (word as AdverbEntity).copy()
             PartOfSpeech.PARTICIPLE -> (word as ParticipleEntity).copy()
-            PartOfSpeech.VERBPARTICIPLE -> (word as VerbParticipleEntity).copy()
+            PartOfSpeech.VERB_PARTICIPLE -> (word as VerbParticipleEntity).copy()
             PartOfSpeech.PRONOUN -> (word as PronounEntity).copy()
             PartOfSpeech.NUMERAL -> (word as NumeralEntity).copy()
-            PartOfSpeech.FUNCPART -> (word as FuncPartEntity).copy()
+            PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
         }
         word.word = newWord
         DictionaryHelperDaoImpl().updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
@@ -185,10 +184,10 @@ class WordDaoImpl : WordDao {
             PartOfSpeech.ADJECTIVE -> (word as AdjectiveEntity).copy()
             PartOfSpeech.ADVERB -> (word as AdverbEntity).copy()
             PartOfSpeech.PARTICIPLE -> (word as ParticipleEntity).copy()
-            PartOfSpeech.VERBPARTICIPLE -> (word as VerbParticipleEntity).copy()
+            PartOfSpeech.VERB_PARTICIPLE -> (word as VerbParticipleEntity).copy()
             PartOfSpeech.PRONOUN -> (word as PronounEntity).copy()
             PartOfSpeech.NUMERAL -> (word as NumeralEntity).copy()
-            PartOfSpeech.FUNCPART -> (word as FuncPartEntity).copy()
+            PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
         }
         word.translation = newTranslation
         DictionaryHelperDaoImpl().updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
@@ -202,10 +201,10 @@ class WordDaoImpl : WordDao {
             PartOfSpeech.ADJECTIVE -> (word as AdjectiveEntity).copy()
             PartOfSpeech.ADVERB -> (word as AdverbEntity).copy()
             PartOfSpeech.PARTICIPLE -> (word as ParticipleEntity).copy()
-            PartOfSpeech.VERBPARTICIPLE -> (word as VerbParticipleEntity).copy()
+            PartOfSpeech.VERB_PARTICIPLE -> (word as VerbParticipleEntity).copy()
             PartOfSpeech.PRONOUN -> (word as PronounEntity).copy()
             PartOfSpeech.NUMERAL -> (word as NumeralEntity).copy()
-            PartOfSpeech.FUNCPART -> (word as FuncPartEntity).copy()
+            PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
         }
         word.immutableAttrs[attribute] = newId
         DictionaryHelperDaoImpl().updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
@@ -218,10 +217,10 @@ class WordDaoImpl : WordDao {
             PartOfSpeech.ADJECTIVE -> (word as AdjectiveEntity).copy()
             PartOfSpeech.ADVERB -> (word as AdverbEntity).copy()
             PartOfSpeech.PARTICIPLE -> (word as ParticipleEntity).copy()
-            PartOfSpeech.VERBPARTICIPLE -> (word as VerbParticipleEntity).copy()
+            PartOfSpeech.VERB_PARTICIPLE -> (word as VerbParticipleEntity).copy()
             PartOfSpeech.PRONOUN -> (word as PronounEntity).copy()
             PartOfSpeech.NUMERAL -> (word as NumeralEntity).copy()
-            PartOfSpeech.FUNCPART -> (word as FuncPartEntity).copy()
+            PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
         }
         for (attr in args.keys) {
             word.immutableAttrs[attr] = args[attr]!!
@@ -236,10 +235,10 @@ class WordDaoImpl : WordDao {
             PartOfSpeech.ADJECTIVE -> (word as AdjectiveEntity).copy()
             PartOfSpeech.ADVERB -> (word as AdverbEntity).copy()
             PartOfSpeech.PARTICIPLE -> (word as ParticipleEntity).copy()
-            PartOfSpeech.VERBPARTICIPLE -> (word as VerbParticipleEntity).copy()
+            PartOfSpeech.VERB_PARTICIPLE -> (word as VerbParticipleEntity).copy()
             PartOfSpeech.PRONOUN -> (word as PronounEntity).copy()
             PartOfSpeech.NUMERAL -> (word as NumeralEntity).copy()
-            PartOfSpeech.FUNCPART -> (word as FuncPartEntity).copy()
+            PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
         }
         /*when (newPartOfSpeech) {
             PartOfSpeech.NOUN -> NounEntity(

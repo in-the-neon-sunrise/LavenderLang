@@ -129,10 +129,10 @@ class GrammarRuleActivity: AppCompatActivity(){
             PartOfSpeech.ADJECTIVE->idPartOfSpeech=2
             PartOfSpeech.ADVERB->idPartOfSpeech=3
             PartOfSpeech.PARTICIPLE->idPartOfSpeech=4
-            PartOfSpeech.VERBPARTICIPLE->idPartOfSpeech=5
+            PartOfSpeech.VERB_PARTICIPLE->idPartOfSpeech=5
             PartOfSpeech.PRONOUN->idPartOfSpeech=6
             PartOfSpeech.NUMERAL->idPartOfSpeech=7
-            PartOfSpeech.FUNCPART->idPartOfSpeech=8
+            PartOfSpeech.FUNC_PART->idPartOfSpeech=8
         }
         spinnerPartOfSpeech.setSelection(idPartOfSpeech)
 
@@ -215,7 +215,7 @@ class GrammarRuleActivity: AppCompatActivity(){
 
         spinnerFinishDegreeOfComparison.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.DEGREEOFCOMPARISON] = positionSpinner
+                mutableAttrs[Attributes.DEGREE_OF_COMPARISON] = positionSpinner
                 updateMutableAttrs()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -345,7 +345,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                     }
                     5->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc, PartOfSpeech.VERBPARTICIPLE)
+                            languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc, PartOfSpeech.VERB_PARTICIPLE)
                         spinnerGender.visibility=View.GONE
                         spinnerType.visibility=View.VISIBLE
                         spinnerVoice.visibility=View.GONE
@@ -411,7 +411,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                     }
                     else->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc, PartOfSpeech.FUNCPART)
+                            languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc, PartOfSpeech.FUNC_PART)
                         spinnerGender.visibility=View.GONE
                         spinnerType.visibility=View.GONE
                         spinnerVoice.visibility=View.GONE
@@ -497,10 +497,10 @@ class GrammarRuleActivity: AppCompatActivity(){
             2->PartOfSpeech.ADJECTIVE
             3->PartOfSpeech.ADVERB
             4->PartOfSpeech.PARTICIPLE
-            5->PartOfSpeech.VERBPARTICIPLE
+            5->PartOfSpeech.VERB_PARTICIPLE
             6->PartOfSpeech.PRONOUN
             7->PartOfSpeech.NUMERAL
-            else->PartOfSpeech.FUNCPART
+            else->PartOfSpeech.FUNC_PART
         }
         var newMasc = MascEntity(
             partOfSpeech, attrs, regex
@@ -615,7 +615,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                 spinnerFinishGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.GENDER] ?:0)
                 spinnerFinishNumber.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.NUMBER] ?:0)
                 spinnerFinishCase.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.CASE] ?:0)
-                spinnerFinishDegreeOfComparison.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.DEGREEOFCOMPARISON] ?:0)
+                spinnerFinishDegreeOfComparison.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.DEGREE_OF_COMPARISON] ?:0)
             }
             3->{}
             4->{

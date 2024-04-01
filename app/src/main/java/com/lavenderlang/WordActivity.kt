@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
@@ -84,10 +83,10 @@ class WordActivity : AppCompatActivity() {
             PartOfSpeech.ADJECTIVE-> GrammarRuleActivity.idPartOfSpeech =2
             PartOfSpeech.ADVERB-> GrammarRuleActivity.idPartOfSpeech =3
             PartOfSpeech.PARTICIPLE-> GrammarRuleActivity.idPartOfSpeech =4
-            PartOfSpeech.VERBPARTICIPLE-> GrammarRuleActivity.idPartOfSpeech =5
+            PartOfSpeech.VERB_PARTICIPLE-> GrammarRuleActivity.idPartOfSpeech =5
             PartOfSpeech.PRONOUN-> GrammarRuleActivity.idPartOfSpeech =6
             PartOfSpeech.NUMERAL-> GrammarRuleActivity.idPartOfSpeech =7
-            PartOfSpeech.FUNCPART-> GrammarRuleActivity.idPartOfSpeech =8
+            PartOfSpeech.FUNC_PART-> GrammarRuleActivity.idPartOfSpeech =8
         }
         immutableAttrs = languages[id_lang]!!.dictionary.dict[id_word].immutableAttrs
         mutableAttrs = languages[id_lang]!!.dictionary.dict[id_word].mutableAttrs
@@ -214,7 +213,7 @@ class WordActivity : AppCompatActivity() {
                 spinnerFinishGender.setSelection(mutableAttrs[Attributes.GENDER] ?:0)
                 spinnerFinishNumber.setSelection(mutableAttrs[Attributes.NUMBER] ?:0)
                 spinnerFinishCase.setSelection(mutableAttrs[Attributes.CASE] ?:0)
-                spinnerFinishDegreeOfComparison.setSelection(mutableAttrs[Attributes.DEGREEOFCOMPARISON] ?:0)
+                spinnerFinishDegreeOfComparison.setSelection(mutableAttrs[Attributes.DEGREE_OF_COMPARISON] ?:0)
             }
             3->{}
             4->{

@@ -15,9 +15,7 @@ interface TranslatorHelperDao {
     fun translateWordToConlang(language: LanguageEntity, word: String): String
     fun immutableAttrsToNormalForm(attrs: ResultAttrs) : MutableMap<Attributes, Int>
     fun mutableAttrsToNormalForm(attrs: ResultAttrs) : MutableMap<Attributes, Int>
-    fun capitalizeWord(word: String) : String {
-        return word[0].uppercaseChar() + word.substring(1)
-    }
+    fun capitalizeWord(word: String) : String
 }
 
 class TranslatorHelperDaoImpl : TranslatorHelperDao {
@@ -32,8 +30,8 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
             Attributes.MOOD -> language.grammar.varsMood
             Attributes.TYPE -> language.grammar.varsType
             Attributes.VOICE -> language.grammar.varsVoice
-            Attributes.DEGREEOFCOMPARISON -> language.grammar.varsDegreeOfComparison
-            Attributes.ISINFINITIVE -> return id
+            Attributes.DEGREE_OF_COMPARISON -> language.grammar.varsDegreeOfComparison
+            Attributes.IS_INFINITIVE -> return id
         }
         for (option in vars.keys) {
             if (vars[option]!!.russianId == id) return vars[option]!!.characteristicId
@@ -52,8 +50,8 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
                 Attributes.MOOD -> language.grammar.varsMood[id]!!.russianId
                 Attributes.TYPE -> language.grammar.varsType[id]!!.russianId
                 Attributes.VOICE -> language.grammar.varsVoice[id]!!.russianId
-                Attributes.DEGREEOFCOMPARISON -> language.grammar.varsDegreeOfComparison[id]!!.russianId
-                Attributes.ISINFINITIVE -> id
+                Attributes.DEGREE_OF_COMPARISON -> language.grammar.varsDegreeOfComparison[id]!!.russianId
+                Attributes.IS_INFINITIVE -> id
             }
         } catch (e: Exception) {
             0
@@ -70,7 +68,7 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
             PartOfSpeech.PARTICIPLE -> return mutableMapOf(
                 Attributes.TYPE to attrs.immutableAttrs[0],
                 Attributes.VOICE to attrs.immutableAttrs[1])
-            PartOfSpeech.VERBPARTICIPLE -> return mutableMapOf(
+            PartOfSpeech.VERB_PARTICIPLE -> return mutableMapOf(
                 Attributes.TYPE to attrs.immutableAttrs[0])
             PartOfSpeech.PRONOUN -> return mutableMapOf(
                 Attributes.GENDER to attrs.immutableAttrs[0])
@@ -91,12 +89,12 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
                 Attributes.GENDER to attrs.mutableAttrs[2],
                 Attributes.PERSON to attrs.mutableAttrs[3],
                 Attributes.MOOD to attrs.mutableAttrs[4],
-                Attributes.ISINFINITIVE to attrs.mutableAttrs[5])
+                Attributes.IS_INFINITIVE to attrs.mutableAttrs[5])
             PartOfSpeech.ADJECTIVE -> return mutableMapOf(
                 Attributes.GENDER to attrs.mutableAttrs[0],
                 Attributes.NUMBER to attrs.mutableAttrs[1],
                 Attributes.CASE to attrs.mutableAttrs[2],
-                Attributes.DEGREEOFCOMPARISON to attrs.mutableAttrs[3])
+                Attributes.DEGREE_OF_COMPARISON to attrs.mutableAttrs[3])
             PartOfSpeech.PARTICIPLE -> return mutableMapOf(
                 Attributes.TIME to attrs.mutableAttrs[0],
                 Attributes.NUMBER to attrs.mutableAttrs[1],
@@ -108,6 +106,11 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
             else -> return mutableMapOf()
         }
     }
+
+    override fun capitalizeWord(word: String): String {
+        return word[0].uppercaseChar() + word.substring(1)
+    }
+
     override fun translateWordFromConlang(language: LanguageEntity, word: String): String {
         for (key in language.dictionary.fullDict.keys) {
             for (w in language.dictionary.fullDict[key]!!) {

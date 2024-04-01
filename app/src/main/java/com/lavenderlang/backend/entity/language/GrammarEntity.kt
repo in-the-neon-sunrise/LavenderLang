@@ -7,8 +7,6 @@ import java.util.SortedSet
 data class GrammarEntity(
     val languageId : Int = 0,
     var base : Int = 10,
-    //var adposition : Adposition = Adposition.PREPOSITION, // если будет время и желание потом
-
     var grammarRules: SortedSet<GrammarRuleEntity> = sortedSetOf(
         GrammarRuleEntity(languageId, MascEntity(), mutableMapOf(), TransformationEntity())
     ),
@@ -25,7 +23,7 @@ data class GrammarEntity(
         Attributes.MOOD to 3,
         Attributes.TYPE to 2,
         Attributes.VOICE to 2,
-        Attributes.DEGREEOFCOMPARISON to 3),
+        Attributes.DEGREE_OF_COMPARISON to 3),
 
     var varsGender : MutableMap<Int, CharacteristicEntity> = mutableMapOf(
         0 to CharacteristicEntity(languageId, 0, Attributes.GENDER, "мужской", 0, true),
@@ -68,13 +66,13 @@ data class GrammarEntity(
         1 to CharacteristicEntity(languageId, 1, Attributes.VOICE, "страдательный", 1)
     ),
     var varsDegreeOfComparison : MutableMap<Int, CharacteristicEntity> = mutableMapOf(
-        0 to CharacteristicEntity(languageId, 0, Attributes.DEGREEOFCOMPARISON, "положительная", 0, true),
-        1 to CharacteristicEntity(languageId, 1, Attributes.DEGREEOFCOMPARISON, "сравнительная", 1),
-        2 to CharacteristicEntity(languageId, 2, Attributes.DEGREEOFCOMPARISON, "превосходная", 2)
+        0 to CharacteristicEntity(languageId, 0, Attributes.DEGREE_OF_COMPARISON, "положительная", 0, true),
+        1 to CharacteristicEntity(languageId, 1, Attributes.DEGREE_OF_COMPARISON, "сравнительная", 1),
+        2 to CharacteristicEntity(languageId, 2, Attributes.DEGREE_OF_COMPARISON, "превосходная", 2)
     ),
     // not shown to the user
     var varsIsInfinitive : MutableMap<Int, CharacteristicEntity> = mutableMapOf(
-        0 to CharacteristicEntity(languageId, 0, Attributes.ISINFINITIVE, "инфинитив", 0, true),
-        1 to CharacteristicEntity(languageId, 1, Attributes.ISINFINITIVE, "не инфинитив", 1)
+        0 to CharacteristicEntity(languageId, 0, Attributes.IS_INFINITIVE, "инфинитив", 0, true),
+        1 to CharacteristicEntity(languageId, 1, Attributes.IS_INFINITIVE, "не инфинитив", 1)
     )
 )

@@ -10,7 +10,7 @@ data class AdjectiveEntity(
         Attributes.GENDER to 0,
         Attributes.NUMBER to 0,
         Attributes.CASE to 0,
-        Attributes.DEGREEOFCOMPARISON to 0),
+        Attributes.DEGREE_OF_COMPARISON to 0),
     override var immutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(),
     override var partOfSpeech: PartOfSpeech = PartOfSpeech.ADJECTIVE
 ) : IWordEntity {
