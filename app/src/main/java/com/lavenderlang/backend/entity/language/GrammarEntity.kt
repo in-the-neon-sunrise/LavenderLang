@@ -6,13 +6,10 @@ import java.util.SortedSet
 
 data class GrammarEntity(
     val languageId : Int = 0,
-    var base : Int = 10,
     var grammarRules: SortedSet<GrammarRuleEntity> = sortedSetOf(
         GrammarRuleEntity(languageId, MascEntity(), mutableMapOf(), TransformationEntity())
     ),
-    var wordFormationRules : SortedSet<WordFormationRuleEntity> = sortedSetOf(
-        WordFormationRuleEntity(languageId, MascEntity(), mutableMapOf(), TransformationEntity(), "Слово не изменяется")
-    ),
+    var wordFormationRules : ArrayList<WordFormationRuleEntity> = arrayListOf(),
 
     var nextIds : MutableMap<Attributes, Int> = mutableMapOf(
         Attributes.GENDER to 3,

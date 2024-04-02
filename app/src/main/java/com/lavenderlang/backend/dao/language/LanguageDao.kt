@@ -7,92 +7,77 @@ import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
 import com.lavenderlang.nextLanguageId
-import com.lavenderlang.serializer
 
 interface LanguageDao {
-    fun changeName(language : LanguageEntity, newName : String)
-    fun changeDescription(language : LanguageEntity, newDescription: String)
-    fun changePunctuationSymbols(language : LanguageEntity, newSymbols : String)
-    fun copyLanguage(language : LanguageEntity) : LanguageEntity
-    fun createLanguage(name : String, description: String) : LanguageEntity
-    fun deleteLanguage(id : Int)
-    fun updateLanguage(language : LanguageEntity, context: Context)
-    fun downloadLanguageJson(language : LanguageEntity)
-    fun downloadLanguagePDF(language : LanguageEntity)
-    fun getLanguageFromFile(path: String) : LanguageEntity
+    fun changeName(language : LanguageEntity, newName : String, context: Context)
+    fun changeDescription(language : LanguageEntity, newDescription: String, context: Context)
+    fun copyLanguage(language : LanguageEntity, context: Context)
+    fun createLanguage(name : String, description: String, context: Context)
+    fun deleteLanguage(id : Int, context: Context)
+    fun getLanguagesFromDB(context: AppCompatActivity)
+    fun downloadLanguageJSON(language: LanguageEntity, activity: AppCompatActivity)
+    fun downloadLanguagePDF(language: LanguageEntity, activity: AppCompatActivity)
+    fun getLanguageFromFile(path: String, activity: AppCompatActivity)
 }
-class LanguageDaoImpl(private val serializer : Serializer = Serializer()
-) : LanguageDao {
-    companion object {
-        fun getLanguagesFromDB(context: AppCompatActivity) {
-            val languageRepository = LanguageRepository()
+class LanguageDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) : LanguageDao {
+    override fun getLanguagesFromDB(context: AppCompatActivity) {
             languageRepository.languages.observe(context
             ) { languageItemList ->
                 run {
                     for (e in languageItemList) {
-                        languages[e.id] = serializer.deserialize(e.lang)
+                        languages[e.id] = Serializer.getInstance().deserializeLanguage(e.lang)
                         if (nextLanguageId <= e.id) nextLanguageId = e.id + 1
                     }
                 }
             }
-            languageRepository.loadAllLanguagesFromDB(context, context)
+            languageRepository.loadAllLanguages(context, context)
         }
-        fun getLanguageFromDB(context: AppCompatActivity, id: Int) {
-            val languageRepository = LanguageRepository()
-            languageRepository.languages.observe(context
-            ) { languageItemList ->
-                run {
-                    for (e in languageItemList) {
-                        languages[e.id] = serializer.deserialize(e.lang)
-                        if (nextLanguageId <= e.id) nextLanguageId = e.id + 1
-                    }
-                }
-            }
-            languageRepository.loadLanguageFromDB(context, context, id)
-
-        }
-    }
-    override fun changeName(language : LanguageEntity, newName : String) {
+    override fun changeName(language : LanguageEntity, newName : String, context: Context) {
         language.name = newName
-
-    }
-    override fun changeDescription(language : LanguageEntity, newDescription: String) {
-        language.description = newDescription
-    }
-
-    override fun changePunctuationSymbols(language: LanguageEntity, newSymbols: String) {
-        language.puncSymbols = newSymbols
-    }
-
-    override fun copyLanguage(language: LanguageEntity): LanguageEntity {
-        serializer.updateMaxLanguageId()
-        return language.copy(languageId = serializer.getMaxLanguageId() - 1, name = language.name + " копия")
-    }
-    override fun createLanguage(name: String, description: String): LanguageEntity {
-        languages[nextLanguageId] = LanguageEntity(nextLanguageId, name, description)
-        return languages[nextLanguageId++]!!
-    }
-    override fun deleteLanguage(id: Int) {
-        languages.remove(id)
-        //delete from db!!
-    }
-
-    override fun updateLanguage(language: LanguageEntity, context: Context) {
-        val languageRepository = LanguageRepository()
         Thread {
-            languageRepository.updateLanguage(context, language.languageId, serializer.serializeLanguage(language))
+            languageRepository.updateLanguage(context, language.languageId, Serializer.getInstance().serializeLanguage(language))
+        }.start()
+    }
+    override fun changeDescription(language : LanguageEntity, newDescription: String, context: Context) {
+        language.description = newDescription
+        Thread {
+            languageRepository.updateLanguage(context, language.languageId, Serializer.getInstance().serializeLanguage(language))
         }.start()
     }
 
-    override fun downloadLanguageJson(language: LanguageEntity) {
+    override fun copyLanguage(language: LanguageEntity, context: Context) {
+        val newLang = language.copy(languageId = nextLanguageId, name = language.name + " копия")
+        languages[nextLanguageId++] = newLang
+        Thread {
+            languageRepository.insertLanguage(context, newLang.languageId, Serializer.getInstance().serializeLanguage(newLang))
+        }.start()
+        return
+    }
+    override fun createLanguage(name: String, description: String, context: Context) {
+        val newLang = LanguageEntity(nextLanguageId, name, description)
+        languages[nextLanguageId] = newLang
+        Thread {
+            languageRepository.insertLanguage(context, nextLanguageId, Serializer.getInstance().serializeLanguage(newLang))
+        }.start()
+        ++nextLanguageId
+        return
+    }
+    override fun deleteLanguage(id: Int, context: Context) {
+        languages.remove(id)
+        Thread {
+            languageRepository.deleteLanguage(context, id)
+        }.start()
+    }
+
+    override fun downloadLanguageJSON(language: LanguageEntity, activity: AppCompatActivity) {
         TODO("Not yet implemented")
     }
 
-    override fun downloadLanguagePDF(language: LanguageEntity) {
+    override fun downloadLanguagePDF(language: LanguageEntity, activity: AppCompatActivity) {
         TODO("Not yet implemented")
     }
 
-    override fun getLanguageFromFile(path: String): LanguageEntity {
+    override fun getLanguageFromFile(path: String, activity: AppCompatActivity) {
         TODO("Not yet implemented")
     }
 }

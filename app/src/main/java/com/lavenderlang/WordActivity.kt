@@ -27,8 +27,6 @@ class WordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.word_activity)
 
-        LanguageDaoImpl.getLanguagesFromDB(this)
-
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {

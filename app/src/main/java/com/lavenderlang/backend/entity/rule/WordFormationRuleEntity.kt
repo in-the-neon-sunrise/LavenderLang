@@ -8,7 +8,4 @@ data class WordFormationRuleEntity(
     var immutableAttrs: MutableMap<Attributes, Int> = mutableMapOf(), // что хотим получить
     override var transformation: TransformationEntity = TransformationEntity(),
     var description: String = ""
-): IRuleEntity, Comparable<WordFormationRuleEntity> {
-    override fun compareTo(other: WordFormationRuleEntity): Int = compareValuesBy(this, other,
-       { -it.masc.attrs.size }, { -it.masc.regex.length })
-}
+): IRuleEntity

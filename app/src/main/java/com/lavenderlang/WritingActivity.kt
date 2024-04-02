@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.LanguageActivity.Companion.languageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.service.Serializer
 
 class WritingActivity : AppCompatActivity() {
     companion object {
@@ -19,8 +20,6 @@ class WritingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.writing_activity)
-
-        LanguageDaoImpl.getLanguageFromDB(this, id_lang)
 
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
@@ -41,8 +40,6 @@ class WritingActivity : AppCompatActivity() {
         super.onResume()
         //how it was started?
 
-        LanguageDaoImpl.getLanguageFromDB(this, id_lang)
-
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
                 val intent = Intent(this@WritingActivity, LanguageActivity::class.java)
@@ -56,7 +53,7 @@ class WritingActivity : AppCompatActivity() {
 
         //letters
         val editTextLetters: EditText = findViewById(R.id.editLetters)
-        editTextLetters.setText(languages[id_lang]?.letters)
+        //editTextLetters.setText(languages[id_lang]?.letters)
 
         //check changing
         editTextLetters.addTextChangedListener(object : TextWatcher {
@@ -72,7 +69,7 @@ class WritingActivity : AppCompatActivity() {
 
         //symbols
         val editTextSymbols: EditText = findViewById(R.id.editSymbols)
-        editTextSymbols.setText(languages[id_lang]?.puncSymbols)
+        //editTextSymbols.setText(languages[id_lang]?.puncSymbols)
 
         //check changing
         editTextSymbols.addTextChangedListener(object : TextWatcher {
@@ -81,7 +78,7 @@ class WritingActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changePunctuationSymbols(languages[id_lang]!!, (editTextSymbols.text.toString()))
+                //languageDao.changePunctuationSymbols(languages[id_lang]!!, (editTextSymbols.text.toString()))
             }
         })
     }
@@ -90,6 +87,6 @@ class WritingActivity : AppCompatActivity() {
         val languageRepository = LanguageRepository()
         Thread {
         languageRepository.insertLanguage(this,
-            LanguageActivity.id_lang, serializer.serializeLanguage(languages[LanguageActivity.id_lang]!!))}.start()
+            LanguageActivity.id_lang, Serializer.getInstance().serializeLanguage(languages[LanguageActivity.id_lang]!!))}.start()
     }
 }

@@ -14,6 +14,8 @@ class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = Translator
         val delimiters = language.puncSymbols + " "
         var curWord = ""
         var res = ""
+        TODO("fix delimiters")
+        /*
         for (letter in text) {
             if (delimiters.contains(letter)) {
                 if (curWord != "") {
@@ -40,13 +42,14 @@ class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = Translator
                 curWord
             }
         }
-        return res
+        return res*/
     }
     override fun translateTextToConlang(language: LanguageEntity, text: String): String {
         val delimiters = language.puncSymbols + " "
         var curWord = ""
         var res = ""
-        for (letter in text) {
+        TODO("fix delimiters")
+        /*for (letter in text) {
             if (delimiters.contains(letter)) {
                 if (curWord != "") {
                     res += try {
@@ -71,6 +74,6 @@ class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = Translator
                 curWord
             }
         }
-        return res
+        return res*/
     }
 }

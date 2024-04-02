@@ -9,7 +9,6 @@ interface GrammarDao {
     fun addOption(grammar : GrammarEntity, option : CharacteristicEntity)
     fun deleteOption(grammar : GrammarEntity, option : CharacteristicEntity)
     fun updateOption(grammar : GrammarEntity, optionId: Int, newOption: CharacteristicEntity)
-    fun updateBase(grammar : GrammarEntity, newBase : Int)
     fun addGrammarRule(grammar : GrammarEntity, rule: GrammarRuleEntity)
     fun deleteGrammarRule(grammar : GrammarEntity, rule : GrammarRuleEntity)
     fun addWordFormationRule(grammar : GrammarEntity, rule: WordFormationRuleEntity)
@@ -70,11 +69,8 @@ class GrammarDaoImpl : GrammarDao {
         return
     }
 
-    override fun updateBase(grammar: GrammarEntity, newBase: Int) {
-        grammar.base = newBase
-    }
-
     override fun addGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
+        //check if rule is correct (letters in transformation are in language)
         grammar.grammarRules.add(rule)
         DictionaryHelperDaoImpl().addMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
     }

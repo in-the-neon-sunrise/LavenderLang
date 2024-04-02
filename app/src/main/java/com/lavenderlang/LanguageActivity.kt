@@ -14,6 +14,7 @@ import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.service.Serializer
 
 
 class LanguageActivity: AppCompatActivity() {
@@ -24,8 +25,6 @@ class LanguageActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.language_activity)
-
-        LanguageDaoImpl.getLanguageFromDB(this, id_lang)
 
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
@@ -91,12 +90,12 @@ class LanguageActivity: AppCompatActivity() {
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
                 id_lang = nextLanguageId
-                languageDao.createLanguage(id_lang.toString(), "")
+                languageDao.createLanguage(id_lang.toString(), "", this)
                 editLanguageName.setText(languages[id_lang]?.name)
 
                 val languageRepository = LanguageRepository()
                 Thread {
-                    languageRepository.insertLanguage(this, id_lang, serializer.serializeLanguage(languages[id_lang]!!))
+                    languageRepository.insertLanguage(this, id_lang, Serializer.getInstance().serializeLanguage(languages[id_lang]!!))
                 }.start()
             }
             else -> {
@@ -113,7 +112,7 @@ class LanguageActivity: AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changeName(languages[id_lang]!!, editLanguageName.text.toString())
+                languageDao.changeName(languages[id_lang]!!, editLanguageName.text.toString(), this@LanguageActivity)
             }
         })
         editDescription.addTextChangedListener(object : TextWatcher {
@@ -122,7 +121,7 @@ class LanguageActivity: AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changeDescription(languages[id_lang]!!, editDescription.text.toString())
+                languageDao.changeDescription(languages[id_lang]!!, editDescription.text.toString(), this@LanguageActivity)
             }
         })
     }
@@ -131,7 +130,7 @@ class LanguageActivity: AppCompatActivity() {
 
         val languageRepository = LanguageRepository()
         Thread {
-            languageRepository.updateLanguage(this, id_lang, serializer.serializeLanguage(languages[id_lang]!!))
+            languageRepository.updateLanguage(this, id_lang, Serializer.getInstance().serializeLanguage(languages[id_lang]!!))
         }.start()
     }
 }

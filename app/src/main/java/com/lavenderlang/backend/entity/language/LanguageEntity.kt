@@ -2,6 +2,7 @@ package com.lavenderlang.backend.entity.language
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.word.IWordEntityKeyDeserializer
 import com.lavenderlang.backend.entity.word.IWordEntityKeySerializer
 
@@ -11,8 +12,11 @@ data class LanguageEntity(
     var description: String = "Введите описание",
     var dictionary: DictionaryEntity = DictionaryEntity(languageId),
     var grammar : GrammarEntity = GrammarEntity(languageId),
-    var letters : String = "а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я",
-    var puncSymbols : String = ". , ! ? : ; \" - ( ) / \\ < > { } [ ] ~"
+    var vovels : String = "а е ё и о у ы э ю я",
+    var consonants: String = "б в г д ж з й к л м н п р с т ф х ц ч ш ъ ь щ",
+    var puncSymbols : ArrayList<String> = arrayListOf(".", ",", "!", "?", ":", ";", "\"", "-", "(",
+        ")", "/", "\\,", "<", ">", "{", "}", "[", "]", "~"),
+    var capitalizedPartsOfSpeech : ArrayList<PartOfSpeech> = arrayListOf()
 ) {
     override fun toString(): String {
         return name

@@ -66,3 +66,6 @@ def inflectAttrs(word, partOfSpeech, attrs):
             inflected_word = new_inflected_word
     
     return 'более ' * int(comp) + inflected_word.word
+
+def getNormalForm(word):
+    return w = morph.parse(word)[0].normal_form

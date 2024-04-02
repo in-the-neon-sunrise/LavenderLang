@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.word
 
+import android.content.Context
 import com.chaquo.python.Python
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
@@ -10,62 +11,17 @@ import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.languages
 
 interface WordDao {
-    fun grammarTransformByAttrs(word : IWordEntity, args : MutableMap<Attributes, Int>) : IWordEntity
-    fun grammarTransformByRule(word : IWordEntity, rule: GrammarRuleEntity) : IWordEntity
-    fun wordFormationTransform(word : IWordEntity, args : MutableMap<Attributes, Int>) : IWordEntity
-    fun wordFormationTransformByRule(word : IWordEntity, rule : WordFormationRuleEntity) : IWordEntity
-    fun updateWord(word : IWordEntity, newWord : String)
-    fun updateTranslation(word : IWordEntity, newTranslation : String)
-    fun updateImmutableAttr(word : IWordEntity, attribute: Attributes, newId : Int)
-    fun updateImmutableAttrs(word : IWordEntity, args : MutableMap<Attributes, Int>)
-    fun updatePartOfSpeech(word : IWordEntity, newPartOfSpeech : PartOfSpeech)
+    //fun grammarTransformByAttrs(word : IWordEntity, args : MutableMap<Attributes, Int>) : IWordEntity
+    //fun wordFormationTransformByAttrs(word : IWordEntity, args : MutableMap<Attributes, Int>) : IWordEntity
+    fun updateWord(word : IWordEntity, newWord : String, context: Context)
+    fun updateTranslation(word : IWordEntity, newTranslation : String, context: Context)
+    //fun updateImmutableAttr(word : IWordEntity, attribute: Attributes, newId : Int, context: Context)
+    fun updateImmutableAttrs(word : IWordEntity, args : MutableMap<Attributes, Int>, context: Context)
+    fun updatePartOfSpeech(word : IWordEntity, newPartOfSpeech : PartOfSpeech, context: Context)
 }
 
 class WordDaoImpl : WordDao {
-    override fun grammarTransformByRule(word: IWordEntity, rule: GrammarRuleEntity): IWordEntity {
-        val transformedWord: IWordEntity = when (word) {
-            is NounEntity -> word.copy()
-            is VerbEntity -> word.copy()
-            is AdjectiveEntity -> word.copy()
-            is AdverbEntity -> word.copy()
-            is ParticipleEntity -> word.copy()
-            is VerbParticipleEntity -> word.copy()
-            is PronounEntity -> word.copy()
-            is NumeralEntity -> word.copy()
-            is FuncPartEntity -> word.copy()
-            else -> throw Error() // какую-нибудь красивую
-        }
-        val newWord = rule.transformation.addToBeginning + word.word.slice(
-            IntRange(
-                rule.transformation.delFromBeginning,
-                word.word.length - rule.transformation.delFromEnd - 1
-            )
-        ) +
-                rule.transformation.addToEnd
-        transformedWord.word = newWord
-        for (attr in rule.mutableAttrs.keys) {
-            transformedWord.mutableAttrs[attr] = rule.mutableAttrs[attr]!!
-        }
-
-        val translatorHelper = TranslatorHelperDaoImpl()
-        val russianMutAttrs = arrayListOf<Int>()
-        for (attr in transformedWord.mutableAttrs.keys) {
-            russianMutAttrs.add(translatorHelper.conlangToRusAttr(
-                languages[transformedWord.languageId]!!, attr, transformedWord.mutableAttrs[attr]!!)
-            )
-        }
-        val py = Python.getInstance()
-        val module = py.getModule("pm3")
-        val res = module.callAttr(
-            "inflectAttrs", word.translation,
-            word.partOfSpeech.toString(),
-            russianMutAttrs.toString()
-        ).toString()
-        transformedWord.translation = res
-
-        return transformedWord
-    }
-    override fun grammarTransformByAttrs(word: IWordEntity, args: MutableMap<Attributes, Int>): IWordEntity {
+    /*override fun grammarTransformByAttrs(word: IWordEntity, args: MutableMap<Attributes, Int>): IWordEntity {
         val transformedWord: IWordEntity = when (word) {
             is NounEntity -> word.copy()
             is VerbEntity -> word.copy()
@@ -93,9 +49,9 @@ class WordDaoImpl : WordDao {
             return grammarTransformByRule(word, rule)
         }
         return transformedWord
-    }
+    }*/
 
-    override fun wordFormationTransform(word: IWordEntity, args: MutableMap<Attributes, Int>): IWordEntity {
+    /*override fun wordFormationTransformByAttrs(word: IWordEntity, args: MutableMap<Attributes, Int>): IWordEntity {
         val transformedWord : IWordEntity = when (word) {
             is NounEntity -> word.copy()
             is VerbEntity -> word.copy()
@@ -136,32 +92,9 @@ class WordDaoImpl : WordDao {
             return transformedWord
         }
         throw Error() // but like pretty error... Not Found??
-    }
+    }*/
 
-    override fun wordFormationTransformByRule(word: IWordEntity, rule: WordFormationRuleEntity) : IWordEntity {
-        val transformedWord : IWordEntity = when (word) {
-            is NounEntity -> word.copy()
-            is VerbEntity -> word.copy()
-            is AdjectiveEntity -> word.copy()
-            is AdverbEntity -> word.copy()
-            is ParticipleEntity -> word.copy()
-            is VerbParticipleEntity -> word.copy()
-            is PronounEntity -> word.copy()
-            is NumeralEntity -> word.copy()
-            is FuncPartEntity -> word.copy()
-            else -> throw Error() // какую-нибудь красивую
-        }
-        val newWord = rule.transformation.addToBeginning + word.word.slice(
-            IntRange(rule.transformation.delFromBeginning,
-                word.word.length - rule.transformation.delFromEnd - 1)) +
-                rule.transformation.addToEnd
-        transformedWord.word = newWord
-        transformedWord.translation = "Введите перевод" // мы сами "кошечка" из "кошка" не образуем
-        transformedWord.immutableAttrs = rule.immutableAttrs
-        return transformedWord
-    }
-
-    override fun updateWord(word: IWordEntity, newWord: String) {
+    override fun updateWord(word: IWordEntity, newWord: String, context: Context) {
         val oldWord = when (word.partOfSpeech) {
             PartOfSpeech.NOUN -> (word as NounEntity).copy()
             PartOfSpeech.VERB -> (word as VerbEntity).copy()
@@ -177,7 +110,7 @@ class WordDaoImpl : WordDao {
         DictionaryHelperDaoImpl().updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
     }
 
-    override fun updateTranslation(word: IWordEntity, newTranslation: String) {
+    override fun updateTranslation(word: IWordEntity, newTranslation: String, context: Context) {
         val oldWord = when (word.partOfSpeech) {
             PartOfSpeech.NOUN -> (word as NounEntity).copy()
             PartOfSpeech.VERB -> (word as VerbEntity).copy()
@@ -193,7 +126,7 @@ class WordDaoImpl : WordDao {
         DictionaryHelperDaoImpl().updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
     }
 
-    override fun updateImmutableAttr(word: IWordEntity, attribute: Attributes, newId: Int) {
+    /*override fun updateImmutableAttr(word: IWordEntity, attribute: Attributes, newId: Int, context: Context) {
         if (!word.immutableAttrs.contains(attribute)) return
         val oldWord = when (word.partOfSpeech) {
             PartOfSpeech.NOUN -> (word as NounEntity).copy()
@@ -208,9 +141,9 @@ class WordDaoImpl : WordDao {
         }
         word.immutableAttrs[attribute] = newId
         DictionaryHelperDaoImpl().updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
-    }
+    }*/
 
-    override fun updateImmutableAttrs(word: IWordEntity, args: MutableMap<Attributes, Int>) {
+    override fun updateImmutableAttrs(word: IWordEntity, args: MutableMap<Attributes, Int>, context: Context) {
         val oldWord = when (word.partOfSpeech) {
             PartOfSpeech.NOUN -> (word as NounEntity).copy()
             PartOfSpeech.VERB -> (word as VerbEntity).copy()
@@ -228,7 +161,7 @@ class WordDaoImpl : WordDao {
         DictionaryHelperDaoImpl().updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
     }
 
-    override fun updatePartOfSpeech(word: IWordEntity, newPartOfSpeech: PartOfSpeech) {
+    override fun updatePartOfSpeech(word: IWordEntity, newPartOfSpeech: PartOfSpeech, context: Context) {
         val oldWord = when (word.partOfSpeech) {
             PartOfSpeech.NOUN -> (word as NounEntity).copy()
             PartOfSpeech.VERB -> (word as VerbEntity).copy()

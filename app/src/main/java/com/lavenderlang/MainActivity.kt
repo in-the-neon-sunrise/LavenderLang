@@ -26,7 +26,6 @@ import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.service.Serializer
 
-var serializer : Serializer = Serializer()
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
 var nextLanguageId : Int = 0
 
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
 
-        LanguageDaoImpl.getLanguagesFromDB(this)
+        LanguageDaoImpl().getLanguagesFromDB(this)
 
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
@@ -64,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             "красивый",
             partOfSpeech = PartOfSpeech.ADJECTIVE
         )
-        languages[0]!!.letters = "a b c"
+        //languages[0]!!.letters = "a b c"
         dict.addWord(languages[0]!!.dictionary, word1)
         dict.addWord(languages[0]!!.dictionary, word2)
         dict.addWord(languages[0]!!.dictionary, word3)
@@ -148,7 +147,7 @@ class MainActivity : AppCompatActivity() {
         val languageRepository = LanguageRepository()
         for (lang in languages.keys) {
             Thread {
-                languageRepository.insertLanguage(this, lang, serializer.serializeLanguage(languages[lang]!!))
+                languageRepository.insertLanguage(this, lang, Serializer.getInstance().serializeLanguage(languages[lang]!!))
             }.start()
         }
     }

@@ -3,13 +3,12 @@ package com.lavenderlang.backend.dao.help
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.word.IWordEntity
 
-// всякая нормальная редактура masc, position, transformation, etc.
 interface MascDao {
-    fun changePartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech);
-    fun addAttribute(masc : MascEntity, attribute : Attributes, ind : Int);
-    fun deleteAttribute(masc: MascEntity, attribute: Attributes, ind : Int) : Boolean;
-    fun updateRegex(masc : MascEntity, newRegex : String);
-    fun fits(masc : MascEntity, word : IWordEntity) : Boolean;
+    fun changePartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech)
+    fun addAttribute(masc : MascEntity, attribute : Attributes, ind : Int)
+    fun deleteAttribute(masc: MascEntity, attribute: Attributes, ind : Int) : Boolean
+    fun updateRegex(masc : MascEntity, newRegex : String)
+    fun fits(masc : MascEntity, word : IWordEntity) : Boolean
 }
 class MascDaoImpl : MascDao {
     override fun changePartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech) {

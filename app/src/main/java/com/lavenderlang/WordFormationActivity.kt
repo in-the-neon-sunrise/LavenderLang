@@ -15,8 +15,6 @@ class WordFormationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.word_formation_activity)
 
-        LanguageDaoImpl.getLanguageFromDB(this, id_lang)
-
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
@@ -34,7 +32,6 @@ class WordFormationActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         //how it was started?
-        LanguageDaoImpl.getLanguageFromDB(this, id_lang)
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
                 val intent = Intent(this@WordFormationActivity, LanguageActivity::class.java)

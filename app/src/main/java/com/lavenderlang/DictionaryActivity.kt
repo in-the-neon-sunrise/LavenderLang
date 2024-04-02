@@ -27,8 +27,6 @@ class DictionaryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dictionary_activity)
 
-        LanguageDaoImpl.getLanguagesFromDB(this)
-
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
@@ -45,8 +43,6 @@ class DictionaryActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-
-        LanguageDaoImpl.getLanguagesFromDB(this)
 
         //how it was started?
         when (val lang = intent.getIntExtra("lang", -1)) {
