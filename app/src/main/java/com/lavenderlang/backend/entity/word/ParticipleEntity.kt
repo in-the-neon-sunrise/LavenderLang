@@ -15,8 +15,4 @@ data class ParticipleEntity( // причастие
         Attributes.TYPE to 0,
         Attributes.VOICE to 0),
     override var partOfSpeech: PartOfSpeech = PartOfSpeech.PARTICIPLE
-) : IWordEntity {
-    override fun toString(): String {
-        return com.lavenderlang.serializer.serializeWord(this as IWordEntity)
-    }
-}
+) : IWordEntity

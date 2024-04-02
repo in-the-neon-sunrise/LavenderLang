@@ -10,8 +10,4 @@ data class VerbParticipleEntity( // деепричастие
     override var immutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(
         Attributes.TYPE to 0),
     override var partOfSpeech: PartOfSpeech = PartOfSpeech.VERB_PARTICIPLE
-) : IWordEntity {
-    override fun toString(): String {
-        return com.lavenderlang.serializer.serializeWord(this as IWordEntity)
-    }
-}
+) : IWordEntity

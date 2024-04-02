@@ -6,11 +6,7 @@ data class AdverbEntity( // наречие
     override val languageId : Int = 0,
     override var word : String = "",
     override var translation : String = "",
-    override var mutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(),
+    override var mutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(Attributes.DEGREE_OF_COMPARISON to 0),
     override var immutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(),
     override var partOfSpeech: PartOfSpeech = PartOfSpeech.ADVERB
-) : IWordEntity {
-    override fun toString(): String {
-        return com.lavenderlang.serializer.serializeWord(this as IWordEntity)
-    }
-}
+) : IWordEntity

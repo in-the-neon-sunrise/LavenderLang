@@ -22,6 +22,7 @@ import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.backend.entity.word.AdverbEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.service.Serializer
@@ -63,10 +64,16 @@ class MainActivity : AppCompatActivity() {
             "красивый",
             partOfSpeech = PartOfSpeech.ADJECTIVE
         )
-        //languages[0]!!.letters = "a b c"
-        dict.addWord(languages[0]!!.dictionary, word1)
-        dict.addWord(languages[0]!!.dictionary, word2)
-        dict.addWord(languages[0]!!.dictionary, word3)
+        languages[0]!!.vowels = "a"
+        languages[0]!!.consonants = "b c d"
+        dict.addWord(languages[0]!!.dictionary, word1, this)
+        dict.addWord(languages[0]!!.dictionary, word2, this)
+        dict.addWord(languages[0]!!.dictionary, word3, this)
+        dict.addWord(languages[0]!!.dictionary, AdverbEntity(
+            0,
+            "ddd",
+            "красиво"), this)
+
         val grammarHandler = GrammarDaoImpl()
         val rule = GrammarRuleEntity(
             0, MascEntity(
@@ -74,14 +81,21 @@ class MainActivity : AppCompatActivity() {
             ), mutableMapOf(Attributes.NUMBER to 1),
             TransformationEntity(0, 1, "", "b")
         )
-        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule)
+        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule, this)
         val rule1 = GrammarRuleEntity(
             0, MascEntity(
                 PartOfSpeech.VERB, mutableMapOf()
             ), mutableMapOf(Attributes.NUMBER to 1),
             TransformationEntity(0, 1, "", "d")
         )
-        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule1)
+        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule1, this)
+        val rule2 = GrammarRuleEntity(
+            0, MascEntity(
+                PartOfSpeech.ADVERB, mutableMapOf()
+            ), mutableMapOf(Attributes.DEGREE_OF_COMPARISON to 1),
+            TransformationEntity(0, 0, "", "d")
+        )
+        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule2, this)
 
         val trans = TranslatorDaoImpl()
         val py = Python.getInstance()
@@ -95,6 +109,8 @@ class MainActivity : AppCompatActivity() {
         )
         Log.d(TAG, languages[0]!!.grammar.varsGender.toString())
         Log.d(TAG, languages[0]!!.grammar.nextIds.toString())
+
+        Log.d(TAG, languages[0]!!.grammar.grammarRules.toString())
 
         //button new lang listener
         val buttonNewLang: Button = findViewById(R.id.buttonNewLang)
@@ -114,9 +130,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        //LanguageDaoImpl.getLanguagesFromDB(this)
-
         /*val languageRepository = LanguageRepository()
         if (languages.containsKey(1)) {
             LanguageDaoImpl().deleteLanguage(1)

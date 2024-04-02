@@ -9,8 +9,4 @@ data class FuncPartEntity(
     override var mutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(),
     override var immutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(),
     override var partOfSpeech: PartOfSpeech = PartOfSpeech.FUNC_PART
-) : IWordEntity {
-    override fun toString(): String {
-        return com.lavenderlang.serializer.serializeWord(this as IWordEntity)
-    }
-}
+) : IWordEntity

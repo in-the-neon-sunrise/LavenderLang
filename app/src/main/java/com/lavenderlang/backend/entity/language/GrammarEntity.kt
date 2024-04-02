@@ -2,13 +2,10 @@ package com.lavenderlang.backend.entity.language
 
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.rule.*
-import java.util.SortedSet
 
 data class GrammarEntity(
     val languageId : Int = 0,
-    var grammarRules: SortedSet<GrammarRuleEntity> = sortedSetOf(
-        GrammarRuleEntity(languageId, MascEntity(), mutableMapOf(), TransformationEntity())
-    ),
+    var grammarRules: ArrayList<GrammarRuleEntity> = arrayListOf(),
     var wordFormationRules : ArrayList<WordFormationRuleEntity> = arrayListOf(),
 
     var nextIds : MutableMap<Attributes, Int> = mutableMapOf(

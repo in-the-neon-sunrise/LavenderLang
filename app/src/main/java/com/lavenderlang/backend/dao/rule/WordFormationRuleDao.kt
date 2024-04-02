@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.rule
 
+import android.content.Context
 import com.lavenderlang.backend.dao.help.TransformationDaoImpl
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.rule.*
@@ -13,6 +14,8 @@ import com.lavenderlang.backend.entity.word.ParticipleEntity
 import com.lavenderlang.backend.entity.word.PronounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.entity.word.VerbParticipleEntity
+import com.lavenderlang.backend.service.ForbiddenSymbolsException
+import com.lavenderlang.languages
 
 interface WordFormationRuleDao : RuleDao {
     fun updateTransformation(rule : WordFormationRuleEntity, newTransformation: TransformationEntity)
@@ -22,11 +25,24 @@ interface WordFormationRuleDao : RuleDao {
 
 }
 class WordFormationRuleDaoImpl : WordFormationRuleDao {
-    override fun updateMasc(rule: IRuleEntity, newMasc: MascEntity) {
+    override fun updateMasc(rule: IRuleEntity, newMasc: MascEntity, context: Context) {
         rule.masc = newMasc
     }
 
     override fun updateTransformation(rule: WordFormationRuleEntity, newTransformation: TransformationEntity) {
+        //check if rule is correct (letters in transformation are in language)
+        for (letter in newTransformation.addToBeginning) {
+            if (!languages[rule.languageId]!!.vowels.contains(letter) &&
+                !languages[rule.languageId]!!.consonants.contains(letter)) {
+                throw ForbiddenSymbolsException("Letter $letter is not in language")
+            }
+        }
+        for (letter in newTransformation.addToEnd) {
+            if (!languages[rule.languageId]!!.vowels.contains(letter) &&
+                !languages[rule.languageId]!!.consonants.contains(letter)) {
+                throw ForbiddenSymbolsException("Letter $letter is not in language")
+            }
+        }
         rule.transformation = newTransformation
     }
 

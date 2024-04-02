@@ -1,8 +1,11 @@
 package com.lavenderlang.backend.dao.language
 
 import android.content.Context
+import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.backend.service.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.Serializer
 
 interface WritingDao {
     fun changeVowels(language : LanguageEntity, newLetters : String, context: Context)
@@ -11,13 +14,35 @@ interface WritingDao {
     fun deleteCapitalizedPartOfSpeech(language : LanguageEntity, partOfSpeech : PartOfSpeech, context: Context)
 }
 
-class WritingDaoImpl : WritingDao {
+class WritingDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) : WritingDao {
     override fun changeVowels(language: LanguageEntity, newLetters: String, context: Context) {
-        TODO("Not yet implemented")
+        for (letter in newLetters) {
+            if (language.consonants.contains(letter) || language.puncSymbols.values.contains(letter.toString())) {
+                throw ForbiddenSymbolsException("Letter $letter is already in consonants")
+            }
+        }
+        language.vowels = newLetters
+        Thread {
+            languageRepository.updateLanguage(
+                context, language.languageId,
+                Serializer.getInstance().serializeLanguage(language)
+            )
+        }.start()
     }
 
     override fun changeConsonants(language: LanguageEntity, newLetters: String, context: Context) {
-        TODO("Not yet implemented")
+        for (letter in newLetters) {
+            if (language.vowels.contains(letter) || language.puncSymbols.values.contains(letter.toString())) {
+                throw ForbiddenSymbolsException("Letter $letter is already in consonants")
+            }
+        }
+        language.consonants = newLetters
+        Thread {
+            languageRepository.updateLanguage(
+                context, language.languageId,
+                Serializer.getInstance().serializeLanguage(language)
+            )
+        }.start()
     }
 
     override fun addCapitalizedPartOfSpeech(
@@ -25,7 +50,13 @@ class WritingDaoImpl : WritingDao {
         partOfSpeech: PartOfSpeech,
         context: Context
     ) {
-        TODO("Not yet implemented")
+        language.capitalizedPartsOfSpeech.add(partOfSpeech)
+        Thread {
+            languageRepository.updateLanguage(
+                context, language.languageId,
+                Serializer.getInstance().serializeLanguage(language)
+            )
+        }.start()
     }
 
     override fun deleteCapitalizedPartOfSpeech(
@@ -33,6 +64,12 @@ class WritingDaoImpl : WritingDao {
         partOfSpeech: PartOfSpeech,
         context: Context
     ) {
-        TODO("Not yet implemented")
+        language.capitalizedPartsOfSpeech.remove(partOfSpeech)
+        Thread {
+            languageRepository.updateLanguage(
+                context, language.languageId,
+                Serializer.getInstance().serializeLanguage(language)
+            )
+        }.start()
     }
 }

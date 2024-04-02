@@ -78,7 +78,7 @@ class GrammarRuleActivity: AppCompatActivity(){
         when(val rule = intent.getIntExtra("grammarRule", -1)){
             -1 -> {
                 var newRule = GrammarRuleEntity(id_lang)
-                grammarDao.addGrammarRule(languages[id_lang]!!.grammar, newRule)
+                grammarDao.addGrammarRule(languages[id_lang]!!.grammar, newRule, this@GrammarRuleActivity)
                 id_rule = languages[id_lang]!!.grammar.grammarRules.size-1
                 editMasc.setText("это новое правило привет")
             }
@@ -505,17 +505,17 @@ class GrammarRuleActivity: AppCompatActivity(){
         var newMasc = MascEntity(
             partOfSpeech, attrs, regex
         )
-        grammarRuleDao.updateMasc(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newMasc)
+        grammarRuleDao.updateMasc(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newMasc, this@GrammarRuleActivity)
         Toast.makeText(this, newMasc.toString(), Toast.LENGTH_LONG).show()
     }
     fun updateMutableAttrs(){
-        grammarRuleDao.updateMutableAttrs(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], mutableAttrs)
+        grammarRuleDao.updateMutableAttrs(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], mutableAttrs, this@GrammarRuleActivity)
     }
     fun updateTransformation(){
         var newTransformation = TransformationEntity(
             numberFront, numberBack, addFront, addBack
         )
-        grammarRuleDao.updateTransformation(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newTransformation)
+        grammarRuleDao.updateTransformation(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newTransformation, this@GrammarRuleActivity)
     }
     fun listenSpinners(){
 

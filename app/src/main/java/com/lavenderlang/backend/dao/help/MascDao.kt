@@ -31,6 +31,7 @@ class MascDaoImpl : MascDao {
     override fun fits(masc : MascEntity, word : IWordEntity) : Boolean {
         if (masc.partsOfSpeech != word.partOfSpeech) return false
         for (attr in masc.attrs.keys) {
+            //if (attr == Attributes.IS_INFINITIVE) continue
             var check = false
             for (ind in masc.attrs[attr]!!) {
                 if (word.immutableAttrs.contains(attr)) {

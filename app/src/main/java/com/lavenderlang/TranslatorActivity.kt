@@ -2,8 +2,7 @@ package com.lavenderlang
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -13,7 +12,6 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 
@@ -54,8 +52,7 @@ class TranslatorActivity : AppCompatActivity() {
 
         radiobutton.isChecked = true//перевод с конланга
         radiogroup.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId==radiobutton.id) translationOnConlang=false
-            else translationOnConlang=true
+            translationOnConlang = checkedId != radiobutton.id
         }
 
 
@@ -82,12 +79,15 @@ class TranslatorActivity : AppCompatActivity() {
             translate()
         }
     }
-    fun translate(){
+    private fun translate(){
+        val TAG = "meowmeow"
+        Log.d(TAG, languages[0]!!.dictionary.fullDict.toString())
+
         val edittext: EditText = findViewById(R.id.editTextText)
         val textview: TextView = findViewById(R.id.textViewTranslation)
 
-        var clever_index_of_language: Int = languages.keys.toMutableList()[id_lang]
-        var input_text: String = edittext.text.toString()
+        val clever_index_of_language: Int = languages.keys.toMutableList()[id_lang]
+        val input_text: String = edittext.text.toString()
 
         val translatorDao = TranslatorDaoImpl()
         if (!translationOnConlang) {

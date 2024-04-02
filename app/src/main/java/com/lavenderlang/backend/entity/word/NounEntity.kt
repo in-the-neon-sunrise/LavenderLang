@@ -12,8 +12,4 @@ data class NounEntity(
     override var immutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(
         Attributes.GENDER to 0),
     override var partOfSpeech: PartOfSpeech = PartOfSpeech.NOUN
-) : IWordEntity {
-    override fun toString(): String {
-        return com.lavenderlang.serializer.serializeWord(this as IWordEntity)
-    }
-}
+) : IWordEntity

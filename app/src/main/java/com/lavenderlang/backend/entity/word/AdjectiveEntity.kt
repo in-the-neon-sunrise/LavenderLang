@@ -13,8 +13,4 @@ data class AdjectiveEntity(
         Attributes.DEGREE_OF_COMPARISON to 0),
     override var immutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(),
     override var partOfSpeech: PartOfSpeech = PartOfSpeech.ADJECTIVE
-) : IWordEntity {
-    override fun toString(): String {
-        return com.lavenderlang.serializer.serializeWord(this as IWordEntity)
-    }
-}
+) : IWordEntity

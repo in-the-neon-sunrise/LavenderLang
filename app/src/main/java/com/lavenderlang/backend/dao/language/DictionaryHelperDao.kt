@@ -2,7 +2,6 @@ package com.lavenderlang.backend.dao.language
 
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
-import com.lavenderlang.backend.dao.word.WordDaoImpl
 import com.lavenderlang.backend.entity.language.DictionaryEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
@@ -20,19 +19,21 @@ interface DictionaryHelperDao {
 class DictionaryHelperDaoImpl : DictionaryHelperDao {
     override fun delMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity) {
         val mascHandler = MascDaoImpl()
-        for (key in dictionary.fullDict.keys) {
-            val keyWord = Serializer.getInstance().deserializeWord(key)
-            if (!mascHandler.fits(rule.masc, keyWord)) continue
-            for (word in dictionary.fullDict[key]!!) {
-                var check = true
-                for (attr in rule.mutableAttrs.keys) {
-                    if (!word.mutableAttrs.contains(attr) || rule.mutableAttrs[attr] != word.mutableAttrs[attr]) {
-                        check = false
-                        break
+        synchronized(dictionary.fullDict) {
+            for (key in dictionary.fullDict.keys) {
+                val keyWord = Serializer.getInstance().deserializeWord(key)
+                if (!mascHandler.fits(rule.masc, keyWord)) continue
+                for (word in dictionary.fullDict[key]!!) {
+                    var check = true
+                    for (attr in rule.mutableAttrs.keys) {
+                        if (!word.mutableAttrs.contains(attr) || rule.mutableAttrs[attr] != word.mutableAttrs[attr]) {
+                            check = false
+                            break
+                        }
                     }
+                    if (!check) continue
+                    dictionary.fullDict[key]!!.remove(word)
                 }
-                if (!check) continue
-                dictionary.fullDict[key]!!.remove(word)
             }
         }
     }
@@ -40,10 +41,17 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
     override fun addMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity) {
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
-        for (key in dictionary.fullDict.keys) {
-            val keyWord = Serializer.getInstance().deserializeWord(key)
-            if (mascHandler.fits(rule.masc, keyWord)) {
-                dictionary.fullDict[key]!!.add(ruleHandler.grammarTransformByRule(rule, keyWord))
+        synchronized(dictionary.fullDict) {
+            for (key in dictionary.fullDict.keys) {
+                val keyWord = Serializer.getInstance().deserializeWord(key)
+                if (mascHandler.fits(rule.masc, keyWord)) {
+                    dictionary.fullDict[key]!!.add(
+                        ruleHandler.grammarTransformByRule(
+                            rule,
+                            keyWord
+                        )
+                    )
+                }
             }
         }
     }
@@ -55,17 +63,21 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
 
     override fun delMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
         val key = Serializer.getInstance().serializeWord(word)
-        dictionary.fullDict.remove(key)
+        synchronized(dictionary.fullDict) {
+            dictionary.fullDict.remove(key)
+        }
     }
 
     override fun addMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
         val key = Serializer.getInstance().serializeWord(word)
-        dictionary.fullDict[key] = arrayListOf(word)
-        for (rule in languages[dictionary.languageId]!!.grammar.grammarRules) {
-            if (!mascHandler.fits(rule.masc, word)) continue
-            dictionary.fullDict[key]!!.add(ruleHandler.grammarTransformByRule(rule, word))
+        synchronized(dictionary.fullDict) {
+            dictionary.fullDict[key] = arrayListOf(word)
+            for (rule in languages[dictionary.languageId]!!.grammar.grammarRules) {
+                if (!mascHandler.fits(rule.masc, word)) continue
+                dictionary.fullDict[key]!!.add(ruleHandler.grammarTransformByRule(rule, word))
+            }
         }
     }
 

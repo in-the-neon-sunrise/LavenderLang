@@ -1,9 +1,7 @@
 package com.lavenderlang.backend.dao.language
 
 import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.ResultAttrs
 import com.lavenderlang.backend.service.WordNotFoundException
 
 interface TranslatorHelperDao {
@@ -52,6 +50,7 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
         for (key in language.dictionary.fullDict.keys) {
             for (w in language.dictionary.fullDict[key]!!) {
                 if (w.translation == word.lowercase()) {
+                    if (language.capitalizedPartsOfSpeech.contains(w.partOfSpeech)) return capitalizeWord(w.word)
                     return w.word
                 }
             }

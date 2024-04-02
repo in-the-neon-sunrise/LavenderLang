@@ -1,21 +1,27 @@
 package com.lavenderlang.backend.dao.language
 
+import android.content.Context
+import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.entity.rule.*
+import com.lavenderlang.backend.service.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
 
 interface GrammarDao {
     fun addOption(grammar : GrammarEntity, option : CharacteristicEntity)
     fun deleteOption(grammar : GrammarEntity, option : CharacteristicEntity)
     fun updateOption(grammar : GrammarEntity, optionId: Int, newOption: CharacteristicEntity)
-    fun addGrammarRule(grammar : GrammarEntity, rule: GrammarRuleEntity)
-    fun deleteGrammarRule(grammar : GrammarEntity, rule : GrammarRuleEntity)
+    fun addGrammarRule(grammar : GrammarEntity, rule: GrammarRuleEntity, context: Context)
+    fun deleteGrammarRule(grammar : GrammarEntity, rule : GrammarRuleEntity, context: Context)
     fun addWordFormationRule(grammar : GrammarEntity, rule: WordFormationRuleEntity)
     fun deleteWordFormationRule(grammar : GrammarEntity, rule : WordFormationRuleEntity)
 }
 
-class GrammarDaoImpl : GrammarDao {
+class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
+                     private val languageRepository: LanguageRepository = LanguageRepository()
+) : GrammarDao {
     override fun addOption(grammar: GrammarEntity, option: CharacteristicEntity) {
         when (option.type) {
             Attributes.GENDER -> grammar.varsGender[grammar.nextIds[option.type]!!] = option
@@ -69,15 +75,41 @@ class GrammarDaoImpl : GrammarDao {
         return
     }
 
-    override fun addGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
+    override fun addGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity, context: Context) {
         //check if rule is correct (letters in transformation are in language)
+        for (letter in rule.transformation.addToBeginning) {
+            if (!languages[grammar.languageId]!!.vowels.contains(letter) &&
+                !languages[grammar.languageId]!!.consonants.contains(letter)) {
+                throw ForbiddenSymbolsException("Letter $letter is not in language")
+            }
+        }
+        for (letter in rule.transformation.addToEnd) {
+            if (!languages[grammar.languageId]!!.vowels.contains(letter) &&
+                !languages[grammar.languageId]!!.consonants.contains(letter)) {
+                throw ForbiddenSymbolsException("Letter $letter is not in language")
+            }
+        }
+
         grammar.grammarRules.add(rule)
+        Thread {
+            helper.addMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
+            languageRepository.updateLanguage(
+                context, grammar.languageId,
+                Serializer.getInstance().serializeLanguage(languages[grammar.languageId]!!)
+            )
+        }.start()
         DictionaryHelperDaoImpl().addMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
     }
 
-    override fun deleteGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
+    override fun deleteGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity, context: Context) {
         grammar.grammarRules.remove(rule)
-        DictionaryHelperDaoImpl().delMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
+        Thread {
+            helper.delMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
+            languageRepository.updateLanguage(
+                context, grammar.languageId,
+                Serializer.getInstance().serializeLanguage(languages[grammar.languageId]!!)
+            )
+        }.start()
     }
 
     override fun addWordFormationRule(grammar: GrammarEntity, rule: WordFormationRuleEntity) {

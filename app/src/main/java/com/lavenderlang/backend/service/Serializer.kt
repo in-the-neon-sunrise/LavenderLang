@@ -39,10 +39,12 @@ class Serializer private constructor() {
     }
 
     fun serializeLanguage(language: LanguageEntity) : String {
-        return try {
-            mapper.writeValueAsString(language)
-        } catch (e : Exception) {
-            throw LanguageNotFoundException(e.message?:"")
+        synchronized(language.dictionary.fullDict) {
+            return try {
+                mapper.writeValueAsString(language)
+            } catch (e: Exception) {
+                throw LanguageNotFoundException(e.message ?: "")
+            }
         }
     }
 }
