@@ -7,9 +7,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
+import com.lavenderlang.LanguageActivity.Companion.languageDao
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.service.Serializer
 
-class WritingActivity : Activity() {
-    companion object{
+class WritingActivity : AppCompatActivity() {
+    companion object {
         var id_lang: Int = 0
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +24,9 @@ class WritingActivity : Activity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            this.finish()
+            val intent = Intent(this@WritingActivity, LanguageActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -32,6 +39,7 @@ class WritingActivity : Activity() {
     override fun onResume() {
         super.onResume()
         //how it was started?
+
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
                 val intent = Intent(this@WritingActivity, LanguageActivity::class.java)
@@ -45,7 +53,7 @@ class WritingActivity : Activity() {
 
         //letters
         val editTextLetters: EditText = findViewById(R.id.editLetters)
-        editTextLetters.setText(Languages.languages[id_lang].stringLetters())
+        //editTextLetters.setText(languages[id_lang]?.letters)
 
         //check changing
         editTextLetters.addTextChangedListener(object : TextWatcher {
@@ -54,13 +62,14 @@ class WritingActivity : Activity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                Languages.languages[LanguageActivity.id_lang].setLetters(editTextLetters.text.toString())
+                //!!!
+                //languageDao.changeLetters(languages[id_lang]!!, (editTextLetters.text.toString()))
             }
         })
 
         //symbols
         val editTextSymbols: EditText = findViewById(R.id.editSymbols)
-        editTextLetters.setText("hello")
+        //editTextSymbols.setText(languages[id_lang]?.puncSymbols)
 
         //check changing
         editTextSymbols.addTextChangedListener(object : TextWatcher {
@@ -69,7 +78,7 @@ class WritingActivity : Activity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                //Languages.languages[LanguageActivity.id_lang].setLetters(editTextLetters.text.toString())
+                //languageDao.changePunctuationSymbols(languages[id_lang]!!, (editTextSymbols.text.toString()))
             }
         })
     }

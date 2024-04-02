@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 
-class WordFormationActivity : Activity() {
+class WordFormationActivity : AppCompatActivity() {
     companion object{
         var id_lang: Int = 0
     }
@@ -16,7 +18,9 @@ class WordFormationActivity : Activity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            this.finish()
+            val intent = Intent(this@WordFormationActivity, LanguageActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -35,8 +39,9 @@ class WordFormationActivity : Activity() {
             }
 
             else -> {
-                WordFormationActivity.id_lang = lang
+                id_lang = lang
             }
         }
     }
+
 }

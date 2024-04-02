@@ -7,12 +7,20 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import com.lavenderlang.backend.dao.language.LanguageDao
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
+import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.service.Serializer
 
 
-class LanguageActivity: Activity() {
+class LanguageActivity: AppCompatActivity() {
     companion object{
         var id_lang: Int = 0
+        val languageDao: LanguageDaoImpl = LanguageDaoImpl()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +29,8 @@ class LanguageActivity: Activity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            this.finish()
+            val intent = Intent(this@LanguageActivity, MainActivity::class.java)
+            startActivity(intent)
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -61,24 +70,40 @@ class LanguageActivity: Activity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
+
+        //bottom navigation menu
+        val buttonTranslator: Button = findViewById(R.id.buttonTranslator)
+        buttonTranslator.setOnClickListener {
+            val intent = Intent(this@LanguageActivity, TranslatorActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
         super.onResume()
+
+        //LanguageDaoImpl.getLanguagesFromDB(this)
+
         //how it was started?
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
-                Languages.languages.add(Language("-"))
-                id_lang=Languages.languages.size-1;
+                id_lang = nextLanguageId
+                languageDao.createLanguage(id_lang.toString(), "", this)
+                editLanguageName.setText(languages[id_lang]?.name)
+
+                val languageRepository = LanguageRepository()
+                Thread {
+                    languageRepository.insertLanguage(this, id_lang, Serializer.getInstance().serializeLanguage(languages[id_lang]!!))
+                }.start()
             }
             else -> {
-                id_lang=lang
-                editLanguageName.setText(Languages.languages[id_lang].name)
+                id_lang = lang
+                editLanguageName.setText(languages[id_lang]?.name)
             }
         }
-        if(Languages.languages[id_lang].description != "") editDescription.setText(Languages.languages[id_lang].description)
+        if(languages[id_lang]?.description != "") editDescription.setText(languages[id_lang]?.description)
 
         //check changing
         editLanguageName.addTextChangedListener(object : TextWatcher {
@@ -87,7 +112,7 @@ class LanguageActivity: Activity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                Languages.languages[id_lang].name=editLanguageName.text.toString()
+                languageDao.changeName(languages[id_lang]!!, editLanguageName.text.toString(), this@LanguageActivity)
             }
         })
         editDescription.addTextChangedListener(object : TextWatcher {
@@ -96,10 +121,8 @@ class LanguageActivity: Activity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                Languages.languages[id_lang].description=editDescription.text.toString()
+                languageDao.changeDescription(languages[id_lang]!!, editDescription.text.toString(), this@LanguageActivity)
             }
         })
     }
-
-
 }
