@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
 
-        LanguageDaoImpl().getLanguagesFromDB(this)
+        if (languages.isEmpty()) LanguageDaoImpl().getLanguagesFromDB(this)
 
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
@@ -154,14 +154,5 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("lang", languages[position]?.languageId)
                 startActivity(intent)
             }
-    }
-    override fun onPause() {
-        super.onPause()
-        val languageRepository = LanguageRepository()
-        for (lang in languages.keys) {
-            Thread {
-                languageRepository.insertLanguage(this, lang, Serializer.getInstance().serializeLanguage(languages[lang]!!))
-            }.start()
-        }
     }
 }

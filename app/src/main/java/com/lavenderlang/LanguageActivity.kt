@@ -125,12 +125,4 @@ class LanguageActivity: AppCompatActivity() {
             }
         })
     }
-    override fun onPause() {
-        super.onPause()
-
-        val languageRepository = LanguageRepository()
-        Thread {
-            languageRepository.updateLanguage(this, id_lang, Serializer.getInstance().serializeLanguage(languages[id_lang]!!))
-        }.start()
-    }
 }
