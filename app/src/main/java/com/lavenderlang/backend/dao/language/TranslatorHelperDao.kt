@@ -1,7 +1,10 @@
 package com.lavenderlang.backend.dao.language
 
+import android.util.Log
+import com.chaquo.python.Python
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.backend.service.WordNotFoundException
 
 interface TranslatorHelperDao {
@@ -37,6 +40,7 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
     }
 
     override fun translateWordFromConlang(language: LanguageEntity, word: String): String {
+        // not synchronized for a reason
         for (key in language.dictionary.fullDict.keys) {
             for (w in language.dictionary.fullDict[key]!!) {
                 if (w.word == word.lowercase()) {
@@ -47,13 +51,22 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
         throw WordNotFoundException("Word not found")
     }
     override fun translateWordToConlang(language: LanguageEntity, word: String): String {
+        val py = Python.getInstance()
+        val module = py.getModule("pm3")
+        val normalForm = module.callAttr("getNormalForm", word.lowercase()).toString()
+        Log.d("meowmeow", normalForm)
+        // not synchronized for a reason
         for (key in language.dictionary.fullDict.keys) {
+            val keyWord = Serializer.getInstance().deserializeWord(key)
+            if (keyWord.translation != normalForm) continue
             for (w in language.dictionary.fullDict[key]!!) {
                 if (w.translation == word.lowercase()) {
-                    if (language.capitalizedPartsOfSpeech.contains(w.partOfSpeech)) return capitalizeWord(w.word)
+                    if (language.capitalizedPartsOfSpeech.contains(w.partOfSpeech))
+                        return capitalizeWord(w.word)
                     return w.word
                 }
             }
+            return keyWord.word
         }
         throw WordNotFoundException("Word not found")
     }

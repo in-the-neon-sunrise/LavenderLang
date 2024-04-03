@@ -17,8 +17,12 @@ interface WritingDao {
 class WritingDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) : WritingDao {
     override fun changeVowels(language: LanguageEntity, newLetters: String, context: Context) {
         for (letter in newLetters) {
-            if (language.consonants.contains(letter) || language.puncSymbols.values.contains(letter.toString())) {
+            if (letter == ' ') continue
+            if (language.consonants.contains(letter)) {
                 throw ForbiddenSymbolsException("Letter $letter is already in consonants")
+            }
+            if (language.puncSymbols.values.contains(letter.toString())) {
+                throw ForbiddenSymbolsException("Letter $letter is already in punctuation symbols")
             }
         }
         language.vowels = newLetters
@@ -32,8 +36,12 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
 
     override fun changeConsonants(language: LanguageEntity, newLetters: String, context: Context) {
         for (letter in newLetters) {
-            if (language.vowels.contains(letter) || language.puncSymbols.values.contains(letter.toString())) {
-                throw ForbiddenSymbolsException("Letter $letter is already in consonants")
+            if (letter == ' ') continue
+            if (language.vowels.contains(letter)) {
+                throw ForbiddenSymbolsException("Letter $letter is already in vowels")
+            }
+            if (language.puncSymbols.values.contains(letter.toString())) {
+                throw ForbiddenSymbolsException("Letter $letter is already in punctuation symbols")
             }
         }
         language.consonants = newLetters

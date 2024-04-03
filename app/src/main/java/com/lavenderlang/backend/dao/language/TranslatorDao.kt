@@ -97,6 +97,26 @@ class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = Translator
         var curDelimiter = ""
         var res = ""
         for (letter in text) {
+            if (letter == ' ') {
+                if (curWord != "") {
+                    res += try {
+                        var translatedWord = helper.translateWordToConlang(language, curWord)
+                        if (curWord[0].isUpperCase()) translatedWord = helper.capitalizeWord(translatedWord)
+                        translatedWord
+                    } catch (e: WordNotFoundException) {
+                        curWord
+                    }
+                    curWord = ""
+                }
+                if (curDelimiter != "") {
+                    res += if (language.puncSymbols.containsKey(curDelimiter)) {
+                        language.puncSymbols[curDelimiter]
+                    } else curDelimiter
+                    curDelimiter = ""
+                }
+                res += letter
+                continue
+            }
             if (delimiters.contains(letter)) {
                 if (curWord != "") {
                     res += try {

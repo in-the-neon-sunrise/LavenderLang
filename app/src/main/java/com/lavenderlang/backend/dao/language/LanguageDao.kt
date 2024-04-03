@@ -9,15 +9,15 @@ import com.lavenderlang.languages
 import com.lavenderlang.nextLanguageId
 
 interface LanguageDao {
-    fun changeName(language : LanguageEntity, newName : String, context: Context)
-    fun changeDescription(language : LanguageEntity, newDescription: String, context: Context)
-    fun copyLanguage(language : LanguageEntity, context: Context)
-    fun createLanguage(name : String, description: String, context: Context)
-    fun deleteLanguage(id : Int, context: Context)
+    fun changeName(language: LanguageEntity, newName: String, context: Context)
+    fun changeDescription(language: LanguageEntity, newDescription: String, context: Context)
+    fun copyLanguage(language: LanguageEntity, context: Context)
+    fun createLanguage(name: String, description: String, context: Context)
+    fun deleteLanguage(id: Int, context: Context)
     fun getLanguagesFromDB(context: AppCompatActivity)
     fun downloadLanguageJSON(language: LanguageEntity, activity: AppCompatActivity)
     fun downloadLanguagePDF(language: LanguageEntity, activity: AppCompatActivity)
-    fun getLanguageFromFile(path: String, activity: AppCompatActivity)
+    fun getLanguageFromFile(path: String, activity: AppCompatActivity)//кошечку
 }
 class LanguageDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) : LanguageDao {
     override fun getLanguagesFromDB(context: AppCompatActivity) {

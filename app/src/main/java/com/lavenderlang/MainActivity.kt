@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         grammarHandler.addOption(languages[0]!!.grammar, CharacteristicEntity(
         0, languages[0]!!.grammar.nextIds[Attributes.GENDER]!!, Attributes.GENDER, "деревья в клеточку", 2)
         )
-        Log.d(TAG, languages[0]!!.grammar.varsGender.toString())
+        if (languages.containsKey(0)) Log.d(TAG, TranslatorDaoImpl().translateTextToConlang(languages[0]!!, "кошечка! кошечке!"))
         Log.d(TAG, languages[0]!!.grammar.nextIds.toString())
 
         Log.d(TAG, languages[0]!!.grammar.grammarRules.toString())
