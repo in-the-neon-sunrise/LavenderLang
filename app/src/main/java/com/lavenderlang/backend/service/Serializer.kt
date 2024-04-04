@@ -3,6 +3,7 @@ package com.lavenderlang.backend.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
+import com.lavenderlang.languages
 
 class Serializer private constructor() {
     companion object {
@@ -39,7 +40,7 @@ class Serializer private constructor() {
     }
 
     fun serializeLanguage(language: LanguageEntity) : String {
-        synchronized(language.dictionary.fullDict) {
+        synchronized(language) {
             return try {
                 mapper.writeValueAsString(language)
             } catch (e: Exception) {

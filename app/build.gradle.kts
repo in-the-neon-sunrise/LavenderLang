@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.lavenderlang"
-        minSdk = 24
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -65,4 +65,16 @@ dependencies {
     // room database
     implementation("androidx.room:room-runtime:2.5.1")
     kapt("androidx.room:room-compiler:2.5.1")
+    // coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    // SAF
+    implementation("androidx.documentfile:documentfile:1.0.1")
+    // simpleStorage
+    implementation("com.anggrayudi:storage:1.5.5")
+    // modernStorage... help
+    // For storage permissions checking
+    implementation("com.google.modernstorage:modernstorage-permissions:1.0.0-alpha06")
+    // For storage interactions using Okio FileSystem API
+    implementation("com.google.modernstorage:modernstorage-storage:1.0.0-alpha06")
 }

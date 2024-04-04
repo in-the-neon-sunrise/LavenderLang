@@ -35,7 +35,7 @@ class LanguageActivity: AppCompatActivity() {
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
             val intent = Intent(this@LanguageActivity, InformationActivity::class.java)
-            intent.putExtra("lang", LanguageActivity.id_lang)
+            intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
 
@@ -82,8 +82,6 @@ class LanguageActivity: AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        //LanguageDaoImpl.getLanguagesFromDB(this)
-
         //how it was started?
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)
@@ -92,11 +90,6 @@ class LanguageActivity: AppCompatActivity() {
                 id_lang = nextLanguageId
                 languageDao.createLanguage(id_lang.toString(), "", this)
                 editLanguageName.setText(languages[id_lang]?.name)
-
-                val languageRepository = LanguageRepository()
-                Thread {
-                    languageRepository.insertLanguage(this, id_lang, Serializer.getInstance().serializeLanguage(languages[id_lang]!!))
-                }.start()
             }
             else -> {
                 id_lang = lang

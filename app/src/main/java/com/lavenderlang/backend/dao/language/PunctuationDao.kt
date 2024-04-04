@@ -12,7 +12,7 @@ interface PunctuationDao {
 // если символ в буквах конланга - ошибка
 }
 
-class PunctuationDaoImpl(val languageRepository: LanguageRepository = LanguageRepository()): PunctuationDao {
+class PunctuationDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()): PunctuationDao {
     override fun updatePunctuationSymbol(
         language: LanguageEntity,
         id: Int,

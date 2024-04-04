@@ -13,7 +13,7 @@ data class LanguageEntity(
     var puncSymbols : MutableMap<String, String> = mutableMapOf("." to ".", "," to ",", "!" to "!", "?" to "?",
         ":" to ":", ";" to ";", "\"" to "\"", "(" to "(", ")" to ")", "/" to "/", "\\" to "\\",
         "<" to "<", ">" to ">", "{" to "{", "}" to "}", "[" to "[", "]" to "]", "~" to "~", "—" to "—"),
-    var capitalizedPartsOfSpeech : ArrayList<PartOfSpeech> = arrayListOf()
+    var capitalizedPartsOfSpeech : ArrayList<PartOfSpeech> = arrayListOf(),
 ) {
     override fun toString(): String {
         return name

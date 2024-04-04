@@ -60,7 +60,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         for (rule in languages[dictionary.languageId]!!.grammar.wordFormationRules) {
             if (!mascHandler.fits(rule.masc, word)) continue
             val posWord = wfrHandler.wordFormationTransformByRule(word, rule)
-            if (dictionary.fullDict.containsKey(Serializer.getInstance().serializeWord(posWord))) continue
+            if (dictionary.fullDict.containsKey("${posWord.word} ${posWord.translation}")) continue
             possibleWords.add(posWord)
             addWord(dictionary, posWord, context)
         }

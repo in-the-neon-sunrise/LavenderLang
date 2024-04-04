@@ -19,9 +19,10 @@ interface DictionaryHelperDao {
 class DictionaryHelperDaoImpl : DictionaryHelperDao {
     override fun delMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity) {
         val mascHandler = MascDaoImpl()
-        synchronized(dictionary.fullDict) {
+        synchronized(languages[dictionary.languageId]!!) {
             for (key in dictionary.fullDict.keys) {
-                val keyWord = Serializer.getInstance().deserializeWord(key)
+                if (languages[dictionary.languageId]!!.dictionary.fullDict[key]!!.isEmpty()) continue
+                val keyWord = languages[dictionary.languageId]!!.dictionary.fullDict[key]!![0]
                 if (!mascHandler.fits(rule.masc, keyWord)) continue
                 for (word in dictionary.fullDict[key]!!) {
                     var check = true
@@ -41,9 +42,10 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
     override fun addMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity) {
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
-        synchronized(dictionary.fullDict) {
+        synchronized(languages[dictionary.languageId]!!) {
             for (key in dictionary.fullDict.keys) {
-                val keyWord = Serializer.getInstance().deserializeWord(key)
+                if (languages[dictionary.languageId]!!.dictionary.fullDict[key]!!.isEmpty()) continue
+                val keyWord = languages[dictionary.languageId]!!.dictionary.fullDict[key]!![0]
                 if (mascHandler.fits(rule.masc, keyWord)) {
                     dictionary.fullDict[key]!!.add(
                         ruleHandler.grammarTransformByRule(
@@ -62,8 +64,8 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
     }
 
     override fun delMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
-        val key = Serializer.getInstance().serializeWord(word)
-        synchronized(dictionary.fullDict) {
+        val key = "${word.word} ${word.translation}"
+        synchronized(languages[dictionary.languageId]!!) {
             dictionary.fullDict.remove(key)
         }
     }
@@ -71,8 +73,8 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
     override fun addMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
-        val key = Serializer.getInstance().serializeWord(word)
-        synchronized(dictionary.fullDict) {
+        val key = "${word.word} ${word.translation}"
+        synchronized(languages[dictionary.languageId]!!) {
             dictionary.fullDict[key] = arrayListOf(word)
             for (rule in languages[dictionary.languageId]!!.grammar.grammarRules) {
                 if (!mascHandler.fits(rule.masc, word)) continue
