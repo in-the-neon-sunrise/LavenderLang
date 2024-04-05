@@ -45,10 +45,13 @@ class TranslatorActivity : AppCompatActivity() {
         val radiogroup: RadioGroup = findViewById(R.id.radioGroupTranslate)
         val radiobutton: RadioButton = findViewById(R.id.radioButtonFromConlang)
 
+        id_lang = intent.getIntExtra("lang", -1)
+
         val languageNames = languages.values.map { it.name }
         val adapterLanguages: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item, languageNames)
         spinner.adapter = adapterLanguages
         adapterLanguages.notifyDataSetChanged()
+        if(id_lang!=-1)spinner.setSelection(id_lang)
 
         radiobutton.isChecked = true//перевод с конланга
         radiogroup.setOnCheckedChangeListener { group, checkedId ->

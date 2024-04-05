@@ -30,9 +30,7 @@ class DictionaryActivity : AppCompatActivity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            val intent = Intent(this@DictionaryActivity, LanguageActivity::class.java)
-            intent.putExtra("lang", id_lang)
-            startActivity(intent)
+            finish()
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -41,9 +39,9 @@ class DictionaryActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    override fun onResume() {
-        super.onResume()
 
+    override fun onStart() {
+        super.onStart()
         //how it was started?
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
@@ -55,6 +53,9 @@ class DictionaryActivity : AppCompatActivity() {
                 id_lang = lang
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
 
         val listWords : ListView = findViewById(R.id.listWords)
         val adapter: ArrayAdapter<IWordEntity> = WordAdapter(this, languages[id_lang]!!.dictionary.dict)
@@ -69,7 +70,7 @@ class DictionaryActivity : AppCompatActivity() {
             }
     }
 }
-private class WordAdapter(context: Context, listOfWords: MutableList<IWordEntity>) :
+public class WordAdapter(context: Context, listOfWords: MutableList<IWordEntity>) :
     ArrayAdapter<IWordEntity>(context, R.layout.word_line_activity, listOfWords) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var newView = convertView

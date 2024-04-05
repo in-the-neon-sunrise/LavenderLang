@@ -29,8 +29,7 @@ class LanguageActivity: AppCompatActivity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            val intent = Intent(this@LanguageActivity, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -78,12 +77,8 @@ class LanguageActivity: AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        //LanguageDaoImpl.getLanguagesFromDB(this)
-
+    override fun onStart() {
+        super.onStart()
         //how it was started?
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)
@@ -104,6 +99,14 @@ class LanguageActivity: AppCompatActivity() {
             }
         }
         if(languages[id_lang]?.description != "") editDescription.setText(languages[id_lang]?.description)
+    }
+    override fun onResume() {
+        super.onResume()
+
+        //LanguageDaoImpl.getLanguagesFromDB(this)
+
+        val editLanguageName: EditText = findViewById(R.id.editLanguageName)
+        val editDescription: EditText = findViewById(R.id.editDescription)
 
         //check changing
         editLanguageName.addTextChangedListener(object : TextWatcher {
