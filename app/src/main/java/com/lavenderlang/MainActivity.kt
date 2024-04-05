@@ -10,9 +10,22 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
+import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
+import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.entity.help.Attributes
+import com.lavenderlang.backend.entity.help.CharacteristicEntity
+import com.lavenderlang.backend.entity.help.MascEntity
+import com.lavenderlang.backend.entity.help.PartOfSpeech
+import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
-
+import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.backend.entity.word.AdverbEntity
+import com.lavenderlang.backend.entity.word.NounEntity
+import com.lavenderlang.backend.entity.word.VerbEntity
+import com.lavenderlang.backend.service.Serializer
 
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
 var nextLanguageId : Int = 0

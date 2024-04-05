@@ -12,6 +12,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 
@@ -19,6 +20,7 @@ class TranslatorActivity : AppCompatActivity() {
     companion object{
         var id_lang = 0
         var translationOnConlang = false
+        var flagIsSpinnerSelected = false
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,19 +42,20 @@ class TranslatorActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
+        flagIsSpinnerSelected = false
+
         val spinner: Spinner = findViewById(R.id.spinnerChooseLanguage)
         val edittext: EditText = findViewById(R.id.editTextText)
         val radiogroup: RadioGroup = findViewById(R.id.radioGroupTranslate)
         val radiobutton: RadioButton = findViewById(R.id.radioButtonFromConlang)
 
         id_lang = intent.getIntExtra("lang", -1)
-
         val languageNames = languages.values.map { it.name }
         val adapterLanguages: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item, languageNames)
         spinner.adapter = adapterLanguages
         adapterLanguages.notifyDataSetChanged()
+        flagIsSpinnerSelected=true;
         if(id_lang!=-1)spinner.setSelection(id_lang)
-
         radiobutton.isChecked = true//перевод с конланга
         radiogroup.setOnCheckedChangeListener { group, checkedId ->
             translationOnConlang = checkedId != radiobutton.id
@@ -60,8 +63,9 @@ class TranslatorActivity : AppCompatActivity() {
 
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+
             override fun onItemSelected(parent: AdapterView<*>?, item: View?, position: Int, id: Long) {
-                id_lang = position
+                if(flagIsSpinnerSelected) id_lang = position
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 id_lang = 0

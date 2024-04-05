@@ -38,6 +38,8 @@ class DictionaryActivity : AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
+
+
     }
 
     override fun onStart() {

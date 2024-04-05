@@ -74,6 +74,7 @@ class LanguageActivity: AppCompatActivity() {
         val buttonTranslator: Button = findViewById(R.id.buttonTranslator)
         buttonTranslator.setOnClickListener {
             val intent = Intent(this@LanguageActivity, TranslatorActivity::class.java)
+            intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
     }
