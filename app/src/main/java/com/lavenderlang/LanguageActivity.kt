@@ -29,13 +29,12 @@ class LanguageActivity: AppCompatActivity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            val intent = Intent(this@LanguageActivity, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
             val intent = Intent(this@LanguageActivity, InformationActivity::class.java)
-            intent.putExtra("lang", id_lang)
+            intent.putExtra("lang", LanguageActivity.id_lang)
             startActivity(intent)
         }
 
@@ -78,10 +77,8 @@ class LanguageActivity: AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-
+    override fun onStart() {
+        super.onStart()
         //how it was started?
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)
@@ -90,6 +87,11 @@ class LanguageActivity: AppCompatActivity() {
                 id_lang = nextLanguageId
                 languageDao.createLanguage(id_lang.toString(), "", this)
                 editLanguageName.setText(languages[id_lang]?.name)
+
+                val languageRepository = LanguageRepository()
+                Thread {
+                    languageRepository.insertLanguage(this, id_lang, Serializer.getInstance().serializeLanguage(languages[id_lang]!!))
+                }.start()
             }
             else -> {
                 id_lang = lang
@@ -97,6 +99,14 @@ class LanguageActivity: AppCompatActivity() {
             }
         }
         if(languages[id_lang]?.description != "") editDescription.setText(languages[id_lang]?.description)
+    }
+    override fun onResume() {
+        super.onResume()
+
+        //LanguageDaoImpl.getLanguagesFromDB(this)
+
+        val editLanguageName: EditText = findViewById(R.id.editLanguageName)
+        val editDescription: EditText = findViewById(R.id.editDescription)
 
         //check changing
         editLanguageName.addTextChangedListener(object : TextWatcher {

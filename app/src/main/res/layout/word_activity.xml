@@ -64,7 +64,7 @@
                 android:layout_marginEnd="20dp"
                 android:autofillHints=""
                 android:gravity="center"
-                android:text="Слово на конланге"
+                android:text="Перевод слова"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editConlangWord" />
@@ -86,7 +86,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="56dp"
                 android:gravity="center"
-                android:text="Характеристики начального слова"
+                android:text="Характеристики слова"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerPartOfSpeech" />
@@ -121,86 +121,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerType" />
 
-            <TextView
-                android:id="@+id/textViewFinishWord"
-                android:layout_width="300dp"
+            <com.lavenderlang.NonScrollListView
+                android:id="@+id/listWordForms"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="Характеристики конечного слова"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerVoice" />
-
-            <Spinner
-                android:id="@+id/spinnerFinishGender"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewFinishWord" />
-
-            <Spinner
-                android:id="@+id/spinnerFinishNumber"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishGender" />
-
-            <Spinner
-                android:id="@+id/spinnerFinishCase"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishNumber" />
-
-            <Spinner
-                android:id="@+id/spinnerFinishTime"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishCase" />
-
-            <Spinner
-                android:id="@+id/spinnerFinishPerson"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishTime" />
-
-            <Spinner
-                android:id="@+id/spinnerFinishMood"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishPerson" />
-
-            <Spinner
-                android:id="@+id/spinnerFinishDegreeOfComparison"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishMood" />
+                app:layout_constraintTop_toBottomOf="@id/spinnerVoice"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -214,4 +142,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Удалить"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonUpdate"
+        app:layout_constraintTop_toTopOf="@+id/buttonUpdate" />
 </androidx.constraintlayout.widget.ConstraintLayout>

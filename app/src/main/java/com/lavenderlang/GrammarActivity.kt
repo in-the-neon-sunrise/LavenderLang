@@ -38,9 +38,7 @@ class GrammarActivity: AppCompatActivity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            val intent = Intent(this@GrammarActivity, LanguageActivity::class.java)
-            intent.putExtra("lang", id_lang)
-            startActivity(intent)
+            finish()
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -48,11 +46,10 @@ class GrammarActivity: AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
-
-
     }
-    override fun onResume() {
-        super.onResume()
+
+    override fun onStart() {
+        super.onStart()
         //how it was started?
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
@@ -64,6 +61,9 @@ class GrammarActivity: AppCompatActivity() {
                 id_lang = lang
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
 
         //list of genders
         val listGender : ListView = findViewById(R.id.listViewGender)

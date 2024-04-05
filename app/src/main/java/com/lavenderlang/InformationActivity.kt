@@ -19,7 +19,6 @@ class InformationActivity : AppCompatActivity() {
             this.finish()
         }
     }
-
     override fun onResume() {
         super.onResume()
         id_lang = intent.getIntExtra("lang", -1)

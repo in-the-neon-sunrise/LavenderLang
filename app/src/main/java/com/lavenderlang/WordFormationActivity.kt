@@ -18,9 +18,7 @@ class WordFormationActivity : AppCompatActivity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            val intent = Intent(this@WordFormationActivity, LanguageActivity::class.java)
-            intent.putExtra("lang", id_lang)
-            startActivity(intent)
+            finish()
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -29,8 +27,8 @@ class WordFormationActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         //how it was started?
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {

@@ -48,9 +48,7 @@ class GrammarRuleActivity: AppCompatActivity(){
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            val intent = Intent(this@GrammarRuleActivity, GrammarActivity::class.java)
-            intent.putExtra("lang", id_lang)
-            startActivity(intent)
+            finish()
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -60,9 +58,8 @@ class GrammarRuleActivity: AppCompatActivity(){
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
+    override fun onStart() {
+        super.onStart()
         val editMasc: EditText = findViewById(R.id.editMasc)
 
         when(val lang = intent.getIntExtra("lang", -1)){
@@ -87,6 +84,13 @@ class GrammarRuleActivity: AppCompatActivity(){
                 editMasc.setText(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.regex)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val editMasc: EditText = findViewById(R.id.editMasc)
+
         attrs = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.attrs
         regex = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.regex
         mutableAttrs = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs
