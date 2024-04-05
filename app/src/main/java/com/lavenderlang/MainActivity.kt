@@ -1,40 +1,17 @@
 package com.lavenderlang
 
-import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import com.anggrayudi.storage.file.DocumentFileCompat
-import com.anggrayudi.storage.SimpleStorageHelper
-import com.anggrayudi.storage.file.FileFullPath
-import com.anggrayudi.storage.file.StorageType
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
-import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
-import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
-import com.lavenderlang.backend.dao.language.WritingDaoImpl
-import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.CharacteristicEntity
-import com.lavenderlang.backend.entity.help.MascEntity
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
-import com.lavenderlang.backend.entity.word.AdverbEntity
-import com.lavenderlang.backend.entity.word.NounEntity
-import com.lavenderlang.backend.entity.word.VerbEntity
-import java.io.OutputStream
-import java.security.AccessController.getContext
 
 
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
@@ -42,10 +19,22 @@ var nextLanguageId : Int = 0
 
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        private var instance : MainActivity? = null
+        fun getInstance() : MainActivity {
+            if (instance == null) throw Exception("MainActivity is not created")
+            return instance!!
+        }
+        fun setInstance(mainActivity: MainActivity) {
+            if (instance == null) instance = mainActivity
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         //activity creation
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
+
+        setInstance(this)
 
         Log.d("meowmeow", languages.keys.toString())
 

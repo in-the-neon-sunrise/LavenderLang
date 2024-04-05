@@ -1,6 +1,8 @@
 package com.lavenderlang.backend.dao.language
 
 import android.content.Context
+import androidx.lifecycle.lifecycleScope
+import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.language.*
@@ -8,6 +10,8 @@ import com.lavenderlang.backend.entity.rule.*
 import com.lavenderlang.backend.service.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 interface GrammarDao {
     fun addOption(grammar : GrammarEntity, option : CharacteristicEntity)
@@ -36,6 +40,13 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
             Attributes.IS_INFINITIVE -> return
         }
         grammar.nextIds[option.type] = grammar.nextIds[option.type]!! + 1
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+            languageRepository.updateLanguage(
+                MainActivity.getInstance(),
+                grammar.languageId,
+                Serializer.getInstance().serializeLanguage(languages[grammar.languageId]!!)
+            )
+        }
     }
 
     override fun deleteOption(grammar: GrammarEntity, option: CharacteristicEntity) {
@@ -51,6 +62,14 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
             Attributes.DEGREE_OF_COMPARISON -> grammar.varsDegreeOfComparison.remove(option.characteristicId)
             Attributes.IS_INFINITIVE -> return
         }
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+            languageRepository.updateLanguage(
+                MainActivity.getInstance(),
+                grammar.languageId,
+                Serializer.getInstance().serializeLanguage(languages[grammar.languageId]!!)
+            )
+        }
+        // !!! update words in dictionary
     }
 
     override fun updateOption(
@@ -72,6 +91,13 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         }
         if (!map.contains(optionId)) return
         map[optionId] = newOption
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+            languageRepository.updateLanguage(
+                MainActivity.getInstance(),
+                grammar.languageId,
+                Serializer.getInstance().serializeLanguage(languages[grammar.languageId]!!)
+            )
+        }
         return
     }
 
@@ -91,25 +117,24 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         }
 
         grammar.grammarRules.add(rule)
-        Thread {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.addMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
             languageRepository.updateLanguage(
                 context, grammar.languageId,
                 Serializer.getInstance().serializeLanguage(languages[grammar.languageId]!!)
             )
-        }.start()
-        DictionaryHelperDaoImpl().addMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
+        }
     }
 
     override fun deleteGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity, context: Context) {
         grammar.grammarRules.remove(rule)
-        Thread {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.delMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
             languageRepository.updateLanguage(
                 context, grammar.languageId,
                 Serializer.getInstance().serializeLanguage(languages[grammar.languageId]!!)
             )
-        }.start()
+        }
     }
 
     override fun addWordFormationRule(grammar: GrammarEntity, rule: WordFormationRuleEntity) {

@@ -87,11 +87,6 @@ class LanguageActivity: AppCompatActivity() {
                 id_lang = nextLanguageId
                 languageDao.createLanguage(id_lang.toString(), "", this)
                 editLanguageName.setText(languages[id_lang]?.name)
-
-                val languageRepository = LanguageRepository()
-                Thread {
-                    languageRepository.insertLanguage(this, id_lang, Serializer.getInstance().serializeLanguage(languages[id_lang]!!))
-                }.start()
             }
             else -> {
                 id_lang = lang
@@ -102,8 +97,6 @@ class LanguageActivity: AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-
-        //LanguageDaoImpl.getLanguagesFromDB(this)
 
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)

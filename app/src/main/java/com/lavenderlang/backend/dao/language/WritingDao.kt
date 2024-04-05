@@ -1,11 +1,15 @@
 package com.lavenderlang.backend.dao.language
 
 import android.content.Context
+import androidx.lifecycle.lifecycleScope
+import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 interface WritingDao {
     fun changeVowels(language : LanguageEntity, newLetters : String, context: Context)
@@ -45,12 +49,12 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
             }
         }
         language.consonants = newLetters
-        Thread {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
                 context, language.languageId,
                 Serializer.getInstance().serializeLanguage(language)
             )
-        }.start()
+        }
     }
 
     override fun addCapitalizedPartOfSpeech(
@@ -59,12 +63,12 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         context: Context
     ) {
         language.capitalizedPartsOfSpeech.add(partOfSpeech)
-        Thread {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
                 context, language.languageId,
                 Serializer.getInstance().serializeLanguage(language)
             )
-        }.start()
+        }
     }
 
     override fun deleteCapitalizedPartOfSpeech(
@@ -73,11 +77,11 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         context: Context
     ) {
         language.capitalizedPartsOfSpeech.remove(partOfSpeech)
-        Thread {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
                 context, language.languageId,
                 Serializer.getInstance().serializeLanguage(language)
             )
-        }.start()
+        }
     }
 }

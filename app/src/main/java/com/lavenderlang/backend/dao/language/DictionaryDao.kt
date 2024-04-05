@@ -1,6 +1,8 @@
 package com.lavenderlang.backend.dao.language
 
 import android.content.Context
+import androidx.lifecycle.lifecycleScope
+import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
@@ -10,6 +12,8 @@ import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.backend.service.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 interface DictionaryDao {
     fun addWord(dictionary: DictionaryEntity, word : IWordEntity, context: Context)
@@ -32,24 +36,24 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
             }
         }
         dictionary.dict.add(word)
-        Thread {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.addMadeByWord(dictionary, word)
             languageRepository.updateLanguage(
                 context, dictionary.languageId,
                 Serializer.getInstance().serializeLanguage(languages[dictionary.languageId]!!)
             )
-        }.start()
+        }
     }
 
     override fun deleteWord(dictionary: DictionaryEntity, word: IWordEntity, context: Context) {
         dictionary.dict.remove(word)
-        Thread {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.delMadeByWord(dictionary, word)
             languageRepository.updateLanguage(
                 context, dictionary.languageId,
                 Serializer.getInstance().serializeLanguage(languages[dictionary.languageId]!!)
             )
-        }.start()
+        }
 
     }
 

@@ -13,12 +13,14 @@ import com.anggrayudi.storage.file.FileFullPath
 import com.anggrayudi.storage.file.StorageType
 import com.anggrayudi.storage.file.openInputStream
 import com.anggrayudi.storage.file.openOutputStream
+import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
 import com.lavenderlang.nextLanguageId
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.BufferedWriter
 import java.io.File
@@ -51,13 +53,13 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         }
     override fun changeName(language : LanguageEntity, newName : String, context: AppCompatActivity) {
         language.name = newName
-        context.lifecycleScope.launch(Dispatchers.IO) {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(context, language.languageId, Serializer.getInstance().serializeLanguage(language))
         }
     }
     override fun changeDescription(language : LanguageEntity, newDescription: String, context: AppCompatActivity) {
         language.description = newDescription
-        context.lifecycleScope.launch(Dispatchers.IO) {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(context, language.languageId, Serializer.getInstance().serializeLanguage(language))
         }
     }
@@ -65,7 +67,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     override fun copyLanguage(language: LanguageEntity, context: AppCompatActivity) {
         val newLang = language.copy(languageId = nextLanguageId, name = language.name + " копия")
         languages[nextLanguageId++] = newLang
-        context.lifecycleScope.launch(Dispatchers.IO) {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.insertLanguage(context, newLang.languageId, Serializer.getInstance().serializeLanguage(newLang))
         }
         return
@@ -74,7 +76,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         val newLang = LanguageEntity(nextLanguageId, name, description)
         Log.d("woof", "new $newLang")
         languages[nextLanguageId] = newLang
-        context.lifecycleScope.launch(Dispatchers.IO) {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.insertLanguage(context, newLang.languageId, Serializer.getInstance().serializeLanguage(newLang))
         }
         ++nextLanguageId
@@ -82,7 +84,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     }
     override fun deleteLanguage(id: Int, context: AppCompatActivity) {
         languages.remove(id)
-        context.lifecycleScope.launch(Dispatchers.IO) {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.deleteLanguage(context, id)
         }
     }
