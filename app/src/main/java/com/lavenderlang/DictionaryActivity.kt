@@ -39,7 +39,14 @@ class DictionaryActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
+        //button new lang listener
+        val buttonNewWord: Button = findViewById(R.id.buttonNewWord)
+        buttonNewWord.setOnClickListener {
+            val intent = Intent(this@DictionaryActivity, WordActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            intent.putExtra("word", -1)
+            startActivity(intent)
+        }
     }
 
     override fun onStart() {

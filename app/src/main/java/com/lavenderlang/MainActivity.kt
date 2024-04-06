@@ -187,7 +187,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-
         val listLanguages: ListView = findViewById(R.id.listLanguages)
         val adapter: ArrayAdapter<LanguageEntity> =
             ArrayAdapter(this, android.R.layout.simple_list_item_1, languages.values.toList())

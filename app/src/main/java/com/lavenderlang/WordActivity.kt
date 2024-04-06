@@ -11,6 +11,10 @@ import android.widget.ListView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.lavenderlang.LanguageActivity.Companion.languageDao
+import com.lavenderlang.backend.dao.language.DictionaryDao
+import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
+import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.word.WordDao
 import com.lavenderlang.backend.dao.word.WordDaoImpl
@@ -18,6 +22,7 @@ import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.CharacteristicEntity
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.word.IWordEntity
+import com.lavenderlang.backend.entity.word.NounEntity
 
 class WordActivity : AppCompatActivity() {
     companion object{
@@ -30,6 +35,8 @@ class WordActivity : AppCompatActivity() {
         var flagIsFirst:Boolean = true
 
         val wordDao: WordDao = WordDaoImpl()
+        val languageDao: LanguageDao = LanguageDaoImpl()
+        val dictionaryDao: DictionaryDao = DictionaryDaoImpl()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +45,7 @@ class WordActivity : AppCompatActivity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            val intent = Intent(this@WordActivity, DictionaryActivity::class.java)
-            intent.putExtra("lang", id_lang)
-            startActivity(intent)
+            finish()
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
@@ -65,8 +70,8 @@ class WordActivity : AppCompatActivity() {
         }
         when (val word = intent.getIntExtra("word", -1)) {
             -1 -> {
-                val intent = Intent(this@WordActivity, LanguageActivity::class.java)
-                startActivity(intent)
+                id_word = languages[id_lang]!!.dictionary.dict.size
+                dictionaryDao.addWord(languages[id_lang]!!.dictionary, NounEntity(id_lang, "", "-"))
             }
             else -> {
                 id_word = word
@@ -103,11 +108,6 @@ class WordActivity : AppCompatActivity() {
         setPartOfSpeechListener()
 
         updateWordForms()
-        val wordForms = languages[id_lang]!!.dictionary.fullDict[languages[id_lang]!!.dictionary.dict[id_word].word]!!.toMutableList()
-        val listWordForms : ListView = findViewById(R.id.listWordForms)
-        val adapterWordForms: ArrayAdapter<IWordEntity> = WordAdapter(this, wordForms)
-        listWordForms.adapter = adapterWordForms
-        adapterWordForms.notifyDataSetChanged()
 
         val buttonUpdate: Button = findViewById(R.id.buttonUpdate)
         buttonUpdate.setOnClickListener {
@@ -363,7 +363,7 @@ class WordActivity : AppCompatActivity() {
         }
     }
     fun updateWordForms(){
-        val wordForms = languages[id_lang]!!.dictionary.fullDict[languages[id_lang]!!.dictionary.dict[id_word].word]!!.toMutableList()
+        val wordForms = dictionaryDao.getWordForms(languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word].word)
         val listWordForms : ListView = findViewById(R.id.listWordForms)
         val adapterWordForms: ArrayAdapter<IWordEntity> = WordAdapter(this, wordForms)
         listWordForms.adapter = adapterWordForms
