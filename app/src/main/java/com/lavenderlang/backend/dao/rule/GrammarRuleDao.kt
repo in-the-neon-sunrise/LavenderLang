@@ -1,7 +1,9 @@
 package com.lavenderlang.backend.dao.rule
 
 import android.content.Context
+import androidx.lifecycle.lifecycleScope
 import com.chaquo.python.Python
+import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.dao.help.TransformationDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorHelperDaoImpl
@@ -19,30 +21,37 @@ import com.lavenderlang.backend.entity.word.PronounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.entity.word.VerbParticipleEntity
 import com.lavenderlang.backend.service.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.IncorrectRegexException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
+import kotlinx.coroutines.launch
 
 interface GrammarRuleDao : RuleDao {
-    fun updateTransformation(rule : GrammarRuleEntity, newTransformation: TransformationEntity, context: Context)
-    fun updateMutableAttrs(rule : GrammarRuleEntity, newAttrs: MutableMap<Attributes, Int>, context: Context)
+    fun updateTransformation(rule : GrammarRuleEntity, newTransformation: TransformationEntity)
+    fun updateMutableAttrs(rule : GrammarRuleEntity, newAttrs: MutableMap<Attributes, Int>)
     fun grammarTransformByRule(rule: GrammarRuleEntity, word : IWordEntity) : IWordEntity
 }
 class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
                          private val languageRepository: LanguageRepository = LanguageRepository()
 ) : GrammarRuleDao {
-    override fun updateMasc(rule : IRuleEntity, newMasc : MascEntity, context: Context) {
+    override fun updateMasc(rule : IRuleEntity, newMasc : MascEntity) {
+        try {
+            newMasc.regex.toRegex()
+        } catch (e : Exception) {
+            throw IncorrectRegexException("Неверное регулярное выражение!")
+        }
         val oldRule = (rule as GrammarRuleEntity).copy()
         rule.masc = newMasc
-        Thread {
+        MainActivity.getInstance().lifecycleScope.launch {
             helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
             languageRepository.updateLanguage(
-                context, rule.languageId,
+                MainActivity.getInstance(), rule.languageId,
                 Serializer.getInstance().serializeLanguage(languages[rule.languageId]!!)
             )
 
-        }.start()
+        }
     }
-    override fun updateTransformation(rule : GrammarRuleEntity, newTransformation: TransformationEntity, context: Context) {
+    override fun updateTransformation(rule : GrammarRuleEntity, newTransformation: TransformationEntity) {
         //check if rule is correct (letters in transformation are in language)
         for (letter in newTransformation.addToBeginning) {
             if (!languages[rule.languageId]!!.vowels.contains(letter) &&
@@ -58,25 +67,25 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         }
         val oldRule = rule.copy()
         rule.transformation = newTransformation
-        Thread {
+        MainActivity.getInstance().lifecycleScope.launch {
             helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
             languageRepository.updateLanguage(
-                context, rule.languageId,
+                MainActivity.getInstance(), rule.languageId,
                 Serializer.getInstance().serializeLanguage(languages[rule.languageId]!!)
             )
-        }.start()
+        }
     }
 
-    override fun updateMutableAttrs(rule: GrammarRuleEntity, newAttrs: MutableMap<Attributes, Int>, context: Context) {
+    override fun updateMutableAttrs(rule: GrammarRuleEntity, newAttrs: MutableMap<Attributes, Int>) {
         val oldRule = rule.copy()
         rule.mutableAttrs = newAttrs
-        Thread {
+        MainActivity.getInstance().lifecycleScope.launch {
             helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
             languageRepository.updateLanguage(
-                context, rule.languageId,
+                MainActivity.getInstance(), rule.languageId,
                 Serializer.getInstance().serializeLanguage(languages[rule.languageId]!!)
             )
-        }.start()
+        }
     }
     override fun grammarTransformByRule(rule: GrammarRuleEntity, word: IWordEntity): IWordEntity {
         val transformedWord: IWordEntity = when (word) {

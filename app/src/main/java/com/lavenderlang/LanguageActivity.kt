@@ -1,6 +1,5 @@
 package com.lavenderlang
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -34,7 +33,7 @@ class LanguageActivity: AppCompatActivity() {
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
             val intent = Intent(this@LanguageActivity, InformationActivity::class.java)
-            intent.putExtra("lang", LanguageActivity.id_lang)
+            intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
 
@@ -86,7 +85,7 @@ class LanguageActivity: AppCompatActivity() {
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
                 id_lang = nextLanguageId
-                languageDao.createLanguage(id_lang.toString(), "", this)
+                languageDao.createLanguage(id_lang.toString(), "")
                 editLanguageName.setText(languages[id_lang]?.name)
             }
             else -> {
@@ -109,7 +108,7 @@ class LanguageActivity: AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changeName(languages[id_lang]!!, editLanguageName.text.toString(), this@LanguageActivity)
+                languageDao.changeName(languages[id_lang]!!, editLanguageName.text.toString())
             }
         })
         editDescription.addTextChangedListener(object : TextWatcher {
@@ -118,7 +117,7 @@ class LanguageActivity: AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changeDescription(languages[id_lang]!!, editDescription.text.toString(), this@LanguageActivity)
+                languageDao.changeDescription(languages[id_lang]!!, editDescription.text.toString())
             }
         })
     }

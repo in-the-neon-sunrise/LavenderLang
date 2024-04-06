@@ -1,9 +1,11 @@
 package com.lavenderlang.backend.dao.language
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
@@ -19,27 +21,35 @@ import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
 import com.lavenderlang.nextLanguageId
+import com.lowagie.text.Document
+import com.lowagie.text.Paragraph
+import com.lowagie.text.pdf.PdfWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.BufferedWriter
 import java.io.File
+import java.io.FileOutputStream
 import java.io.OutputStreamWriter
+import java.lang.Thread.sleep
 
 interface LanguageDao {
-    fun changeName(language: LanguageEntity, newName: String, context: AppCompatActivity)
-    fun changeDescription(language: LanguageEntity, newDescription: String, context: AppCompatActivity)
-    fun copyLanguage(language: LanguageEntity, context: AppCompatActivity)
-    fun createLanguage(name: String, description: String, context: AppCompatActivity)
-    fun deleteLanguage(id: Int, context: AppCompatActivity)
-    fun getLanguagesFromDB(context: AppCompatActivity)
-    fun downloadLanguageJSON(language: LanguageEntity, context: AppCompatActivity)
-    fun downloadLanguagePDF(language: LanguageEntity, context: AppCompatActivity)
+    fun changeName(language: LanguageEntity, newName: String)
+    fun changeDescription(language: LanguageEntity, newDescription: String)
+    fun copyLanguage(language: LanguageEntity)
+    fun createLanguage(name: String, description: String)
+    fun deleteLanguage(id: Int)
+    fun getLanguagesFromDB()
+    fun downloadLanguageJSON(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>)
+    fun downloadLanguagePDF(language: LanguageEntity, storageHelper: SimpleStorageHelper)
     fun getLanguageFromFile(path: String, context: AppCompatActivity)
 }
 class LanguageDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) : LanguageDao {
-    override fun getLanguagesFromDB(context: AppCompatActivity) {
-            languageRepository.languages.observe(context
+    companion object {
+        var curLanguage: LanguageEntity? = null
+    }
+    override fun getLanguagesFromDB() {
+            languageRepository.languages.observe(MainActivity.getInstance()
             ) { languageItemList ->
                 run {
                     for (e in languageItemList) {
@@ -49,112 +59,77 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
                     }
                 }
             }
-            languageRepository.loadAllLanguages(context, context)
+            languageRepository.loadAllLanguages(MainActivity.getInstance(), MainActivity.getInstance())
         }
-    override fun changeName(language : LanguageEntity, newName : String, context: AppCompatActivity) {
+    override fun changeName(language : LanguageEntity, newName : String) {
         language.name = newName
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.updateLanguage(context, language.languageId, Serializer.getInstance().serializeLanguage(language))
+            languageRepository.updateLanguage(MainActivity.getInstance(), language.languageId, Serializer.getInstance().serializeLanguage(language))
         }
     }
-    override fun changeDescription(language : LanguageEntity, newDescription: String, context: AppCompatActivity) {
+    override fun changeDescription(language : LanguageEntity, newDescription: String) {
         language.description = newDescription
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.updateLanguage(context, language.languageId, Serializer.getInstance().serializeLanguage(language))
+            languageRepository.updateLanguage(MainActivity.getInstance(), language.languageId, Serializer.getInstance().serializeLanguage(language))
         }
     }
 
-    override fun copyLanguage(language: LanguageEntity, context: AppCompatActivity) {
+    override fun copyLanguage(language: LanguageEntity) {
         val newLang = language.copy(languageId = nextLanguageId, name = language.name + " копия")
         languages[nextLanguageId++] = newLang
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.insertLanguage(context, newLang.languageId, Serializer.getInstance().serializeLanguage(newLang))
+            languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, Serializer.getInstance().serializeLanguage(newLang))
         }
         return
     }
-    override fun createLanguage(name: String, description: String, context: AppCompatActivity) {
+    override fun createLanguage(name: String, description: String) {
         val newLang = LanguageEntity(nextLanguageId, name, description)
         Log.d("woof", "new $newLang")
         languages[nextLanguageId] = newLang
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.insertLanguage(context, newLang.languageId, Serializer.getInstance().serializeLanguage(newLang))
+            languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, Serializer.getInstance().serializeLanguage(newLang))
         }
         ++nextLanguageId
         return
     }
-    override fun deleteLanguage(id: Int, context: AppCompatActivity) {
+    override fun deleteLanguage(id: Int) {
         languages.remove(id)
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.deleteLanguage(context, id)
+            languageRepository.deleteLanguage(MainActivity.getInstance(), id)
         }
     }
+    override fun getLanguageFromFile(path: String, context: AppCompatActivity) {
+        TODO("Not yet implemented")
+    }
 
-    override fun downloadLanguageJSON(language: LanguageEntity, context: AppCompatActivity) {
-        val REQUEST_CODE = 12123
-        val storageHelper = SimpleStorageHelper(context)
-        var accessible = DocumentFileCompat.getAccessibleAbsolutePaths(context)
+    override fun downloadLanguageJSON(language: LanguageEntity, storageHelper: SimpleStorageHelper,
+                                      createDocumentResultLauncher: ActivityResultLauncher<String>) {
+        val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MainActivity.getInstance())
         if (accessible.isEmpty()) {
-            storageHelper.requestStorageAccess(REQUEST_CODE, null, StorageType.EXTERNAL)
-            accessible = DocumentFileCompat.getAccessibleAbsolutePaths(context)
-        }
-        if (accessible.isEmpty()) {
-            Toast.makeText(context,
+            Toast.makeText(MainActivity.getInstance(),
                 "Вы не дали приложению доступ к памяти телефона, сохранение невозможно :(",
                 Toast.LENGTH_LONG).show()
             Log.d("woof", "no access")
             return
         }
-        if (Build.VERSION.SDK_INT <= 29) downloadJSONOldApi(language, context)
-        else downloadJSONNewApi(language, context)
-        Log.d("woof", DocumentFileCompat.getAccessibleAbsolutePaths(context).values.toString())
+        curLanguage = language
+        if (Build.VERSION.SDK_INT <= 29) LanguageHelperDaoImpl().downloadJSONOldApi(language)
+        else LanguageHelperDaoImpl().downloadJSONNewApi(language, createDocumentResultLauncher)
+        Log.d("woof", "json done i hope")
     }
 
-    override fun downloadLanguagePDF(language: LanguageEntity, context: AppCompatActivity) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getLanguageFromFile(path: String, context: AppCompatActivity) {
-        TODO("Not yet implemented")
-    }
-
-    private fun downloadJSONOldApi(language: LanguageEntity, context: AppCompatActivity) {
-        TODO()
-    }
-
-    @SuppressLint("NewApi")
-    private fun downloadJSONNewApi(language: LanguageEntity, context: AppCompatActivity) {
-        val storageHelper = SimpleStorageHelper(context)
-        val fullPath = FileFullPath(context, StorageType.EXTERNAL, "Download/Cat")
-        storageHelper.createFile("application/json", language.name, fullPath)
-        for (i in 0..10000) {
-            val file : DocumentFile = DocumentFileCompat.fromFile(context, File(fullPath.absolutePath+"/${language.name}.json"))
-                ?: continue
-            val output = file.openOutputStream(context)
-            if (output == null) {
-                Toast.makeText(context, "Не удалось открыть файл", Toast.LENGTH_LONG).show()
-                Log.d("woof", "no output")
-                return
-            }
-            val writer = BufferedWriter(OutputStreamWriter(output))
-            writer.use { it.write(Serializer.getInstance().serializeLanguage(language)) }
-            Log.d("woof", "written")
+    override fun downloadLanguagePDF(language: LanguageEntity, storageHelper: SimpleStorageHelper) {
+        val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MainActivity.getInstance())
+        if (accessible.isEmpty()) {
+            Toast.makeText(MainActivity.getInstance(),
+                "Вы не дали приложению доступ к памяти телефона, сохранение невозможно",
+                Toast.LENGTH_LONG).show()
+            Log.d("woof", "no access")
             return
         }
-        val file : DocumentFile? = DocumentFileCompat.fromFile(context, File(fullPath.absolutePath+"/${language.name}.json"))
-        if (file == null) {
-            Toast.makeText(context, "Не удалось создать файл", Toast.LENGTH_LONG).show()
-            Log.d("woof", "no file")
-            return
-        }
-        Log.d("woof", file.canWrite().toString())
-        val output = file.openOutputStream(context)
-        if (output == null) {
-            Toast.makeText(context, "Не удалось открыть файл", Toast.LENGTH_LONG).show()
-            Log.d("woof", "no output")
-            return
-        }
-        val writer = BufferedWriter(OutputStreamWriter(output))
-        writer.use { it.write(Serializer.getInstance().serializeLanguage(language)) }
-        Log.d("woof", "written")
+        if (Build.VERSION.SDK_INT <= 29) LanguageHelperDaoImpl().downloadPDFOldApi(language)
+        else LanguageHelperDaoImpl().downloadPDFNewApi(language, storageHelper)
+        Log.d("woof", "pdf done i hope")
     }
+
 }

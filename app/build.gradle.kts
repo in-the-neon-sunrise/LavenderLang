@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.lavenderlang"
-        minSdk = 23
+        minSdk = 26 // fixme: 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -72,9 +72,6 @@ dependencies {
     implementation("androidx.documentfile:documentfile:1.0.1")
     // simpleStorage
     implementation("com.anggrayudi:storage:1.5.5")
-    // modernStorage... help
-    // For storage permissions checking
-    implementation("com.google.modernstorage:modernstorage-permissions:1.0.0-alpha06")
-    // For storage interactions using Okio FileSystem API
-    implementation("com.google.modernstorage:modernstorage-storage:1.0.0-alpha06")
+    // openPDF
+    implementation("com.github.librepdf:openpdf:2.0.1")
 }

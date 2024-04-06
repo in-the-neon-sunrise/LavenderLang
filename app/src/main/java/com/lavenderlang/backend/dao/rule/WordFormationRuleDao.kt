@@ -15,6 +15,7 @@ import com.lavenderlang.backend.entity.word.PronounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.entity.word.VerbParticipleEntity
 import com.lavenderlang.backend.service.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.IncorrectRegexException
 import com.lavenderlang.languages
 
 interface WordFormationRuleDao : RuleDao {
@@ -25,7 +26,12 @@ interface WordFormationRuleDao : RuleDao {
 
 }
 class WordFormationRuleDaoImpl : WordFormationRuleDao {
-    override fun updateMasc(rule: IRuleEntity, newMasc: MascEntity, context: Context) {
+    override fun updateMasc(rule: IRuleEntity, newMasc: MascEntity) {
+        try {
+            newMasc.regex.toRegex()
+        } catch (e : Exception) {
+            throw IncorrectRegexException("Неверное регулярное выражение!")
+        }
         rule.masc = newMasc
     }
 

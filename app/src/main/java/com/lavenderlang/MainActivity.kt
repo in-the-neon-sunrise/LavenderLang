@@ -7,13 +7,21 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.appcompat.app.AppCompatActivity
+import com.anggrayudi.storage.SimpleStorageHelper
+import com.anggrayudi.storage.file.DocumentFileCompat
+import com.anggrayudi.storage.file.StorageType
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.dao.language.LanguageHelperDaoImpl
+import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
+import com.lavenderlang.backend.dao.language.WritingDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.CharacteristicEntity
@@ -32,6 +40,14 @@ var nextLanguageId : Int = 0
 
 
 class MainActivity : AppCompatActivity() {
+    private val createFileLauncher = registerForActivityResult(CreateDocument("todo/todo")) { uri ->
+        if (uri != null) {
+            LanguageHelperDaoImpl().writeToFile(uri)
+        }
+    }
+
+    private lateinit var storageHelper: SimpleStorageHelper
+
     companion object {
         private var instance : MainActivity? = null
         fun getInstance() : MainActivity {
@@ -48,11 +64,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.start_activity)
 
         setInstance(this)
+        storageHelper = SimpleStorageHelper(this)
+        if (DocumentFileCompat.getAccessibleAbsolutePaths(this).isEmpty()) {
+            val REQUEST_CODE = 123123
+            storageHelper.requestStorageAccess(REQUEST_CODE, null, StorageType.EXTERNAL)
+        }
 
         Log.d("meowmeow", languages.keys.toString())
 
 
-        if (languages.isEmpty()) LanguageDaoImpl().getLanguagesFromDB(this)
+        if (languages.isEmpty()) LanguageDaoImpl().getLanguagesFromDB()
 
         if (!Python.isStarted()) Python.start(AndroidPlatform(this))
 
@@ -61,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
 
         /*if (languages.isEmpty()) {
-            LanguageDaoImpl().createLanguage("Пример языка", "Пример :>", this)
+            LanguageDaoImpl().createLanguage("Пример языка", "Пример :>")
             val dict = DictionaryDaoImpl()
             val word1 = NounEntity(
                 0,
@@ -84,15 +105,15 @@ class MainActivity : AppCompatActivity() {
             )
             languages[0]!!.vowels = "a"
             languages[0]!!.consonants = "b c d"
-            dict.addWord(languages[0]!!.dictionary, word1, this)
-            dict.addWord(languages[0]!!.dictionary, word2, this)
-            dict.addWord(languages[0]!!.dictionary, word3, this)
+            dict.addWord(languages[0]!!.dictionary, word1)
+            dict.addWord(languages[0]!!.dictionary, word2)
+            dict.addWord(languages[0]!!.dictionary, word3)
             dict.addWord(
                 languages[0]!!.dictionary, AdverbEntity(
                     0,
                     "ddd",
                     "красиво"
-                ), this
+                )
             )
 
             val grammarHandler = GrammarDaoImpl()
@@ -102,21 +123,21 @@ class MainActivity : AppCompatActivity() {
                 ), mutableMapOf(Attributes.NUMBER to 1),
                 TransformationEntity(0, 1, "", "b")
             )
-            grammarHandler.addGrammarRule(languages[0]!!.grammar, rule, this)
+            grammarHandler.addGrammarRule(languages[0]!!.grammar, rule)
             val rule1 = GrammarRuleEntity(
                 0, MascEntity(
                     PartOfSpeech.VERB, mutableMapOf()
                 ), mutableMapOf(Attributes.NUMBER to 1),
                 TransformationEntity(0, 1, "", "d")
             )
-            grammarHandler.addGrammarRule(languages[0]!!.grammar, rule1, this)
+            grammarHandler.addGrammarRule(languages[0]!!.grammar, rule1)
             val rule2 = GrammarRuleEntity(
                 0, MascEntity(
                     PartOfSpeech.ADVERB, mutableMapOf()
                 ), mutableMapOf(Attributes.DEGREE_OF_COMPARISON to 1),
                 TransformationEntity(0, 0, "", "d")
             )
-            grammarHandler.addGrammarRule(languages[0]!!.grammar, rule2, this)
+            grammarHandler.addGrammarRule(languages[0]!!.grammar, rule2)
 
             val TAG = "meowmeow"
             grammarHandler.addOption(
@@ -137,15 +158,15 @@ class MainActivity : AppCompatActivity() {
                     2
                 )
             )
-            WritingDaoImpl().addCapitalizedPartOfSpeech(languages[0]!!, PartOfSpeech.NOUN, this)
-            PunctuationDaoImpl().updatePunctuationSymbol(languages[0]!!, 0, "MEOW", this);
+            WritingDaoImpl().addCapitalizedPartOfSpeech(languages[0]!!, PartOfSpeech.NOUN)
+            PunctuationDaoImpl().updatePunctuationSymbol(languages[0]!!, 0, "MEOW");
         }*/
 
 
 
 
-        Log.d("meowmeow", "onCreate")
-        //LanguageDaoImpl().downloadLanguageJSON(languages[0]!!, this)
+        if (languages.isNotEmpty()) Log.d("meowmeow",
+            languages[0]!!.capitalizedPartsOfSpeech.toString())
 
         //button new lang listener
         val buttonNewLang: Button = findViewById(R.id.buttonNewLang)
@@ -177,6 +198,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, LanguageActivity::class.java)
                 Log.d("meowmeow", "pos $position real ${languages.values.toList()[position].languageId}")
                 intent.putExtra("lang", languages.values.toList()[position].languageId)
+                //LanguageDaoImpl().downloadLanguageJSON(languages.values.toList()[position], storageHelper, createFileLauncher)
                 startActivity(intent)
             }
     }

@@ -16,18 +16,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 interface DictionaryDao {
-    fun addWord(dictionary: DictionaryEntity, word : IWordEntity, context: Context)
-    fun deleteWord(dictionary: DictionaryEntity, word : IWordEntity, context: Context)
-    fun createWordsFromExisting(dictionary: DictionaryEntity, word : IWordEntity, context: Context) : ArrayList<IWordEntity>
+    fun addWord(dictionary: DictionaryEntity, word : IWordEntity)
+    fun deleteWord(dictionary: DictionaryEntity, word : IWordEntity)
+    fun createWordsFromExisting(dictionary: DictionaryEntity, word : IWordEntity) : ArrayList<IWordEntity>
     fun filterDictByPartOfSpeech(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : ArrayList<IWordEntity>
     fun sortDictByWord(dictionary: DictionaryEntity) : ArrayList<IWordEntity>
     fun sortDictByTranslation(dictionary: DictionaryEntity) : ArrayList<IWordEntity>
+    fun getWordForms(dictionary: DictionaryEntity, word: String) : ArrayList<IWordEntity>
 
 }
 class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
     private val languageRepository: LanguageRepository = LanguageRepository()
 ) : DictionaryDao {
-    override fun addWord(dictionary: DictionaryEntity, word: IWordEntity, context: Context) {
+    override fun addWord(dictionary: DictionaryEntity, word: IWordEntity) {
         word.word = word.word.lowercase()
         for (letter in word.word) {
             if (!languages[dictionary.languageId]!!.vowels.contains(letter) &&
@@ -39,25 +40,25 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.addMadeByWord(dictionary, word)
             languageRepository.updateLanguage(
-                context, dictionary.languageId,
+                MainActivity.getInstance(), dictionary.languageId,
                 Serializer.getInstance().serializeLanguage(languages[dictionary.languageId]!!)
             )
         }
     }
 
-    override fun deleteWord(dictionary: DictionaryEntity, word: IWordEntity, context: Context) {
+    override fun deleteWord(dictionary: DictionaryEntity, word: IWordEntity) {
         dictionary.dict.remove(word)
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.delMadeByWord(dictionary, word)
             languageRepository.updateLanguage(
-                context, dictionary.languageId,
+                MainActivity.getInstance(), dictionary.languageId,
                 Serializer.getInstance().serializeLanguage(languages[dictionary.languageId]!!)
             )
         }
 
     }
 
-    override fun createWordsFromExisting(dictionary: DictionaryEntity, word: IWordEntity, context: Context): ArrayList<IWordEntity> {
+    override fun createWordsFromExisting(dictionary: DictionaryEntity, word: IWordEntity): ArrayList<IWordEntity> {
         val possibleWords: ArrayList<IWordEntity> = arrayListOf()
         val wfrHandler = WordFormationRuleDaoImpl()
         val mascHandler = MascDaoImpl()
@@ -66,7 +67,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
             val posWord = wfrHandler.wordFormationTransformByRule(word, rule)
             if (dictionary.fullDict.containsKey("${posWord.word} ${posWord.translation}")) continue
             possibleWords.add(posWord)
-            addWord(dictionary, posWord, context)
+            addWord(dictionary, posWord)
         }
         return possibleWords
     }
@@ -87,5 +88,12 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
 
     override fun sortDictByTranslation(dictionary: DictionaryEntity): ArrayList<IWordEntity> {
         return dictionary.dict.sortedBy { it.translation } as ArrayList<IWordEntity>
+    }
+
+    override fun getWordForms(dictionary: DictionaryEntity, word: String): ArrayList<IWordEntity> {
+        for (key in dictionary.fullDict.keys) {
+            if (key.split(" ")[0] == word) return dictionary.fullDict[key]!!
+        }
+        return arrayListOf()
     }
 }

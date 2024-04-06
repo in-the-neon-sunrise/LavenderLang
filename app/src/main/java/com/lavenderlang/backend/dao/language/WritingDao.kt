@@ -9,17 +9,18 @@ import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface WritingDao {
-    fun changeVowels(language : LanguageEntity, newLetters : String, context: Context)
-    fun changeConsonants(language : LanguageEntity, newLetters : String, context: Context)
-    fun addCapitalizedPartOfSpeech(language : LanguageEntity, partOfSpeech : PartOfSpeech, context: Context)
-    fun deleteCapitalizedPartOfSpeech(language : LanguageEntity, partOfSpeech : PartOfSpeech, context: Context)
+    fun changeVowels(language : LanguageEntity, newLetters : String)
+    fun changeConsonants(language : LanguageEntity, newLetters : String)
+    fun addCapitalizedPartOfSpeech(language : LanguageEntity, partOfSpeech : PartOfSpeech)
+    fun deleteCapitalizedPartOfSpeech(language : LanguageEntity, partOfSpeech : PartOfSpeech)
 }
 
 class WritingDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) : WritingDao {
-    override fun changeVowels(language: LanguageEntity, newLetters: String, context: Context) {
+    override fun changeVowels(language: LanguageEntity, newLetters: String) {
         for (letter in newLetters) {
             if (letter == ' ') continue
             if (language.consonants.contains(letter)) {
@@ -30,15 +31,15 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
             }
         }
         language.vowels = newLetters
-        Thread {
+        GlobalScope.launch {
             languageRepository.updateLanguage(
-                context, language.languageId,
+                MainActivity.getInstance(), language.languageId,
                 Serializer.getInstance().serializeLanguage(language)
             )
-        }.start()
+        }
     }
 
-    override fun changeConsonants(language: LanguageEntity, newLetters: String, context: Context) {
+    override fun changeConsonants(language: LanguageEntity, newLetters: String) {
         for (letter in newLetters) {
             if (letter == ' ') continue
             if (language.vowels.contains(letter)) {
@@ -51,35 +52,27 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         language.consonants = newLetters
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
-                context, language.languageId,
+                MainActivity.getInstance(), language.languageId,
                 Serializer.getInstance().serializeLanguage(language)
             )
         }
     }
 
-    override fun addCapitalizedPartOfSpeech(
-        language: LanguageEntity,
-        partOfSpeech: PartOfSpeech,
-        context: Context
-    ) {
+    override fun addCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
         language.capitalizedPartsOfSpeech.add(partOfSpeech)
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
-                context, language.languageId,
+                MainActivity.getInstance(), language.languageId,
                 Serializer.getInstance().serializeLanguage(language)
             )
         }
     }
 
-    override fun deleteCapitalizedPartOfSpeech(
-        language: LanguageEntity,
-        partOfSpeech: PartOfSpeech,
-        context: Context
-    ) {
+    override fun deleteCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
         language.capitalizedPartsOfSpeech.remove(partOfSpeech)
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
-                context, language.languageId,
+                MainActivity.getInstance(), language.languageId,
                 Serializer.getInstance().serializeLanguage(language)
             )
         }

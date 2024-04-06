@@ -2,6 +2,7 @@ package com.lavenderlang.backend.dao.help
 
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.word.IWordEntity
+import com.lavenderlang.backend.service.IncorrectRegexException
 
 interface MascDao {
     fun changePartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech)
@@ -26,6 +27,11 @@ class MascDaoImpl : MascDao {
         return masc.attrs[attribute]!!.remove(ind)
     }
     override fun updateRegex(masc : MascEntity, newRegex : String) {
+        try {
+            newRegex.toRegex()
+        } catch (e : Exception) {
+            throw IncorrectRegexException("Неверное регулярное выражение!")
+        }
         masc.regex = newRegex
     }
     override fun fits(masc : MascEntity, word : IWordEntity) : Boolean {

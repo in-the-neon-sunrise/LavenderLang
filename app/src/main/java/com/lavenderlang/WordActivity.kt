@@ -111,8 +111,8 @@ class WordActivity : AppCompatActivity() {
 
         val buttonUpdate: Button = findViewById(R.id.buttonUpdate)
         buttonUpdate.setOnClickListener {
-            wordDao.updateWord(languages[id_lang]!!.dictionary.dict[id_word], editConlangWord.text.toString(), this)
-            wordDao.updateTranslation(languages[id_lang]!!.dictionary.dict[id_word], editRussianWord.text.toString(), this)
+            wordDao.updateWord(languages[id_lang]!!.dictionary.dict[id_word], editConlangWord.text.toString())
+            wordDao.updateTranslation(languages[id_lang]!!.dictionary.dict[id_word], editRussianWord.text.toString())
 
             partOfSpeech = when(idPartOfSpeech){
                 0-> PartOfSpeech.NOUN

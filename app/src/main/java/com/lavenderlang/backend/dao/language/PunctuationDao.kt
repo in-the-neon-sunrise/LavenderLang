@@ -12,17 +12,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 interface PunctuationDao {
-    fun updatePunctuationSymbol(language: LanguageEntity, id: Int, newSymbol: String, context: Context)
+    fun updatePunctuationSymbol(language: LanguageEntity, id: Int, newSymbol: String)
 // если символ в буквах конланга - ошибка
 }
 
 class PunctuationDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()): PunctuationDao {
-    override fun updatePunctuationSymbol(
-        language: LanguageEntity,
-        id: Int,
-        newSymbol: String,
-        context: Context
-    ) {
+    override fun updatePunctuationSymbol(language: LanguageEntity, id: Int, newSymbol: String) {
         //check if symbol is in language
         for (letter in newSymbol) {
             if (languages[language.languageId]!!.vowels.contains(newSymbol) ||
@@ -32,7 +27,7 @@ class PunctuationDaoImpl(private val languageRepository: LanguageRepository = La
         language.puncSymbols[language.puncSymbols.keys.toList()[id]] = newSymbol
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
-                context, language.languageId,
+                MainActivity.getInstance(), language.languageId,
                 Serializer.getInstance().serializeLanguage(language)
             )
         }
