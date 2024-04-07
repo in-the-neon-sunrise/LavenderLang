@@ -74,4 +74,6 @@ dependencies {
     implementation("com.anggrayudi:storage:1.5.5")
     // openPDF
     implementation("com.github.librepdf:openpdf:2.0.1")
+    // iText
+    implementation("com.itextpdf:itextg:5.5.10")
 }

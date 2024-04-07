@@ -39,7 +39,7 @@ class IWordEntityKeyDeserializer : KeyDeserializer() {
     JsonSubTypes.Type(value = FuncPartEntity::class, name = "funcpart")
 )
 interface IWordEntity {
-    val languageId : Int
+    var languageId : Int
     var word : String
     var translation : String
     var mutableAttrs : MutableMap<Attributes, Int>

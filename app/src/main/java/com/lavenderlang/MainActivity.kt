@@ -18,7 +18,6 @@ import com.chaquo.python.android.AndroidPlatform
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.dao.language.LanguageHelperDaoImpl
 import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 import com.lavenderlang.backend.dao.language.WritingDaoImpl
@@ -40,9 +39,14 @@ var nextLanguageId : Int = 0
 
 
 class MainActivity : AppCompatActivity() {
-    private val createFileLauncher = registerForActivityResult(CreateDocument("todo/todo")) { uri ->
+    private val createJSONLauncher = registerForActivityResult(CreateDocument("todo/todo")) { uri ->
         if (uri != null) {
-            LanguageHelperDaoImpl().writeToFile(uri)
+            LanguageDaoImpl().writeToJSON(uri)
+        }
+    }
+    private val createPDFLauncher = registerForActivityResult(CreateDocument("todo/todo")) { uri ->
+        if (uri != null) {
+            LanguageDaoImpl().writeToPDF(uri)
         }
     }
 
@@ -167,6 +171,7 @@ class MainActivity : AppCompatActivity() {
 
         if (languages.isNotEmpty()) Log.d("meowmeow",
             languages[0]!!.capitalizedPartsOfSpeech.toString())
+        if (languages.isNotEmpty()) Log.d("meowmeow", languages.keys.toString())
 
         //button new lang listener
         val buttonNewLang: Button = findViewById(R.id.buttonNewLang)
@@ -197,7 +202,8 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, LanguageActivity::class.java)
                 Log.d("meowmeow", "pos $position real ${languages.values.toList()[position].languageId}")
                 intent.putExtra("lang", languages.values.toList()[position].languageId)
-                //LanguageDaoImpl().downloadLanguageJSON(languages.values.toList()[position], storageHelper, createFileLauncher)
+                //LanguageDaoImpl().downloadLanguagePDF(languages.values.toList()[position], storageHelper, createPDFLauncher)
+                //LanguageDaoImpl().getLanguageFromFile(DocumentFileCompat.getAccessibleAbsolutePaths(this).values.toList()[0].toList()[0]+"/1.json", this)
                 startActivity(intent)
             }
     }

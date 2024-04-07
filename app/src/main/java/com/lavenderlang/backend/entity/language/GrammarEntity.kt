@@ -4,7 +4,7 @@ import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.rule.*
 
 data class GrammarEntity(
-    val languageId : Int = 0,
+    var languageId : Int = 0,
     var grammarRules: ArrayList<GrammarRuleEntity> = arrayListOf(),
     var wordFormationRules : ArrayList<WordFormationRuleEntity> = arrayListOf(),
 
