@@ -31,7 +31,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
             }
         }
         language.vowels = newLetters
-        GlobalScope.launch {
+        MainActivity.getInstance().lifecycleScope.launch {
             languageRepository.updateLanguage(
                 MainActivity.getInstance(), language.languageId,
                 Serializer.getInstance().serializeLanguage(language)

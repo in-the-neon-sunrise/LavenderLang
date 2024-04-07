@@ -42,7 +42,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
             Attributes.IS_INFINITIVE -> return
         }
         grammar.nextIds[option.type] = grammar.nextIds[option.type]!! + 1
-        GlobalScope.launch(Dispatchers.IO) {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
                 MainActivity.getInstance(),
                 grammar.languageId,

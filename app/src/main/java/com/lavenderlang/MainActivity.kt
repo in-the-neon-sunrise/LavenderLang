@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         setInstance(this)
         storageHelper = SimpleStorageHelper(this)
+        // fixme: will be in another activity
         if (DocumentFileCompat.getAccessibleAbsolutePaths(this).isEmpty()) {
             val REQUEST_CODE = 123123
             storageHelper.requestStorageAccess(REQUEST_CODE, null, StorageType.EXTERNAL)

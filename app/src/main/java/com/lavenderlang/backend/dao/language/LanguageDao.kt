@@ -46,6 +46,8 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
             languageRepository.languages.observe(MainActivity.getInstance()
             ) { languageItemList: List<LanguageItem> ->
                 run {
+                    languages = mutableMapOf()
+                    nextLanguageId = 0
                     for (e in languageItemList) {
                         languages[e.id] = Serializer.getInstance().deserializeLanguage(e.lang)
                         Log.d("woof", "loaded ${languages[e.id]}")

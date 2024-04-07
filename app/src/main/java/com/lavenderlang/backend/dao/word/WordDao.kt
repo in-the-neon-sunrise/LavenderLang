@@ -3,6 +3,7 @@ package com.lavenderlang.backend.dao.word
 import android.content.Context
 import androidx.lifecycle.lifecycleScope
 import com.lavenderlang.MainActivity
+import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
@@ -35,7 +36,7 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
             PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
         }
         word.word = newWord
-        GlobalScope.launch {
+        MainActivity.getInstance().lifecycleScope.launch {
             helper.updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
             languageRepository.updateLanguage(
                 MainActivity.getInstance(), word.languageId,
@@ -56,7 +57,7 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
             PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
         }
         word.translation = newTranslation
-        GlobalScope.launch {
+        MainActivity.getInstance().lifecycleScope.launch {
             helper.updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
             languageRepository.updateLanguage(
                 MainActivity.getInstance(), word.languageId,
@@ -87,74 +88,55 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
     }
 
     override fun updatePartOfSpeech(word: IWordEntity, newPartOfSpeech: PartOfSpeech) {
-        val oldWord = when (word.partOfSpeech) {
-            PartOfSpeech.NOUN -> (word as NounEntity).copy()
-            PartOfSpeech.VERB -> (word as VerbEntity).copy()
-            PartOfSpeech.ADJECTIVE -> (word as AdjectiveEntity).copy()
-            PartOfSpeech.ADVERB -> (word as AdverbEntity).copy()
-            PartOfSpeech.PARTICIPLE -> (word as ParticipleEntity).copy()
-            PartOfSpeech.VERB_PARTICIPLE -> (word as VerbParticipleEntity).copy()
-            PartOfSpeech.PRONOUN -> (word as PronounEntity).copy()
-            PartOfSpeech.NUMERAL -> (word as NumeralEntity).copy()
-            PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
-        }
-        /*when (newPartOfSpeech) {
+        val newWord = when (newPartOfSpeech) {
             PartOfSpeech.NOUN -> NounEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.VERB -> VerbEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.ADJECTIVE -> AdjectiveEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.ADVERB -> AdverbEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.PARTICIPLE -> ParticipleEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
-            PartOfSpeech.VERBPARTICIPLE -> VerbParticipleEntity(
+            PartOfSpeech.VERB_PARTICIPLE -> VerbParticipleEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.PRONOUN -> PronounEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.NUMERAL -> NumeralEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
-            PartOfSpeech.FUNCPART -> FuncPartEntity(
+            PartOfSpeech.FUNC_PART -> FuncPartEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
-        }*/
-        TODO("how to update the whole word???")
-        //DictionaryHelperDaoImpl().updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
+        }
+        val dictionaryHandler = DictionaryDaoImpl()
+        dictionaryHandler.deleteWord(languages[word.languageId]!!.dictionary, word)
+        dictionaryHandler.addWord(languages[word.languageId]!!.dictionary, newWord)
     }
 }
