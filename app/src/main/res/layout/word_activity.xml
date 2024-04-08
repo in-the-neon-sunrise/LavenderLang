@@ -134,10 +134,10 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/buttonUpdate"
+        android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Обновить"
+        android:text="Сохранить"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -149,6 +149,6 @@
         android:layout_height="wrap_content"
         android:text="Удалить"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonUpdate"
-        app:layout_constraintTop_toTopOf="@+id/buttonUpdate" />
+        app:layout_constraintStart_toEndOf="@+id/buttonSave"
+        app:layout_constraintTop_toTopOf="@+id/buttonSave" />
 </androidx.constraintlayout.widget.ConstraintLayout>

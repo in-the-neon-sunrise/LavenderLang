@@ -75,7 +75,6 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewGender.setOnClickListener {
             val newGender = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.GENDER]?: 0, Attributes.GENDER)
             grammarDao.addOption(languages[clever_id_lang]!!.grammar, newGender)
-            Toast.makeText(this, languages[clever_id_lang]!!.grammar.nextIds.toString(), Toast.LENGTH_LONG).show()
             adapterGender.notifyDataSetChanged()
         }
 

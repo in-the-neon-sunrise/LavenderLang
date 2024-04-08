@@ -11,7 +11,6 @@ import android.widget.ListView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.lavenderlang.LanguageActivity.Companion.languageDao
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDao
@@ -19,7 +18,6 @@ import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.word.WordDao
 import com.lavenderlang.backend.dao.word.WordDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.CharacteristicEntity
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.entity.word.NounEntity
@@ -109,7 +107,7 @@ class WordActivity : AppCompatActivity() {
 
         updateWordForms()
 
-        val buttonUpdate: Button = findViewById(R.id.buttonUpdate)
+        val buttonUpdate: Button = findViewById(R.id.buttonSave)
         buttonUpdate.setOnClickListener {
             wordDao.updateWord(languages[id_lang]!!.dictionary.dict[id_word], editConlangWord.text.toString())
             wordDao.updateTranslation(languages[id_lang]!!.dictionary.dict[id_word], editRussianWord.text.toString())
@@ -155,7 +153,7 @@ class WordActivity : AppCompatActivity() {
             "Деепричастие",
             "Местоимение",
             "Числительное",
-            "Предлог/частица/..."))
+            "Служебное слово"))
         spinnerPartOfSpeech.adapter = spinnerAdapter
         spinnerAdapter.notifyDataSetChanged()
 

@@ -4,11 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.lavenderlang.backend.dao.language.PunctuationDao
+import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
 
 class PunctuationActivity : AppCompatActivity() {
     companion object{
         var id_lang: Int = 0
+        val punctuationDao: PunctuationDao = PunctuationDaoImpl()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +43,30 @@ class PunctuationActivity : AppCompatActivity() {
             else -> {
                 id_lang = lang
             }
+        }
+    }
+    override fun onResume(){
+        super.onResume()
+
+        var editTextConlangSymbol1: EditText = findViewById(R.id.editTextConlangSymbol1)
+        var editTextConlangSymbol2: EditText = findViewById(R.id.editTextConlangSymbol2)
+        var editTextConlangSymbol3: EditText = findViewById(R.id.editTextConlangSymbol3)
+        var editTextConlangSymbol4: EditText = findViewById(R.id.editTextConlangSymbol4)
+
+        // set symbols
+        editTextConlangSymbol1.setText(languages[id_lang]!!.puncSymbols.values.toMutableList()[0])
+        editTextConlangSymbol2.setText(languages[id_lang]!!.puncSymbols.values.toMutableList()[1])
+        editTextConlangSymbol3.setText(languages[id_lang]!!.puncSymbols.values.toMutableList()[2])
+        editTextConlangSymbol4.setText(languages[id_lang]!!.puncSymbols.values.toMutableList()[3])
+
+        var buttonSave: Button = findViewById(R.id.buttonSave)
+
+        // save symbols
+        buttonSave.setOnClickListener {
+            punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 0, editTextConlangSymbol1.text.toString())
+            punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 1, editTextConlangSymbol2.text.toString())
+            punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 2, editTextConlangSymbol3.text.toString())
+            punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 3, editTextConlangSymbol4.text.toString())
         }
     }
 }

@@ -26,4 +26,135 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <ScrollView
+        android:id="@+id/scrollView4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewRusSymbol1"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="."
+                app:layout_constraintEnd_toStartOf="@+id/editTextConlangSymbol1"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/editTextConlangSymbol1"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol1"
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol1" />
+
+            <TextView
+                android:id="@+id/textViewRusSymbol2"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text=","
+                app:layout_constraintEnd_toStartOf="@+id/editTextConlangSymbol2"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol1" />
+
+            <EditText
+                android:id="@+id/editTextConlangSymbol2"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol2"
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol2" />
+
+            <TextView
+                android:id="@+id/textViewRusSymbol3"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="!"
+                app:layout_constraintEnd_toStartOf="@+id/editTextConlangSymbol3"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol2" />
+
+            <EditText
+                android:id="@+id/editTextConlangSymbol3"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol3"
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol3" />
+
+            <TextView
+                android:id="@+id/textViewRusSymbol4"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="\?"
+                app:layout_constraintEnd_toStartOf="@+id/editTextConlangSymbol4"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol3" />
+
+            <EditText
+                android:id="@+id/editTextConlangSymbol4"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol4"
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol4" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/buttonSavePunctuation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Сохранить"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView4" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

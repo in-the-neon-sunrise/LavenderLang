@@ -11,5 +11,6 @@
     <string name="punctuation">Punctuation</string>
     <string name="grammar">Grammar</string>
     <string name="word_formation">Word formation</string>
-    <string name="russian_alphabet">а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я</string>
+    <string name="russian_vowels">а е ё и о у ы э ю я</string>
+    <string name="russian_consonants">б в г д ж з й к л м н п р с т ф х ц ч ш щ</string>
 </resources>

@@ -292,13 +292,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewDegreeOfComparison"/>
 
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="300dp"
+                android:layout_height="60dp"
+                android:text="Сохранить"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewDegreeOfComparison" />
+
             <TextView
                 android:id="@+id/textViewGrammarRule"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginTop="20dp"
                 android:text="Грамматические правила:"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/listViewDegreeOfComparison"/>
+                app:layout_constraintTop_toBottomOf="@id/buttonSave"/>
 
             <Button
                 android:id="@+id/buttonNewGrammarRule"
