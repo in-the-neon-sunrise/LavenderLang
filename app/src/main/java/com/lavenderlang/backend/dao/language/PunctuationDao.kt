@@ -1,15 +1,15 @@
 package com.lavenderlang.backend.dao.language
 
-import android.content.Context
 import androidx.lifecycle.lifecycleScope
 import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 interface PunctuationDao {
     fun updatePunctuationSymbol(language: LanguageEntity, id: Int, newSymbol: String)
@@ -20,8 +20,8 @@ class PunctuationDaoImpl(private val languageRepository: LanguageRepository = La
     override fun updatePunctuationSymbol(language: LanguageEntity, id: Int, newSymbol: String) {
         //check if symbol is in language
         for (letter in newSymbol) {
-            if (languages[language.languageId]!!.vowels.contains(newSymbol) ||
-                languages[language.languageId]!!.consonants.contains(newSymbol)
+            if (languages[language.languageId]!!.vowels.contains(newSymbol.lowercase()) ||
+                languages[language.languageId]!!.consonants.contains(newSymbol.lowercase())
             ) throw ForbiddenSymbolsException("Symbol $newSymbol is in language!")
         }
         language.puncSymbols[language.puncSymbols.keys.toList()[id]] = newSymbol

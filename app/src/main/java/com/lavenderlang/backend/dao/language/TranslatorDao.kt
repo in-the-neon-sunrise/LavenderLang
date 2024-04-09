@@ -1,7 +1,7 @@
 package com.lavenderlang.backend.dao.language
 
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.WordNotFoundException
+import com.lavenderlang.backend.service.exception.WordNotFoundException
 
 
 interface TranslatorDao {

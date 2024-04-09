@@ -119,7 +119,15 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         for (rule in language.grammar.wordFormationRules) {
                 rule.languageId = nextLanguageId
         }
-        // fixme: characteristics, words in dict and fullDict
+        // fixme: characteristics
+        for (word in language.dictionary.dict) {
+            word.languageId = nextLanguageId
+        }
+        for (key in language.dictionary.fullDict.keys) {
+            for (word in language.dictionary.fullDict[key]!!) {
+                word.languageId = nextLanguageId
+            }
+        }
 
         language.dictionary.languageId = nextLanguageId
 
@@ -156,14 +164,16 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
             Log.d("woof", "no access")
             return
         }
+        Log.d("woof", "path:"+accessible.values.toList()[0].toList()[0])
         curLanguage = language
         createDocumentResultLauncher.launch("${language.name}.pdf")
         Log.d("woof", "pdf done i hope")
     }
 
     fun writeToJSON(uri: Uri) {
+        Log.d("woof", "writing json")
         val context = MainActivity.getInstance()
-        if (LanguageDaoImpl.curLanguage == null) {
+        if (curLanguage == null) {
             Log.d("woof", "no language")
             Toast.makeText(context, "Не удалось сохранить файл", Toast.LENGTH_LONG).show()
             return
@@ -172,7 +182,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
             val writer = BufferedWriter(OutputStreamWriter(outputStream))
             writer.use {
                 it.write(
-                    Serializer.getInstance().serializeLanguage(LanguageDaoImpl.curLanguage!!)
+                    Serializer.getInstance().serializeLanguage(curLanguage!!)
                 )
             }
         }
@@ -180,12 +190,12 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
 
     fun writeToPDF(uri: Uri) {
         val context = MainActivity.getInstance()
-        if (LanguageDaoImpl.curLanguage == null) {
+        if (curLanguage == null) {
             Log.d("woof", "no language")
             Toast.makeText(context, "Не удалось сохранить файл", Toast.LENGTH_LONG).show()
             return
         }
-        val language = LanguageDaoImpl.curLanguage!!
+        val language = curLanguage!!
         context.contentResolver.openOutputStream(uri)?.use { outputStream ->
             val writer = BufferedWriter(OutputStreamWriter(outputStream))
             writer.use { it.write(Serializer.getInstance().serializeLanguage(language)) }
@@ -193,17 +203,27 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         val file: DocumentFile = DocumentFileCompat.fromUri(context, uri)!!
         val output = file.openOutputStream(context)
         val document = PdfDocument()
-        // fixme: count pages
-        val pageInfo = PdfDocument.PageInfo.Builder(1080, 1920, 1).create()
+        val width = 1080
+        val height = 1920
+        val pagesNum = 1 // fixme: count pages
+        val pageInfo = PdfDocument.PageInfo.Builder(width, height, pagesNum).create()
         val page = document.startPage(pageInfo)
         val canvas = page.canvas
         val paint = Paint()
         // fixme: it's just a test
-        paint.setColor(Color.RED)
-        paint.textSize = 42F
-        val text = "Hello, World"
-        val x = 500F
-        val y = 900F
+        // name
+        paint.setColor(Color.rgb(102, 0, 102)) // purple
+        paint.textSize = 40F
+        var text = language.name
+        var x = width.toFloat() / 2F
+        var y = height.toFloat() / 50F
+        canvas.drawText(text, x, y, paint)
+        // description
+        paint.setColor(Color.BLACK)
+        paint.textSize = 14F
+        text = language.description
+        x = width.toFloat() / 20F
+        y = height.toFloat() / 25F
         canvas.drawText(text, x, y, paint)
         document.finishPage(page)
         document.writeTo(output)

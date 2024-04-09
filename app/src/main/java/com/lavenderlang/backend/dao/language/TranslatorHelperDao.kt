@@ -4,8 +4,7 @@ import android.util.Log
 import com.chaquo.python.Python
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.backend.service.WordNotFoundException
+import com.lavenderlang.backend.service.exception.WordNotFoundException
 
 interface TranslatorHelperDao {
     fun conlangToRusAttr(language: LanguageEntity, attr: Attributes, id: Int) : Int

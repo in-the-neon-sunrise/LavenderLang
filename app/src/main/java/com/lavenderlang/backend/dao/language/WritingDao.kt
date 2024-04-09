@@ -1,15 +1,13 @@
 package com.lavenderlang.backend.dao.language
 
-import android.content.Context
 import androidx.lifecycle.lifecycleScope
 import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface WritingDao {
@@ -23,9 +21,10 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
     override fun changeVowels(language: LanguageEntity, newLetters: String) {
         for (letter in newLetters) {
             if (letter == ' ') continue
-            if (language.consonants.contains(letter)) {
+            if (language.consonants.contains(letter.lowercase())) {
                 throw ForbiddenSymbolsException("Letter $letter is already in consonants")
             }
+            // fixme: проверять отдельно для каждой строки-пунк. символа (m in MEOW)
             if (language.puncSymbols.values.contains(letter.toString())) {
                 throw ForbiddenSymbolsException("Letter $letter is already in punctuation symbols")
             }

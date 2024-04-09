@@ -1,6 +1,5 @@
 package com.lavenderlang.backend.dao.rule
 
-import android.content.Context
 import com.lavenderlang.backend.dao.help.TransformationDaoImpl
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.rule.*
@@ -14,8 +13,8 @@ import com.lavenderlang.backend.entity.word.ParticipleEntity
 import com.lavenderlang.backend.entity.word.PronounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.entity.word.VerbParticipleEntity
-import com.lavenderlang.backend.service.ForbiddenSymbolsException
-import com.lavenderlang.backend.service.IncorrectRegexException
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.exception.IncorrectRegexException
 import com.lavenderlang.languages
 
 interface WordFormationRuleDao : RuleDao {

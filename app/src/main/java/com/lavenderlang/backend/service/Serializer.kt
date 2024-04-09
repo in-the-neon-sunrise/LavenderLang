@@ -3,7 +3,8 @@ package com.lavenderlang.backend.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
-import com.lavenderlang.languages
+import com.lavenderlang.backend.service.exception.LanguageNotFoundException
+import com.lavenderlang.backend.service.exception.WordNotFoundException
 
 class Serializer private constructor() {
     companion object {

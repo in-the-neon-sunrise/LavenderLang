@@ -2,7 +2,7 @@ package com.lavenderlang.backend.dao.help
 
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.word.IWordEntity
-import com.lavenderlang.backend.service.IncorrectRegexException
+import com.lavenderlang.backend.service.exception.IncorrectRegexException
 
 interface MascDao {
     fun changePartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech)

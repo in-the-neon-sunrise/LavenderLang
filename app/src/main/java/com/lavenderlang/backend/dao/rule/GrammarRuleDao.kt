@@ -1,6 +1,5 @@
 package com.lavenderlang.backend.dao.rule
 
-import android.content.Context
 import androidx.lifecycle.lifecycleScope
 import com.chaquo.python.Python
 import com.lavenderlang.MainActivity
@@ -20,8 +19,8 @@ import com.lavenderlang.backend.entity.word.ParticipleEntity
 import com.lavenderlang.backend.entity.word.PronounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.entity.word.VerbParticipleEntity
-import com.lavenderlang.backend.service.ForbiddenSymbolsException
-import com.lavenderlang.backend.service.IncorrectRegexException
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.exception.IncorrectRegexException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
 import kotlinx.coroutines.launch
