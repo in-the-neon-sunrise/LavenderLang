@@ -1,8 +1,12 @@
 package com.lavenderlang
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +19,14 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.lavenderlang.GrammarActivity.Companion.SAVE_ACTION
 import com.lavenderlang.GrammarActivity.Companion.clever_id_lang
+import com.lavenderlang.GrammarActivity.Companion.grammarDao
+import com.lavenderlang.GrammarActivity.Companion.id_lang
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.CharacteristicEntity
+import com.lavenderlang.backend.entity.language.GrammarEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.service.*
 
@@ -28,6 +36,8 @@ class GrammarActivity: AppCompatActivity() {
         var id_lang: Int = 0
         var clever_id_lang = languages.keys.toMutableList()[id_lang]
         val grammarDao = GrammarDaoImpl()
+        var grammar: GrammarEntity = languages[id_lang]!!.grammar
+        val SAVE_ACTION = "com.lavenderlang.SAVE_ACTION"
     }
 
 
@@ -46,6 +56,12 @@ class GrammarActivity: AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
+
+        /*val buttonSave: Button = findViewById(R.id.buttonSave)
+        buttonSave.setOnClickListener {
+            val intent = Intent(SAVE_ACTION)
+            sendBroadcast(intent)
+        }*/
     }
 
     override fun onStart() {
@@ -75,7 +91,7 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewGender.setOnClickListener {
             val newGender = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.GENDER]?: 0, Attributes.GENDER)
             grammarDao.addOption(languages[clever_id_lang]!!.grammar, newGender)
-            adapterGender.notifyDataSetChanged()
+            updateAdapter(0)
         }
 
         //list of numbers
@@ -83,41 +99,104 @@ class GrammarActivity: AppCompatActivity() {
         val adapterNumber: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsNumber.values.toMutableList(), 1)
         listNumber.adapter = adapterNumber
         adapterNumber.notifyDataSetChanged()
+
+        val buttonNewNumber: Button = findViewById(R.id.buttonNewNumber)
+        buttonNewNumber.setOnClickListener {
+            val newNumber = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.NUMBER]?: 0, Attributes.NUMBER)
+            grammarDao.addOption(languages[clever_id_lang]!!.grammar, newNumber)
+            updateAdapter(1)
+        }
+
         //list of cases
         val listCases : ListView = findViewById(R.id.listViewCase)
         val adapterCases: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsCase.values.toMutableList(), 2)
         listCases.adapter = adapterCases
         adapterCases.notifyDataSetChanged()
+
+        val buttonNewCase: Button = findViewById(R.id.buttonNewCase)
+        buttonNewCase.setOnClickListener {
+            val newCase = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.CASE]?: 0, Attributes.CASE)
+            grammarDao.addOption(languages[clever_id_lang]!!.grammar, newCase)
+            updateAdapter(2)
+        }
+
         //list of times
         val listTimes : ListView = findViewById(R.id.listViewTime)
         val adapterTimes: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsTime.values.toMutableList(), 3)
         listTimes.adapter = adapterTimes
         adapterTimes.notifyDataSetChanged()
+
+        val buttonNewTime: Button = findViewById(R.id.buttonNewTime)
+        buttonNewTime.setOnClickListener {
+            val newTime = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.TIME]?: 0, Attributes.TIME)
+            grammarDao.addOption(languages[clever_id_lang]!!.grammar, newTime)
+            updateAdapter(3)
+        }
+
         //list of persons
         val listPersons : ListView = findViewById(R.id.listViewPerson)
         val adapterPersons: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsPerson.values.toMutableList(), 4)
         listPersons.adapter = adapterPersons
         adapterPersons.notifyDataSetChanged()
+
+        val buttonNewPerson: Button = findViewById(R.id.buttonNewPerson)
+        buttonNewPerson.setOnClickListener {
+            val newPerson = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.PERSON]?: 0, Attributes.PERSON)
+            grammarDao.addOption(languages[clever_id_lang]!!.grammar, newPerson)
+            updateAdapter(4)
+        }
+
         //list of moods
         val listMoods : ListView = findViewById(R.id.listViewMood)
         val adapterMoods: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsMood.values.toMutableList(), 5)
         listMoods.adapter = adapterMoods
         adapterMoods.notifyDataSetChanged()
+
+        val buttonNewMood: Button = findViewById(R.id.buttonNewMood)
+        buttonNewMood.setOnClickListener {
+            val newMood = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.MOOD]?: 0, Attributes.MOOD)
+            grammarDao.addOption(languages[clever_id_lang]!!.grammar, newMood)
+            updateAdapter(5)
+        }
+
         //list of types
         val listTypes : ListView = findViewById(R.id.listViewType)
         val adapterTypes: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsType.values.toMutableList(), 6)
         listTypes.adapter = adapterTypes
         adapterTypes.notifyDataSetChanged()
+
+        val buttonNewType: Button = findViewById(R.id.buttonNewType)
+        buttonNewType.setOnClickListener {
+            val newType = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.TYPE]?: 0, Attributes.TYPE)
+            grammarDao.addOption(languages[clever_id_lang]!!.grammar, newType)
+            updateAdapter(6)
+        }
+
         //list of voices
         val listVoices : ListView = findViewById(R.id.listViewVoice)
         val adapterVoices: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsVoice.values.toMutableList(), 7)
         listVoices.adapter = adapterVoices
         adapterVoices.notifyDataSetChanged()
+
+        val buttonNewVoice: Button = findViewById(R.id.buttonNewVoice)
+        buttonNewVoice.setOnClickListener {
+            val newVoice = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.VOICE]?: 0, Attributes.VOICE)
+            grammarDao.addOption(languages[clever_id_lang]!!.grammar, newVoice)
+            updateAdapter(7)
+        }
+
         //list of voices
         val listDegreeOfComparison : ListView = findViewById(R.id.listViewDegreeOfComparison)
         val adapterDegreeOfComparison: ArrayAdapter<CharacteristicEntity> = AttributeAdapter(this, languages[clever_id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList(), 8)
         listDegreeOfComparison.adapter = adapterDegreeOfComparison
         adapterDegreeOfComparison.notifyDataSetChanged()
+
+        val buttonNewDegreeOfComparison: Button = findViewById(R.id.buttonNewDegreeOfComparison)
+        buttonNewDegreeOfComparison.setOnClickListener {
+            val newDegreeOfComparison = CharacteristicEntity(languages.keys.toMutableList()[clever_id_lang], languages[clever_id_lang]!!.grammar.nextIds[Attributes.DEGREE_OF_COMPARISON]?: 0, Attributes.DEGREE_OF_COMPARISON)
+            grammarDao.addOption(languages[clever_id_lang]!!.grammar, newDegreeOfComparison)
+            updateAdapter(8)
+        }
 
 
         //button new grammar rule listener
@@ -144,6 +223,10 @@ class GrammarActivity: AppCompatActivity() {
 
                 startActivity(intent)
             }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
     fun updateAdapter(idCharacteristic: Int) {
         when(idCharacteristic){
@@ -204,9 +287,11 @@ class GrammarActivity: AppCompatActivity() {
         }
     }
 }
-private class AttributeAdapter(context: Context, listOfAttributes: MutableList<CharacteristicEntity>, idListAttribute: Int) :
+private class AttributeAdapter(context: Context, listOfAttributes: MutableList<CharacteristicEntity>,
+                               idListAttribute: Int) :
     ArrayAdapter<CharacteristicEntity>(context, R.layout.characteristic_line_activity, listOfAttributes) {
     var idAttribute = idListAttribute
+
 
     override fun getView(positionAttribute: Int, convertView: View?, parent: ViewGroup): View {
 
@@ -219,47 +304,6 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
         //edittext is visible
         var editTextName: EditText = newView!!.findViewById(R.id.editTextNameAttribute)
         (editTextName as TextView).text = attribute!!.name
-
-        /*editTextName.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                when(idAttribute){
-                    0->{
-                        /*grammarDao.updateOption(languages[GrammarActivity.id_lang]!!.grammar,
-                            languages[GrammarActivity.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].characteristicId,
-                            Characteristic(id_lang, languages[GrammarActivity.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].characteristicId, Attributes.GENDER, editTextName.text.toString(), languages[GrammarActivity.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].russianId*/
-                        if(editTextName.text==s) languages[clever_id_lang]!!.grammar.varsGender.values.toMutableList()[attribute.characteristicId].name=s.toString()
-                    }
-                    1->{
-                        languages[clever_id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].name=editTextName.text.toString()
-                    }
-                    2->{
-                        languages[clever_id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].name=editTextName.text.toString()
-                    }
-                    3->{
-                        languages[clever_id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].name=editTextName.text.toString()
-                    }
-                    4->{
-                        languages[clever_id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].name=editTextName.text.toString()
-                    }
-                    5->{
-                        languages[clever_id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].name=editTextName.text.toString()
-                    }
-                    6->{
-                        languages[clever_id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].name=editTextName.text.toString()
-                    }
-                    7->{
-                        languages[clever_id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].name=editTextName.text.toString()
-                    }
-                    else->{
-                        languages[clever_id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].name=editTextName.text.toString()
-                    }
-                }
-            }
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-            }
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            }
-        })*/
 
         //spinner is working
         val spinnerRus: Spinner = newView.findViewById(R.id.spinnerRusAttribute)
@@ -299,72 +343,111 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
 
         spinnerRus.setSelection(attribute.russianId)
 
-        spinnerRus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                when(idAttribute){
-                    0->{
-                        languages[clever_id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].russianId=positionSpinner;
-                    }
-                    1->{
-                        languages[clever_id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].russianId=positionSpinner;
-                    }
-                    2->{
-                        languages[clever_id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].russianId=positionSpinner;
-                    }
-                    3->{
-                        languages[clever_id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].russianId=positionSpinner;
-                    }
-                    4->{
-                        languages[clever_id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].russianId=positionSpinner;
-                    }
-                    5->{
-                        languages[clever_id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].russianId=positionSpinner;
-                    }
-                    6->{
-                        languages[clever_id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].russianId=positionSpinner;
-                    }
-                    7->{
-                        languages[clever_id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].russianId=positionSpinner;
-                    }
-                    else->{
-                        languages[clever_id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].russianId=positionSpinner;
-                    }
+        //button save is working
+        val saveReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                if (intent.action == SAVE_ACTION) {
+                    when(idAttribute){
+                        0->{
+                            grammarDao.updateOption(languages[id_lang]!!.grammar,
+                                languages[id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].characteristicId,
+                                CharacteristicEntity(id_lang,
+                                    languages[id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].characteristicId,
+                                    Attributes.GENDER, editTextName.text.toString(),
+                                    languages[id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].russianId))
 
-                }
-            }
+                            languages[id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                when(idAttribute){
-                    0->{
-                        languages[clever_id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].russianId=0;
-                    }
-                    1->{
-                        languages[clever_id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].russianId=0;
-                    }
-                    2->{
-                        languages[clever_id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].russianId=0;
-                    }
-                    3->{
-                        languages[clever_id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].russianId=0;
-                    }
-                    4->{
-                        languages[clever_id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].russianId=0;
-                    }
-                    5->{
-                        languages[clever_id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].russianId=0;
-                    }
-                    6->{
-                        languages[clever_id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].russianId=0;
-                    }
-                    7->{
-                        languages[clever_id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].russianId=0;
-                    }
-                    else->{
-                        languages[clever_id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].russianId=0;
+                        }
+                        1->{
+                            grammarDao.updateOption(languages[id_lang]!!.grammar,
+                                languages[id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].characteristicId,
+                                CharacteristicEntity(id_lang,
+                                    languages[id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].characteristicId,
+                                    Attributes.NUMBER, editTextName.text.toString(),
+                                    languages[id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].russianId))
+
+                            languages[id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
+                        }
+                        2->{
+                            grammarDao.updateOption(languages[id_lang]!!.grammar,
+                                languages[id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].characteristicId,
+                                CharacteristicEntity(id_lang,
+                                    languages[id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].characteristicId,
+                                    Attributes.CASE, editTextName.text.toString(),
+                                    languages[id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].russianId))
+
+                            languages[id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
+                        }
+                        3->{
+                            grammarDao.updateOption(languages[id_lang]!!.grammar,
+                                languages[id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].characteristicId,
+                                CharacteristicEntity(id_lang,
+                                    languages[id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].characteristicId,
+                                    Attributes.TIME, editTextName.text.toString(),
+                                    languages[id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].russianId))
+
+                            languages[id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
+                        }
+                        4->{
+                            grammarDao.updateOption(languages[id_lang]!!.grammar,
+                                languages[id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].characteristicId,
+                                CharacteristicEntity(id_lang,
+                                    languages[id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].characteristicId,
+                                    Attributes.PERSON, editTextName.text.toString(),
+                                    languages[id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].russianId))
+
+                            languages[id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
+                        }
+                        5->{
+                            grammarDao.updateOption(languages[id_lang]!!.grammar,
+                                languages[id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].characteristicId,
+                                CharacteristicEntity(id_lang,
+                                    languages[id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].characteristicId,
+                                    Attributes.MOOD, editTextName.text.toString(),
+                                    languages[id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].russianId))
+
+                            languages[id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
+                        }
+                        6-> {
+                            grammarDao.updateOption(
+                                languages[id_lang]!!.grammar,
+                                languages[id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].characteristicId,
+                                CharacteristicEntity(
+                                    id_lang,
+                                    languages[id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].characteristicId,
+                                    Attributes.TYPE, editTextName.text.toString(),
+                                    languages[id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].russianId))
+
+                            languages[id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
+                        }
+                        7->{grammarDao.updateOption(languages[id_lang]!!.grammar,
+                            languages[id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].characteristicId,
+                            CharacteristicEntity(id_lang,
+                                languages[id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].characteristicId,
+                                Attributes.VOICE, editTextName.text.toString(),
+                                languages[id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].russianId))
+
+                            languages[id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
+                        }
+                        else->{
+                            grammarDao.updateOption(languages[id_lang]!!.grammar,
+                                languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].characteristicId,
+                                CharacteristicEntity(id_lang,
+                                    languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].characteristicId,
+                                    Attributes.DEGREE_OF_COMPARISON, editTextName.text.toString(),
+                                    languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].russianId))
+
+                            languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
+                        }
                     }
                 }
             }
         }
+        val filter = IntentFilter(SAVE_ACTION)
+        context.registerReceiver(saveReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+
 
         //button del is working
         val buttonDel: Button = newView.findViewById(R.id.buttonDel)

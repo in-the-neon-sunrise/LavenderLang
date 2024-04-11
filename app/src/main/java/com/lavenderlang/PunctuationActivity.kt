@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.backend.dao.language.PunctuationDao
 import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
@@ -59,7 +60,7 @@ class PunctuationActivity : AppCompatActivity() {
         editTextConlangSymbol3.setText(languages[id_lang]!!.puncSymbols.values.toMutableList()[2])
         editTextConlangSymbol4.setText(languages[id_lang]!!.puncSymbols.values.toMutableList()[3])
 
-        var buttonSave: Button = findViewById(R.id.buttonSave)
+        var buttonSave: Button = findViewById(R.id.buttonSavePunctuation)
 
         // save symbols
         buttonSave.setOnClickListener {
