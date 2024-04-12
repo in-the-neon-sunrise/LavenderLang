@@ -40,6 +40,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
             Attributes.IS_INFINITIVE -> return
         }
         grammar.nextIds[option.type] = grammar.nextIds[option.type]!! + 1
+        if (grammar.languageId !in languages) return
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
                 MainActivity.getInstance(),
@@ -62,6 +63,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
             Attributes.DEGREE_OF_COMPARISON -> grammar.varsDegreeOfComparison.remove(option.characteristicId)
             Attributes.IS_INFINITIVE -> return
         }
+        if (grammar.languageId !in languages) return
         val wordDao = WordDaoImpl()
         for (word in languages[grammar.languageId]!!.dictionary.dict) {
             if (word.mutableAttrs.contains(option.type) && word.mutableAttrs[option.type] == option.characteristicId) {
@@ -98,6 +100,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         }
         if (!map.contains(optionId)) return
         map[optionId] = newOption
+        if (grammar.languageId !in languages) return
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
                 MainActivity.getInstance(),
@@ -109,6 +112,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
     }
 
     override fun addGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
+        if (grammar.languageId !in languages) return
         //check if rule is correct (letters in transformation are in language)
         for (letter in rule.transformation.addToBeginning) {
             if (!languages[grammar.languageId]!!.vowels.contains(letter) &&
@@ -135,6 +139,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
 
     override fun deleteGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
         grammar.grammarRules.remove(rule)
+        if (grammar.languageId !in languages) return
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.delMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
             languageRepository.updateLanguage(

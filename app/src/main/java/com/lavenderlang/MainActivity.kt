@@ -70,21 +70,22 @@ class MainActivity : AppCompatActivity() {
         setInstance(this)
         storageHelper = SimpleStorageHelper(this)
         // fixme: will be in another activity
+        /*
         if (DocumentFileCompat.getAccessibleAbsolutePaths(this).isEmpty()) {
             val REQUEST_CODE = 123123
             storageHelper.requestStorageAccess(REQUEST_CODE, null, StorageType.EXTERNAL)
-        }
+        }*/
 
         Log.d("meowmeow", languages.keys.toString())
 
 
-        if (languages.isEmpty()) LanguageDaoImpl().getLanguagesFromDB()
+        //if (languages.isEmpty()) LanguageDaoImpl().getLanguagesFromDB()
 
         if (!Python.isStarted()) Python.start(AndroidPlatform(this))
 
 
 
-        /*if (languages.isEmpty()) {
+        if (languages.isEmpty()) {
             LanguageDaoImpl().createLanguage("Пример языка", "Пример :>")
             val dict = DictionaryDaoImpl()
             val word1 = NounEntity(
@@ -123,14 +124,18 @@ class MainActivity : AppCompatActivity() {
             val rule = GrammarRuleEntity(
                 0, MascEntity(
                     PartOfSpeech.NOUN, mutableMapOf(Attributes.GENDER to arrayListOf(1))
-                ), mutableMapOf(Attributes.NUMBER to 1),
+                ), mutableMapOf(Attributes.NUMBER to 1, Attributes.CASE to 0),
                 TransformationEntity(0, 1, "", "b")
             )
             grammarHandler.addGrammarRule(languages[0]!!.grammar, rule)
             val rule1 = GrammarRuleEntity(
                 0, MascEntity(
                     PartOfSpeech.VERB, mutableMapOf()
-                ), mutableMapOf(Attributes.NUMBER to 1),
+                ), mutableMapOf(Attributes.NUMBER to 1,
+                    Attributes.PERSON to 0,
+                    Attributes.TIME to 0,
+                    Attributes.GENDER to 0,
+                    Attributes.MOOD to 0),
                 TransformationEntity(0, 1, "", "d")
             )
             grammarHandler.addGrammarRule(languages[0]!!.grammar, rule1)
@@ -163,7 +168,7 @@ class MainActivity : AppCompatActivity() {
             )
             WritingDaoImpl().addCapitalizedPartOfSpeech(languages[0]!!, PartOfSpeech.NOUN)
             PunctuationDaoImpl().updatePunctuationSymbol(languages[0]!!, 0, "MEOW");
-        }*/
+        }
 
 
 

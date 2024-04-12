@@ -59,12 +59,14 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         }
     override fun changeName(language : LanguageEntity, newName : String) {
         language.name = newName
+        if (language.languageId !in languages) return
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(MainActivity.getInstance(), language.languageId, Serializer.getInstance().serializeLanguage(language))
         }
     }
     override fun changeDescription(language : LanguageEntity, newDescription: String) {
         language.description = newDescription
+        if (language.languageId !in languages) return
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(MainActivity.getInstance(), language.languageId, Serializer.getInstance().serializeLanguage(language))
         }

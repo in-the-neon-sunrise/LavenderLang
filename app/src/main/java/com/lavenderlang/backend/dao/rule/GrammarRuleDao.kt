@@ -23,6 +23,8 @@ import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.IncorrectRegexException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface GrammarRuleDao : RuleDao {
@@ -41,13 +43,12 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         }
         val oldRule = (rule as GrammarRuleEntity).copy()
         rule.masc = newMasc
-        MainActivity.getInstance().lifecycleScope.launch {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
             languageRepository.updateLanguage(
                 MainActivity.getInstance(), rule.languageId,
                 Serializer.getInstance().serializeLanguage(languages[rule.languageId]!!)
             )
-
         }
     }
     override fun updateTransformation(rule : GrammarRuleEntity, newTransformation: TransformationEntity) {
@@ -66,7 +67,7 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         }
         val oldRule = rule.copy()
         rule.transformation = newTransformation
-        MainActivity.getInstance().lifecycleScope.launch {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
             languageRepository.updateLanguage(
                 MainActivity.getInstance(), rule.languageId,
@@ -78,7 +79,7 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
     override fun updateMutableAttrs(rule: GrammarRuleEntity, newAttrs: MutableMap<Attributes, Int>) {
         val oldRule = rule.copy()
         rule.mutableAttrs = newAttrs
-        MainActivity.getInstance().lifecycleScope.launch {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
             languageRepository.updateLanguage(
                 MainActivity.getInstance(), rule.languageId,

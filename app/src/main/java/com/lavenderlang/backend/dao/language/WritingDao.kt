@@ -8,6 +8,7 @@ import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface WritingDao {
@@ -30,7 +31,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
             }
         }
         language.vowels = newLetters
-        MainActivity.getInstance().lifecycleScope.launch {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateLanguage(
                 MainActivity.getInstance(), language.languageId,
                 Serializer.getInstance().serializeLanguage(language)

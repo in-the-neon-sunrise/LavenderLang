@@ -10,6 +10,7 @@ import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -36,7 +37,7 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
             PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
         }
         word.word = newWord
-        MainActivity.getInstance().lifecycleScope.launch {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
             languageRepository.updateLanguage(
                 MainActivity.getInstance(), word.languageId,
@@ -57,7 +58,7 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
             PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
         }
         word.translation = newTranslation
-        MainActivity.getInstance().lifecycleScope.launch {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
             languageRepository.updateLanguage(
                 MainActivity.getInstance(), word.languageId,
@@ -79,7 +80,7 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
         for (attr in args.keys) {
             word.immutableAttrs[attr] = args[attr]!!
         }
-        MainActivity.getInstance().lifecycleScope.launch {
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
             languageRepository.updateLanguage(
                 MainActivity.getInstance(), word.languageId,

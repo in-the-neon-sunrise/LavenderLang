@@ -18,6 +18,7 @@ interface PunctuationDao {
 
 class PunctuationDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()): PunctuationDao {
     override fun updatePunctuationSymbol(language: LanguageEntity, id: Int, newSymbol: String) {
+        if (language.languageId !in languages) return
         //check if symbol is in language
         for (letter in newSymbol) {
             if (languages[language.languageId]!!.vowels.contains(newSymbol.lowercase()) ||
