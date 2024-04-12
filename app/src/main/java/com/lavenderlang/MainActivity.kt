@@ -29,6 +29,7 @@ import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.backend.entity.word.AdjectiveEntity
 import com.lavenderlang.backend.entity.word.AdverbEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
@@ -70,22 +71,22 @@ class MainActivity : AppCompatActivity() {
         setInstance(this)
         storageHelper = SimpleStorageHelper(this)
         // fixme: will be in another activity
-        /*
+
         if (DocumentFileCompat.getAccessibleAbsolutePaths(this).isEmpty()) {
             val REQUEST_CODE = 123123
             storageHelper.requestStorageAccess(REQUEST_CODE, null, StorageType.EXTERNAL)
-        }*/
+        }
 
         Log.d("meowmeow", languages.keys.toString())
 
 
-        //if (languages.isEmpty()) LanguageDaoImpl().getLanguagesFromDB()
+        if (languages.isEmpty()) LanguageDaoImpl().getLanguagesFromDB()
 
         if (!Python.isStarted()) Python.start(AndroidPlatform(this))
 
 
 
-        if (languages.isEmpty()) {
+        /*if (languages.isEmpty()) {
             LanguageDaoImpl().createLanguage("Пример языка", "Пример :>")
             val dict = DictionaryDaoImpl()
             val word1 = NounEntity(
@@ -101,7 +102,7 @@ class MainActivity : AppCompatActivity() {
                 "заплакать",
                 partOfSpeech = PartOfSpeech.VERB
             )
-            val word3 = VerbEntity(
+            val word3 = AdjectiveEntity(
                 0,
                 "ccc",
                 "красивый",
@@ -168,7 +169,7 @@ class MainActivity : AppCompatActivity() {
             )
             WritingDaoImpl().addCapitalizedPartOfSpeech(languages[0]!!, PartOfSpeech.NOUN)
             PunctuationDaoImpl().updatePunctuationSymbol(languages[0]!!, 0, "MEOW");
-        }
+        }*/
 
 
 
@@ -206,7 +207,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, LanguageActivity::class.java)
                 Log.d("meowmeow", "pos $position real ${languages.values.toList()[position].languageId}")
                 intent.putExtra("lang", languages.values.toList()[position].languageId)
-                //LanguageDaoImpl().downloadLanguagePDF(languages.values.toList()[position], storageHelper, createPDFLauncher)
+                LanguageDaoImpl().downloadLanguagePDF(languages.values.toList()[position], storageHelper, createPDFLauncher)
                 //LanguageDaoImpl().downloadLanguageJSON(languages.values.toList()[position], storageHelper, createJSONLauncher)
                 //LanguageDaoImpl().getLanguageFromFile(DocumentFileCompat.getAccessibleAbsolutePaths(this).values.toList()[0].toList()[0]+"/1.json", this)
                 startActivity(intent)

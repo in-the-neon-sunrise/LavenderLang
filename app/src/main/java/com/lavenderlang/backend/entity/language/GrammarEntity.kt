@@ -48,8 +48,7 @@ data class GrammarEntity(
     ),
     var varsMood : MutableMap<Int, CharacteristicEntity> = mutableMapOf(
         0 to CharacteristicEntity(languageId, 0, Attributes.MOOD, "изъявительное", 0, true),
-        1 to CharacteristicEntity(languageId, 1, Attributes.MOOD, "повелительное", 1),
-        2 to CharacteristicEntity(languageId, 2, Attributes.MOOD, "условное", 2)
+        1 to CharacteristicEntity(languageId, 1, Attributes.MOOD, "повелительное", 1)
     ),
     var varsType : MutableMap<Int, CharacteristicEntity> = mutableMapOf(
         0 to CharacteristicEntity(languageId, 0, Attributes.TYPE, "совершенный", 0, true),

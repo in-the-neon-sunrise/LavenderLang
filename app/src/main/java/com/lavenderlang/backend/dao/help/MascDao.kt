@@ -13,18 +13,18 @@ interface MascDao {
 }
 class MascDaoImpl : MascDao {
     override fun changePartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech) {
-        masc.partsOfSpeech = partOfSpeech
+        masc.partOfSpeech = partOfSpeech
     }
     override fun addAttribute(masc : MascEntity, attribute : Attributes, ind : Int) {
-        if (masc.attrs.contains(attribute)) {
-            masc.attrs[attribute]!!.add(ind)
+        if (masc.immutableAttrs.contains(attribute)) {
+            masc.immutableAttrs[attribute]!!.add(ind)
         } else {
-            masc.attrs[attribute] = arrayListOf(ind)
+            masc.immutableAttrs[attribute] = arrayListOf(ind)
         }
     }
     override fun deleteAttribute(masc: MascEntity, attribute : Attributes, ind : Int) : Boolean {
-        if (!masc.attrs.contains(attribute)) return false
-        return masc.attrs[attribute]!!.remove(ind)
+        if (!masc.immutableAttrs.contains(attribute)) return false
+        return masc.immutableAttrs[attribute]!!.remove(ind)
     }
     override fun updateRegex(masc : MascEntity, newRegex : String) {
         try {
@@ -35,11 +35,11 @@ class MascDaoImpl : MascDao {
         masc.regex = newRegex
     }
     override fun fits(masc : MascEntity, word : IWordEntity) : Boolean {
-        if (masc.partsOfSpeech != word.partOfSpeech) return false
-        for (attr in masc.attrs.keys) {
+        if (masc.partOfSpeech != word.partOfSpeech) return false
+        for (attr in masc.immutableAttrs.keys) {
             //if (attr == Attributes.IS_INFINITIVE) continue
             var check = false
-            for (ind in masc.attrs[attr]!!) {
+            for (ind in masc.immutableAttrs[attr]!!) {
                 if (word.immutableAttrs.contains(attr)) {
                     check = true
                     break

@@ -59,22 +59,76 @@ class WordFormationRuleDaoImpl : WordFormationRuleDao {
         rule.immutableAttrs = newAttrs
     }
     override fun wordFormationTransformByRule(word: IWordEntity, rule: WordFormationRuleEntity) : IWordEntity {
-        val transformedWord : IWordEntity = when (word) {
-            is NounEntity -> word.copy()
-            is VerbEntity -> word.copy()
-            is AdjectiveEntity -> word.copy()
-            is AdverbEntity -> word.copy()
-            is ParticipleEntity -> word.copy()
-            is VerbParticipleEntity -> word.copy()
-            is PronounEntity -> word.copy()
-            is NumeralEntity -> word.copy()
-            is FuncPartEntity -> word.copy()
-            else -> throw Error() // какую-нибудь красивую
+        val transformedWord : IWordEntity = when (rule.partOfSpeech) {
+            PartOfSpeech.NOUN -> NounEntity()
+            PartOfSpeech.VERB -> VerbEntity()
+            PartOfSpeech.ADJECTIVE -> AdjectiveEntity()
+            PartOfSpeech.ADVERB -> AdverbEntity()
+            PartOfSpeech.PARTICIPLE -> ParticipleEntity()
+            PartOfSpeech.VERB_PARTICIPLE -> VerbParticipleEntity()
+            PartOfSpeech.PRONOUN -> PronounEntity()
+            PartOfSpeech.NUMERAL -> NumeralEntity()
+            PartOfSpeech.FUNC_PART -> FuncPartEntity()
         }
         val newWord = TransformationDaoImpl().transform(rule.transformation, word.word)
         transformedWord.word = newWord
         transformedWord.translation = "Введите перевод" // мы сами "кошечка" из "кошка" не образуем
         transformedWord.immutableAttrs = rule.immutableAttrs
         return transformedWord
+    }
+    override fun getOrigInfo(rule: IRuleEntity): String {
+        var res = when (rule.masc.partOfSpeech) {
+            PartOfSpeech.NOUN -> "существительное; "
+            PartOfSpeech.VERB -> "глагол; "
+            PartOfSpeech.ADJECTIVE -> "прилагательное; "
+            PartOfSpeech.ADVERB -> "наречие; "
+            PartOfSpeech.PARTICIPLE -> "причастие; "
+            PartOfSpeech.VERB_PARTICIPLE -> "деепричастие; "
+            PartOfSpeech.PRONOUN -> "местоимение; "
+            PartOfSpeech.NUMERAL -> "числительное; "
+            PartOfSpeech.FUNC_PART -> "служебное слово; "
+        }
+        for (attr in rule.masc.immutableAttrs.keys) {
+            res += when (attr) {
+                Attributes.GENDER -> "род: "
+                Attributes.TYPE -> "вид: "
+                Attributes.VOICE -> "залог: "
+                else -> continue
+            }
+            for (e in rule.masc.immutableAttrs[attr]!!) {
+                res += when (attr) {
+                    Attributes.GENDER -> languages[rule.languageId]!!.grammar.varsGender[e]?.name + ", "
+                    Attributes.TYPE -> languages[rule.languageId]!!.grammar.varsType[e]?.name + ", "
+                    Attributes.VOICE -> languages[rule.languageId]!!.grammar.varsVoice[e]?.name + ", "
+                    else -> break
+                }
+            }
+        }
+        return res.slice(0 until res.length - 2)
+    }
+
+    override fun getResultInfo(rule: IRuleEntity): String {
+        if (rule !is WordFormationRuleEntity) return ""
+        var res = when (rule.partOfSpeech) {
+            PartOfSpeech.NOUN -> "существительное; "
+            PartOfSpeech.VERB -> "глагол; "
+            PartOfSpeech.ADJECTIVE -> "прилагательное; "
+            PartOfSpeech.ADVERB -> "наречие; "
+            PartOfSpeech.PARTICIPLE -> "причастие; "
+            PartOfSpeech.VERB_PARTICIPLE -> "деепричастие; "
+            PartOfSpeech.PRONOUN -> "местоимение; "
+            PartOfSpeech.NUMERAL -> "числительное; "
+            PartOfSpeech.FUNC_PART -> "служебное слово; "
+        }
+        for (attr in rule.immutableAttrs.keys) {
+            res += when (attr) {
+                Attributes.GENDER -> "род: ${languages[rule.languageId]!!.grammar.varsGender[rule.immutableAttrs[attr]!!]?.name}, "
+                Attributes.TYPE -> "вид: ${languages[rule.languageId]!!.grammar.varsType[rule.immutableAttrs[attr]!!]?.name}, "
+                Attributes.VOICE -> "залог: ${languages[rule.languageId]!!.grammar.varsVoice[rule.immutableAttrs[attr]!!]?.name}, "
+                else -> ""
+            }
+        }
+        if (res.length < 2) return res
+        return res.slice(0 until res.length - 2)
     }
 }

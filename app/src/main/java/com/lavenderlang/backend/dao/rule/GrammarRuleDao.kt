@@ -24,7 +24,6 @@ import com.lavenderlang.backend.service.exception.IncorrectRegexException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface GrammarRuleDao : RuleDao {
@@ -123,5 +122,56 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         transformedWord.translation = res
 
         return transformedWord
+    }
+
+    override fun getOrigInfo(rule: IRuleEntity): String {
+        var res = when (rule.masc.partOfSpeech) {
+            PartOfSpeech.NOUN -> "существительное; "
+            PartOfSpeech.VERB -> "глагол; "
+            PartOfSpeech.ADJECTIVE -> "прилагательное; "
+            PartOfSpeech.ADVERB -> "наречие; "
+            PartOfSpeech.PARTICIPLE -> "причастие; "
+            PartOfSpeech.VERB_PARTICIPLE -> "деепричастие; "
+            PartOfSpeech.PRONOUN -> "местоимение; "
+            PartOfSpeech.NUMERAL -> "числительное; "
+            PartOfSpeech.FUNC_PART -> "служебное слово; "
+        }
+        for (attr in rule.masc.immutableAttrs.keys) {
+            res += when (attr) {
+                Attributes.GENDER -> "род: "
+                Attributes.TYPE -> "вид: "
+                Attributes.VOICE -> "залог: "
+                else -> continue
+            }
+            for (e in rule.masc.immutableAttrs[attr]!!) {
+                res += when (attr) {
+                    Attributes.GENDER -> languages[rule.languageId]!!.grammar.varsGender[e]?.name + ", "
+                    Attributes.TYPE -> languages[rule.languageId]!!.grammar.varsType[e]?.name + ", "
+                    Attributes.VOICE -> languages[rule.languageId]!!.grammar.varsVoice[e]?.name + ", "
+                    else -> break
+                }
+            }
+        }
+        return res.slice(0 until res.length - 2)
+    }
+
+    override fun getResultInfo(rule: IRuleEntity): String {
+        if (rule !is GrammarRuleEntity) return ""
+        var res = ""
+        for (attr in rule.mutableAttrs.keys) {
+            res += when (attr) {
+                Attributes.CASE -> "падеж: ${languages[rule.languageId]!!.grammar.varsCase[rule.mutableAttrs[attr]!!]?.name}, "
+                Attributes.NUMBER -> "число: ${languages[rule.languageId]!!.grammar.varsNumber[rule.mutableAttrs[attr]!!]?.name}, "
+                Attributes.VOICE -> "залог: ${languages[rule.languageId]!!.grammar.varsVoice[rule.mutableAttrs[attr]!!]?.name}, "
+                Attributes.DEGREE_OF_COMPARISON -> "степень сравнения: ${languages[rule.languageId]!!.grammar.varsDegreeOfComparison[rule.mutableAttrs[attr]!!]?.name}, "
+                Attributes.TIME -> "время: ${languages[rule.languageId]!!.grammar.varsTime[rule.mutableAttrs[attr]!!]?.name}, "
+                Attributes.MOOD -> "наклонение: ${languages[rule.languageId]!!.grammar.varsMood[rule.mutableAttrs[attr]!!]?.name}, "
+                Attributes.PERSON -> "лицо: ${languages[rule.languageId]!!.grammar.varsPerson[rule.mutableAttrs[attr]!!]?.name}, "
+                Attributes.GENDER -> "род: ${languages[rule.languageId]!!.grammar.varsGender[rule.mutableAttrs[attr]!!]?.name}, "
+                else -> ""
+            }
+        }
+        if (res.length < 2) return res
+        return res.slice(0 until res.length - 2)
     }
 }

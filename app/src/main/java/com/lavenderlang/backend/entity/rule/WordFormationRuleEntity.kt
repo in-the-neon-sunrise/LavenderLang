@@ -7,5 +7,6 @@ data class WordFormationRuleEntity(
     override var masc : MascEntity = MascEntity(), // а тут требования все еще
     var immutableAttrs: MutableMap<Attributes, Int> = mutableMapOf(), // что хотим получить
     override var transformation: TransformationEntity = TransformationEntity(),
-    var description: String = ""
+    var description: String = "",
+    var partOfSpeech: PartOfSpeech = PartOfSpeech.NOUN
 ): IRuleEntity

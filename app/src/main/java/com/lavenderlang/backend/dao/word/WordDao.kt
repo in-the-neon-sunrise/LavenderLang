@@ -1,12 +1,15 @@
 package com.lavenderlang.backend.dao.word
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
+import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.backend.entity.rule.IRuleEntity
 import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.languages
@@ -19,6 +22,7 @@ interface WordDao {
     fun updateTranslation(word : IWordEntity, newTranslation : String)
     fun updateImmutableAttrs(word : IWordEntity, args : MutableMap<Attributes, Int>)
     fun updatePartOfSpeech(word : IWordEntity, newPartOfSpeech : PartOfSpeech)
+    fun getImmutableAttrsInfo(word : IWordEntity) : String
 }
 
 class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
@@ -139,5 +143,20 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
         val dictionaryHandler = DictionaryDaoImpl()
         dictionaryHandler.deleteWord(languages[word.languageId]!!.dictionary, word)
         dictionaryHandler.addWord(languages[word.languageId]!!.dictionary, newWord)
+    }
+
+    override fun getImmutableAttrsInfo(word: IWordEntity): String {
+        var res = ""
+        Log.d("frfrfr", word.word+word.partOfSpeech+word.immutableAttrs.toString())
+        for (attr in word.immutableAttrs.keys) {
+            res += when (attr) {
+                Attributes.GENDER -> "род: ${languages[word.languageId]!!.grammar.varsGender[word.immutableAttrs[attr]!!]?.name}, "
+                Attributes.TYPE -> "вид: ${languages[word.languageId]!!.grammar.varsType[word.immutableAttrs[attr]!!]?.name}, "
+                Attributes.VOICE -> "залог: ${languages[word.languageId]!!.grammar.varsVoice[word.immutableAttrs[attr]!!]?.name}, "
+                else -> ""
+            }
+        }
+        if (res.length < 2) return ""
+        return res.slice(0 until res.length - 2)
     }
 }
