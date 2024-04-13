@@ -13,6 +13,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
@@ -97,7 +98,6 @@ class GrammarRuleActivity: AppCompatActivity(){
         attrs = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs
         regex = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.regex
         mutableAttrs = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs
-        updateSpinners()
 
         val spinnerPartOfSpeech: Spinner = findViewById(R.id.spinnerPartOfSpeech)
 
@@ -114,6 +114,7 @@ class GrammarRuleActivity: AppCompatActivity(){
         val spinnerFinishDegreeOfComparison: Spinner = findViewById(R.id.spinnerFinishDegreeOfComparison)
 
         listenSpinners()
+        updateSpinners()
 
         val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf(
             "Существительное",
@@ -142,91 +143,6 @@ class GrammarRuleActivity: AppCompatActivity(){
             PartOfSpeech.FUNC_PART->idPartOfSpeech=8
         }
         spinnerPartOfSpeech.setSelection(idPartOfSpeech)
-
-        // работа с неизменяемыми характеристиками
-
-        spinnerGender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                Toast.makeText(this@GrammarRuleActivity, "задаем гендер", Toast.LENGTH_LONG).show()
-                attrs[Attributes.GENDER] = arrayListOf(positionSpinner)
-                updateMasc()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                attrs[Attributes.TYPE] = arrayListOf(positionSpinner)
-                updateMasc()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerVoice.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                attrs[Attributes.VOICE] = arrayListOf(positionSpinner)
-                updateMasc()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        // работа с изменяемыми характеристиками
-
-        spinnerFinishGender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.GENDER] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishNumber.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.NUMBER] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishCase.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.CASE] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishTime.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.TIME] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishPerson.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.PERSON] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishMood.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.MOOD] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishDegreeOfComparison.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.DEGREE_OF_COMPARISON] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
 
         spinnerPartOfSpeech.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -463,38 +379,31 @@ class GrammarRuleActivity: AppCompatActivity(){
         (editTextAddFront as TextView).setText(addFront)
         (editTextAddBack as TextView).setText(addBack)
 
-        editTextNumberFront.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                numberFront = s.toString().toInt()
-                updateTransformation()
-            }
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
-        editTextNumberBack.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                numberBack = s.toString().toInt()
-                updateTransformation()
-            }
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
-        editTextAddFront.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                addFront = s.toString()
-                updateTransformation()
-            }
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
-        editTextAddBack.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                addBack = s.toString()
-                updateTransformation()
-            }
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
+        var buttonSave: Button = findViewById(R.id.buttonSaveGrammarRule)
+        buttonSave.setOnClickListener{
+            if(spinnerGender.isVisible) attrs[Attributes.GENDER] = arrayListOf(spinnerGender.selectedItemPosition)
+            if(spinnerType.isVisible) attrs[Attributes.TYPE] = arrayListOf(spinnerType.selectedItemPosition)
+            if(spinnerVoice.isVisible) attrs[Attributes.VOICE] = arrayListOf(spinnerVoice.selectedItemPosition)
+
+            regex=editMasc.text.toString()
+
+            if(spinnerFinishGender.isVisible) mutableAttrs[Attributes.GENDER] = spinnerFinishGender.selectedItemPosition
+            if(spinnerFinishNumber.isVisible) mutableAttrs[Attributes.NUMBER] = spinnerFinishNumber.selectedItemPosition
+            if(spinnerFinishCase.isVisible) mutableAttrs[Attributes.CASE] = spinnerFinishCase.selectedItemPosition
+            if(spinnerFinishTime.isVisible) mutableAttrs[Attributes.TIME] = spinnerFinishTime.selectedItemPosition
+            if(spinnerFinishPerson.isVisible) mutableAttrs[Attributes.PERSON] = spinnerFinishPerson.selectedItemPosition
+            if(spinnerFinishMood.isVisible) mutableAttrs[Attributes.MOOD] = spinnerFinishMood.selectedItemPosition
+            if(spinnerFinishDegreeOfComparison.isVisible) mutableAttrs[Attributes.DEGREE_OF_COMPARISON] = spinnerFinishDegreeOfComparison.selectedItemPosition
+
+            addBack=editTextAddBack.text.toString()
+            addFront=editTextAddFront.text.toString()
+            numberBack=editTextNumberBack.text.toString().toInt()
+            numberFront=editTextNumberFront.text.toString().toInt()
+
+            updateMasc()
+            updateMutableAttrs()
+            updateTransformation()
+        }
 
     }
     fun updateMasc(){
