@@ -66,7 +66,12 @@ class WordActivity : AppCompatActivity() {
                 id_lang = lang
             }
         }
-        when (val word = intent.getIntExtra("word", -1)) {
+
+        var word = intent.getIntExtra("word", -1)
+        if (word == -1 && id_word != 0){
+            word = LanguageActivity.id_lang
+        }
+        when (word) {
             -1 -> {
                 id_word = languages[id_lang]!!.dictionary.dict.size
                 dictionaryDao.addWord(languages[id_lang]!!.dictionary, NounEntity(id_lang, "", "-"))

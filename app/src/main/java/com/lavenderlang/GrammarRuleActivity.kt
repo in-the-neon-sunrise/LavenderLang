@@ -71,8 +71,11 @@ class GrammarRuleActivity: AppCompatActivity(){
                 id_lang = lang
             }
         }
-
-        when(val rule = intent.getIntExtra("grammarRule", -1)){
+        var rule = intent.getIntExtra("grammarRule", -1)
+        if (rule == -1 && id_rule != 0){
+            rule = LanguageActivity.id_lang
+        }
+        when(rule){
             -1 -> {
                 var newRule = GrammarRuleEntity(id_lang)
                 grammarDao.addGrammarRule(languages[id_lang]!!.grammar, newRule)
