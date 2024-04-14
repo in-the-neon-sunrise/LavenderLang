@@ -2,6 +2,8 @@ package com.lavenderlang
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -65,6 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         //activity creation
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
 
