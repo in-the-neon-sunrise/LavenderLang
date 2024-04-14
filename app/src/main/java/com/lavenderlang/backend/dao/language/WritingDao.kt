@@ -62,6 +62,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
     override fun addCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
         if (language.capitalizedPartsOfSpeech.contains(partOfSpeech)) return
         Log.d("frfrfr", "add $partOfSpeech")
+        Log.d("frfrfr", language.capitalizedPartsOfSpeech.toString())
         language.capitalizedPartsOfSpeech.add(partOfSpeech)
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateCapitalizedPartsOfSpeech(

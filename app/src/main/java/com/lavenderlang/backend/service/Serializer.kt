@@ -119,7 +119,12 @@ class Serializer private constructor() {
 
     fun deserializeCapitalizedPartsOfSpeech(capitalizedPartsOfSpeechString: String) : ArrayList<PartOfSpeech> {
         try {
-            return mapper.readValue(capitalizedPartsOfSpeechString, ArrayList::class.java) as ArrayList<PartOfSpeech>
+            val strings = mapper.readValue(capitalizedPartsOfSpeechString, ArrayList::class.java) as ArrayList<String>
+            val partsOfSpeech = arrayListOf<PartOfSpeech>()
+            for (string in strings) {
+                if (!partsOfSpeech.contains(PartOfSpeech.valueOf(string))) partsOfSpeech.add(PartOfSpeech.valueOf(string))
+            }
+            return partsOfSpeech
         } catch (e : Exception) {
             throw LanguageNotFoundException(e.message?:"")
         }

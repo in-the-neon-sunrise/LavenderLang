@@ -66,7 +66,6 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
                             Serializer.getInstance().deserializePuncSymbols(e.puncSymbols),
                             Serializer.getInstance().deserializeCapitalizedPartsOfSpeech(e.capitalizedPartsOfSpeech)
                         )
-                        Log.d("woof", "loaded ${languages[e.id]}: ${languages[e.id]!!.capitalizedPartsOfSpeech}")
                         if (nextLanguageId <= e.id) nextLanguageId = e.id + 1
                     }
                 }
