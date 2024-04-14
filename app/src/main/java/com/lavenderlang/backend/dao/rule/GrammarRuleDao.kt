@@ -30,6 +30,7 @@ interface GrammarRuleDao : RuleDao {
     fun updateTransformation(rule : GrammarRuleEntity, newTransformation: TransformationEntity)
     fun updateMutableAttrs(rule : GrammarRuleEntity, newAttrs: MutableMap<Attributes, Int>)
     fun grammarTransformByRule(rule: GrammarRuleEntity, word : IWordEntity) : IWordEntity
+    fun updateRule(rule : GrammarRuleEntity, masc: MascEntity, transformation: TransformationEntity, mutableAttrs: MutableMap<Attributes, Int>)
 }
 class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
                          private val languageRepository: LanguageRepository = LanguageRepository()
@@ -40,15 +41,7 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         } catch (e : Exception) {
             throw IncorrectRegexException("Неверное регулярное выражение!")
         }
-        val oldRule = (rule as GrammarRuleEntity).copy()
         rule.masc = newMasc
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
-            languageRepository.updateLanguage(
-                MainActivity.getInstance(), rule.languageId,
-                Serializer.getInstance().serializeLanguage(languages[rule.languageId]!!)
-            )
-        }
     }
     override fun updateTransformation(rule : GrammarRuleEntity, newTransformation: TransformationEntity) {
         //check if rule is correct (letters in transformation are in language)
@@ -64,27 +57,11 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
                 throw ForbiddenSymbolsException("Letter $letter is not in language")
             }
         }
-        val oldRule = rule.copy()
         rule.transformation = newTransformation
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
-            languageRepository.updateLanguage(
-                MainActivity.getInstance(), rule.languageId,
-                Serializer.getInstance().serializeLanguage(languages[rule.languageId]!!)
-            )
-        }
     }
 
     override fun updateMutableAttrs(rule: GrammarRuleEntity, newAttrs: MutableMap<Attributes, Int>) {
-        val oldRule = rule.copy()
         rule.mutableAttrs = newAttrs
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
-            languageRepository.updateLanguage(
-                MainActivity.getInstance(), rule.languageId,
-                Serializer.getInstance().serializeLanguage(languages[rule.languageId]!!)
-            )
-        }
     }
     override fun grammarTransformByRule(rule: GrammarRuleEntity, word: IWordEntity): IWordEntity {
         val transformedWord: IWordEntity = when (word.partOfSpeech) {
@@ -122,6 +99,20 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         transformedWord.translation = res
 
         return transformedWord
+    }
+
+    override fun updateRule(rule: GrammarRuleEntity, masc: MascEntity, transformation: TransformationEntity, newAttrs: MutableMap<Attributes, Int>) {
+        val oldRule = rule.copy()
+        updateMasc(rule, masc)
+        updateTransformation(rule, transformation)
+        updateMutableAttrs(rule, newAttrs)
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+            helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
+            languageRepository.updateLanguage(
+                MainActivity.getInstance(), rule.languageId,
+                Serializer.getInstance().serializeLanguage(languages[rule.languageId]!!)
+            )
+        }
     }
 
     override fun getOrigInfo(rule: IRuleEntity): String {
