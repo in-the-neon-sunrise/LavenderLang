@@ -21,6 +21,7 @@ interface WordFormationRuleDao : RuleDao {
     fun updateTransformation(rule : WordFormationRuleEntity, newTransformation: TransformationEntity)
     fun updateDescription(rule : WordFormationRuleEntity, newDescription: String)
     fun updateImmutableAttrs(rule : WordFormationRuleEntity, newAttrs: MutableMap<Attributes, Int>)
+    fun updatePartOfSpeech(rule : WordFormationRuleEntity, newPartOfSpeech: PartOfSpeech)
     fun wordFormationTransformByRule(word : IWordEntity, rule : WordFormationRuleEntity) : IWordEntity
 
 }
@@ -105,6 +106,10 @@ class WordFormationRuleDaoImpl : WordFormationRuleDao {
             }
         }
         return res.slice(0 until res.length - 2)
+    }
+
+    override fun updatePartOfSpeech(rule : WordFormationRuleEntity, newPartOfSpeech: PartOfSpeech) {
+        rule.partOfSpeech = newPartOfSpeech
     }
 
     override fun getResultInfo(rule: IRuleEntity): String {
