@@ -87,20 +87,20 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         }
     }
     override fun grammarTransformByRule(rule: GrammarRuleEntity, word: IWordEntity): IWordEntity {
-        val transformedWord: IWordEntity = when (word) {
-            is NounEntity -> word.copy()
-            is VerbEntity -> word.copy()
-            is AdjectiveEntity -> word.copy()
-            is AdverbEntity -> word.copy()
-            is ParticipleEntity -> word.copy()
-            is VerbParticipleEntity -> word.copy()
-            is PronounEntity -> word.copy()
-            is NumeralEntity -> word.copy()
-            is FuncPartEntity -> word.copy()
-            else -> throw Error() // какую-нибудь красивую
+        val transformedWord: IWordEntity = when (word.partOfSpeech) {
+            PartOfSpeech.NOUN -> NounEntity()
+            PartOfSpeech.VERB -> VerbEntity()
+            PartOfSpeech.ADJECTIVE -> AdjectiveEntity()
+            PartOfSpeech.ADVERB -> AdverbEntity()
+            PartOfSpeech.PARTICIPLE -> ParticipleEntity()
+            PartOfSpeech.VERB_PARTICIPLE -> VerbParticipleEntity()
+            PartOfSpeech.PRONOUN -> PronounEntity()
+            PartOfSpeech.NUMERAL -> NumeralEntity()
+            PartOfSpeech.FUNC_PART -> FuncPartEntity()
         }
-        val newWord = TransformationDaoImpl().transform(rule.transformation, word.word)
-        transformedWord.word = newWord
+        transformedWord.languageId = word.languageId
+        transformedWord.immutableAttrs = word.immutableAttrs
+        transformedWord.word = TransformationDaoImpl().transform(rule.transformation, word.word)
         for (attr in rule.mutableAttrs.keys) {
             transformedWord.mutableAttrs[attr] = rule.mutableAttrs[attr]!!
         }

@@ -86,6 +86,11 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
+
+
+
         /*if (languages.isEmpty()) {
             LanguageDaoImpl().createLanguage("Пример языка", "Пример :>")
             val dict = DictionaryDaoImpl()
@@ -174,6 +179,11 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
+
+
+
         if (languages.isNotEmpty()) Log.d("meowmeow",
             languages[0]!!.capitalizedPartsOfSpeech.toString())
         if (languages.isNotEmpty()) Log.d("meowmeow", languages.keys.toString())
@@ -207,7 +217,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, LanguageActivity::class.java)
                 Log.d("meowmeow", "pos $position real ${languages.values.toList()[position].languageId}")
                 intent.putExtra("lang", languages.values.toList()[position].languageId)
-                LanguageDaoImpl().downloadLanguagePDF(languages.values.toList()[position], storageHelper, createPDFLauncher)
+                //LanguageDaoImpl().downloadLanguagePDF(languages.values.toList()[position], storageHelper, createPDFLauncher)
                 //LanguageDaoImpl().downloadLanguageJSON(languages.values.toList()[position], storageHelper, createJSONLauncher)
                 //LanguageDaoImpl().getLanguageFromFile(DocumentFileCompat.getAccessibleAbsolutePaths(this).values.toList()[0].toList()[0]+"/1.json", this)
                 startActivity(intent)

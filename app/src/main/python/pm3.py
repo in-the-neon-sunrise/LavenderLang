@@ -15,6 +15,8 @@ def inflectAttrs(word, partOfSpeech, attrs):
     w = morph.parse(word)[0]
     res = []
     comp = False
+    if (attrs == '[]'):
+        return word
     attrs = list(map(int, attrs[1:-1].split(", ")))
     
     if partOfSpeech == 'NOUN' or partOfSpeech == 'PRONOUN':
