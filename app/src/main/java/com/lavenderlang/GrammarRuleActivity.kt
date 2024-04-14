@@ -28,7 +28,6 @@ class GrammarRuleActivity: AppCompatActivity(){
         var id_lang: Int = 0
         var id_rule: Int = 0
 
-        var isEverythingCreated: Boolean = false
         var idPartOfSpeech: Int = 0
         var attrs: MutableMap<Attributes, ArrayList<Int>> = mutableMapOf()
         var regex: String = ".*"
@@ -81,7 +80,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                 var newRule = GrammarRuleEntity(id_lang)
                 grammarDao.addGrammarRule(languages[id_lang]!!.grammar, newRule)
                 id_rule = languages[id_lang]!!.grammar.grammarRules.size-1
-                editMasc.setText("это новое правило привет")
+                editMasc.setText(newRule.masc.regex)
             }
             else -> {
                 id_rule = rule
@@ -174,8 +173,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        updateRule()
                         updateSpinners()
                     }
                     1->{
@@ -196,8 +194,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         idPartOfSpeech=positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        updateRule()
                         updateSpinners()
                     }
                     2->{
@@ -218,8 +215,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         idPartOfSpeech=positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        updateRule()
                         updateSpinners()
                     }
                     3->{
@@ -240,8 +236,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         idPartOfSpeech=positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        updateRule()
                         updateSpinners()
                     }
                     4->{
@@ -262,8 +257,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         idPartOfSpeech=positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        updateRule()
                         updateSpinners()
                     }
                     5->{
@@ -284,8 +278,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         idPartOfSpeech=positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        updateRule()
                         updateSpinners()
                     }
                     6->{
@@ -306,8 +299,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         idPartOfSpeech=positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        updateRule()
                         updateSpinners()
                     }
                     7->{
@@ -328,8 +320,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         idPartOfSpeech=positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        updateRule()
                         updateSpinners()
                     }
                     else->{
@@ -350,8 +341,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         idPartOfSpeech=positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        updateRule()
                         updateSpinners()
                     }
                 }
@@ -400,13 +390,16 @@ class GrammarRuleActivity: AppCompatActivity(){
             numberBack=editTextNumberBack.text.toString().toInt()
             numberFront=editTextNumberFront.text.toString().toInt()
 
-            updateMasc()
-            updateMutableAttrs()
-            updateTransformation()
+        }
+
+        val buttonDelete: Button = findViewById(R.id.buttonDelete)
+        buttonDelete.setOnClickListener{
+            grammarDao.deleteGrammarRule(languages[id_lang]!!.grammar, languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule])
+            finish()
         }
 
     }
-    fun updateMasc(){
+    fun updateRule(){
         var partOfSpeech=when(idPartOfSpeech){
             0->PartOfSpeech.NOUN
             1->PartOfSpeech.VERB
@@ -421,17 +414,16 @@ class GrammarRuleActivity: AppCompatActivity(){
         var newMasc = MascEntity(
             partOfSpeech, attrs, regex
         )
-        grammarRuleDao.updateMasc(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newMasc)
-        Toast.makeText(this, newMasc.toString(), Toast.LENGTH_LONG).show()
-    }
-    fun updateMutableAttrs(){
-        grammarRuleDao.updateMutableAttrs(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], mutableAttrs)
-    }
-    fun updateTransformation(){
+        //grammarRuleDao.updateMasc(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newMasc)
+
+        //grammarRuleDao.updateMutableAttrs(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], mutableAttrs)
+
         var newTransformation = TransformationEntity(
             numberFront, numberBack, addFront, addBack
         )
-        grammarRuleDao.updateTransformation(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newTransformation)
+        //grammarRuleDao.updateTransformation(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newTransformation)
+
+        grammarRuleDao.updateRule(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newMasc, newTransformation, mutableAttrs)
     }
     fun listenSpinners(){
 

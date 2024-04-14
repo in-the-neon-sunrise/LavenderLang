@@ -19,6 +19,8 @@ import com.lavenderlang.GrammarActivity.Companion.id_lang
 import com.lavenderlang.GrammarActivity.Companion.grammarDao
 import com.lavenderlang.GrammarActivity.Companion.id_lang
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
+import com.lavenderlang.backend.dao.rule.GrammarRuleDao
+import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.CharacteristicEntity
 import com.lavenderlang.backend.entity.language.GrammarEntity
@@ -556,11 +558,12 @@ private class GrammarRuleAdapter(context: Context, listOfRules: MutableList<Gram
             newView = LayoutInflater.from(context).inflate(R.layout.grammar_rule_line_activity, null)
         }
 
+        val grammarRuleDao: GrammarRuleDao = GrammarRuleDaoImpl()
         //textview is visible
         val unchangeableAttributes: TextView = newView!!.findViewById(R.id.textViewUnchangeableAttributes)
         val changeableAttributes: TextView = newView!!.findViewById(R.id.textViewChangeableAttributes)
-        unchangeableAttributes.text = grammarRule.toString()
-        changeableAttributes.text = grammarRule.toString()
+        unchangeableAttributes.text = grammarRuleDao.getOrigInfo(grammarRule!!)
+        changeableAttributes.text = grammarRuleDao.getResultInfo(grammarRule!!)
 
         return newView
     }
