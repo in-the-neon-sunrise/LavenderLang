@@ -1,6 +1,9 @@
 package com.lavenderlang.backend.dao.rule
 
+import androidx.lifecycle.lifecycleScope
+import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.dao.help.TransformationDaoImpl
+import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.rule.*
 import com.lavenderlang.backend.entity.word.AdjectiveEntity
@@ -13,19 +16,24 @@ import com.lavenderlang.backend.entity.word.ParticipleEntity
 import com.lavenderlang.backend.entity.word.PronounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.entity.word.VerbParticipleEntity
+import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.IncorrectRegexException
 import com.lavenderlang.languages
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 interface WordFormationRuleDao : RuleDao {
     fun updateTransformation(rule : WordFormationRuleEntity, newTransformation: TransformationEntity)
     fun updateDescription(rule : WordFormationRuleEntity, newDescription: String)
     fun updateImmutableAttrs(rule : WordFormationRuleEntity, newAttrs: MutableMap<Attributes, Int>)
     fun updatePartOfSpeech(rule : WordFormationRuleEntity, newPartOfSpeech: PartOfSpeech)
+    fun updateRule(rule : WordFormationRuleEntity, masc: MascEntity, transformation: TransformationEntity, description: String, newAttrs: MutableMap<Attributes, Int>, partOfSpeech: PartOfSpeech)
     fun wordFormationTransformByRule(word : IWordEntity, rule : WordFormationRuleEntity) : IWordEntity
 
 }
-class WordFormationRuleDaoImpl : WordFormationRuleDao {
+class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository())
+    : WordFormationRuleDao {
     override fun updateMasc(rule: IRuleEntity, newMasc: MascEntity) {
         try {
             newMasc.regex.toRegex()
@@ -58,6 +66,20 @@ class WordFormationRuleDaoImpl : WordFormationRuleDao {
 
     override fun updateImmutableAttrs(rule: WordFormationRuleEntity, newAttrs: MutableMap<Attributes, Int>) {
         rule.immutableAttrs = newAttrs
+    }
+
+    override fun updateRule(rule: WordFormationRuleEntity, masc: MascEntity, transformation: TransformationEntity, description: String, newAttrs: MutableMap<Attributes, Int>, partOfSpeech: PartOfSpeech) {
+        updateMasc(rule, masc)
+        updateTransformation(rule, transformation)
+        updateDescription(rule, description)
+        updateImmutableAttrs(rule, newAttrs)
+        updatePartOfSpeech(rule, partOfSpeech)
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+            languageRepository.updateGrammar(
+                MainActivity.getInstance(), rule.languageId,
+                Serializer.getInstance().serializeGrammar(languages[rule.languageId]!!.grammar)
+            )
+        }
     }
     override fun wordFormationTransformByRule(word: IWordEntity, rule: WordFormationRuleEntity) : IWordEntity {
         val transformedWord : IWordEntity = when (rule.partOfSpeech) {

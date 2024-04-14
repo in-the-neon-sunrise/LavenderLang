@@ -114,9 +114,6 @@ class WordActivity : AppCompatActivity() {
 
         val buttonUpdate: Button = findViewById(R.id.buttonSave)
         buttonUpdate.setOnClickListener {
-            wordDao.updateWord(languages[id_lang]!!.dictionary.dict[id_word], editConlangWord.text.toString())
-            wordDao.updateTranslation(languages[id_lang]!!.dictionary.dict[id_word], editRussianWord.text.toString())
-
             partOfSpeech = when(idPartOfSpeech){
                 0-> PartOfSpeech.NOUN
                 1-> PartOfSpeech.VERB
@@ -130,12 +127,8 @@ class WordActivity : AppCompatActivity() {
                 else-> PartOfSpeech.NOUN
             }
             updateAttrs()
-
-
-            wordDao.updatePartOfSpeech(languages[id_lang]!!.dictionary.dict[id_word], partOfSpeech)
-
-            wordDao.updateImmutableAttrs(languages[id_lang]!!.dictionary.dict[id_word], immutableAttrs)
-            Toast.makeText(this, immutableAttrs.toString(), Toast.LENGTH_SHORT).show()
+            wordDao.updateWord(languages[id_lang]!!.dictionary.dict[id_word], editConlangWord.text.toString(),
+                editRussianWord.text.toString(), immutableAttrs, partOfSpeech)
         }
         val buttonDelete: Button = findViewById(R.id.buttonDelete)
         buttonDelete.setOnClickListener {

@@ -27,9 +27,9 @@ class PunctuationDaoImpl(private val languageRepository: LanguageRepository = La
         }
         language.puncSymbols[language.puncSymbols.keys.toList()[id]] = newSymbol
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.updateLanguage(
+            languageRepository.updatePuncSymbols(
                 MainActivity.getInstance(), language.languageId,
-                Serializer.getInstance().serializeLanguage(language)
+                Serializer.getInstance().serializePuncSymbols(language.puncSymbols)
             )
         }
     }

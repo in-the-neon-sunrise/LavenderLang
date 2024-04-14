@@ -28,7 +28,6 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
     private val languageRepository: LanguageRepository = LanguageRepository()
 ) : DictionaryDao {
     override fun addWord(dictionary: DictionaryEntity, word: IWordEntity) {
-        if (dictionary.languageId !in languages) return
         word.word = word.word.lowercase()
         for (letter in word.word) {
             if (!languages[dictionary.languageId]!!.vowels.contains(letter) &&
@@ -39,21 +38,20 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         dictionary.dict.add(word)
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.addMadeByWord(dictionary, word)
-            languageRepository.updateLanguage(
+            languageRepository.updateDictionary(
                 MainActivity.getInstance(), dictionary.languageId,
-                Serializer.getInstance().serializeLanguage(languages[dictionary.languageId]!!)
+                Serializer.getInstance().serializeDictionary(dictionary)
             )
         }
     }
 
     override fun deleteWord(dictionary: DictionaryEntity, word: IWordEntity) {
         dictionary.dict.remove(word)
-        if (dictionary.languageId !in languages) return
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.delMadeByWord(dictionary, word)
-            languageRepository.updateLanguage(
+            languageRepository.updateDictionary(
                 MainActivity.getInstance(), dictionary.languageId,
-                Serializer.getInstance().serializeLanguage(languages[dictionary.languageId]!!)
+                Serializer.getInstance().serializeDictionary(dictionary)
             )
         }
 

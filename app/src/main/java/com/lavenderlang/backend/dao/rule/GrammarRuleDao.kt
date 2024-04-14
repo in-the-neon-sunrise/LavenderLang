@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.rule
 
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.chaquo.python.Python
 import com.lavenderlang.MainActivity
@@ -103,14 +104,37 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
 
     override fun updateRule(rule: GrammarRuleEntity, masc: MascEntity, transformation: TransformationEntity, newAttrs: MutableMap<Attributes, Int>) {
         val oldRule = rule.copy()
-        updateMasc(rule, masc)
-        updateTransformation(rule, transformation)
+
+        try {
+            masc.regex.toRegex()
+        } catch (e : Exception) {
+            throw IncorrectRegexException("Неверное регулярное выражение!")
+        }
+        rule.masc = masc
+        Log.d("updaterule", "masc updated")
+
+        for (letter in transformation.addToBeginning) {
+            if (!languages[rule.languageId]!!.vowels.contains(letter) &&
+                !languages[rule.languageId]!!.consonants.contains(letter)) {
+                throw ForbiddenSymbolsException("Letter $letter is not in language")
+            }
+        }
+        for (letter in transformation.addToEnd) {
+            if (!languages[rule.languageId]!!.vowels.contains(letter) &&
+                !languages[rule.languageId]!!.consonants.contains(letter)) {
+                throw ForbiddenSymbolsException("Letter $letter is not in language")
+            }
+        }
+        rule.transformation = transformation
+        Log.d("updaterule", "transformation updated")
+
         updateMutableAttrs(rule, newAttrs)
+        Log.d("updaterule", "mutableAttrs updated")
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
-            languageRepository.updateLanguage(
+            languageRepository.updateGrammar(
                 MainActivity.getInstance(), rule.languageId,
-                Serializer.getInstance().serializeLanguage(languages[rule.languageId]!!)
+                Serializer.getInstance().serializeGrammar(languages[rule.languageId]!!.grammar)
             )
         }
     }

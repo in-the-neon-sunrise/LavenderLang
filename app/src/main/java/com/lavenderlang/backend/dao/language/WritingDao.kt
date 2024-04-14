@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.language
 
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
@@ -32,9 +33,9 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         }
         language.vowels = newLetters
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.updateLanguage(
+            languageRepository.updateVowels(
                 MainActivity.getInstance(), language.languageId,
-                Serializer.getInstance().serializeLanguage(language)
+                newLetters
             )
         }
     }
@@ -51,29 +52,32 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         }
         language.consonants = newLetters
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.updateLanguage(
+            languageRepository.updateConsonants(
                 MainActivity.getInstance(), language.languageId,
-                Serializer.getInstance().serializeLanguage(language)
+                newLetters
             )
         }
     }
 
     override fun addCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
+        if (language.capitalizedPartsOfSpeech.contains(partOfSpeech)) return
+        Log.d("frfrfr", "add $partOfSpeech")
         language.capitalizedPartsOfSpeech.add(partOfSpeech)
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.updateLanguage(
+            languageRepository.updateCapitalizedPartsOfSpeech(
                 MainActivity.getInstance(), language.languageId,
-                Serializer.getInstance().serializeLanguage(language)
+                Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
             )
         }
     }
 
     override fun deleteCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
+        Log.d("frfrfr", "del $partOfSpeech")
         language.capitalizedPartsOfSpeech.remove(partOfSpeech)
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.updateLanguage(
+            languageRepository.updateCapitalizedPartsOfSpeech(
                 MainActivity.getInstance(), language.languageId,
-                Serializer.getInstance().serializeLanguage(language)
+                Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
             )
         }
     }

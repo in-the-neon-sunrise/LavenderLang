@@ -54,8 +54,19 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
                     languages = mutableMapOf()
                     nextLanguageId = 0
                     for (e in languageItemList) {
-                        languages[e.id] = Serializer.getInstance().deserializeLanguage(e.lang)
-                        Log.d("woof", "loaded ${languages[e.id]}")
+                        Log.d("woof", "load ${e.name}: ${e.capitalizedPartsOfSpeech}")
+                        languages[e.id] = LanguageEntity(
+                            e.id,
+                            e.name,
+                            e.description,
+                            Serializer.getInstance().deserializeDictionary(e.dictionary),
+                            Serializer.getInstance().deserializeGrammar(e.grammar),
+                            e.vowels,
+                            e.consonants,
+                            Serializer.getInstance().deserializePuncSymbols(e.puncSymbols),
+                            Serializer.getInstance().deserializeCapitalizedPartsOfSpeech(e.capitalizedPartsOfSpeech)
+                        )
+                        Log.d("woof", "loaded ${languages[e.id]}: ${languages[e.id]!!.capitalizedPartsOfSpeech}")
                         if (nextLanguageId <= e.id) nextLanguageId = e.id + 1
                     }
                 }
@@ -66,14 +77,14 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         language.name = newName
         if (language.languageId !in languages) return
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.updateLanguage(MainActivity.getInstance(), language.languageId, Serializer.getInstance().serializeLanguage(language))
+            languageRepository.updateName(MainActivity.getInstance(), language.languageId, newName)
         }
     }
     override fun changeDescription(language : LanguageEntity, newDescription: String) {
         language.description = newDescription
         if (language.languageId !in languages) return
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.updateLanguage(MainActivity.getInstance(), language.languageId, Serializer.getInstance().serializeLanguage(language))
+            languageRepository.updateDescription(MainActivity.getInstance(), language.languageId, newDescription)
         }
     }
 
@@ -81,7 +92,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         val newLang = language.copy(languageId = nextLanguageId, name = language.name + " копия")
         languages[nextLanguageId++] = newLang
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, Serializer.getInstance().serializeLanguage(newLang))
+            languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, newLang)
         }
         return
     }
@@ -90,7 +101,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         Log.d("woof", "new $newLang")
         languages[nextLanguageId] = newLang
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, Serializer.getInstance().serializeLanguage(newLang))
+            languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, newLang)
         }
         ++nextLanguageId
         return
@@ -140,7 +151,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         languages[nextLanguageId] = language
         ++nextLanguageId
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.insertLanguage(context, language.languageId, Serializer.getInstance().serializeLanguage(language))
+            languageRepository.insertLanguage(context, language.languageId, language)
         }
         Toast.makeText(context, "Язык успешно загружен", Toast.LENGTH_LONG).show()
         Log.d("woof", "loaded ${language.name}")

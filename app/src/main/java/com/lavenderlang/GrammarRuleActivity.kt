@@ -390,6 +390,8 @@ class GrammarRuleActivity: AppCompatActivity(){
             numberBack=editTextNumberBack.text.toString().toInt()
             numberFront=editTextNumberFront.text.toString().toInt()
 
+            updateRule()
+
         }
 
         val buttonDelete: Button = findViewById(R.id.buttonDelete)
