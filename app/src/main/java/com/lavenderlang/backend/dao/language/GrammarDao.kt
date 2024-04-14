@@ -155,17 +155,21 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
 
     override fun addWordFormationRule(grammar: GrammarEntity, rule: WordFormationRuleEntity) {
         grammar.wordFormationRules.add(rule)
-        languageRepository.updateGrammar(
-            MainActivity.getInstance(), grammar.languageId,
-            Serializer.getInstance().serializeGrammar(grammar)
-        )
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+            languageRepository.updateGrammar(
+                MainActivity.getInstance(), grammar.languageId,
+                Serializer.getInstance().serializeGrammar(grammar)
+            )
+        }
     }
 
     override fun deleteWordFormationRule(grammar: GrammarEntity, rule: WordFormationRuleEntity) {
         grammar.wordFormationRules.remove(rule)
-        languageRepository.updateGrammar(
-            MainActivity.getInstance(), grammar.languageId,
-            Serializer.getInstance().serializeGrammar(grammar)
-        )
+        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+            languageRepository.updateGrammar(
+                MainActivity.getInstance(), grammar.languageId,
+                Serializer.getInstance().serializeGrammar(grammar)
+            )
+        }
     }
 }
