@@ -240,13 +240,23 @@
                 android:id="@+id/editTextAddBack"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:ems="10"
-                android:inputType="text"
                 android:layout_marginTop="10dp"
+                android:ems="10"
                 android:hint="Вписать сзади"
+                android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextNumberBack"/>
+                app:layout_constraintTop_toBottomOf="@+id/editTextNumberBack" />
+
+            <Button
+                android:id="@+id/buttonSaveGrammarRule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Сохранить"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextAddBack" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

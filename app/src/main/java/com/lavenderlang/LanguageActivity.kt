@@ -82,7 +82,12 @@ class LanguageActivity: AppCompatActivity() {
         //how it was started?
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)
-        when(val lang = intent.getIntExtra("lang", -1)){
+
+        var lang = intent.getIntExtra("lang", -1)
+        if (lang == -1 && id_lang != 0){
+            lang = id_lang
+        }
+        when(lang){
             -1 -> {
                 id_lang = nextLanguageId
                 languageDao.createLanguage(id_lang.toString(), "")
@@ -97,7 +102,6 @@ class LanguageActivity: AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)
 
