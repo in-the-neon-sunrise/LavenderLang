@@ -132,14 +132,15 @@ class WordActivity : AppCompatActivity() {
             updateAttrs()
 
 
-            //wordDao.uodatePartOfSpeech(languages[id_lang]!!.dictionary.dict[id_word], partOfSpeech)
+            wordDao.updatePartOfSpeech(languages[id_lang]!!.dictionary.dict[id_word], partOfSpeech)
 
-            //wordDao.updateImmutableAttrs(languages[id_lang]!!.dictionary.dict[id_word], immutableAttrs)
+            wordDao.updateImmutableAttrs(languages[id_lang]!!.dictionary.dict[id_word], immutableAttrs)
             Toast.makeText(this, immutableAttrs.toString(), Toast.LENGTH_SHORT).show()
         }
         val buttonDelete: Button = findViewById(R.id.buttonDelete)
         buttonDelete.setOnClickListener {
-            //удалить слово как-нибудь
+            dictionaryDao.deleteWord(languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word])
+            finish()
         }
     }
     fun setSpinners(){
