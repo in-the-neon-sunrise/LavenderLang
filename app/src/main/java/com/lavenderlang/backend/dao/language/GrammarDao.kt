@@ -139,7 +139,6 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
 
     override fun deleteGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
         grammar.grammarRules.remove(rule)
-        if (grammar.languageId !in languages) return
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.delMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
             languageRepository.updateLanguage(

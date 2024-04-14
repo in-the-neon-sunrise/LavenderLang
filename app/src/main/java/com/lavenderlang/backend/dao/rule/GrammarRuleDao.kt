@@ -30,7 +30,7 @@ interface GrammarRuleDao : RuleDao {
     fun updateTransformation(rule : GrammarRuleEntity, newTransformation: TransformationEntity)
     fun updateMutableAttrs(rule : GrammarRuleEntity, newAttrs: MutableMap<Attributes, Int>)
     fun grammarTransformByRule(rule: GrammarRuleEntity, word : IWordEntity) : IWordEntity
-    fun updateRule(rule : GrammarRuleEntity, masc: MascEntity, transformation: TransformationEntity, mutableAttrs: MutableMap<Attributes, Int>)
+    fun updateRule(rule : GrammarRuleEntity, masc: MascEntity, transformation: TransformationEntity, newAttrs: MutableMap<Attributes, Int>)
 }
 class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
                          private val languageRepository: LanguageRepository = LanguageRepository()
