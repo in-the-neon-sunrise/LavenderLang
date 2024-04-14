@@ -82,9 +82,6 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("meowmeow", languages.keys.toString())
 
-
-        if (languages.isEmpty()) LanguageDaoImpl().getLanguagesFromDB()
-
         if (!Python.isStarted()) Python.start(AndroidPlatform(this))
 
 

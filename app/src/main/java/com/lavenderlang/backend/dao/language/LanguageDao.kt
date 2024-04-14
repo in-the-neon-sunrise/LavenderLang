@@ -38,7 +38,7 @@ interface LanguageDao {
     fun copyLanguage(language: LanguageEntity)
     fun createLanguage(name: String, description: String)
     fun deleteLanguage(id: Int)
-    fun getLanguagesFromDB()
+    fun getLanguagesFromDB(context: AppCompatActivity)
     fun downloadLanguageJSON(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>)
     fun downloadLanguagePDF(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>)
     fun getLanguageFromFile(path: String, context: AppCompatActivity)
@@ -47,8 +47,8 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     companion object {
         var curLanguage: LanguageEntity? = null
     }
-    override fun getLanguagesFromDB() {
-            languageRepository.languages.observe(MainActivity.getInstance()
+    override fun getLanguagesFromDB(context: AppCompatActivity) {
+            languageRepository.languages.observe(context
             ) { languageItemList: List<LanguageItem> ->
                 run {
                     languages = mutableMapOf()
@@ -70,7 +70,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
                     }
                 }
             }
-            languageRepository.loadAllLanguages(MainActivity.getInstance(), MainActivity.getInstance())
+            languageRepository.loadAllLanguages(context, context)
         }
     override fun changeName(language : LanguageEntity, newName : String) {
         language.name = newName
