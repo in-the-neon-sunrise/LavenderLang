@@ -32,7 +32,7 @@ import com.lavenderlang.backend.entity.word.NounEntity
 class WordActivity : AppCompatActivity() {
     companion object{
         var id_lang: Int = -1
-        var id_word: Int = 0
+        var id_word: Int = -1
 
         var immutableAttrs: MutableMap<Attributes, Int> = mutableMapOf()
         var idPartOfSpeech: Int = 0
@@ -75,8 +75,8 @@ class WordActivity : AppCompatActivity() {
         }
 
         var word = intent.getIntExtra("word", -1)
-        if (word == -1 && id_word != 0){
-            word = LanguageActivity.id_lang
+        if (word == -1 && id_word != -1){
+            id_lang = LanguageActivity.id_lang
         }
         when (word) {
             -1 -> {

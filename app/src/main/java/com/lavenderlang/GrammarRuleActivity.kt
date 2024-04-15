@@ -167,7 +167,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
                         if(positionSpinner==idPartOfSpeech){
-                            Toast.makeText(this@GrammarRuleActivity, "задаем в первый раз чр", Toast.LENGTH_LONG).show()
+                            //Toast.makeText(this@GrammarRuleActivity, "задаем в первый раз чр", Toast.LENGTH_LONG).show()
                             return
                         }
                         idPartOfSpeech = positionSpinner
@@ -503,7 +503,7 @@ class GrammarRuleActivity: AppCompatActivity(){
         val spinnerFinishPerson: Spinner = findViewById(R.id.spinnerFinishPerson)
         val spinnerFinishMood: Spinner = findViewById(R.id.spinnerFinishMood)
         val spinnerFinishDegreeOfComparison: Spinner = findViewById(R.id.spinnerFinishDegreeOfComparison)
-        Toast.makeText(this@GrammarRuleActivity, "обновляем гендер", Toast.LENGTH_LONG).show()
+        //Toast.makeText(this@GrammarRuleActivity, "обновляем гендер", Toast.LENGTH_LONG).show()
         when(idPartOfSpeech) {
             0 -> {
                 spinnerGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
