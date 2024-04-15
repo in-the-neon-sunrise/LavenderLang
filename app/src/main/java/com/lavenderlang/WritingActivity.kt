@@ -117,4 +117,10 @@ class WritingActivity : AppCompatActivity() {
             else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.FUNC_PART)
         }
     }
+    override fun finish(){
+        val data = Intent()
+        data.putExtra("lang", GrammarRuleActivity.id_lang)
+        setResult(RESULT_OK, data)
+        super.finish()
+    }
 }

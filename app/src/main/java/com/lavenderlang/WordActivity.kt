@@ -382,6 +382,13 @@ class WordActivity : AppCompatActivity() {
         listWordFormationRules.adapter = adapterWordFormationRules
         adapterWordFormationRules.notifyDataSetChanged()*/
     }
+    override fun finish(){
+        val data = Intent()
+        data.putExtra("lang", id_lang)
+        data.putExtra("word", id_word)
+        setResult(RESULT_OK, data)
+        super.finish()
+    }
 }
 
 private class NewWordAdapter(context: Context, listOfWords: MutableList<IWordEntity>) :

@@ -550,4 +550,11 @@ class GrammarRuleActivity: AppCompatActivity(){
             else->{}
         }
     }
+    override fun finish(){
+        val data = Intent()
+        data.putExtra("lang", id_lang)
+        data.putExtra("grammarRule", id_rule)
+        setResult(RESULT_OK, data)
+        super.finish()
+    }
 }

@@ -78,6 +78,12 @@ class DictionaryActivity : AppCompatActivity() {
                 startActivity(intent)
             }
     }
+    override fun finish(){
+        val data = Intent()
+        data.putExtra("lang", id_lang)
+        setResult(RESULT_OK, data)
+        super.finish()
+    }
 }
 public class WordAdapter(context: Context, listOfWords: MutableList<IWordEntity>) :
     ArrayAdapter<IWordEntity>(context, R.layout.word_line_activity, listOfWords) {

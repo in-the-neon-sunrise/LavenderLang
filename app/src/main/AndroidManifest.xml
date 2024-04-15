@@ -40,7 +40,8 @@
         <activity android:name=".GrammarRuleActivity" />
         <activity android:name=".TranslatorActivity" />
         <activity android:name=".WordActivity" />
-        <activity android:name="WordFormationRuleActivity"/>
+        <activity android:name=".WordFormationRuleActivity"/>
+        <activity android:name=".LoadLanguageActivity" />
     </application>
 
 </manifest>

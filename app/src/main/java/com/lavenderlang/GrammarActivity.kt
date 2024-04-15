@@ -320,6 +320,12 @@ class GrammarActivity: AppCompatActivity() {
             }
         }
     }
+    override fun finish(){
+        val data = Intent()
+        data.putExtra("lang", id_lang)
+        setResult(RESULT_OK, data)
+        super.finish()
+    }
 }
 private class AttributeAdapter(context: Context, listOfAttributes: MutableList<CharacteristicEntity>,
                                idListAttribute: Int) :

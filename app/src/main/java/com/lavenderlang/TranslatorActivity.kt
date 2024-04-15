@@ -28,13 +28,12 @@ class TranslatorActivity : AppCompatActivity() {
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            val intent = Intent(this@TranslatorActivity, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
             val intent = Intent(this@TranslatorActivity, InformationActivity::class.java)
-            intent.putExtra("lang", LanguageActivity.id_lang)
+            intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
     }
@@ -104,5 +103,11 @@ class TranslatorActivity : AppCompatActivity() {
             textview.setText(
                 translatorDao.translateTextToConlang(languages[clever_index_of_language]!!, input_text))
         }
+    }
+    override fun finish(){
+        val data = Intent()
+        data.putExtra("lang", id_lang)
+        setResult(RESULT_OK, data)
+        super.finish()
     }
 }

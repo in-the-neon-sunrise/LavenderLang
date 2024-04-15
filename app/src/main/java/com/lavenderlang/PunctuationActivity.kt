@@ -70,4 +70,10 @@ class PunctuationActivity : AppCompatActivity() {
             punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 3, editTextConlangSymbol4.text.toString())
         }
     }
+    override fun finish(){
+        val data = Intent()
+        data.putExtra("lang", id_lang)
+        setResult(RESULT_OK, data)
+        super.finish()
+    }
 }

@@ -662,4 +662,11 @@ class WordFormationRuleActivity: AppCompatActivity()  {
             else->{}
         }
     }
+    override fun finish(){
+        val data = Intent()
+        data.putExtra("lang", id_lang)
+        data.putExtra("wordFormationRule", id_rule)
+        setResult(RESULT_OK, data)
+        super.finish()
+    }
 }

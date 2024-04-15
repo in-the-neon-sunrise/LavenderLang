@@ -124,5 +124,15 @@ class LanguageActivity: AppCompatActivity() {
                 languageDao.changeDescription(languages[id_lang]!!, editDescription.text.toString())
             }
         })
+
+        val buttonFile: Button = findViewById(R.id.buttonFile)
+        buttonFile.setOnClickListener {
+            //скачать файл
+        }
+        val buttonPDF: Button = findViewById(R.id.buttonPDF)
+        buttonPDF.setOnClickListener {
+            //скачать pdf
+        }
+
     }
 }

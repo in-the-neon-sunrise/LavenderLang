@@ -196,6 +196,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        //go to load language
+        val buttonFromFile: Button = findViewById(R.id.buttonFromFile)
+        buttonFromFile.setOnClickListener {
+            val intent = Intent(this@MainActivity, LoadLanguageActivity::class.java)
+            startActivity(intent)
+        }
+
         //go to information
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener {
