@@ -113,18 +113,10 @@ class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepositor
         }
         for (attr in rule.masc.immutableAttrs.keys) {
             res += when (attr) {
-                Attributes.GENDER -> "род: "
-                Attributes.TYPE -> "вид: "
-                Attributes.VOICE -> "залог: "
+                Attributes.GENDER -> "род: ${languages[rule.languageId]!!.grammar.varsGender[rule.masc.immutableAttrs[attr]]!!.name}, "
+                Attributes.TYPE -> "вид: ${languages[rule.languageId]!!.grammar.varsType[rule.masc.immutableAttrs[attr]]!!.name}, "
+                Attributes.VOICE -> "залог: ${languages[rule.languageId]!!.grammar.varsVoice[rule.masc.immutableAttrs[attr]]!!.name}, "
                 else -> continue
-            }
-            for (e in rule.masc.immutableAttrs[attr]!!) {
-                res += when (attr) {
-                    Attributes.GENDER -> languages[rule.languageId]!!.grammar.varsGender[e]?.name + ", "
-                    Attributes.TYPE -> languages[rule.languageId]!!.grammar.varsType[e]?.name + ", "
-                    Attributes.VOICE -> languages[rule.languageId]!!.grammar.varsVoice[e]?.name + ", "
-                    else -> break
-                }
             }
         }
         return res.slice(0 until res.length - 2)

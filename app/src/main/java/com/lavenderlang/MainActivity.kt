@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        /*if (languages.isEmpty()) {
+            /*if (languages.isEmpty()) {
             LanguageDaoImpl().createLanguage("Пример языка", "Пример :>")
             val dict = DictionaryDaoImpl()
             val word1 = NounEntity(
@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity() {
             val grammarHandler = GrammarDaoImpl()
             val rule = GrammarRuleEntity(
                 0, MascEntity(
-                    PartOfSpeech.NOUN, mutableMapOf(Attributes.GENDER to arrayListOf(1))
+                    PartOfSpeech.NOUN, mutableMapOf(Attributes.GENDER to 1)
                 ), mutableMapOf(Attributes.NUMBER to 1, Attributes.CASE to 0),
                 TransformationEntity(0, 1, "", "b")
             )

@@ -31,7 +31,7 @@ import com.lavenderlang.backend.entity.word.NounEntity
 
 class WordActivity : AppCompatActivity() {
     companion object{
-        var id_lang: Int = 0
+        var id_lang: Int = -1
         var id_word: Int = 0
 
         var immutableAttrs: MutableMap<Attributes, Int> = mutableMapOf()

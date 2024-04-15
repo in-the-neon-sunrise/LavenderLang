@@ -1,16 +1,11 @@
 package com.lavenderlang.backend.data
 
 import android.content.Context
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.Serializer
 
 
 class LanguageRepository {
-    var languages: MutableLiveData<ArrayList<LanguageItem>> =
-        MutableLiveData<ArrayList<LanguageItem>>()
-
     fun loadAllLanguages(context: Context) : ArrayList<LanguageItem> {
         val languageDB: LanguageDB = LanguageDB.getInstance(context)
         val languageDao: LanguageDao = languageDB.languageDao()
@@ -40,14 +35,6 @@ class LanguageRepository {
 
         languageDao.deleteById(id)
     }
-
-    /*fun updateLanguage(context: Context, id: Int, language: String) {
-        val languageDB: LanguageDB = LanguageDB.getInstance(context)
-        val languageDao: LanguageDao = languageDB.languageDao()
-
-        val languageItem = LanguageItem(id, language)
-        languageDao.update(languageItem)
-    }*/
 
     fun updateName(context: Context, id: Int, name: String) {
         val languageDB: LanguageDB = LanguageDB.getInstance(context)

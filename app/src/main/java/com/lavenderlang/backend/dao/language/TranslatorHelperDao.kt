@@ -39,8 +39,6 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
     }
 
     override fun translateWordFromConlang(language: LanguageEntity, word: String): String {
-        // not synchronized for a reason
-        // or is it?..
         for (key in language.dictionary.fullDict.keys) {
             for (w in language.dictionary.fullDict[key]!!) {
                 if (w.word == word.lowercase()) {
@@ -54,12 +52,8 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
         val py = Python.getInstance()
         val module = py.getModule("pm3")
         val normalForm = module.callAttr("getNormalForm", word.lowercase()).toString()
-        //Log.d("meowmeow", language.languageId.toString())
         Log.d("meowmeow", language.languageId.toString()+language.dictionary.fullDict.toString())
-        // not synchronized for a reason
-        // or is it?..
         for (key in language.dictionary.fullDict.keys) {
-            //val keyWord = Serializer.getInstance().deserializeWord(key)
             val keyWord = key.split(" ")[0]
             val keyTranslation = key.split(" ")[1]
             if (keyTranslation != normalForm) continue

@@ -29,7 +29,7 @@ class GrammarRuleActivity: AppCompatActivity(){
         var id_rule: Int = 0
 
         var idPartOfSpeech: Int = 0
-        var attrs: MutableMap<Attributes, ArrayList<Int>> = mutableMapOf()
+        var attrs: MutableMap<Attributes, Int> = mutableMapOf()
         var regex: String = ".*"
         var mutableAttrs: MutableMap<Attributes, Int> = mutableMapOf()
         var numberFront=0
@@ -371,9 +371,9 @@ class GrammarRuleActivity: AppCompatActivity(){
 
         var buttonSave: Button = findViewById(R.id.buttonSaveGrammarRule)
         buttonSave.setOnClickListener{
-            if(spinnerGender.isVisible) attrs[Attributes.GENDER] = arrayListOf(spinnerGender.selectedItemPosition)
-            if(spinnerType.isVisible) attrs[Attributes.TYPE] = arrayListOf(spinnerType.selectedItemPosition)
-            if(spinnerVoice.isVisible) attrs[Attributes.VOICE] = arrayListOf(spinnerVoice.selectedItemPosition)
+            if(spinnerGender.isVisible) attrs[Attributes.GENDER] = spinnerGender.selectedItemPosition
+            if(spinnerType.isVisible) attrs[Attributes.TYPE] = spinnerType.selectedItemPosition
+            if(spinnerVoice.isVisible) attrs[Attributes.VOICE] = spinnerVoice.selectedItemPosition
 
             regex=editMasc.text.toString()
 
@@ -506,14 +506,14 @@ class GrammarRuleActivity: AppCompatActivity(){
         Toast.makeText(this@GrammarRuleActivity, "обновляем гендер", Toast.LENGTH_LONG).show()
         when(idPartOfSpeech) {
             0 -> {
-                spinnerGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER]?.get(0) ?: 0)
+                spinnerGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
 
                 spinnerFinishNumber.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.NUMBER] ?:0)
                 spinnerFinishCase.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.CASE] ?:0)
             }
             1->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE]?.get(0) ?: 0)
-                spinnerVoice.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE]?.get(0) ?: 0)
+                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerVoice.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
 
                 spinnerFinishGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.GENDER] ?:0)
                 spinnerFinishNumber.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.NUMBER] ?:0)
@@ -529,8 +529,8 @@ class GrammarRuleActivity: AppCompatActivity(){
             }
             3->{}
             4->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE]?.get(0) ?: 0)
-                spinnerVoice.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE]?.get(0) ?: 0)
+                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerVoice.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
 
                 spinnerFinishGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.GENDER] ?:0)
                 spinnerFinishNumber.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.NUMBER] ?:0)
@@ -538,10 +538,10 @@ class GrammarRuleActivity: AppCompatActivity(){
                 spinnerFinishTime.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.TIME] ?:0)
             }
             5->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE]?.get(0) ?: 0)
+                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
             }
             6->{
-                spinnerGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER]?.get(0) ?: 0)
+                spinnerGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
 
                 spinnerFinishNumber.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.NUMBER] ?:0)
                 spinnerFinishCase.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.CASE] ?:0)

@@ -30,7 +30,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
         var id_rule: Int = 0
 
         var idPartOfSpeech: Int = 0
-        var attrs: MutableMap<Attributes, ArrayList<Int>> = mutableMapOf()
+        var attrs: MutableMap<Attributes, Int> = mutableMapOf()
         var regex: String = ".*"
 
         var finishIdPartOfSpeech: Int = 0
@@ -522,9 +522,9 @@ class WordFormationRuleActivity: AppCompatActivity()  {
 
         val buttonSave: Button=findViewById(R.id.buttonSaveWordFormationRule)
         buttonSave.setOnClickListener{
-            if(spinnerGender.isVisible) attrs[Attributes.GENDER] = arrayListOf(spinnerGender.selectedItemPosition)
-            if(spinnerType.isVisible) attrs[Attributes.TYPE] = arrayListOf(spinnerType.selectedItemPosition)
-            if(spinnerVoice.isVisible) attrs[Attributes.VOICE] = arrayListOf(spinnerVoice.selectedItemPosition)
+            if(spinnerGender.isVisible) attrs[Attributes.GENDER] = spinnerGender.selectedItemPosition
+            if(spinnerType.isVisible) attrs[Attributes.TYPE] = spinnerType.selectedItemPosition
+            if(spinnerVoice.isVisible) attrs[Attributes.VOICE] = spinnerVoice.selectedItemPosition
 
             regex =editMasc.text.toString()
             description= editTextDescriptionRule.text.toString()
@@ -611,23 +611,23 @@ class WordFormationRuleActivity: AppCompatActivity()  {
 
         when(idPartOfSpeech) {
             0 -> {
-                spinnerGender.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER]?.get(0) ?: 0)
+                spinnerGender.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
             }
             1->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE]?.get(0) ?: 0)
-                spinnerVoice.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE]?.get(0) ?: 0)
+                spinnerType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerVoice.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
             }
             2->{}
             3->{}
             4->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE]?.get(0) ?: 0)
-                spinnerVoice.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE]?.get(0) ?: 0)
+                spinnerType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerVoice.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
             }
             5->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE]?.get(0) ?: 0)
+                spinnerType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
             }
             6->{
-                spinnerGender.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER]?.get(0) ?: 0)
+                spinnerGender.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
             }
             7->{}
             else->{}
