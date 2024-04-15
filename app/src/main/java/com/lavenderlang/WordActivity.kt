@@ -1,24 +1,31 @@
 package com.lavenderlang
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.dao.rule.WordFormationRuleDao
+import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.dao.word.WordDao
 import com.lavenderlang.backend.dao.word.WordDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.PartOfSpeech
+import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 
@@ -111,6 +118,7 @@ class WordActivity : AppCompatActivity() {
         setPartOfSpeechListener()
 
         updateWordForms()
+        updateNewWords()
 
         val buttonUpdate: Button = findViewById(R.id.buttonSave)
         buttonUpdate.setOnClickListener {
@@ -365,5 +373,37 @@ class WordActivity : AppCompatActivity() {
         val adapterWordForms: ArrayAdapter<IWordEntity> = WordAdapter(this, wordForms)
         listWordForms.adapter = adapterWordForms
         adapterWordForms.notifyDataSetChanged()
+    }
+
+    fun updateNewWords(){
+        //list of new words
+        val listViewNewWords : ListView = findViewById(R.id.listViewNewWords)
+        /*val adapter: ArrayAdapter<IWordEntity> = NewWordAdapter(this, )
+        listWordFormationRules.adapter = adapterWordFormationRules
+        adapterWordFormationRules.notifyDataSetChanged()*/
+    }
+}
+
+private class NewWordAdapter(context: Context, listOfWords: MutableList<IWordEntity>) :
+    ArrayAdapter<IWordEntity>(context, R.layout.new_word_line_activity, listOfWords) {
+    companion object{
+        val wordFormationRuleDao: WordFormationRuleDao = WordFormationRuleDaoImpl()
+    }
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+
+        var newView = convertView
+        val word: IWordEntity? = getItem(position)
+        if (newView == null) {
+            newView = LayoutInflater.from(context).inflate(R.layout.new_word_line_activity, null)
+        }
+
+        //textview is visible
+        val textViewDescription: TextView = newView!!.findViewById(R.id.textViewDescription)
+        val textViewConlangWord: TextView = newView.findViewById(R.id.textViewConlangWord)
+        val editTextRussianWord: EditText = newView.findViewById(R.id.editTextRussianWord)
+        val buttonSave: Button = newView.findViewById(R.id.buttonSave)
+
+
+        return newView
     }
 }
