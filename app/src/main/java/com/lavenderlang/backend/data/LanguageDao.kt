@@ -13,7 +13,7 @@ interface LanguageDao {
     fun insert(item : LanguageItem) : Long
 
     @Query("SELECT * FROM language_table")
-    fun selectAll() : LiveData<List<LanguageItem>>
+    fun selectAll() : List<LanguageItem>
 
     @Query("DELETE FROM language_table WHERE id = :id")
     fun deleteById(id: Int)

@@ -27,22 +27,6 @@ class Serializer private constructor() {
         }
     }
 
-    fun deserializeWord(wordString: String) : IWordEntity {
-        try {
-            return mapper.readValue(wordString, IWordEntity::class.java)
-        } catch (e : Exception) {
-            throw WordNotFoundException(e.message?:"")
-        }
-    }
-
-    fun serializeWord(word: IWordEntity) : String {
-        return try {
-            mapper.writeValueAsString(word)
-        } catch (e : Exception) {
-            throw WordNotFoundException(e.message?:"")
-        }
-    }
-
     fun serializeLanguage(language: LanguageEntity) : String {
         synchronized(language) {
             return try {

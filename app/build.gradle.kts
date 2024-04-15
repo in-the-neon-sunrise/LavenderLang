@@ -68,8 +68,6 @@ dependencies {
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
-    // SAF
-    implementation("androidx.documentfile:documentfile:1.0.1")
     // simpleStorage
     implementation("com.anggrayudi:storage:1.5.5")
     // openPDF

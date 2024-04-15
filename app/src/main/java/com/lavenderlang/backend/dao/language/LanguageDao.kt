@@ -1,27 +1,16 @@
 package com.lavenderlang.backend.dao.language
 
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
-import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
 import com.anggrayudi.storage.SimpleStorageHelper
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.openInputStream
-import com.anggrayudi.storage.file.openOutputStream
 import com.lavenderlang.MainActivity
-import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
-import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
-import com.lavenderlang.backend.dao.word.WordDaoImpl
-import com.lavenderlang.backend.data.LanguageItem
 import com.lavenderlang.backend.data.LanguageRepository
-import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.*
 import com.lavenderlang.languages
@@ -47,31 +36,32 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     companion object {
         var curLanguage: LanguageEntity? = null
     }
+
     override fun getLanguagesFromDB(context: AppCompatActivity) {
-            languageRepository.languages.observe(context
-            ) { languageItemList: List<LanguageItem> ->
-                run {
-                    languages = mutableMapOf()
-                    nextLanguageId = 0
-                    for (e in languageItemList) {
-                        Log.d("woof", "load ${e.name}: ${e.capitalizedPartsOfSpeech}")
-                        languages[e.id] = LanguageEntity(
-                            e.id,
-                            e.name,
-                            e.description,
-                            Serializer.getInstance().deserializeDictionary(e.dictionary),
-                            Serializer.getInstance().deserializeGrammar(e.grammar),
-                            e.vowels,
-                            e.consonants,
-                            Serializer.getInstance().deserializePuncSymbols(e.puncSymbols),
-                            Serializer.getInstance().deserializeCapitalizedPartsOfSpeech(e.capitalizedPartsOfSpeech)
-                        )
-                        if (nextLanguageId <= e.id) nextLanguageId = e.id + 1
-                    }
-                }
+        context.lifecycleScope.launch(Dispatchers.IO) {
+            val languageItemList = languageRepository.loadAllLanguages(context)
+            languages = mutableMapOf()
+            nextLanguageId = 0
+            for (e in languageItemList) {
+                Log.d("woof", "load ${e.name}: ${e.capitalizedPartsOfSpeech}")
+                languages[e.id] = LanguageEntity(
+                    e.id,
+                    e.name,
+                    e.description,
+                    Serializer.getInstance().deserializeDictionary(e.dictionary),
+                    Serializer.getInstance().deserializeGrammar(e.grammar),
+                    e.vowels,
+                    e.consonants,
+                    Serializer.getInstance().deserializePuncSymbols(e.puncSymbols),
+                    Serializer.getInstance()
+                        .deserializeCapitalizedPartsOfSpeech(e.capitalizedPartsOfSpeech)
+                )
+                if (nextLanguageId <= e.id) nextLanguageId = e.id + 1
             }
-            languageRepository.loadAllLanguages(context, context)
         }
+    }
+
+
     override fun changeName(language : LanguageEntity, newName : String) {
         language.name = newName
         if (language.languageId !in languages) return

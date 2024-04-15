@@ -11,14 +11,10 @@ class LanguageRepository {
     var languages: MutableLiveData<ArrayList<LanguageItem>> =
         MutableLiveData<ArrayList<LanguageItem>>()
 
-    fun loadAllLanguages(context: Context, lifecycleOwner: LifecycleOwner) {
+    fun loadAllLanguages(context: Context) : ArrayList<LanguageItem> {
         val languageDB: LanguageDB = LanguageDB.getInstance(context)
         val languageDao: LanguageDao = languageDB.languageDao()
-        languageDao.selectAll().observe(lifecycleOwner) { languageItems ->
-            languages.setValue(
-                languageItems as ArrayList<LanguageItem>
-            )
-        }
+        return languageDao.selectAll() as ArrayList<LanguageItem>
     }
 
     fun insertLanguage(context: Context, id: Int, language: LanguageEntity) {
