@@ -85,18 +85,18 @@ class DictionaryActivity : AppCompatActivity() {
         super.finish()
     }
 }
-public class WordAdapter(context: Context, listOfWords: MutableList<IWordEntity>) :
+class WordAdapter(context: Context, listOfWords: MutableList<IWordEntity>) :
     ArrayAdapter<IWordEntity>(context, R.layout.word_line_activity, listOfWords) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var newView = convertView
         val word: IWordEntity? = getItem(position)
         if (newView == null) {
-            newView = LayoutInflater.from(context).inflate(R.layout.grammar_rule_line_activity, null)
+            newView = LayoutInflater.from(context).inflate(R.layout.word_line_activity, null)
         }
 
         //textview is visible
-        val unchangeableAttributes: TextView = newView!!.findViewById(R.id.textViewUnchangeableAttributes)
-        val changeableAttributes: TextView = newView!!.findViewById(R.id.textViewChangeableAttributes)
+        val unchangeableAttributes: TextView = newView!!.findViewById(R.id.textViewDescription)
+        val changeableAttributes: TextView = newView.findViewById(R.id.textViewConlangWord)
         unchangeableAttributes.text = word?.word
         changeableAttributes.text = word?.translation
 
