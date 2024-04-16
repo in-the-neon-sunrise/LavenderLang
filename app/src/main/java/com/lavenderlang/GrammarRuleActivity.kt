@@ -22,6 +22,7 @@ import com.lavenderlang.backend.entity.help.MascEntity
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.IncorrectRegexException
 
 class GrammarRuleActivity: AppCompatActivity(){
@@ -425,6 +426,12 @@ class GrammarRuleActivity: AppCompatActivity(){
             )
         }catch (e:IncorrectRegexException){
             Toast.makeText(this@GrammarRuleActivity, e.message, Toast.LENGTH_LONG).show()
+        }
+        catch (e:ForbiddenSymbolsException){
+            Toast.makeText(this@GrammarRuleActivity, e.message, Toast.LENGTH_LONG).show()
+        }
+        catch (e:Exception){
+            Toast.makeText(this@GrammarRuleActivity, "какая-то беда", Toast.LENGTH_LONG).show()
         }
     }
     fun listenSpinners(){

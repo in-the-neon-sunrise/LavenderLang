@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.backend.dao.language.PunctuationDao
 import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 
 class PunctuationActivity : AppCompatActivity() {
     companion object{
@@ -64,10 +65,14 @@ class PunctuationActivity : AppCompatActivity() {
 
         // save symbols
         buttonSave.setOnClickListener {
-            punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 0, editTextConlangSymbol1.text.toString())
-            punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 1, editTextConlangSymbol2.text.toString())
-            punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 2, editTextConlangSymbol3.text.toString())
-            punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 3, editTextConlangSymbol4.text.toString())
+            try{
+                punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 0, editTextConlangSymbol1.text.toString())
+                punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 1, editTextConlangSymbol2.text.toString())
+                punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 2, editTextConlangSymbol3.text.toString())
+                punctuationDao.updatePunctuationSymbol(languages[id_lang]!!, 3, editTextConlangSymbol4.text.toString())
+            }catch (e:ForbiddenSymbolsException){
+                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
     override fun finish(){
