@@ -151,7 +151,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MainActivity.getInstance())
         if (accessible.isEmpty()) {
             Toast.makeText(MainActivity.getInstance(),
-                "Вы не дали приложению доступ к памяти телефона, сохранение невозможно :(",
+                "Вы не дали приложению доступ к памяти телефона, сохранение невозможно.",
                 Toast.LENGTH_LONG).show()
             Log.d("woof", "no access")
             return

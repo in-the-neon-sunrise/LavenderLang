@@ -2,6 +2,7 @@ package com.lavenderlang
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -39,7 +40,7 @@ class LoadLanguageActivity: AppCompatActivity(){
         val buttonOpen: Button = findViewById(R.id.buttonOpen)
         val languageDao: LanguageDao = LanguageDaoImpl()
         val accessible = arrayListOf<String>()
-        val accessiblePathsRaw = DocumentFileCompat.getAccessibleAbsolutePaths(this)
+        var accessiblePathsRaw = DocumentFileCompat.getAccessibleAbsolutePaths(this)
         for (key in  accessiblePathsRaw.keys) {
             for (path in accessiblePathsRaw[key]!!) {
                 accessible.add(path)
@@ -58,11 +59,20 @@ class LoadLanguageActivity: AppCompatActivity(){
                 null,
                 StorageType.EXTERNAL
             )
+            accessible.clear()
+            accessiblePathsRaw = DocumentFileCompat.getAccessibleAbsolutePaths(this)
+            for (key in  accessiblePathsRaw.keys) {
+                for (path in accessiblePathsRaw[key]!!) {
+                    accessible.add(path)
+                }
+            }
         }
         buttonOpen.setOnClickListener {
+            Log.d("restore", accessible.toString())
             val path = editTextPath.text.toString()
             val pathPositionSpinner = spinnerPath.selectedItemPosition
-            languageDao.getLanguageFromFile("${accessible[pathPositionSpinner]}\\${path}", this)
+            Log.d("path", "${accessible[pathPositionSpinner]}\\${path}")
+            languageDao.getLanguageFromFile("${accessible[pathPositionSpinner]}/${path}", this)
 
             val intent = Intent(this, LanguageActivity::class.java)
             intent.putExtra("lang", languages.keys.toMutableList().last())
