@@ -21,40 +21,43 @@ interface WritingDao {
 
 class WritingDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) : WritingDao {
     override fun changeVowels(language: LanguageEntity, newLetters: String) {
-        for (letter in newLetters) {
+        for (letter in newLetters.lowercase()) {
             if (letter == ' ') continue
-            if (language.consonants.contains(letter.lowercase())) {
+            if (language.consonants.contains(letter)) {
                 throw ForbiddenSymbolsException("Letter $letter is already in consonants")
             }
-            // fixme: проверять отдельно для каждой строки-пунк. символа (m in MEOW)
-            if (language.puncSymbols.values.contains(letter.toString())) {
-                throw ForbiddenSymbolsException("Letter $letter is already in punctuation symbols")
+            for (ps in language.puncSymbols.values) {
+                if (ps.contains(letter)) {
+                    throw ForbiddenSymbolsException("Letter $letter is already in punctuation symbols")
+                }
             }
         }
-        language.vowels = newLetters
+        language.vowels = newLetters.lowercase()
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateVowels(
                 MainActivity.getInstance(), language.languageId,
-                newLetters
+                language.vowels
             )
         }
     }
 
     override fun changeConsonants(language: LanguageEntity, newLetters: String) {
-        for (letter in newLetters) {
+        for (letter in newLetters.lowercase()) {
             if (letter == ' ') continue
             if (language.vowels.contains(letter)) {
                 throw ForbiddenSymbolsException("Letter $letter is already in vowels")
             }
-            if (language.puncSymbols.values.contains(letter.toString())) {
-                throw ForbiddenSymbolsException("Letter $letter is already in punctuation symbols")
+            for (ps in language.puncSymbols.values) {
+                if (ps.contains(letter)) {
+                    throw ForbiddenSymbolsException("Letter $letter is already in punctuation symbols")
+                }
             }
         }
-        language.consonants = newLetters
+        language.consonants = newLetters.lowercase()
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.updateConsonants(
                 MainActivity.getInstance(), language.languageId,
-                newLetters
+                language.consonants
             )
         }
     }

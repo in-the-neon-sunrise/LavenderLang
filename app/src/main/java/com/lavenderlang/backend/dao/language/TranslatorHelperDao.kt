@@ -41,7 +41,7 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
     override fun translateWordFromConlang(language: LanguageEntity, word: String): String {
         for (key in language.dictionary.fullDict.keys) {
             for (w in language.dictionary.fullDict[key]!!) {
-                if (w.word == word.lowercase()) {
+                if (w.word.lowercase() == word.lowercase()) {
                     return w.translation
                 }
             }
@@ -52,20 +52,26 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
         val py = Python.getInstance()
         val module = py.getModule("pm3")
         val normalForm = module.callAttr("getNormalForm", word.lowercase()).toString()
-        Log.d("meowmeow", language.languageId.toString()+language.dictionary.fullDict.toString())
         for (key in language.dictionary.fullDict.keys) {
             val keyWord = key.split(" ")[0]
             val keyTranslation = key.split(" ")[1]
             if (keyTranslation != normalForm) continue
             for (w in language.dictionary.fullDict[key]!!) {
-                if (w.translation == word.lowercase()) {
-                    if (language.capitalizedPartsOfSpeech.contains(w.partOfSpeech)) return capitalizeWord(w.word)
+                if (w.translation.lowercase() == word.lowercase()) {
+                    if (language.capitalizedPartsOfSpeech.contains(w.partOfSpeech)) {
+                        return capitalizeWord(w.word)
+                    }
                     return w.word
                 }
             }
-            if (language.dictionary.fullDict[key]!!.isEmpty()) return keyWord
-            if (language.capitalizedPartsOfSpeech.contains(language.dictionary.fullDict[key]!![0].partOfSpeech))
+            if (language.dictionary.fullDict[key]!!.isEmpty()) {
+                return keyWord
+            }
+            if (language.capitalizedPartsOfSpeech.contains(
+                    language.dictionary.fullDict[key]!![0].partOfSpeech)
+                ) {
                 return capitalizeWord(keyWord)
+            }
             return keyWord
         }
         throw WordNotFoundException("Word not found")

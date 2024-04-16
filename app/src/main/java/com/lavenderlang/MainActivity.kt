@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-            /*if (languages.isEmpty()) {
+        /*if (languages.isEmpty()) {
             LanguageDaoImpl().createLanguage("Пример языка", "Пример :>")
             val dict = DictionaryDaoImpl()
             val word1 = NounEntity(
@@ -137,11 +137,13 @@ class MainActivity : AppCompatActivity() {
             val rule1 = GrammarRuleEntity(
                 0, MascEntity(
                     PartOfSpeech.VERB, mutableMapOf()
-                ), mutableMapOf(Attributes.NUMBER to 1,
+                ), mutableMapOf(
+                    Attributes.NUMBER to 1,
                     Attributes.PERSON to 0,
                     Attributes.TIME to 0,
                     Attributes.GENDER to 0,
-                    Attributes.MOOD to 0),
+                    Attributes.MOOD to 0
+                ),
                 TransformationEntity(0, 1, "", "d")
             )
             grammarHandler.addGrammarRule(languages[0]!!.grammar, rule1)
@@ -153,10 +155,8 @@ class MainActivity : AppCompatActivity() {
             )
             grammarHandler.addGrammarRule(languages[0]!!.grammar, rule2)
 
-            val TAG = "meowmeow"
             grammarHandler.addOption(
                 languages[0]!!.grammar, CharacteristicEntity(
-                    0,
                     languages[0]!!.grammar.nextIds[Attributes.GENDER]!!,
                     Attributes.GENDER,
                     "полосатые деревья",
@@ -165,7 +165,6 @@ class MainActivity : AppCompatActivity() {
             )
             grammarHandler.addOption(
                 languages[0]!!.grammar, CharacteristicEntity(
-                    0,
                     languages[0]!!.grammar.nextIds[Attributes.GENDER]!!,
                     Attributes.GENDER,
                     "деревья в клеточку",

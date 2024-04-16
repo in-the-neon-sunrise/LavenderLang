@@ -125,7 +125,9 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
 
         grammar.grammarRules.add(rule)
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            if (rule.masc.immutableAttrs.isNotEmpty()) helper.addMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
+            if (rule.masc.immutableAttrs.isNotEmpty()) {
+                helper.addMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
+            }
             languageRepository.updateDictionary(
                 MainActivity.getInstance(), grammar.languageId,
                 Serializer.getInstance().serializeDictionary(languages[grammar.languageId]!!.dictionary)
@@ -143,7 +145,9 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
             helper.delMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
             languageRepository.updateDictionary(
                 MainActivity.getInstance(), grammar.languageId,
-                Serializer.getInstance().serializeDictionary(languages[grammar.languageId]!!.dictionary)
+                Serializer.getInstance().serializeDictionary(
+                    languages[grammar.languageId]!!.dictionary
+                )
             )
             languageRepository.updateGrammar(
                 MainActivity.getInstance(), grammar.languageId,
