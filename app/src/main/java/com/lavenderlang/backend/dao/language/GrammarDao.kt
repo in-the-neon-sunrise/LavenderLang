@@ -65,10 +65,11 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         if (grammar.languageId !in languages) return
         val wordDao = WordDaoImpl()
         for (word in languages[grammar.languageId]!!.dictionary.dict) {
-            if (word.mutableAttrs.contains(option.type) && word.mutableAttrs[option.type] == option.characteristicId) {
+            if (word.mutableAttrs.contains(option.type) &&
+                word.mutableAttrs[option.type] == option.characteristicId) {
                 val immutAttrs = word.immutableAttrs
                 immutAttrs[option.type] = 0 // инфинитив
-                wordDao.updateImmutableAttrs(word, immutAttrs)
+                wordDao.updateWord(word, word.word, word.translation, immutAttrs, word.partOfSpeech)
             }
         }
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
@@ -111,14 +112,14 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
     override fun addGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
         //check if rule is correct (letters in transformation are in language)
         for (letter in rule.transformation.addToBeginning) {
-            if (!languages[grammar.languageId]!!.vowels.contains(letter) &&
-                !languages[grammar.languageId]!!.consonants.contains(letter)) {
+            if (!languages[grammar.languageId]!!.vowels.contains(letter.lowercase()) &&
+                !languages[grammar.languageId]!!.consonants.contains(letter.lowercase())) {
                 throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }
         for (letter in rule.transformation.addToEnd) {
-            if (!languages[grammar.languageId]!!.vowels.contains(letter) &&
-                !languages[grammar.languageId]!!.consonants.contains(letter)) {
+            if (!languages[grammar.languageId]!!.vowels.contains(letter.lowercase()) &&
+                !languages[grammar.languageId]!!.consonants.contains(letter.lowercase())) {
                 throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }

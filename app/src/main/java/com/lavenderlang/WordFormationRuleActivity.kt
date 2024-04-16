@@ -171,10 +171,10 @@ class WordFormationRuleActivity: AppCompatActivity()  {
 
         editTextDescriptionRule.setText(description)
 
-        (editTextNumberFront as TextView).setText(numberFront.toString())
-        (editTextNumberBack as TextView).setText(numberBack.toString())
-        (editTextAddFront as TextView).setText(addFront)
-        (editTextAddBack as TextView).setText(addBack)
+        (editTextNumberFront as TextView).text = numberFront.toString()
+        (editTextNumberBack as TextView).text = numberBack.toString()
+        (editTextAddFront as TextView).text = addFront
+        (editTextAddBack as TextView).text = addBack
 
         val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf(
             "Существительное",
@@ -185,7 +185,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
             "Деепричастие",
             "Местоимение",
             "Числительное",
-            "Предлог/частица/..."))
+            "Служебное слово"))
 
         spinnerPartOfSpeech.adapter = spinnerAdapter
         spinnerFinishPartOfSpeech.adapter = spinnerAdapter
@@ -528,15 +528,19 @@ class WordFormationRuleActivity: AppCompatActivity()  {
             if(spinnerType.isVisible) attrs[Attributes.TYPE] = spinnerType.selectedItemPosition
             if(spinnerVoice.isVisible) attrs[Attributes.VOICE] = spinnerVoice.selectedItemPosition
 
-            regex =editMasc.text.toString()
-            description= editTextDescriptionRule.text.toString()
+            regex = editMasc.text.toString()
+            description = editTextDescriptionRule.text.toString()
 
             if(spinnerFinishGender.isVisible) finishAttrs[Attributes.GENDER] = spinnerFinishGender.selectedItemPosition
             if(spinnerFinishType.isVisible) finishAttrs[Attributes.TYPE] = spinnerFinishType.selectedItemPosition
             if(spinnerFinishVoice.isVisible) finishAttrs[Attributes.VOICE] = spinnerFinishVoice.selectedItemPosition
 
-            numberFront = editTextNumberFront.text.toString().toInt()
-            numberBack = editTextNumberBack.text.toString().toInt()
+            numberFront = if (editTextNumberFront.text.toString().isNotEmpty())
+                editTextNumberFront.text.toString().toInt()
+            else 0
+            numberBack = if (editTextNumberBack.text.toString().isNotEmpty())
+                editTextNumberBack.text.toString().toInt()
+            else 0
             addFront = editTextAddFront.text.toString()
             addBack = editTextAddBack.text.toString()
 

@@ -8,11 +8,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.SpinnerAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.StorageType
 import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.service.exception.FileWorkException
 
 class LoadLanguageActivity: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,9 +73,20 @@ class LoadLanguageActivity: AppCompatActivity(){
             Log.d("restore", accessible.toString())
             val path = editTextPath.text.toString()
             val pathPositionSpinner = spinnerPath.selectedItemPosition
+            if (pathPositionSpinner == Spinner.INVALID_POSITION) {
+                Toast.makeText(this, "Папка не выбрана, сохранение невозможно", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             Log.d("path", "${accessible[pathPositionSpinner]}//${path}")
-            languageDao.getLanguageFromFile("${accessible[pathPositionSpinner]}/${path}", this)
-
+            try {
+                languageDao.getLanguageFromFile("${accessible[pathPositionSpinner]}/${path}", this)
+            } catch (e: FileWorkException) {
+                Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            catch (_: Exception) {
+                return@setOnClickListener
+            }
             val intent = Intent(this, LanguageActivity::class.java)
             intent.putExtra("lang", languages.keys.toMutableList().last())
             startActivity(intent)

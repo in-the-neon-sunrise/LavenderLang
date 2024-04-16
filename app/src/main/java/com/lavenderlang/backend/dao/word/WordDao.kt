@@ -32,8 +32,8 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
 ) : WordDao {
     override fun updateWord(word: IWordEntity, newWord: String) {
         for (letter in newWord) {
-            if (!languages[word.languageId]!!.vowels.contains(letter) &&
-                !languages[word.languageId]!!.consonants.contains(letter)) {
+            if (!languages[word.languageId]!!.vowels.contains(letter.lowercase()) &&
+                !languages[word.languageId]!!.consonants.contains(letter.lowercase())) {
                 throw ForbiddenSymbolsException("Letter $letter is not in language")
             }
         }

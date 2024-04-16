@@ -46,8 +46,8 @@ class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepositor
     override fun updateTransformation(rule: WordFormationRuleEntity, newTransformation: TransformationEntity) {
         //check if rule is correct (letters in transformation are in language)
         for (letter in newTransformation.addToBeginning) {
-            if (!languages[rule.languageId]!!.vowels.contains(letter) &&
-                !languages[rule.languageId]!!.consonants.contains(letter)) {
+            if (!languages[rule.languageId]!!.vowels.contains(letter.lowercase()) &&
+                !languages[rule.languageId]!!.consonants.contains(letter.lowercase())) {
                 throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }

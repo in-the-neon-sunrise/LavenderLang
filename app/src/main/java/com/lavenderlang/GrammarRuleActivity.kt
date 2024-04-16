@@ -389,8 +389,12 @@ class GrammarRuleActivity: AppCompatActivity(){
 
             addBack=editTextAddBack.text.toString()
             addFront=editTextAddFront.text.toString()
-            numberBack=editTextNumberBack.text.toString().toInt()
-            numberFront=editTextNumberFront.text.toString().toInt()
+            numberFront = if (editTextNumberFront.text.toString().isNotEmpty())
+                editTextNumberFront.text.toString().toInt()
+            else 0
+            numberBack = if (editTextNumberBack.text.toString().isNotEmpty())
+                editTextNumberBack.text.toString().toInt()
+            else 0
 
             updateRule()
 

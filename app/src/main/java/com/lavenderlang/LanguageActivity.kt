@@ -14,6 +14,7 @@ import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.backend.service.exception.FileWorkException
 
 
 class LanguageActivity: AppCompatActivity() {
@@ -127,15 +128,27 @@ class LanguageActivity: AppCompatActivity() {
 
         val buttonFile: Button = findViewById(R.id.buttonFile)
         buttonFile.setOnClickListener {
+            try {
             LanguageDaoImpl().downloadLanguageJSON(languages[id_lang]!!,
                 MainActivity.getInstance().storageHelper,
                 MainActivity.getInstance().createJSONLauncher)
+            } catch (e: FileWorkException) {
+                Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+            }
+            catch (_: Exception) {
+            }
         }
         val buttonPDF: Button = findViewById(R.id.buttonPDF)
         buttonPDF.setOnClickListener {
+            try {
             LanguageDaoImpl().downloadLanguagePDF(languages[id_lang]!!,
                 MainActivity.getInstance().storageHelper,
                 MainActivity.getInstance().createPDFLauncher)
+            } catch (e: FileWorkException) {
+                Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+            }
+            catch (_: Exception) {
+            }
         }
 
     }

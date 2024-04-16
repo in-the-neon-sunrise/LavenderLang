@@ -8,11 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.anggrayudi.storage.SimpleStorageHelper
 import com.anggrayudi.storage.file.DocumentFileCompat
+import com.anggrayudi.storage.file.StorageType
 import com.anggrayudi.storage.file.openInputStream
 import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.*
+import com.lavenderlang.backend.service.exception.FileWorkException
 import com.lavenderlang.languages
 import com.lavenderlang.nextLanguageId
 import kotlinx.coroutines.Dispatchers
@@ -150,11 +152,14 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
                                       createDocumentResultLauncher: ActivityResultLauncher<String>) {
         val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MainActivity.getInstance())
         if (accessible.isEmpty()) {
-            Toast.makeText(MainActivity.getInstance(),
-                "Вы не дали приложению доступ к памяти телефона, сохранение невозможно.",
-                Toast.LENGTH_LONG).show()
-            Log.d("woof", "no access")
-            return
+            val requestCode = 123123
+            MainActivity.getInstance().storageHelper.requestStorageAccess(
+                requestCode,
+                null,
+                StorageType.EXTERNAL
+            )
+            if (accessible.isEmpty())
+                throw FileWorkException("Вы не дали приложению доступ к памяти телефона, сохранение невозможно")
         }
         curLanguage = language
         createDocumentResultLauncher.launch("${PdfWriterDaoImpl().translitName(language.name)}.json")
@@ -164,11 +169,14 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     override fun downloadLanguagePDF(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>) {
         val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MainActivity.getInstance())
         if (accessible.isEmpty()) {
-            Toast.makeText(MainActivity.getInstance(),
-                "Вы не дали приложению доступ к памяти телефона, сохранение невозможно",
-                Toast.LENGTH_LONG).show()
-            Log.d("woof", "no access")
-            return
+            val requestCode = 123123
+            MainActivity.getInstance().storageHelper.requestStorageAccess(
+                requestCode,
+                null,
+                StorageType.EXTERNAL
+            )
+            if (accessible.isEmpty())
+                throw FileWorkException("Вы не дали приложению доступ к памяти телефона, сохранение невозможно")
         }
         curLanguage = language
         createDocumentResultLauncher.launch("${PdfWriterDaoImpl().translitName(language.name)}.pdf")
@@ -180,8 +188,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         val context = MainActivity.getInstance()
         if (curLanguage == null) {
             Log.d("woof", "no language")
-            Toast.makeText(context, "Не удалось сохранить файл", Toast.LENGTH_LONG).show()
-            return
+            throw FileWorkException("Не удалось сохранить файл")
         }
         context.contentResolver.openOutputStream(uri)?.use { outputStream ->
             val writer = BufferedWriter(OutputStreamWriter(outputStream))
@@ -197,8 +204,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         val context = MainActivity.getInstance()
         if (curLanguage == null) {
             Log.d("woof", "no language")
-            Toast.makeText(context, "Не удалось сохранить файл", Toast.LENGTH_LONG).show()
-            return false
+            throw FileWorkException("Не удалось сохранить файл")
         }
         val language = curLanguage!!
         context.contentResolver.openOutputStream(uri)?.use { outputStream ->
