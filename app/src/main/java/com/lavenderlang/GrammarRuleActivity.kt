@@ -22,6 +22,7 @@ import com.lavenderlang.backend.entity.help.MascEntity
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.backend.service.exception.IncorrectRegexException
 
 class GrammarRuleActivity: AppCompatActivity(){
     companion object{
@@ -413,19 +414,18 @@ class GrammarRuleActivity: AppCompatActivity(){
             7->PartOfSpeech.NUMERAL
             else->PartOfSpeech.FUNC_PART
         }
-        var newMasc = MascEntity(
-            partOfSpeech, attrs, regex
-        )
-        //grammarRuleDao.updateMasc(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newMasc)
-
-        //grammarRuleDao.updateMutableAttrs(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], mutableAttrs)
-
-        var newTransformation = TransformationEntity(
-            numberFront, numberBack, addFront, addBack
-        )
-        //grammarRuleDao.updateTransformation(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newTransformation)
-
-        grammarRuleDao.updateRule(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newMasc, newTransformation, mutableAttrs)
+        try {
+            var newMasc = MascEntity( partOfSpeech, attrs, regex)
+            var newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
+            grammarRuleDao.updateRule(
+                languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule],
+                newMasc,
+                newTransformation,
+                mutableAttrs
+            )
+        }catch (e:IncorrectRegexException){
+            Toast.makeText(this@GrammarRuleActivity, e.message, Toast.LENGTH_LONG).show()
+        }
     }
     fun listenSpinners(){
 

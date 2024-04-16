@@ -2,9 +2,11 @@ package com.lavenderlang
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.SpinnerAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.StorageType
@@ -43,6 +45,11 @@ class LoadLanguageActivity: AppCompatActivity(){
                 accessible.add(path)
             }
         }
+        //эти 3 строчки обновляют список
+        val adapterPath: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item, accessible)
+        spinnerPath.adapter = adapterPath
+        adapterPath.notifyDataSetChanged()
+
 
         buttonFirst.setOnClickListener {
             val requestCode = 123123
