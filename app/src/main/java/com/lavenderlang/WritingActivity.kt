@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.LanguageActivity.Companion.languageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
@@ -16,6 +17,7 @@ import com.lavenderlang.backend.dao.language.WritingDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 
 class WritingActivity : AppCompatActivity() {
     companion object {
@@ -86,8 +88,12 @@ class WritingActivity : AppCompatActivity() {
 
         val buttonSave: Button = findViewById(R.id.buttonSave)
         buttonSave.setOnClickListener {
+            try{
             writingDao.changeVowels(languages[id_lang]!!, editTextVowels.text.toString())
             writingDao.changeConsonants(languages[id_lang]!!, editTextConsonants.text.toString())
+            }catch (e: ForbiddenSymbolsException){
+                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+            }
 
             if(checkBoxNoun.isChecked) writingDao.addCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.NOUN)
             else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.NOUN)

@@ -28,6 +28,7 @@ import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.entity.word.NounEntity
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 
 class WordActivity : AppCompatActivity() {
     companion object{
@@ -135,8 +136,14 @@ class WordActivity : AppCompatActivity() {
                 else-> PartOfSpeech.NOUN
             }
             updateAttrs()
-            wordDao.updateWord(languages[id_lang]!!.dictionary.dict[id_word], editConlangWord.text.toString(),
-                editRussianWord.text.toString(), immutableAttrs, partOfSpeech)
+            try {
+                wordDao.updateWord(
+                    languages[id_lang]!!.dictionary.dict[id_word], editConlangWord.text.toString(),
+                    editRussianWord.text.toString(), immutableAttrs, partOfSpeech
+                )
+            } catch (e: ForbiddenSymbolsException) {
+                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+            }
         }
         val buttonDelete: Button = findViewById(R.id.buttonDelete)
         buttonDelete.setOnClickListener {

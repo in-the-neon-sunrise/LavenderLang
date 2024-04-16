@@ -23,6 +23,8 @@ import com.lavenderlang.backend.entity.help.MascEntity
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.exception.IncorrectRegexException
 
 class WordFormationRuleActivity: AppCompatActivity()  {
     companion object {
@@ -559,22 +561,39 @@ class WordFormationRuleActivity: AppCompatActivity()  {
             7->PartOfSpeech.NUMERAL
             else->PartOfSpeech.FUNC_PART
         }
-        var newMasc = MascEntity( partOfSpeech, attrs, regex)
-        partOfSpeech=when(finishIdPartOfSpeech){
-            0->PartOfSpeech.NOUN
-            1->PartOfSpeech.VERB
-            2->PartOfSpeech.ADJECTIVE
-            3->PartOfSpeech.ADVERB
-            4->PartOfSpeech.PARTICIPLE
-            5->PartOfSpeech.VERB_PARTICIPLE
-            6->PartOfSpeech.PRONOUN
-            7->PartOfSpeech.NUMERAL
-            else->PartOfSpeech.FUNC_PART
-        }
-        var newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
+        try {
+            var newMasc = MascEntity(partOfSpeech, attrs, regex)
+            partOfSpeech = when (finishIdPartOfSpeech) {
+                0 -> PartOfSpeech.NOUN
+                1 -> PartOfSpeech.VERB
+                2 -> PartOfSpeech.ADJECTIVE
+                3 -> PartOfSpeech.ADVERB
+                4 -> PartOfSpeech.PARTICIPLE
+                5 -> PartOfSpeech.VERB_PARTICIPLE
+                6 -> PartOfSpeech.PRONOUN
+                7 -> PartOfSpeech.NUMERAL
+                else -> PartOfSpeech.FUNC_PART
+            }
+            var newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
 
-        wordFormationRuleDao.updateRule(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule], newMasc, newTransformation,
-            description, finishAttrs, partOfSpeech)
+            wordFormationRuleDao.updateRule(
+                languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule],
+                newMasc,
+                newTransformation,
+                description,
+                finishAttrs,
+                partOfSpeech
+            )
+        }
+        catch(e: IncorrectRegexException){
+            Toast.makeText(this@WordFormationRuleActivity, e.message, Toast.LENGTH_LONG).show()
+        }
+        catch (e: ForbiddenSymbolsException){
+            Toast.makeText(this@WordFormationRuleActivity, e.message, Toast.LENGTH_LONG).show()
+        }
+        catch (e:Exception){
+            Toast.makeText(this@WordFormationRuleActivity, "какая-то беда", Toast.LENGTH_LONG).show()
+        }
     }
     fun listenSpinners(){
         val spinnerGender: Spinner=findViewById(R.id.spinnerGender)
