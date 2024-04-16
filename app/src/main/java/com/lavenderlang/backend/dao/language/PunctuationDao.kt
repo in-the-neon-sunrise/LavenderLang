@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.language
 
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
@@ -21,9 +22,9 @@ class PunctuationDaoImpl(private val languageRepository: LanguageRepository = La
         if (language.languageId !in languages) return
         //check if symbol is in language
         for (letter in newSymbol) {
-            if (languages[language.languageId]!!.vowels.contains(newSymbol.lowercase()) ||
-                languages[language.languageId]!!.consonants.contains(newSymbol.lowercase())
-            ) throw ForbiddenSymbolsException("Symbol $newSymbol is in language!")
+            if (languages[language.languageId]!!.vowels.contains(letter.lowercase()) ||
+                languages[language.languageId]!!.consonants.contains(letter.lowercase())
+            ) throw ForbiddenSymbolsException("Буква $letter находится в алфавите языка!")
         }
         language.puncSymbols[language.puncSymbols.keys.toList()[id]] = newSymbol
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {

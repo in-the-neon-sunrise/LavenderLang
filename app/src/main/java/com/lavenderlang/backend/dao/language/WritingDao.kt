@@ -24,11 +24,11 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         for (letter in newLetters.lowercase()) {
             if (letter == ' ') continue
             if (language.consonants.contains(letter)) {
-                throw ForbiddenSymbolsException("Letter $letter is already in consonants")
+                throw ForbiddenSymbolsException("Буква $letter уже находится в согласных!")
             }
             for (ps in language.puncSymbols.values) {
-                if (ps.contains(letter)) {
-                    throw ForbiddenSymbolsException("Letter $letter is already in punctuation symbols")
+                if (ps.lowercase().contains(letter)) {
+                    throw ForbiddenSymbolsException("Буква $letter уже находится в символах пунктуации!")
                 }
             }
         }
@@ -45,11 +45,11 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         for (letter in newLetters.lowercase()) {
             if (letter == ' ') continue
             if (language.vowels.contains(letter)) {
-                throw ForbiddenSymbolsException("Letter $letter is already in vowels")
+                throw ForbiddenSymbolsException("Буква $letter уже находится в гласных!")
             }
             for (ps in language.puncSymbols.values) {
-                if (ps.contains(letter)) {
-                    throw ForbiddenSymbolsException("Letter $letter is already in punctuation symbols")
+                if (ps.lowercase().contains(letter)) {
+                    throw ForbiddenSymbolsException("Буква $letter уже находится в символах пунктуации!")
                 }
             }
         }

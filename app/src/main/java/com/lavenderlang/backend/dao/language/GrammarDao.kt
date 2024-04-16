@@ -113,13 +113,13 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         for (letter in rule.transformation.addToBeginning) {
             if (!languages[grammar.languageId]!!.vowels.contains(letter) &&
                 !languages[grammar.languageId]!!.consonants.contains(letter)) {
-                throw ForbiddenSymbolsException("Letter $letter is not in language")
+                throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }
         for (letter in rule.transformation.addToEnd) {
             if (!languages[grammar.languageId]!!.vowels.contains(letter) &&
                 !languages[grammar.languageId]!!.consonants.contains(letter)) {
-                throw ForbiddenSymbolsException("Letter $letter is not in language")
+                throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }
 

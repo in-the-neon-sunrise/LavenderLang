@@ -31,7 +31,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         for (letter in word.word) {
             if (!languages[dictionary.languageId]!!.vowels.contains(letter.lowercase()) &&
                 !languages[dictionary.languageId]!!.consonants.contains(letter.lowercase())) {
-                throw ForbiddenSymbolsException("Letter $letter is not in language")
+                throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }
         if (dictionary.dict.contains(word)) return

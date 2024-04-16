@@ -48,13 +48,13 @@ class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepositor
         for (letter in newTransformation.addToBeginning) {
             if (!languages[rule.languageId]!!.vowels.contains(letter) &&
                 !languages[rule.languageId]!!.consonants.contains(letter)) {
-                throw ForbiddenSymbolsException("Letter $letter is not in language")
+                throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }
         for (letter in newTransformation.addToEnd) {
             if (!languages[rule.languageId]!!.vowels.contains(letter) &&
                 !languages[rule.languageId]!!.consonants.contains(letter)) {
-                throw ForbiddenSymbolsException("Letter $letter is not in language")
+                throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }
         rule.transformation = newTransformation

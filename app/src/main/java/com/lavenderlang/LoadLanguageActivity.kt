@@ -71,7 +71,7 @@ class LoadLanguageActivity: AppCompatActivity(){
             Log.d("restore", accessible.toString())
             val path = editTextPath.text.toString()
             val pathPositionSpinner = spinnerPath.selectedItemPosition
-            Log.d("path", "${accessible[pathPositionSpinner]}\\${path}")
+            Log.d("path", "${accessible[pathPositionSpinner]}//${path}")
             languageDao.getLanguageFromFile("${accessible[pathPositionSpinner]}/${path}", this)
 
             val intent = Intent(this, LanguageActivity::class.java)
