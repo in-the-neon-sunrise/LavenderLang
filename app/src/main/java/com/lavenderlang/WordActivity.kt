@@ -3,6 +3,8 @@ package com.lavenderlang
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -119,7 +121,10 @@ class WordActivity : AppCompatActivity() {
         setPartOfSpeechListener()
 
         updateWordForms()
-        updateNewWords()
+        val buttonCreateWords: Button = findViewById(R.id.buttonCreateWords)
+        buttonCreateWords.setOnClickListener {
+            updateNewWords()
+        }
 
         val buttonUpdate: Button = findViewById(R.id.buttonSave)
         buttonUpdate.setOnClickListener {
@@ -385,9 +390,10 @@ class WordActivity : AppCompatActivity() {
     fun updateNewWords(){
         //list of new words
         val listViewNewWords : ListView = findViewById(R.id.listViewNewWords)
-        /*val adapter: ArrayAdapter<IWordEntity> = NewWordAdapter(this, )
-        listWordFormationRules.adapter = adapterWordFormationRules
-        adapterWordFormationRules.notifyDataSetChanged()*/
+        val list: MutableList<Pair<String, IWordEntity>> = dictionaryDao.createWordsFromExisting(languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word])
+        val adapter: ArrayAdapter<Pair<String, IWordEntity>> = NewWordAdapter(this, list)
+        listViewNewWords.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
     override fun finish(){
         val data = Intent()
@@ -398,15 +404,17 @@ class WordActivity : AppCompatActivity() {
     }
 }
 
-private class NewWordAdapter(context: Context, listOfWords: MutableList<IWordEntity>) :
-    ArrayAdapter<IWordEntity>(context, R.layout.new_word_line_activity, listOfWords) {
+private class NewWordAdapter(context: Context, listOfWords: MutableList<Pair<String, IWordEntity>>) :
+    ArrayAdapter<Pair<String, IWordEntity>>(context, R.layout.new_word_line_activity, listOfWords) {
     companion object{
         val wordFormationRuleDao: WordFormationRuleDao = WordFormationRuleDaoImpl()
+        val dictionaryDao: DictionaryDao = DictionaryDaoImpl()
     }
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var newView = convertView
-        val word: IWordEntity? = getItem(position)
+        val description: String = getItem(position)!!.first
+        val word: IWordEntity = getItem(position)!!.second
         if (newView == null) {
             newView = LayoutInflater.from(context).inflate(R.layout.new_word_line_activity, null)
         }
@@ -417,6 +425,19 @@ private class NewWordAdapter(context: Context, listOfWords: MutableList<IWordEnt
         val editTextRussianWord: EditText = newView.findViewById(R.id.editTextRussianWord)
         val buttonSave: Button = newView.findViewById(R.id.buttonSave)
 
+        textViewDescription.text = description
+        textViewConlangWord.text = word.word
+        editTextRussianWord.setText(word.translation)
+        buttonSave.tag = position
+        buttonSave.setOnClickListener {
+            if(position == buttonSave.tag){
+                try {
+                    dictionaryDao.addWord(languages[WordActivity.id_lang]!!.dictionary, word)
+                } catch (e: ForbiddenSymbolsException) {
+                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         return newView
     }
