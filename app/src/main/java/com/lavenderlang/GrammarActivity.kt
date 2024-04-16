@@ -96,14 +96,14 @@ class GrammarActivity: AppCompatActivity() {
 
         val buttonSave: Button = findViewById(R.id.buttonSave)
         buttonSave.setOnClickListener {
-            var name = ""
-            var rusId = 0
+            var name: String
+            var rusId: Int
             Toast.makeText(this, genderNames.toString(), Toast.LENGTH_SHORT).show()
-            for(i in 0..languages[id_lang]!!.grammar.varsGender.values.size-1) {
+            for(i in 0..<languages[id_lang]!!.grammar.varsGender.values.size) {
                 name = genderNames[i]
                 rusId= genderRusIds[i]
                 grammarDao.updateOption(languages[id_lang]!!.grammar, i,
-                     CharacteristicEntity(id_lang, i, Attributes.GENDER, name, rusId))
+                    CharacteristicEntity(i, Attributes.GENDER, name, rusId))
             }
         }
     }
@@ -163,7 +163,7 @@ class GrammarActivity: AppCompatActivity() {
 
         val buttonNewGender: Button = findViewById(R.id.buttonNewGender)
         buttonNewGender.setOnClickListener {
-            val newGender = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.GENDER]?: 0, Attributes.GENDER)
+            val newGender = CharacteristicEntity(languages[id_lang]!!.grammar.nextIds[Attributes.GENDER]?: 0, Attributes.GENDER)
             grammarDao.addOption(languages[id_lang]!!.grammar, newGender)
             genderNames.add("")
             genderRusIds.add(0)
@@ -178,7 +178,7 @@ class GrammarActivity: AppCompatActivity() {
 
         val buttonNewNumber: Button = findViewById(R.id.buttonNewNumber)
         buttonNewNumber.setOnClickListener {
-            val newNumber = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.NUMBER]?: 0, Attributes.NUMBER)
+            val newNumber = CharacteristicEntity(languages[id_lang]!!.grammar.nextIds[Attributes.NUMBER]?: 0, Attributes.NUMBER)
             grammarDao.addOption(languages[id_lang]!!.grammar, newNumber)
             numberNames.add("")
             numberRusIds.add(0)
@@ -193,7 +193,7 @@ class GrammarActivity: AppCompatActivity() {
 
         val buttonNewCase: Button = findViewById(R.id.buttonNewCase)
         buttonNewCase.setOnClickListener {
-            val newCase = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.CASE]?: 0, Attributes.CASE)
+            val newCase = CharacteristicEntity(languages[id_lang]!!.grammar.nextIds[Attributes.CASE]?: 0, Attributes.CASE)
             grammarDao.addOption(languages[id_lang]!!.grammar, newCase)
             caseNames.add("")
             caseRusIds.add(0)
@@ -208,7 +208,7 @@ class GrammarActivity: AppCompatActivity() {
 
         val buttonNewTime: Button = findViewById(R.id.buttonNewTime)
         buttonNewTime.setOnClickListener {
-            val newTime = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.TIME]?: 0, Attributes.TIME)
+            val newTime = CharacteristicEntity(languages[id_lang]!!.grammar.nextIds[Attributes.TIME]?: 0, Attributes.TIME)
             grammarDao.addOption(languages[id_lang]!!.grammar, newTime)
             timeNames.add("")
             timeRusIds.add(0)
@@ -223,7 +223,7 @@ class GrammarActivity: AppCompatActivity() {
 
         val buttonNewPerson: Button = findViewById(R.id.buttonNewPerson)
         buttonNewPerson.setOnClickListener {
-            val newPerson = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.PERSON]?: 0, Attributes.PERSON)
+            val newPerson = CharacteristicEntity(languages[id_lang]!!.grammar.nextIds[Attributes.PERSON]?: 0, Attributes.PERSON)
             grammarDao.addOption(languages[id_lang]!!.grammar, newPerson)
             personNames.add("")
             personRusIds.add(0)
@@ -238,7 +238,7 @@ class GrammarActivity: AppCompatActivity() {
 
         val buttonNewMood: Button = findViewById(R.id.buttonNewMood)
         buttonNewMood.setOnClickListener {
-            val newMood = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.MOOD]?: 0, Attributes.MOOD)
+            val newMood = CharacteristicEntity(languages[id_lang]!!.grammar.nextIds[Attributes.MOOD]?: 0, Attributes.MOOD)
             grammarDao.addOption(languages[id_lang]!!.grammar, newMood)
             moodNames.add("")
             moodRusIds.add(0)
@@ -253,7 +253,7 @@ class GrammarActivity: AppCompatActivity() {
 
         val buttonNewType: Button = findViewById(R.id.buttonNewType)
         buttonNewType.setOnClickListener {
-            val newType = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.TYPE]?: 0, Attributes.TYPE)
+            val newType = CharacteristicEntity(languages[id_lang]!!.grammar.nextIds[Attributes.TYPE]?: 0, Attributes.TYPE)
             grammarDao.addOption(languages[id_lang]!!.grammar, newType)
             typeNames.add("")
             typeRusIds.add(0)
@@ -268,7 +268,7 @@ class GrammarActivity: AppCompatActivity() {
 
         val buttonNewVoice: Button = findViewById(R.id.buttonNewVoice)
         buttonNewVoice.setOnClickListener {
-            val newVoice = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.VOICE]?: 0, Attributes.VOICE)
+            val newVoice = CharacteristicEntity(languages[id_lang]!!.grammar.nextIds[Attributes.VOICE]?: 0, Attributes.VOICE)
             grammarDao.addOption(languages[id_lang]!!.grammar, newVoice)
             voiceNames.add("")
             voiceRusIds.add(0)
@@ -283,7 +283,7 @@ class GrammarActivity: AppCompatActivity() {
 
         val buttonNewDegreeOfComparison: Button = findViewById(R.id.buttonNewDegreeOfComparison)
         buttonNewDegreeOfComparison.setOnClickListener {
-            val newDegreeOfComparison = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.DEGREE_OF_COMPARISON]?: 0, Attributes.DEGREE_OF_COMPARISON)
+            val newDegreeOfComparison = CharacteristicEntity(languages[id_lang]!!.grammar.nextIds[Attributes.DEGREE_OF_COMPARISON]?: 0, Attributes.DEGREE_OF_COMPARISON)
             grammarDao.addOption(languages[id_lang]!!.grammar, newDegreeOfComparison)
             degreeOfComparisonNames.add("")
             degreeOfComparisonRusIds.add(0)
@@ -640,9 +640,9 @@ private class GrammarRuleAdapter(context: Context, listOfRules: MutableList<Gram
         val grammarRuleDao: GrammarRuleDao = GrammarRuleDaoImpl()
         //textview is visible
         val unchangeableAttributes: TextView = newView!!.findViewById(R.id.textViewUnchangeableAttributes)
-        val changeableAttributes: TextView = newView!!.findViewById(R.id.textViewChangeableAttributes)
+        val changeableAttributes: TextView = newView.findViewById(R.id.textViewChangeableAttributes)
         unchangeableAttributes.text = grammarRuleDao.getOrigInfo(grammarRule!!)
-        changeableAttributes.text = grammarRuleDao.getResultInfo(grammarRule!!)
+        changeableAttributes.text = grammarRuleDao.getResultInfo(grammarRule)
 
         return newView
     }

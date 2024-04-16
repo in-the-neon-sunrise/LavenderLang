@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 interface DictionaryDao {
     fun addWord(dictionary: DictionaryEntity, word : IWordEntity)
     fun deleteWord(dictionary: DictionaryEntity, word : IWordEntity)
-    fun createWordsFromExisting(dictionary: DictionaryEntity, word : IWordEntity) : ArrayList<IWordEntity>
+    fun createWordsFromExisting(dictionary: DictionaryEntity, word : IWordEntity) : ArrayList<Pair<String, IWordEntity>>
     fun filterDictByPartOfSpeech(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : ArrayList<IWordEntity>
     fun sortDictByWord(dictionary: DictionaryEntity) : ArrayList<IWordEntity>
     fun sortDictByTranslation(dictionary: DictionaryEntity) : ArrayList<IWordEntity>
@@ -28,13 +28,13 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
     private val languageRepository: LanguageRepository = LanguageRepository()
 ) : DictionaryDao {
     override fun addWord(dictionary: DictionaryEntity, word: IWordEntity) {
-        word.word = word.word.lowercase()
         for (letter in word.word) {
-            if (!languages[dictionary.languageId]!!.vowels.contains(letter) &&
-                !languages[dictionary.languageId]!!.consonants.contains(letter)) {
+            if (!languages[dictionary.languageId]!!.vowels.contains(letter.lowercase()) &&
+                !languages[dictionary.languageId]!!.consonants.contains(letter.lowercase())) {
                 throw ForbiddenSymbolsException("Letter $letter is not in language")
             }
         }
+        if (dictionary.dict.contains(word)) return
         dictionary.dict.add(word)
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.addMadeByWord(dictionary, word)
@@ -54,20 +54,18 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
                 Serializer.getInstance().serializeDictionary(dictionary)
             )
         }
-
     }
 
-    override fun createWordsFromExisting(dictionary: DictionaryEntity, word: IWordEntity): ArrayList<IWordEntity> {
+    override fun createWordsFromExisting(dictionary: DictionaryEntity, word: IWordEntity): ArrayList<Pair<String, IWordEntity>> {
         if (dictionary.languageId !in languages) return arrayListOf()
-        val possibleWords: ArrayList<IWordEntity> = arrayListOf()
+        val possibleWords: ArrayList<Pair<String, IWordEntity>> = arrayListOf()
         val wfrHandler = WordFormationRuleDaoImpl()
         val mascHandler = MascDaoImpl()
         for (rule in languages[dictionary.languageId]!!.grammar.wordFormationRules) {
             if (!mascHandler.fits(rule.masc, word)) continue
             val posWord = wfrHandler.wordFormationTransformByRule(word, rule)
             if (dictionary.fullDict.containsKey("${posWord.word} ${posWord.translation}")) continue
-            possibleWords.add(posWord)
-            addWord(dictionary, posWord)
+            possibleWords.add(Pair(rule.description, posWord))
         }
         return possibleWords
     }
