@@ -65,6 +65,8 @@ class GrammarActivity: AppCompatActivity() {
         var voiceRusIds: MutableList<Int> = mutableListOf()
         var degreeOfComparisonNames: MutableList<String> = mutableListOf()
         var degreeOfComparisonRusIds: MutableList<Int> = mutableListOf()
+
+        var isFirst: Boolean = false
     }
     private lateinit var adapterGender: AttributeAdapter
     private lateinit var adapterNumber: ArrayAdapter<CharacteristicEntity>
@@ -392,18 +394,21 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
         if (newView == null) {
             newView = LayoutInflater.from(context).inflate(R.layout.characteristic_line_activity, null)
         }
+
+        GrammarActivity.isFirst = true
         var editTextName: EditText = newView!!.findViewById(R.id.editTextNameAttribute)
         val spinnerRus: Spinner = newView.findViewById(R.id.spinnerRusAttribute)
 
         //edittext is visible
         (editTextName as TextView).text = attribute!!.name
         editTextName.tag = positionAttribute
+        GrammarActivity.isFirst = false
 
         editTextName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                if(GrammarActivity.isFirst)return
                 val updatedText = s.toString()
                 val editTextTag = editTextName.tag
-                Log.d("FuckingNames", editTextTag.toString()+updatedText)
                 if (positionAttribute == editTextTag as Int) {
                     when (idAttribute) {
                         0 -> {
@@ -455,8 +460,7 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
 
                         else -> {
                             if (GrammarActivity.degreeOfComparisonNames[positionAttribute] != updatedText) {
-                                GrammarActivity.degreeOfComparisonNames[positionAttribute] =
-                                    updatedText
+                                GrammarActivity.degreeOfComparisonNames[positionAttribute] = updatedText
                             }
                         }
                     }
