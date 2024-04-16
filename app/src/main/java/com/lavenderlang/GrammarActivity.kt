@@ -3,6 +3,9 @@ package com.lavenderlang
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +20,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.GrammarActivity.Companion.id_lang
 import com.lavenderlang.GrammarActivity.Companion.grammarDao
-import com.lavenderlang.GrammarActivity.Companion.id_lang
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDao
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
@@ -44,6 +46,25 @@ class GrammarActivity: AppCompatActivity() {
         var type:MutableList<CharacteristicEntity> = grammar.varsType.values.toMutableList()
         var voice:MutableList<CharacteristicEntity> = grammar.varsVoice.values.toMutableList()
         var degreeOfComparison:MutableList<CharacteristicEntity> = grammar.varsDegreeOfComparison.values.toMutableList()
+
+        var genderNames: MutableList<String> = mutableListOf()
+        var genderRusIds: MutableList<Int> = mutableListOf()
+        var numberNames: MutableList<String> = mutableListOf()
+        var numberRusIds: MutableList<Int> = mutableListOf()
+        var caseNames: MutableList<String> = mutableListOf()
+        var caseRusIds: MutableList<Int> = mutableListOf()
+        var timeNames: MutableList<String> = mutableListOf()
+        var timeRusIds: MutableList<Int> = mutableListOf()
+        var personNames: MutableList<String> = mutableListOf()
+        var personRusIds: MutableList<Int> = mutableListOf()
+        var moodNames: MutableList<String> = mutableListOf()
+        var moodRusIds: MutableList<Int> = mutableListOf()
+        var typeNames: MutableList<String> = mutableListOf()
+        var typeRusIds: MutableList<Int> = mutableListOf()
+        var voiceNames: MutableList<String> = mutableListOf()
+        var voiceRusIds: MutableList<Int> = mutableListOf()
+        var degreeOfComparisonNames: MutableList<String> = mutableListOf()
+        var degreeOfComparisonRusIds: MutableList<Int> = mutableListOf()
     }
     private lateinit var adapterGender: AttributeAdapter
     private lateinit var adapterNumber: ArrayAdapter<CharacteristicEntity>
@@ -75,14 +96,13 @@ class GrammarActivity: AppCompatActivity() {
         buttonSave.setOnClickListener {
             var name = ""
             var rusId = 0
-            /*for(i in 0..languages[id_lang]!!.grammar.varsGender.values.size-1) {
-                name = adapterGender.getItem(i)!!.name
-                name = adapterGender.getCurrentName(i)
-                rusId= adapterGender.getCurrentRussianId(i)
+            Toast.makeText(this, genderNames.toString(), Toast.LENGTH_SHORT).show()
+            for(i in 0..languages[id_lang]!!.grammar.varsGender.values.size-1) {
+                name = genderNames[i]
+                rusId= genderRusIds[i]
                 grammarDao.updateOption(languages[id_lang]!!.grammar, i,
                      CharacteristicEntity(id_lang, i, Attributes.GENDER, name, rusId))
-                Toast.makeText(this, name+rusId.toString(), Toast.LENGTH_SHORT).show()
-            }*/
+            }
         }
     }
 
@@ -103,8 +123,6 @@ class GrammarActivity: AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        Toast.makeText(this, languages[id_lang]!!.grammar.varsGender.values.toMutableList().toString(), Toast.LENGTH_SHORT).show()
-
         gender = languages[id_lang]!!.grammar.varsGender.values.toMutableList()
         number = languages[id_lang]!!.grammar.varsNumber.values.toMutableList()
         case = languages[id_lang]!!.grammar.varsCase.values.toMutableList()
@@ -114,6 +132,26 @@ class GrammarActivity: AppCompatActivity() {
         type = languages[id_lang]!!.grammar.varsType.values.toMutableList()
         voice = languages[id_lang]!!.grammar.varsVoice.values.toMutableList()
         degreeOfComparison = languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()
+
+        genderNames = languages[id_lang]!!.grammar.varsGender.values.toMutableList().map { it.name }.toMutableList()
+        numberNames = languages[id_lang]!!.grammar.varsNumber.values.toMutableList().map { it.name }.toMutableList()
+        caseNames = languages[id_lang]!!.grammar.varsCase.values.toMutableList().map { it.name }.toMutableList()
+        timeNames = languages[id_lang]!!.grammar.varsTime.values.toMutableList().map { it.name }.toMutableList()
+        personNames = languages[id_lang]!!.grammar.varsPerson.values.toMutableList().map { it.name }.toMutableList()
+        moodNames = languages[id_lang]!!.grammar.varsMood.values.toMutableList().map { it.name }.toMutableList()
+        typeNames = languages[id_lang]!!.grammar.varsType.values.toMutableList().map { it.name }.toMutableList()
+        voiceNames = languages[id_lang]!!.grammar.varsVoice.values.toMutableList().map { it.name }.toMutableList()
+        degreeOfComparisonNames = languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList().map { it.name }.toMutableList()
+
+        genderRusIds = languages[id_lang]!!.grammar.varsGender.values.toMutableList().map { it.russianId }.toMutableList()
+        numberRusIds = languages[id_lang]!!.grammar.varsNumber.values.toMutableList().map { it.russianId }.toMutableList()
+        caseRusIds = languages[id_lang]!!.grammar.varsCase.values.toMutableList().map { it.russianId }.toMutableList()
+        timeRusIds = languages[id_lang]!!.grammar.varsTime.values.toMutableList().map { it.russianId }.toMutableList()
+        personRusIds = languages[id_lang]!!.grammar.varsPerson.values.toMutableList().map { it.russianId }.toMutableList()
+        moodRusIds = languages[id_lang]!!.grammar.varsMood.values.toMutableList().map { it.russianId }.toMutableList()
+        typeRusIds = languages[id_lang]!!.grammar.varsType.values.toMutableList().map { it.russianId }.toMutableList()
+        voiceRusIds = languages[id_lang]!!.grammar.varsVoice.values.toMutableList().map { it.russianId }.toMutableList()
+        degreeOfComparisonRusIds = languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList().map { it.russianId }.toMutableList()
 
         //list of genders
         val listGender : ListView = findViewById(R.id.listViewGender)
@@ -125,6 +163,8 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewGender.setOnClickListener {
             val newGender = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.GENDER]?: 0, Attributes.GENDER)
             grammarDao.addOption(languages[id_lang]!!.grammar, newGender)
+            genderNames.add("")
+            genderRusIds.add(0)
             updateAdapter(0)
         }
 
@@ -138,6 +178,8 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewNumber.setOnClickListener {
             val newNumber = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.NUMBER]?: 0, Attributes.NUMBER)
             grammarDao.addOption(languages[id_lang]!!.grammar, newNumber)
+            numberNames.add("")
+            numberRusIds.add(0)
             updateAdapter(1)
         }
 
@@ -151,6 +193,8 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewCase.setOnClickListener {
             val newCase = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.CASE]?: 0, Attributes.CASE)
             grammarDao.addOption(languages[id_lang]!!.grammar, newCase)
+            caseNames.add("")
+            caseRusIds.add(0)
             updateAdapter(2)
         }
 
@@ -164,6 +208,8 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewTime.setOnClickListener {
             val newTime = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.TIME]?: 0, Attributes.TIME)
             grammarDao.addOption(languages[id_lang]!!.grammar, newTime)
+            timeNames.add("")
+            timeRusIds.add(0)
             updateAdapter(3)
         }
 
@@ -177,6 +223,8 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewPerson.setOnClickListener {
             val newPerson = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.PERSON]?: 0, Attributes.PERSON)
             grammarDao.addOption(languages[id_lang]!!.grammar, newPerson)
+            personNames.add("")
+            personRusIds.add(0)
             updateAdapter(4)
         }
 
@@ -190,6 +238,8 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewMood.setOnClickListener {
             val newMood = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.MOOD]?: 0, Attributes.MOOD)
             grammarDao.addOption(languages[id_lang]!!.grammar, newMood)
+            moodNames.add("")
+            moodRusIds.add(0)
             updateAdapter(5)
         }
 
@@ -203,6 +253,8 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewType.setOnClickListener {
             val newType = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.TYPE]?: 0, Attributes.TYPE)
             grammarDao.addOption(languages[id_lang]!!.grammar, newType)
+            typeNames.add("")
+            typeRusIds.add(0)
             updateAdapter(6)
         }
 
@@ -216,6 +268,8 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewVoice.setOnClickListener {
             val newVoice = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.VOICE]?: 0, Attributes.VOICE)
             grammarDao.addOption(languages[id_lang]!!.grammar, newVoice)
+            voiceNames.add("")
+            voiceRusIds.add(0)
             updateAdapter(7)
         }
 
@@ -229,6 +283,8 @@ class GrammarActivity: AppCompatActivity() {
         buttonNewDegreeOfComparison.setOnClickListener {
             val newDegreeOfComparison = CharacteristicEntity(languages.keys.toMutableList()[id_lang], languages[id_lang]!!.grammar.nextIds[Attributes.DEGREE_OF_COMPARISON]?: 0, Attributes.DEGREE_OF_COMPARISON)
             grammarDao.addOption(languages[id_lang]!!.grammar, newDegreeOfComparison)
+            degreeOfComparisonNames.add("")
+            degreeOfComparisonRusIds.add(0)
             updateAdapter(8)
         }
 
@@ -257,10 +313,6 @@ class GrammarActivity: AppCompatActivity() {
 
                 startActivity(intent)
             }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
     fun updateAdapter(idCharacteristic: Int) {
         when(idCharacteristic){
@@ -332,6 +384,7 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
     ArrayAdapter<CharacteristicEntity>(context, R.layout.characteristic_line_activity, listOfAttributes) {
 
     var idAttribute = idListAttribute
+
     override fun getView(positionAttribute: Int, convertView: View?, parent: ViewGroup): View {
 
         var newView = convertView
@@ -339,119 +392,79 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
         if (newView == null) {
             newView = LayoutInflater.from(context).inflate(R.layout.characteristic_line_activity, null)
         }
-        if(idAttribute==0){
-            Toast.makeText(context, "gender $positionAttribute", Toast.LENGTH_SHORT).show()
-        }
         var editTextName: EditText = newView!!.findViewById(R.id.editTextNameAttribute)
         val spinnerRus: Spinner = newView.findViewById(R.id.spinnerRusAttribute)
-        if (false) {
-            when(idAttribute){
-                0->{
-                    grammarDao.updateOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].characteristicId,
-                        CharacteristicEntity(
-                            GrammarActivity.Companion.id_lang,
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].characteristicId,
-                            Attributes.GENDER, editTextName.text.toString(),
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].russianId))
-
-                    languages[GrammarActivity.Companion.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
-
-                }
-                1->{
-                    grammarDao.updateOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].characteristicId,
-                        CharacteristicEntity(
-                            GrammarActivity.Companion.id_lang,
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].characteristicId,
-                            Attributes.NUMBER, editTextName.text.toString(),
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].russianId))
-
-                    languages[GrammarActivity.Companion.id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
-                }
-                2->{
-                    grammarDao.updateOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].characteristicId,
-                        CharacteristicEntity(
-                            GrammarActivity.Companion.id_lang,
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].characteristicId,
-                            Attributes.CASE, editTextName.text.toString(),
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].russianId))
-
-                    languages[GrammarActivity.Companion.id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
-                }
-                3->{
-                    grammarDao.updateOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].characteristicId,
-                        CharacteristicEntity(
-                            GrammarActivity.Companion.id_lang,
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].characteristicId,
-                            Attributes.TIME, editTextName.text.toString(),
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].russianId))
-
-                    languages[GrammarActivity.Companion.id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
-                }
-                4->{
-                    grammarDao.updateOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].characteristicId,
-                        CharacteristicEntity(
-                            GrammarActivity.Companion.id_lang,
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].characteristicId,
-                            Attributes.PERSON, editTextName.text.toString(),
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].russianId))
-
-                    languages[GrammarActivity.Companion.id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
-                }
-                5->{
-                    grammarDao.updateOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].characteristicId,
-                        CharacteristicEntity(
-                            GrammarActivity.Companion.id_lang,
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].characteristicId,
-                            Attributes.MOOD, editTextName.text.toString(),
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].russianId))
-
-                    languages[GrammarActivity.Companion.id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
-                }
-                6-> {
-                    grammarDao.updateOption(
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].characteristicId,
-                        CharacteristicEntity(
-                            GrammarActivity.Companion.id_lang,
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].characteristicId,
-                            Attributes.TYPE, editTextName.text.toString(),
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].russianId))
-
-                    languages[GrammarActivity.Companion.id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
-                }
-                7->{grammarDao.updateOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                    languages[GrammarActivity.Companion.id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].characteristicId,
-                    CharacteristicEntity(
-                        GrammarActivity.Companion.id_lang,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].characteristicId,
-                        Attributes.VOICE, editTextName.text.toString(),
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].russianId))
-
-                    languages[GrammarActivity.Companion.id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
-                }
-                else->{
-                    grammarDao.updateOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].characteristicId,
-                        CharacteristicEntity(
-                            GrammarActivity.Companion.id_lang,
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].characteristicId,
-                            Attributes.DEGREE_OF_COMPARISON, editTextName.text.toString(),
-                            languages[GrammarActivity.Companion.id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].russianId))
-
-                    languages[GrammarActivity.Companion.id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute].russianId=spinnerRus.selectedItemPosition;
-                }
-            }
-        }
 
         //edittext is visible
         (editTextName as TextView).text = attribute!!.name
+        editTextName.tag = positionAttribute
 
+        editTextName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val updatedText = s.toString()
+                val editTextTag = editTextName.tag
+                Log.d("FuckingNames", editTextTag.toString()+updatedText)
+                if (positionAttribute == editTextTag as Int) {
+                    when (idAttribute) {
+                        0 -> {
+
+                            GrammarActivity.genderNames[positionAttribute] = updatedText
+                        }
+
+                        1 -> {
+                            if (GrammarActivity.numberNames[positionAttribute] != updatedText) {
+                                GrammarActivity.numberNames[positionAttribute] = updatedText
+                            }
+                        }
+
+                        2 -> {
+                            if (GrammarActivity.caseNames[positionAttribute] != updatedText) {
+                                GrammarActivity.caseNames[positionAttribute] = updatedText
+                            }
+                        }
+
+                        3 -> {
+                            if (GrammarActivity.timeNames[positionAttribute] != updatedText) {
+                                GrammarActivity.timeNames[positionAttribute] = updatedText
+                            }
+                        }
+
+                        4 -> {
+                            if (GrammarActivity.personNames[positionAttribute] != updatedText) {
+                                GrammarActivity.personNames[positionAttribute] = updatedText
+                            }
+                        }
+
+                        5 -> {
+                            if (GrammarActivity.moodNames[positionAttribute] != updatedText) {
+                                GrammarActivity.moodNames[positionAttribute] = updatedText
+                            }
+                        }
+
+                        6 -> {
+                            if (GrammarActivity.typeNames[positionAttribute] != updatedText) {
+                                GrammarActivity.typeNames[positionAttribute] = updatedText
+                            }
+                        }
+
+                        7 -> {
+                            if (GrammarActivity.voiceNames[positionAttribute] != updatedText) {
+                                GrammarActivity.voiceNames[positionAttribute] = updatedText
+                            }
+                        }
+
+                        else -> {
+                            if (GrammarActivity.degreeOfComparisonNames[positionAttribute] != updatedText) {
+                                GrammarActivity.degreeOfComparisonNames[positionAttribute] =
+                                    updatedText
+                            }
+                        }
+                    }
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
         //spinner is working
         val spinnerAdapter: ArrayAdapter<String>
         when(idAttribute){
@@ -482,13 +495,51 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
             else->{
                 spinnerAdapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, rusDegreeOfComparison)
             }
-
         }
         spinnerRus.adapter = spinnerAdapter
         spinnerAdapter.notifyDataSetChanged()
-
         spinnerRus.setSelection(attribute.russianId)
 
+        spinnerRus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (idAttribute) {
+                    0 -> {
+                        GrammarActivity.genderRusIds[positionAttribute] = position
+                    }
+                    1 -> {
+                        GrammarActivity.numberRusIds[positionAttribute] = position
+                    }
+                    2 -> {
+                        GrammarActivity.caseRusIds[positionAttribute] = position
+                    }
+                    3 -> {
+                        GrammarActivity.timeRusIds[positionAttribute] = position
+                    }
+                    4 -> {
+                        GrammarActivity.personRusIds[positionAttribute] = position
+                    }
+                    5 -> {
+                        GrammarActivity.moodRusIds[positionAttribute] = position
+                    }
+                    6 -> {
+                        GrammarActivity.typeRusIds[positionAttribute] = position
+                    }
+                    7 -> {
+                        GrammarActivity.voiceRusIds[positionAttribute] = position
+                    }
+                    else -> {
+                        GrammarActivity.degreeOfComparisonRusIds[positionAttribute] = position
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
         //button del is working
         val buttonDel: Button = newView.findViewById(R.id.buttonDel)
         if(positionAttribute==0){
@@ -503,46 +554,64 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
                 0->{
                     grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
                         languages[GrammarActivity.Companion.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute])
+                    GrammarActivity.genderNames.removeAt(positionAttribute)
+                    GrammarActivity.genderRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 1->{
                     grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
                         languages[GrammarActivity.Companion.id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute])
+                    GrammarActivity.numberNames.removeAt(positionAttribute)
+                    GrammarActivity.numberRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 2->{
                     grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
                         languages[GrammarActivity.Companion.id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute])
+                    GrammarActivity.caseNames.removeAt(positionAttribute)
+                    GrammarActivity.caseRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 3->{
                     grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
                         languages[GrammarActivity.Companion.id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute])
+                    GrammarActivity.timeNames.removeAt(positionAttribute)
+                    GrammarActivity.timeRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 4-> {
                     grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
                         languages[GrammarActivity.Companion.id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute])
+                    GrammarActivity.personNames.removeAt(positionAttribute)
+                    GrammarActivity.personRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 5->{
                     grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
                         languages[GrammarActivity.Companion.id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute])
+                    GrammarActivity.moodNames.removeAt(positionAttribute)
+                    GrammarActivity.moodRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 6-> {
                     grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
                         languages[GrammarActivity.Companion.id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute])
+                    GrammarActivity.typeNames.removeAt(positionAttribute)
+                    GrammarActivity.typeRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 7->{
                     grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
                         languages[GrammarActivity.Companion.id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute])
+                    GrammarActivity.voiceNames.removeAt(positionAttribute)
+                    GrammarActivity.voiceRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 else-> {
                     grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
                         languages[GrammarActivity.Companion.id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute])
+                    GrammarActivity.degreeOfComparisonNames.removeAt(positionAttribute)
+                    GrammarActivity.degreeOfComparisonRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
             }
