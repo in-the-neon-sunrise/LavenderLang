@@ -127,11 +127,15 @@ class LanguageActivity: AppCompatActivity() {
 
         val buttonFile: Button = findViewById(R.id.buttonFile)
         buttonFile.setOnClickListener {
-            //скачать файл
+            LanguageDaoImpl().downloadLanguageJSON(languages[id_lang]!!,
+                MainActivity.getInstance().storageHelper,
+                MainActivity.getInstance().createJSONLauncher)
         }
         val buttonPDF: Button = findViewById(R.id.buttonPDF)
         buttonPDF.setOnClickListener {
-            //скачать pdf
+            LanguageDaoImpl().downloadLanguagePDF(languages[id_lang]!!,
+                MainActivity.getInstance().storageHelper,
+                MainActivity.getInstance().createPDFLauncher)
         }
 
     }

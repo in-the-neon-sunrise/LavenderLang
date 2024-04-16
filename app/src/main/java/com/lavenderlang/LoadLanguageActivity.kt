@@ -6,6 +6,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import com.anggrayudi.storage.file.DocumentFileCompat
+import com.anggrayudi.storage.file.StorageType
 import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 
@@ -34,14 +36,26 @@ class LoadLanguageActivity: AppCompatActivity(){
         val editTextPath: EditText = findViewById(R.id.editTextPath)
         val buttonOpen: Button = findViewById(R.id.buttonOpen)
         val languageDao: LanguageDao = LanguageDaoImpl()
+        val accessible = arrayListOf<String>()
+        val accessiblePathsRaw = DocumentFileCompat.getAccessibleAbsolutePaths(this)
+        for (key in  accessiblePathsRaw.keys) {
+            for (path in accessiblePathsRaw[key]!!) {
+                accessible.add(path)
+            }
+        }
 
         buttonFirst.setOnClickListener {
-            //что-то сделать
+            val requestCode = 123123
+            MainActivity.getInstance().storageHelper.requestStorageAccess(
+                requestCode,
+                null,
+                StorageType.EXTERNAL
+            )
         }
         buttonOpen.setOnClickListener {
-            var path = editTextPath.text.toString()
-            var pathPositionSpinner = spinnerPath.selectedItemPosition
-            //что-то сделать для загрузки
+            val path = editTextPath.text.toString()
+            val pathPositionSpinner = spinnerPath.selectedItemPosition
+            languageDao.getLanguageFromFile("${accessible[pathPositionSpinner]}\\${path}", this)
 
             val intent = Intent(this, LanguageActivity::class.java)
             intent.putExtra("lang", languages.keys.toMutableList().last())

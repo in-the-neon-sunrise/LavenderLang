@@ -42,18 +42,18 @@ var nextLanguageId : Int = 0
 
 
 class MainActivity : AppCompatActivity() {
-    private val createJSONLauncher = registerForActivityResult(CreateDocument("todo/todo")) { uri ->
+    val createJSONLauncher = registerForActivityResult(CreateDocument("todo/todo")) { uri ->
         if (uri != null) {
             LanguageDaoImpl().writeToJSON(uri)
         }
     }
-    private val createPDFLauncher = registerForActivityResult(CreateDocument("todo/todo")) { uri ->
+    val createPDFLauncher = registerForActivityResult(CreateDocument("todo/todo")) { uri ->
         if (uri != null) {
             LanguageDaoImpl().writeToPDF(uri)
         }
     }
 
-    private lateinit var storageHelper: SimpleStorageHelper
+    lateinit var storageHelper: SimpleStorageHelper
 
     companion object {
         private var instance : MainActivity? = null
@@ -73,12 +73,6 @@ class MainActivity : AppCompatActivity() {
 
         setInstance(this)
         storageHelper = SimpleStorageHelper(this)
-        // fixme: will be in another activity
-
-        /*if (DocumentFileCompat.getAccessibleAbsolutePaths(this).isEmpty()) {
-            val REQUEST_CODE = 123123
-            storageHelper.requestStorageAccess(REQUEST_CODE, null, StorageType.EXTERNAL)
-        }*/
 
         Log.d("meowmeow", languages.keys.toString())
 
