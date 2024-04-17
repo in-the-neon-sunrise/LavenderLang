@@ -101,6 +101,8 @@ class DictionaryActivity : AppCompatActivity() {
         spinnerFilter.adapter = adapter
         adapter.notifyDataSetChanged()
 
+        allWords()
+
         spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 sort = position

@@ -47,6 +47,7 @@ class LoadLanguageActivity: AppCompatActivity(){
         val editTextPath: EditText = findViewById(R.id.editTextPath)
         val buttonOpen: Button = findViewById(R.id.buttonOpen)
         val languageDao: LanguageDao = LanguageDaoImpl()
+
         val accessible = arrayListOf<String>()
         var accessiblePathsRaw = DocumentFileCompat.getAccessibleAbsolutePaths(this)
         for (key in  accessiblePathsRaw.keys) {
@@ -55,7 +56,7 @@ class LoadLanguageActivity: AppCompatActivity(){
             }
         }
         //эти 3 строчки обновляют список
-        val adapterPath: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item, accessible)
+        var adapterPath: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item, accessible)
         spinnerPath.adapter = adapterPath
         adapterPath.notifyDataSetChanged()
 
@@ -68,12 +69,16 @@ class LoadLanguageActivity: AppCompatActivity(){
                 StorageType.EXTERNAL
             )
             accessible.clear()
+
             accessiblePathsRaw = DocumentFileCompat.getAccessibleAbsolutePaths(this)
             for (key in  accessiblePathsRaw.keys) {
                 for (path in accessiblePathsRaw[key]!!) {
                     accessible.add(path)
                 }
             }
+            adapterPath = ArrayAdapter(this, android.R.layout.simple_spinner_item, accessible)
+            spinnerPath.adapter = adapterPath
+            adapterPath.notifyDataSetChanged()
         }
         buttonOpen.setOnClickListener {
             Log.d("restore", accessible.toString())
