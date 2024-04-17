@@ -218,9 +218,9 @@
 
             <Button
                 android:id="@+id/buttonSaveWordFormationRule"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Сохранить"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/save"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -228,9 +228,9 @@
 
             <Button
                 android:id="@+id/buttonDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Удалить"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/delete"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/buttonSaveWordFormationRule"
                 app:layout_constraintTop_toTopOf="@+id/buttonSaveWordFormationRule" />

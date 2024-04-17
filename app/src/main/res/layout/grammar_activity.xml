@@ -294,9 +294,9 @@
 
             <Button
                 android:id="@+id/buttonSave"
-                android:layout_width="300dp"
-                android:layout_height="60dp"
-                android:text="Сохранить"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewDegreeOfComparison" />
@@ -312,9 +312,9 @@
 
             <Button
                 android:id="@+id/buttonNewGrammarRule"
-                android:layout_width="300dp"
-                android:layout_height="60dp"
-                android:text="Новое грамматическое правило"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/plus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewGrammarRule" />
