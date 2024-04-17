@@ -46,7 +46,7 @@
                 app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Genders"
+                android:text="Род"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,7 +74,7 @@
                 app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Numbers"
+                android:text="Число"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewGender"/>
 
@@ -102,7 +102,7 @@
                 app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Cases"
+                android:text="Падеж"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewNumber"/>
 
@@ -130,7 +130,7 @@
                 app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Times"
+                android:text="Время"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewCase"/>
 
@@ -158,7 +158,7 @@
                 app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Persons"
+                android:text="Лицо"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewTime"/>
 
@@ -186,7 +186,7 @@
                 app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Moods"
+                android:text="Наклонение"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewPerson"/>
 
@@ -214,7 +214,7 @@
                 app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Types"
+                android:text="Вид"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewMood"/>
 
@@ -242,7 +242,7 @@
                 app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Voices"
+                android:text="Залог"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewType"/>
 
@@ -270,7 +270,7 @@
                 app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="DegreesOfComparison"
+                android:text="Степень сравнения"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewVoice"/>
 
