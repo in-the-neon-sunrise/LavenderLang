@@ -10,14 +10,20 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.R
+import com.lavenderlang.backend.dao.language.DictionaryDao
+import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.entity.word.IWordEntity
 
 class DictionaryActivity : AppCompatActivity() {
     companion object {
         var id_lang: Int = 0
+        val dictionaryDao: DictionaryDao = DictionaryDaoImpl()
+        var sort: Int = 0
+        var filter: Int = 0
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,24 +87,55 @@ class DictionaryActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-
-        val listWords : ListView = findViewById(R.id.listWords)
-        val adapter: ArrayAdapter<IWordEntity> = WordAdapter(this, languages[id_lang]!!.dictionary.dict)
-        listWords.adapter = adapter
-        adapter.notifyDataSetChanged()
-        listWords.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, itemClicked, position, id ->
-                val intent = Intent(this@DictionaryActivity, WordActivity::class.java)
-                intent.putExtra("lang", id_lang)
-                intent.putExtra("word", position)
-                startActivity(intent)
+        var spinnerSort: Spinner = findViewById(R.id.spinnerSort)
+        spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                sort = position
+                allWords()
             }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+        }
+        var spinnerFilter: Spinner = findViewById(R.id.spinnerFilter)
+        spinnerFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                filter = position
+                allWords()
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+        }
     }
     override fun finish(){
         val data = Intent()
         data.putExtra("lang", id_lang)
         setResult(RESULT_OK, data)
         super.finish()
+    }
+    fun allWords(){
+        /*var dictionary = languages[id_lang]!!.dictionary
+        var list = dictionary.dict
+        if (sort==0){
+            list = dictionaryDao.sortDictByWord(dictionary)
+        }
+        else{
+            list = dictionaryDao.sortDictByTranslation(dictionary)
+        }
+
+
+        val listWords : ListView = findViewById(R.id.listWords)
+        val adapter: ArrayAdapter<IWordEntity> = WordAdapter(this, list)
+        listWords.adapter = adapter
+        adapter.notifyDataSetChanged()
+        listWords.onItemClickListener =
+        AdapterView.OnItemClickListener { parent, itemClicked, position, id ->
+            val intent = Intent(this@DictionaryActivity, WordActivity::class.java)
+            val id: Int = languages[id_lang]!!.dictionary.dict.indexOfFirst { it.word == list[position].word }
+            intent.putExtra("lang", id_lang)
+            intent.putExtra("word", id)
+            startActivity(intent)
+        }*/
+
     }
 }
 class WordAdapter(context: Context, listOfWords: MutableList<IWordEntity>) :
