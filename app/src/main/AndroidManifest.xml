@@ -42,6 +42,7 @@
         <activity android:name=".frontend.WordActivity" />
         <activity android:name=".frontend.WordFormationRuleActivity"/>
         <activity android:name=".frontend.LoadLanguageActivity" />
+        <activity android:name=".frontend.InstructionActivity" />
     </application>
 
 </manifest>

@@ -63,7 +63,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
-            val intent = Intent(this, InformationActivity::class.java)
+            val intent = Intent(this, InstructionActivity::class.java)
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }

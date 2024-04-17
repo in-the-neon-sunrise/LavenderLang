@@ -29,7 +29,7 @@ class WritingActivity : AppCompatActivity() {
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
-            val intent = Intent(this@WritingActivity, InformationActivity::class.java)
+            val intent = Intent(this@WritingActivity, InstructionActivity::class.java)
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }

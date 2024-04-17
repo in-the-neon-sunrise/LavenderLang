@@ -86,7 +86,7 @@ class GrammarActivity: AppCompatActivity() {
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
-            val intent = Intent(this@GrammarActivity, InformationActivity::class.java)
+            val intent = Intent(this@GrammarActivity, InstructionActivity::class.java)
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
