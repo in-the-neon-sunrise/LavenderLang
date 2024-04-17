@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
+import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.word.IWordEntity
 
 class DictionaryActivity : AppCompatActivity() {
@@ -88,17 +89,28 @@ class DictionaryActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         var spinnerSort: Spinner = findViewById(R.id.spinnerSort)
+        var spinnerFilter: Spinner = findViewById(R.id.spinnerFilter)
+
+        var flag = mutableListOf("по конлангу", "по переводу")
+        var adapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_list_item_1, flag)
+        spinnerSort.adapter = adapter
+        adapter.notifyDataSetChanged()
+
+        flag = mutableListOf("всё", "существительные", "глаголы", "прилагательные", "наречия", "причастия", "деепричастия", "местоимения", "числительные", "служебные части речи")
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, flag)
+        spinnerFilter.adapter = adapter
+        adapter.notifyDataSetChanged()
+
         spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 sort = position
                 allWords()
             }
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
         }
-        var spinnerFilter: Spinner = findViewById(R.id.spinnerFilter)
         spinnerFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 filter = position
                 allWords()
             }
@@ -113,15 +125,36 @@ class DictionaryActivity : AppCompatActivity() {
         super.finish()
     }
     fun allWords(){
-        /*var dictionary = languages[id_lang]!!.dictionary
+        var dictionary = languages[id_lang]!!.dictionary
         var list = dictionary.dict
         if (sort==0){
-            list = dictionaryDao.sortDictByWord(dictionary)
+            when(filter){
+                0 -> list = dictionaryDao.sortDictByWord(dictionary)
+                1 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.NOUN)
+                2 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.VERB)
+                3 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.ADJECTIVE)
+                4 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.ADVERB)
+                5 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.PARTICIPLE)
+                6 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.VERB_PARTICIPLE)
+                7 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.PRONOUN)
+                8 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.NUMERAL)
+                9 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.FUNC_PART)
+            }
         }
         else{
-            list = dictionaryDao.sortDictByTranslation(dictionary)
+            when(filter){
+                0 -> list = dictionaryDao.sortDictByTranslation(dictionary)
+                1 -> list = dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.NOUN)
+                2 -> list = dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.VERB)
+                3 -> list = dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.ADJECTIVE)
+                4 -> list = dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.ADVERB)
+                5 -> list = dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.PARTICIPLE)
+                6 -> list = dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.VERB_PARTICIPLE)
+                7 -> list = dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.PRONOUN)
+                8 -> list = dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.NUMERAL)
+                9 -> list = dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.FUNC_PART)
+            }
         }
-
 
         val listWords : ListView = findViewById(R.id.listWords)
         val adapter: ArrayAdapter<IWordEntity> = WordAdapter(this, list)
@@ -134,7 +167,7 @@ class DictionaryActivity : AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             intent.putExtra("word", id)
             startActivity(intent)
-        }*/
+        }
 
     }
 }
