@@ -100,13 +100,11 @@ class TranslatorActivity : AppCompatActivity() {
         }
     }
     private fun translate(){
-        val TAG = "meowmeow"
-        Log.d(TAG, languages[0]!!.dictionary.fullDict.toString())
 
         val edittext: EditText = findViewById(R.id.editTextText)
         val textview: TextView = findViewById(R.id.textViewTranslation)
 
-        val clever_index_of_language: Int = languages.keys.toMutableList()[id_lang]
+        val clever_index_of_language = id_lang//: Int = languages.keys.toMutableList()[id_lang]
         val input_text: String = edittext.text.toString()
 
         val translatorDao = TranslatorDaoImpl()

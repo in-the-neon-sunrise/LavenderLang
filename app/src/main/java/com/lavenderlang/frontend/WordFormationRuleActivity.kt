@@ -103,7 +103,6 @@ class WordFormationRuleActivity: AppCompatActivity()  {
             -1 -> {
                 var newRule = WordFormationRuleEntity(id_lang)
                 grammarDao.addWordFormationRule(languages[id_lang]!!.grammar, newRule)
-                Toast.makeText(this, languages[id_lang]!!.grammar.wordFormationRules.size.toString(), Toast.LENGTH_SHORT).show()
                 id_rule = languages[id_lang]!!.grammar.wordFormationRules.size-1
                 editMasc.setText(newRule.masc.regex)
             }

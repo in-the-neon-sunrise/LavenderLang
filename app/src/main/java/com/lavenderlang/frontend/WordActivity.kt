@@ -118,17 +118,16 @@ class WordActivity : AppCompatActivity() {
         editRussianWord.setText(languages[id_lang]!!.dictionary.dict[id_word].translation)
 
         partOfSpeech = languages[id_lang]!!.dictionary.dict[id_word].partOfSpeech
-        Toast.makeText(this, partOfSpeech.toString(), Toast.LENGTH_SHORT).show()
-        when (partOfSpeech){
-            PartOfSpeech.NOUN-> idPartOfSpeech =0
-            PartOfSpeech.VERB-> idPartOfSpeech =1
-            PartOfSpeech.ADJECTIVE-> idPartOfSpeech =2
-            PartOfSpeech.ADVERB-> idPartOfSpeech =3
-            PartOfSpeech.PARTICIPLE-> idPartOfSpeech =4
-            PartOfSpeech.VERB_PARTICIPLE-> idPartOfSpeech =5
-            PartOfSpeech.PRONOUN-> idPartOfSpeech =6
-            PartOfSpeech.NUMERAL-> idPartOfSpeech =7
-            PartOfSpeech.FUNC_PART-> idPartOfSpeech =8
+        idPartOfSpeech = when (partOfSpeech){
+            PartOfSpeech.NOUN-> 0
+            PartOfSpeech.VERB-> 1
+            PartOfSpeech.ADJECTIVE-> 2
+            PartOfSpeech.ADVERB-> 3
+            PartOfSpeech.PARTICIPLE-> 4
+            PartOfSpeech.VERB_PARTICIPLE-> 5
+            PartOfSpeech.PRONOUN-> 6
+            PartOfSpeech.NUMERAL-> 7
+            PartOfSpeech.FUNC_PART-> 8
         }
         immutableAttrs = languages[id_lang]!!.dictionary.dict[id_word].immutableAttrs
 
@@ -215,7 +214,6 @@ class WordActivity : AppCompatActivity() {
         val spinnerVoice: Spinner =findViewById(R.id.spinnerVoice)
 
         spinnerPartOfSpeech.setSelection(idPartOfSpeech)
-        Toast.makeText(this, idPartOfSpeech.toString(), Toast.LENGTH_SHORT).show()
         when(idPartOfSpeech) {
             0 -> {
                 spinnerGender.setSelection(immutableAttrs[Attributes.GENDER] ?: 0)
