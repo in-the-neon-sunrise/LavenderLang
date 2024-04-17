@@ -126,7 +126,7 @@ class DictionaryActivity : AppCompatActivity() {
     }
     fun allWords(){
         var dictionary = languages[id_lang]!!.dictionary
-        var list = dictionary.dict
+        var list = dictionary.dict.toList()
         if (sort==0){
             when(filter){
                 0 -> list = dictionaryDao.sortDictByWord(dictionary)
@@ -157,7 +157,7 @@ class DictionaryActivity : AppCompatActivity() {
         }
 
         val listWords : ListView = findViewById(R.id.listWords)
-        val adapter: ArrayAdapter<IWordEntity> = WordAdapter(this, list)
+        val adapter: ArrayAdapter<IWordEntity> = WordAdapter(this, list.toMutableList())
         listWords.adapter = adapter
         adapter.notifyDataSetChanged()
         listWords.onItemClickListener =

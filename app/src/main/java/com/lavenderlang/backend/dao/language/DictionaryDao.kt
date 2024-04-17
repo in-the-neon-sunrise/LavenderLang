@@ -17,12 +17,12 @@ import kotlinx.coroutines.launch
 interface DictionaryDao {
     fun addWord(dictionary: DictionaryEntity, word : IWordEntity)
     fun deleteWord(dictionary: DictionaryEntity, word : IWordEntity)
-    fun createWordsFromExisting(dictionary: DictionaryEntity, word : IWordEntity) : ArrayList<Pair<String, IWordEntity>>
-    fun filterDictByPartOfSpeech(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : ArrayList<IWordEntity>
-    fun sortDictByWord(dictionary: DictionaryEntity) : ArrayList<IWordEntity>
-    fun sortDictByTranslation(dictionary: DictionaryEntity) : ArrayList<IWordEntity>
-    fun sortDictByWordFiltered(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : ArrayList<IWordEntity>
-    fun sortDictByTranslationFiltered(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : ArrayList<IWordEntity>
+    fun createWordsFromExisting(dictionary: DictionaryEntity, word : IWordEntity) : List<Pair<String, IWordEntity>>
+    fun filterDictByPartOfSpeech(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : List<IWordEntity>
+    fun sortDictByWord(dictionary: DictionaryEntity) : List<IWordEntity>
+    fun sortDictByTranslation(dictionary: DictionaryEntity) : List<IWordEntity>
+    fun sortDictByWordFiltered(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : List<IWordEntity>
+    fun sortDictByTranslationFiltered(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : List<IWordEntity>
     fun getWordForms(dictionary: DictionaryEntity, word: String) : ArrayList<IWordEntity>
 
 }
@@ -58,7 +58,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         }
     }
 
-    override fun createWordsFromExisting(dictionary: DictionaryEntity, word: IWordEntity): ArrayList<Pair<String, IWordEntity>> {
+    override fun createWordsFromExisting(dictionary: DictionaryEntity, word: IWordEntity): List<Pair<String, IWordEntity>> {
         if (dictionary.languageId !in languages) return arrayListOf()
         val possibleWords: ArrayList<Pair<String, IWordEntity>> = arrayListOf()
         val wfrHandler = WordFormationRuleDaoImpl()
@@ -72,7 +72,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         return possibleWords
     }
 
-    override fun filterDictByPartOfSpeech(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech): ArrayList<IWordEntity> {
+    override fun filterDictByPartOfSpeech(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech): List<IWordEntity> {
         val filteredDict: ArrayList<IWordEntity> = arrayListOf()
         for (word in dictionary.dict) {
             if (word.partOfSpeech == partOfSpeech) {
@@ -82,38 +82,38 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         return filteredDict
     }
 
-    override fun sortDictByWord(dictionary: DictionaryEntity): ArrayList<IWordEntity> {
-        return dictionary.dict.sortedBy { it.word } as ArrayList<IWordEntity>
+    override fun sortDictByWord(dictionary: DictionaryEntity): List<IWordEntity> {
+        return dictionary.dict.sortedBy { it.word }
     }
 
-    override fun sortDictByTranslation(dictionary: DictionaryEntity): ArrayList<IWordEntity> {
-        return dictionary.dict.sortedBy { it.translation } as ArrayList<IWordEntity>
+    override fun sortDictByTranslation(dictionary: DictionaryEntity): List<IWordEntity> {
+        return dictionary.dict.sortedBy { it.translation }
     }
 
     override fun sortDictByWordFiltered(
         dictionary: DictionaryEntity,
         partOfSpeech: PartOfSpeech
-    ): ArrayList<IWordEntity> {
+    ): List<IWordEntity> {
         val filteredDict: ArrayList<IWordEntity> = arrayListOf()
         for (word in dictionary.dict) {
             if (word.partOfSpeech == partOfSpeech) {
                 filteredDict.add(word)
             }
         }
-        return filteredDict.sortedBy { it.word } as ArrayList<IWordEntity>
+        return filteredDict.sortedBy { it.word }
     }
 
     override fun sortDictByTranslationFiltered(
         dictionary: DictionaryEntity,
         partOfSpeech: PartOfSpeech
-    ): ArrayList<IWordEntity> {
+    ): List<IWordEntity> {
         val filteredDict: ArrayList<IWordEntity> = arrayListOf()
         for (word in dictionary.dict) {
             if (word.partOfSpeech == partOfSpeech) {
                 filteredDict.add(word)
             }
         }
-        return filteredDict.sortedBy { it.translation } as ArrayList<IWordEntity>
+        return filteredDict.sortedBy { it.translation }
     }
 
 

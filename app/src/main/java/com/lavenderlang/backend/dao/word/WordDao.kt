@@ -1,6 +1,5 @@
 package com.lavenderlang.backend.dao.word
 
-import android.util.Log
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
@@ -154,7 +153,6 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
     }
     override fun getImmutableAttrsInfo(word: IWordEntity): String {
         var res = ""
-        Log.d("frfrfr", word.word+word.partOfSpeech+word.immutableAttrs.toString())
         for (attr in word.immutableAttrs.keys) {
             res += when (attr) {
                 Attributes.GENDER -> "род: ${languages[word.languageId]!!.grammar.varsGender[word.immutableAttrs[attr]!!]?.name}, "

@@ -5,9 +5,7 @@ import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.DictionaryEntity
 import com.lavenderlang.backend.entity.language.GrammarEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.service.exception.LanguageNotFoundException
-import com.lavenderlang.backend.service.exception.WordNotFoundException
 
 class Serializer private constructor() {
     companion object {

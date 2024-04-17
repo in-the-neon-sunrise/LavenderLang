@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 
 interface PunctuationDao {
     fun updatePunctuationSymbol(language: LanguageEntity, id: Int, newSymbol: String)
-// если символ в буквах конланга - ошибка
 }
 
 class PunctuationDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()): PunctuationDao {

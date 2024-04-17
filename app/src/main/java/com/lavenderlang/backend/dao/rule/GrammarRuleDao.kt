@@ -1,6 +1,5 @@
 package com.lavenderlang.backend.dao.rule
 
-import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.chaquo.python.Python
 import com.lavenderlang.frontend.MainActivity
@@ -111,7 +110,6 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
             throw IncorrectRegexException("Неверное регулярное выражение!")
         }
         rule.masc = masc
-        Log.d("updaterule", "masc updated")
 
         for (letter in transformation.addToBeginning) {
             if (!languages[rule.languageId]!!.vowels.contains(letter.lowercase()) &&
@@ -126,10 +124,7 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
             }
         }
         rule.transformation = transformation
-        Log.d("updaterule", "transformation updated")
-
         updateMutableAttrs(rule, newAttrs)
-        Log.d("updaterule", "mutableAttrs updated")
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
             languageRepository.updateGrammar(

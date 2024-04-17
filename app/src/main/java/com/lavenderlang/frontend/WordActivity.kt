@@ -3,6 +3,7 @@ package com.lavenderlang.frontend
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,7 +73,6 @@ class WordActivity : AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
-        //hello
 
         val buttonTranslator: Button = findViewById(R.id.buttonTranslator)
         buttonTranslator.setOnClickListener {
@@ -100,6 +100,7 @@ class WordActivity : AppCompatActivity() {
             }
             else -> {
                 id_word = word
+                Log.d("why", "$id_lang $word")
             }
         }
     }
@@ -405,7 +406,7 @@ class WordActivity : AppCompatActivity() {
         //list of new words
         val listViewNewWords : ListView = findViewById(R.id.listViewNewWords)
         val list: MutableList<Pair<String, IWordEntity>> = dictionaryDao.createWordsFromExisting(
-            languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word])
+            languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word]).toMutableList()
         val adapter: ArrayAdapter<Pair<String, IWordEntity>> = NewWordAdapter(this, list)
         listViewNewWords.adapter = adapter
         adapter.notifyDataSetChanged()

@@ -1,6 +1,5 @@
 package com.lavenderlang.backend.dao.language
 
-import android.util.Log
 import com.chaquo.python.Python
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.language.LanguageEntity

@@ -1,6 +1,5 @@
 package com.lavenderlang.backend.dao.language
 
-import android.util.Log
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.WordNotFoundException
 
@@ -95,8 +94,6 @@ class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = Translator
         }
     }
     override fun translateTextToConlang(language: LanguageEntity, text: String): String {
-        Log.d("woof", language.dictionary.fullDict.toString())
-        Log.d("woof", language.grammar.grammarRules.toString())
         val letters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
         var curWord = ""
         var curDelimiter = ""

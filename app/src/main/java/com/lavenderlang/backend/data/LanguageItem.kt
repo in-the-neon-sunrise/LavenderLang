@@ -2,9 +2,6 @@ package com.lavenderlang.backend.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.language.DictionaryEntity
-import com.lavenderlang.backend.entity.language.GrammarEntity
 
 @Entity(tableName="language_table")
 class LanguageItem(

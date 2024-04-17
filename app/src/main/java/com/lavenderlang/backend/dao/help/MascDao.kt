@@ -27,14 +27,12 @@ class MascDaoImpl : MascDao {
         masc.regex = newRegex
     }
     override fun fits(masc : MascEntity, word : IWordEntity) : Boolean {
-        Log.d("fits", "${masc.immutableAttrs}, word: $word")
         if (masc.partOfSpeech != word.partOfSpeech) return false
         for (attr in masc.immutableAttrs.keys) {
             if (!word.immutableAttrs.containsKey(attr) || word.immutableAttrs[attr] != masc.immutableAttrs[attr]) {
                 return false
             }
         }
-        Log.d("why god why", "${word.word} ${masc.immutableAttrs}")
         return word.word.matches(masc.regex.toRegex())
     }
 }
