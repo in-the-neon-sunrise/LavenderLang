@@ -179,10 +179,6 @@ class GrammarActivity: AppCompatActivity() {
                     CharacteristicEntity(el.characteristicId, Attributes.DEGREE_OF_COMPARISON, name, rusId))
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
         //how it was started?
         when (val lang = intent.getIntExtra("lang", id_lang)) {
             -1 -> {
@@ -194,6 +190,10 @@ class GrammarActivity: AppCompatActivity() {
                 id_lang = lang
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
     override fun onResume() {
         super.onResume()

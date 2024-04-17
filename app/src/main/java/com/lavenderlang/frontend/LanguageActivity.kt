@@ -28,6 +28,7 @@ class LanguageActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.language_activity)
 
+        Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show()
         createJSONLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
             Log.d("json start write", "result")
             if (uri != null) {
@@ -104,9 +105,7 @@ class LanguageActivity: AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
-    }
-    override fun onStart() {
-        super.onStart()
+
         //how it was started?
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)
@@ -124,11 +123,14 @@ class LanguageActivity: AppCompatActivity() {
         }
         if(languages[id_lang]?.description != "") editDescription.setText(languages[id_lang]?.description)
     }
+    override fun onStart() {
+        super.onStart()
+    }
     override fun onResume() {
         super.onResume()
+
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)
-
         //check changing
         editLanguageName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -188,5 +190,12 @@ class LanguageActivity: AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK) {
+            id_lang = data?.getIntExtra("lang", -1) ?: -1
+        }
     }
 }

@@ -87,10 +87,6 @@ class WordFormationRuleActivity: AppCompatActivity()  {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
         val editMasc: EditText = findViewById(R.id.editMasc)
 
         when(val lang = intent.getIntExtra("lang", -1)){
@@ -103,9 +99,6 @@ class WordFormationRuleActivity: AppCompatActivity()  {
             }
         }
         var rule = intent.getIntExtra("wordFormationRule", -1)
-        /*if (rule == -1 && id_rule != 0){
-            rule = id_lang
-        }*/
         when(rule){
             -1 -> {
                 var newRule = WordFormationRuleEntity(id_lang)
@@ -119,6 +112,10 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                 editMasc.setText(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.regex)
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 
     override fun onResume() {

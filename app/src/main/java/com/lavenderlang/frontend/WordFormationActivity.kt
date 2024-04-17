@@ -57,9 +57,6 @@ class WordFormationActivity : AppCompatActivity() {
             intent.putExtra("lang", LanguageActivity.id_lang)
             startActivity(intent)
         }
-    }
-    override fun onStart() {
-        super.onStart()
         //how it was started?
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
@@ -71,6 +68,9 @@ class WordFormationActivity : AppCompatActivity() {
                 id_lang = lang
             }
         }
+    }
+    override fun onStart() {
+        super.onStart()
     }
 
     override fun onResume() {

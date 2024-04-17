@@ -51,10 +51,6 @@ class PunctuationActivity : AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
         //how it was started?
         when (val lang = intent.getIntExtra("lang", -1)) {
             -1 -> {
@@ -66,6 +62,10 @@ class PunctuationActivity : AppCompatActivity() {
                 id_lang = lang
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
     override fun onResume(){
         super.onResume()

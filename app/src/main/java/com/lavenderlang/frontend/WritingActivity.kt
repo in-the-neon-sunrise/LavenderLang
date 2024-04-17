@@ -53,10 +53,6 @@ class WritingActivity : AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
         //how it was started?
 
         when (val lang = intent.getIntExtra("lang", -1)) {
@@ -69,6 +65,10 @@ class WritingActivity : AppCompatActivity() {
                 id_lang = lang
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
     override fun onResume() {
         super.onResume()
@@ -139,7 +139,7 @@ class WritingActivity : AppCompatActivity() {
     }
     override fun finish(){
         val data = Intent()
-        data.putExtra("lang", GrammarRuleActivity.id_lang)
+        data.putExtra("lang", id_lang)
         setResult(RESULT_OK, data)
         super.finish()
     }
