@@ -33,7 +33,9 @@
         android:id="@+id/editLanguageName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="100dp"
+        android:layout_marginEnd="30dp"
         android:autofillHints=""
         android:hint="@string/name"
         android:inputType="text"
@@ -44,34 +46,26 @@
     <EditText
         android:id="@+id/editDescription"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
         android:autofillHints=""
         android:hint="@string/description"
-        android:inputType="text"
+        android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editLanguageName" />
 
     <Button
-        android:id="@+id/buttonDictionary"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="@string/dictionary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editDescription" />
-
-    <Button
         android:id="@+id/buttonWriting"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="150dp"
         android:text="@string/writing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonDictionary" />
+        app:layout_constraintTop_toBottomOf="@+id/editDescription" />
 
     <Button
         android:id="@+id/buttonPunctuation"
@@ -84,6 +78,16 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonWriting" />
 
     <Button
+        android:id="@+id/buttonDictionary"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/dictionary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPunctuation" />
+
+    <Button
         android:id="@+id/buttonGrammar"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -91,7 +95,7 @@
         android:text="@string/grammar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPunctuation" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonDictionary" />
 
     <Button
         android:id="@+id/buttonWordFormation"
@@ -117,11 +121,11 @@
         android:id="@+id/buttonFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="Скачать файл"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editDescription" />
+        android:layout_marginEnd="10dp"
+        android:text="Скачать json"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPDF" />
 
     <Button
         android:id="@+id/buttonPDF"
@@ -132,5 +136,25 @@
         android:text="Скачать pdf"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editDescription" />
+
+    <Button
+        android:id="@+id/buttonCopy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Дублировать"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editDescription" />
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Удалить"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCopy" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

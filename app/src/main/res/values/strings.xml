@@ -6,11 +6,11 @@
     <string name="description">Description</string>
     <string name="p">P</string>
     <string name="i">I</string>
-    <string name="dictionary">Dictionary</string>
-    <string name="writing">Writing</string>
-    <string name="punctuation">Punctuation</string>
-    <string name="grammar">Grammar</string>
-    <string name="word_formation">Word formation</string>
+    <string name="dictionary">Словарь</string>
+    <string name="writing">Написание</string>
+    <string name="punctuation">Пунктуация</string>
+    <string name="grammar">Грамматика</string>
+    <string name="word_formation">Словообразование</string>
     <string name="russian_vowels">а е ё и о у ы э ю я</string>
     <string name="russian_consonants">б в г д ж з й к л м н п р с т ф х ц ч ш щ</string>
     <string name="developers">Создатели:\n\n

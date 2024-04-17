@@ -81,9 +81,6 @@ class LanguageActivity: AppCompatActivity() {
         val editDescription: EditText = findViewById(R.id.editDescription)
 
         var lang = intent.getIntExtra("lang", -1)
-        if (lang == -1 && id_lang != 0){
-            lang = id_lang
-        }
         when(lang){
             -1 -> {
                 id_lang = nextLanguageId
@@ -147,6 +144,18 @@ class LanguageActivity: AppCompatActivity() {
             }
             catch (_: Exception) {
             }
+        }
+        val buttonCopy: Button = findViewById(R.id.buttonCopy)
+        buttonCopy.setOnClickListener {
+            languageDao.copyLanguage(languages[id_lang]!!)
+            val intent = Intent(this@LanguageActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
+        val buttonDelete: Button = findViewById(R.id.buttonDelete)
+        buttonDelete.setOnClickListener {
+            languageDao.deleteLanguage(id_lang)
+            val intent = Intent(this@LanguageActivity, MainActivity::class.java)
+            startActivity(intent)
         }
 
     }
