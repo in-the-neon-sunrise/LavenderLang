@@ -72,6 +72,7 @@ class WordActivity : AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
+        //hello
 
         val buttonTranslator: Button = findViewById(R.id.buttonTranslator)
         buttonTranslator.setOnClickListener {
