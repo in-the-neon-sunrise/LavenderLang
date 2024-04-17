@@ -1,7 +1,7 @@
 package com.lavenderlang.backend.dao.language
 
 import androidx.lifecycle.lifecycleScope
-import com.lavenderlang.MainActivity
+import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
@@ -10,7 +10,7 @@ import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.languages
+import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

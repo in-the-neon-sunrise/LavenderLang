@@ -1,4 +1,4 @@
-package com.lavenderlang
+package com.lavenderlang.frontend
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,10 +12,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.lavenderlang.R
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.language.GrammarDao
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
-import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDao
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
@@ -104,10 +104,10 @@ class WordFormationRuleActivity: AppCompatActivity()  {
     override fun onResume() {
         super.onResume()
 
-        startFlagIsFirst=true
-        finishFlagIsFirst=true
+        startFlagIsFirst =true
+        finishFlagIsFirst =true
 
-        var partOfSpeech=languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.partOfSpeech
+        var partOfSpeech= languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.partOfSpeech
         when (partOfSpeech){
             PartOfSpeech.NOUN-> idPartOfSpeech =0
             PartOfSpeech.VERB-> idPartOfSpeech =1
@@ -123,7 +123,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
         attrs = languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs
         regex = languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.regex
 
-        partOfSpeech=languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].partOfSpeech
+        partOfSpeech= languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].partOfSpeech
         when (partOfSpeech){
             PartOfSpeech.NOUN-> finishIdPartOfSpeech =0
             PartOfSpeech.VERB-> finishIdPartOfSpeech =1

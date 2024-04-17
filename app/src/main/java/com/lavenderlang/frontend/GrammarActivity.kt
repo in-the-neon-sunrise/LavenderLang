@@ -1,11 +1,10 @@
-package com.lavenderlang
+package com.lavenderlang.frontend
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +17,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.lavenderlang.GrammarActivity.Companion.id_lang
-import com.lavenderlang.GrammarActivity.Companion.grammarDao
+import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDao
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
@@ -28,7 +26,6 @@ import com.lavenderlang.backend.entity.help.CharacteristicEntity
 import com.lavenderlang.backend.entity.language.GrammarEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.service.*
-import java.text.AttributedCharacterIterator.Attribute
 
 
 class GrammarActivity: AppCompatActivity() {
@@ -102,7 +99,8 @@ class GrammarActivity: AppCompatActivity() {
             for(i in 0..<languages[id_lang]!!.grammar.varsGender.values.size) {
                 name = genderNames[i]
                 rusId= genderRusIds[i]
-                grammarDao.updateOption(languages[id_lang]!!.grammar, i,
+                grammarDao.updateOption(
+                    languages[id_lang]!!.grammar, i,
                     CharacteristicEntity(i, Attributes.GENDER, name, rusId))
             }
         }
@@ -383,7 +381,8 @@ class GrammarActivity: AppCompatActivity() {
 }
 private class AttributeAdapter(context: Context, listOfAttributes: MutableList<CharacteristicEntity>,
                                idListAttribute: Int) :
-    ArrayAdapter<CharacteristicEntity>(context, R.layout.characteristic_line_activity, listOfAttributes) {
+    ArrayAdapter<CharacteristicEntity>(context,
+        R.layout.characteristic_line_activity, listOfAttributes) {
 
     var idAttribute = idListAttribute
 
@@ -556,64 +555,73 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
         buttonDel.setOnClickListener {
             when(idAttribute){
                 0->{
-                    grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute])
+                    grammarDao.deleteOption(
+                        languages[GrammarActivity.id_lang]!!.grammar,
+                        languages[GrammarActivity.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute])
                     GrammarActivity.genderNames.removeAt(positionAttribute)
                     GrammarActivity.genderRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 1->{
-                    grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute])
+                    grammarDao.deleteOption(
+                        languages[GrammarActivity.id_lang]!!.grammar,
+                        languages[GrammarActivity.id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute])
                     GrammarActivity.numberNames.removeAt(positionAttribute)
                     GrammarActivity.numberRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 2->{
-                    grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute])
+                    grammarDao.deleteOption(
+                        languages[GrammarActivity.id_lang]!!.grammar,
+                        languages[GrammarActivity.id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute])
                     GrammarActivity.caseNames.removeAt(positionAttribute)
                     GrammarActivity.caseRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 3->{
-                    grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute])
+                    grammarDao.deleteOption(
+                        languages[GrammarActivity.id_lang]!!.grammar,
+                        languages[GrammarActivity.id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute])
                     GrammarActivity.timeNames.removeAt(positionAttribute)
                     GrammarActivity.timeRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 4-> {
-                    grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute])
+                    grammarDao.deleteOption(
+                        languages[GrammarActivity.id_lang]!!.grammar,
+                        languages[GrammarActivity.id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute])
                     GrammarActivity.personNames.removeAt(positionAttribute)
                     GrammarActivity.personRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 5->{
-                    grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute])
+                    grammarDao.deleteOption(
+                        languages[GrammarActivity.id_lang]!!.grammar,
+                        languages[GrammarActivity.id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute])
                     GrammarActivity.moodNames.removeAt(positionAttribute)
                     GrammarActivity.moodRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 6-> {
-                    grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute])
+                    grammarDao.deleteOption(
+                        languages[GrammarActivity.id_lang]!!.grammar,
+                        languages[GrammarActivity.id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute])
                     GrammarActivity.typeNames.removeAt(positionAttribute)
                     GrammarActivity.typeRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 7->{
-                    grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute])
+                    grammarDao.deleteOption(
+                        languages[GrammarActivity.id_lang]!!.grammar,
+                        languages[GrammarActivity.id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute])
                     GrammarActivity.voiceNames.removeAt(positionAttribute)
                     GrammarActivity.voiceRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)
                 }
                 else-> {
-                    grammarDao.deleteOption(languages[GrammarActivity.Companion.id_lang]!!.grammar,
-                        languages[GrammarActivity.Companion.id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute])
+                    grammarDao.deleteOption(
+                        languages[GrammarActivity.id_lang]!!.grammar,
+                        languages[GrammarActivity.id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute])
                     GrammarActivity.degreeOfComparisonNames.removeAt(positionAttribute)
                     GrammarActivity.degreeOfComparisonRusIds.removeAt(positionAttribute)
                     (context as GrammarActivity).updateAdapter(idAttribute)

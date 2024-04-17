@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WritingActivity">
+    tools:context=".frontend.WritingActivity">
 
     <Button
         android:id="@+id/buttonInf"

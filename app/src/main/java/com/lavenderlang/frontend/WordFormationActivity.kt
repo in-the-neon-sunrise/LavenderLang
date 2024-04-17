@@ -1,6 +1,5 @@
-package com.lavenderlang
+package com.lavenderlang.frontend
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -13,12 +12,9 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.lavenderlang.backend.dao.language.GrammarDao
-import com.lavenderlang.backend.dao.language.GrammarDaoImpl
-import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.R
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDao
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
-import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
 
 class WordFormationActivity : AppCompatActivity() {
@@ -114,7 +110,8 @@ class WordFormationActivity : AppCompatActivity() {
 }
 
 private class WordFormationRuleAdapter(context: Context, listOfRules: MutableList<WordFormationRuleEntity>) :
-    ArrayAdapter<WordFormationRuleEntity>(context, R.layout.word_formation_rule_line_activity, listOfRules) {
+    ArrayAdapter<WordFormationRuleEntity>(context,
+        R.layout.word_formation_rule_line_activity, listOfRules) {
         companion object{
             val wordFormationRuleDao: WordFormationRuleDao = WordFormationRuleDaoImpl()
         }

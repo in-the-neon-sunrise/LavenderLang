@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".WordFormationActivity">
+    tools:context=".frontend.WordFormationActivity">
     <Button
         android:id="@+id/buttonInf"
         android:layout_width="55dp"
@@ -57,7 +57,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewWordFormationRule" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewWordFormationRules"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

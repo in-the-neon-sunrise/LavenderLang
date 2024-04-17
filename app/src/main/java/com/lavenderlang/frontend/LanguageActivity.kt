@@ -1,4 +1,4 @@
-package com.lavenderlang
+package com.lavenderlang.frontend
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,12 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
-import com.lavenderlang.backend.dao.language.LanguageDao
+import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
-import com.lavenderlang.backend.data.LanguageRepository
-import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.backend.service.exception.FileWorkException
 
 
@@ -91,7 +87,7 @@ class LanguageActivity: AppCompatActivity() {
         when(lang){
             -1 -> {
                 id_lang = nextLanguageId
-                languageDao.createLanguage("Язык${id_lang}", "")
+                languageDao.createLanguage("Язык$id_lang", "")
                 editLanguageName.setText(languages[id_lang]?.name)
             }
             else -> {
@@ -129,7 +125,8 @@ class LanguageActivity: AppCompatActivity() {
         val buttonFile: Button = findViewById(R.id.buttonFile)
         buttonFile.setOnClickListener {
             try {
-            LanguageDaoImpl().downloadLanguageJSON(languages[id_lang]!!,
+            LanguageDaoImpl().downloadLanguageJSON(
+                languages[id_lang]!!,
                 MainActivity.getInstance().storageHelper,
                 MainActivity.getInstance().createJSONLauncher)
             } catch (e: FileWorkException) {
@@ -141,7 +138,8 @@ class LanguageActivity: AppCompatActivity() {
         val buttonPDF: Button = findViewById(R.id.buttonPDF)
         buttonPDF.setOnClickListener {
             try {
-            LanguageDaoImpl().downloadLanguagePDF(languages[id_lang]!!,
+            LanguageDaoImpl().downloadLanguagePDF(
+                languages[id_lang]!!,
                 MainActivity.getInstance().storageHelper,
                 MainActivity.getInstance().createPDFLauncher)
             } catch (e: FileWorkException) {

@@ -1,22 +1,13 @@
 package com.lavenderlang.backend.dao.word
 
-import android.content.Context
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
-import com.lavenderlang.MainActivity
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
-import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
-import com.lavenderlang.backend.entity.rule.IRuleEntity
 import com.lavenderlang.backend.entity.word.*
-import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
-import com.lavenderlang.languages
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.lavenderlang.frontend.languages
 
 interface WordDao {
     fun updateWord(word : IWordEntity, newWord : String)

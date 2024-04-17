@@ -1,22 +1,16 @@
-package com.lavenderlang
+package com.lavenderlang.frontend
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.lavenderlang.LanguageActivity.Companion.languageDao
-import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.WritingDao
 import com.lavenderlang.backend.dao.language.WritingDaoImpl
-import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 
 class WritingActivity : AppCompatActivity() {

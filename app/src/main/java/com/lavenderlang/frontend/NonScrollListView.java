@@ -1,4 +1,4 @@
-package com.lavenderlang;
+package com.lavenderlang.frontend;
 
 import android.content.Context;
 import android.util.AttributeSet;

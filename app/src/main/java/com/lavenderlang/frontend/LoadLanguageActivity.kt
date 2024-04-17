@@ -1,4 +1,4 @@
-package com.lavenderlang
+package com.lavenderlang.frontend
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,11 +7,11 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.SpinnerAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.StorageType
+import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.service.exception.FileWorkException

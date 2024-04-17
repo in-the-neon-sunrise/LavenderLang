@@ -1,16 +1,14 @@
 package com.lavenderlang.backend.dao.language
 
-import android.util.Log
 import androidx.lifecycle.lifecycleScope
-import com.lavenderlang.MainActivity
+import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.languages
+import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 interface PunctuationDao {
     fun updatePunctuationSymbol(language: LanguageEntity, id: Int, newSymbol: String)

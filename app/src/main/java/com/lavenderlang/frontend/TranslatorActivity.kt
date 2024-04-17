@@ -1,4 +1,4 @@
-package com.lavenderlang
+package com.lavenderlang.frontend
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,8 +12,8 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 
 class TranslatorActivity : AppCompatActivity() {
@@ -53,8 +53,8 @@ class TranslatorActivity : AppCompatActivity() {
         val adapterLanguages: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item, languageNames)
         spinner.adapter = adapterLanguages
         adapterLanguages.notifyDataSetChanged()
-        flagIsSpinnerSelected=true;
-        if(id_lang!=-1)spinner.setSelection(id_lang)
+        flagIsSpinnerSelected =true;
+        if(id_lang !=-1)spinner.setSelection(id_lang)
         radiobutton.isChecked = true//перевод с конланга
         radiogroup.setOnCheckedChangeListener { group, checkedId ->
             translationOnConlang = checkedId != radiobutton.id

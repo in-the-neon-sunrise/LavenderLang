@@ -1,13 +1,11 @@
 package com.lavenderlang.backend.dao.language
 
-import android.util.Log
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.entity.language.DictionaryEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
-import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.languages
+import com.lavenderlang.frontend.languages
 
 interface DictionaryHelperDao {
     fun delMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity)

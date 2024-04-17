@@ -1,6 +1,5 @@
-package com.lavenderlang
+package com.lavenderlang.frontend
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,13 +9,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.R
 import com.lavenderlang.backend.entity.word.IWordEntity
 
 class DictionaryActivity : AppCompatActivity() {

@@ -2,14 +2,13 @@ package com.lavenderlang.backend.dao.language
 
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
-import com.lavenderlang.MainActivity
+import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface WritingDao {

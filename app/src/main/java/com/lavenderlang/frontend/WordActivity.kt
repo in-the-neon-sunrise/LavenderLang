@@ -1,10 +1,8 @@
-package com.lavenderlang
+package com.lavenderlang.frontend
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +15,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDao
@@ -27,7 +26,6 @@ import com.lavenderlang.backend.dao.word.WordDao
 import com.lavenderlang.backend.dao.word.WordDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
@@ -93,7 +91,7 @@ class WordActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-        flagIsFirst=true
+        flagIsFirst =true
 
         var editConlangWord: EditText = findViewById(R.id.editConlangWord)
         var editRussianWord: EditText = findViewById(R.id.editRussianWord)
@@ -245,7 +243,7 @@ class WordActivity : AppCompatActivity() {
                         spinnerVoice.visibility= View.GONE
 
                         if(positionSpinner == idPartOfSpeech || flagIsFirst){
-                            flagIsFirst=false
+                            flagIsFirst =false
                             return
                         }
                         idPartOfSpeech = positionSpinner
@@ -258,7 +256,7 @@ class WordActivity : AppCompatActivity() {
                         spinnerVoice.visibility= View.VISIBLE
 
                         if(positionSpinner == idPartOfSpeech || flagIsFirst){
-                            flagIsFirst=false
+                            flagIsFirst =false
                             return
                         }
                         idPartOfSpeech = positionSpinner
@@ -271,7 +269,7 @@ class WordActivity : AppCompatActivity() {
                         spinnerVoice.visibility= View.GONE
 
                         if(positionSpinner == idPartOfSpeech || flagIsFirst){
-                            flagIsFirst=false
+                            flagIsFirst =false
                             return
                         }
                         idPartOfSpeech = positionSpinner
@@ -287,7 +285,7 @@ class WordActivity : AppCompatActivity() {
                         idPartOfSpeech = positionSpinner
                         immutableAttrs = mutableMapOf()
                         updateSpinners()
-                        flagIsFirst=false
+                        flagIsFirst =false
                     }
                     4->{
                         spinnerGender.visibility= View.GONE
@@ -298,7 +296,7 @@ class WordActivity : AppCompatActivity() {
                         idPartOfSpeech = positionSpinner
                         immutableAttrs = mutableMapOf()
                         updateSpinners()
-                        flagIsFirst=false
+                        flagIsFirst =false
                     }
                     5->{
                         spinnerGender.visibility= View.GONE
@@ -309,7 +307,7 @@ class WordActivity : AppCompatActivity() {
                         idPartOfSpeech = positionSpinner
                         immutableAttrs = mutableMapOf()
                         updateSpinners()
-                        flagIsFirst=false
+                        flagIsFirst =false
                     }
                     6->{
                         spinnerGender.visibility= View.VISIBLE
@@ -320,7 +318,7 @@ class WordActivity : AppCompatActivity() {
                         idPartOfSpeech = positionSpinner
                         immutableAttrs = mutableMapOf()
                         updateSpinners()
-                        flagIsFirst=false
+                        flagIsFirst =false
                     }
                     7->{
                         spinnerGender.visibility= View.GONE
@@ -331,7 +329,7 @@ class WordActivity : AppCompatActivity() {
                         idPartOfSpeech = positionSpinner
                         immutableAttrs = mutableMapOf()
                         updateSpinners()
-                        flagIsFirst=false
+                        flagIsFirst =false
                     }
                     else->{
                         spinnerGender.visibility= View.GONE
@@ -342,7 +340,7 @@ class WordActivity : AppCompatActivity() {
                         idPartOfSpeech = positionSpinner
                         immutableAttrs = mutableMapOf()
                         updateSpinners()
-                        flagIsFirst=false
+                        flagIsFirst =false
                     }
                 }
             }
@@ -390,7 +388,8 @@ class WordActivity : AppCompatActivity() {
     fun updateNewWords(){
         //list of new words
         val listViewNewWords : ListView = findViewById(R.id.listViewNewWords)
-        val list: MutableList<Pair<String, IWordEntity>> = dictionaryDao.createWordsFromExisting(languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word])
+        val list: MutableList<Pair<String, IWordEntity>> = dictionaryDao.createWordsFromExisting(
+            languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word])
         val adapter: ArrayAdapter<Pair<String, IWordEntity>> = NewWordAdapter(this, list)
         listViewNewWords.adapter = adapter
         adapter.notifyDataSetChanged()
