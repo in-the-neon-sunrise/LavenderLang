@@ -7,6 +7,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.appcompat.app.AppCompatActivity
 import com.anggrayudi.storage.SimpleStorageHelper
@@ -21,17 +22,6 @@ var nextLanguageId : Int = 0
 
 
 class MainActivity : AppCompatActivity() {
-    val createJSONLauncher = registerForActivityResult(CreateDocument("todo/todo")) { uri ->
-        if (uri != null) {
-            LanguageDaoImpl().writeToJSON(uri)
-        }
-    }
-    val createPDFLauncher = registerForActivityResult(CreateDocument("todo/todo")) { uri ->
-        if (uri != null) {
-            LanguageDaoImpl().writeToPDF(uri)
-        }
-    }
-
     lateinit var storageHelper: SimpleStorageHelper
 
     companion object {
@@ -49,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
+
 
         setInstance(this)
         storageHelper = SimpleStorageHelper(this)
@@ -155,10 +146,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-        if (languages.isNotEmpty()) Log.d("meowmeow",
-            languages[0]!!.capitalizedPartsOfSpeech.toString())
-        if (languages.isNotEmpty()) Log.d("meowmeow", languages.keys.toString())
 
         //button new lang listener
         val buttonNewLang: Button = findViewById(R.id.buttonNewLang)

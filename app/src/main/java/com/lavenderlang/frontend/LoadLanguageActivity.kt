@@ -77,14 +77,15 @@ class LoadLanguageActivity: AppCompatActivity(){
                 Toast.makeText(this, "Папка не выбрана, сохранение невозможно", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            Log.d("path", "${accessible[pathPositionSpinner]}//${path}")
+            Log.d("path", "${accessible[pathPositionSpinner]}/${path}")
             try {
                 languageDao.getLanguageFromFile("${accessible[pathPositionSpinner]}/${path}", this)
             } catch (e: FileWorkException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            catch (_: Exception) {
+            catch (e: Exception) {
+                Log.d("woof", e.message?:"")
                 return@setOnClickListener
             }
             val intent = Intent(this, LanguageActivity::class.java)

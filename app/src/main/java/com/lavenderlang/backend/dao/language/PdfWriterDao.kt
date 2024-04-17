@@ -41,11 +41,11 @@ class PdfWriterDaoImpl : PdfWriterDao {
             "И" to "I", "Й" to "Y", "К" to "K", "Л" to "L", "М" to "M", "Н" to "N", "О" to "O",
             "П" to "P", "Р" to "R", "С" to "S", "Т" to "T", "У" to "U", "Ф" to "F", "Х" to "Kh",
             "Ц" to "Ts", "Ч" to "Ch", "Ш" to "Sh", "Щ" to "Shch", "Ы" to "Y", "Э" to "E",
-            "Ю" to "Yu", "Я" to "Ya", " " to "_", "1" to "1", "2" to "2", "3" to "3", "4" to "4",
-            "5" to "5", "6" to "6", "7" to "7", "8" to "8", "9" to "9", "0" to "0")
+            "Ю" to "Yu", "Я" to "Ya", " " to "_")
         var res = ""
         for (c in name) {
-            if (c.toString() in dict.keys) {
+            if (c in '0'..'9' || c in 'a'..'z' || c in 'A'..'Z') res += c
+            else if (c.toString() in dict.keys) {
                 res += dict[c.toString()]!!
             }
         }
@@ -731,7 +731,8 @@ class PdfWriterDaoImpl : PdfWriterDao {
                     prev += columnWidths[i]
                 }
                 // separately for the last column with characteristics
-                if (word.partOfSpeech == PartOfSpeech.VERB) {
+                if (word.partOfSpeech == PartOfSpeech.VERB ||
+                    word.partOfSpeech == PartOfSpeech.PARTICIPLE) {
                     val textList = wordHandler.getImmutableAttrsInfo(word).split(", ")
                     text = textList[0]
                     x = prev + (columnWidths[3] - paint.measureText(text)) / 2

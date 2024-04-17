@@ -107,16 +107,16 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         val origFile = File(path)
         val file = DocumentFileCompat.fromFile(context, origFile)
         if (file == null) {
-            Toast.makeText(context, "Не удалось загрузить язык", Toast.LENGTH_LONG).show()
             Log.d("woof", "no file")
-            return
+            throw FileWorkException("Не удалось загрузить язык")
         }
+        Log.d("woof", "file ${file.name}")
         val inputStream = file.openInputStream(context)
         if (inputStream == null) {
-            Toast.makeText(context, "Не удалось загрузить язык", Toast.LENGTH_LONG).show()
             Log.d("woof", "no input stream")
-            return
+            throw FileWorkException("Не удалось загрузить язык")
         }
+        Log.d("woof", "input stream")
         val inputString = inputStream.bufferedReader().use { it.readText() }
         val language = Serializer.getInstance().deserializeLanguage(inputString)
         language.languageId = nextLanguageId
@@ -140,11 +140,11 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         language.dictionary.languageId = nextLanguageId
 
         languages[nextLanguageId] = language
+        Log.d("woof", "loaded ${language.name}")
         ++nextLanguageId
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.insertLanguage(context, language.languageId, language)
         }
-        Toast.makeText(context, "Язык успешно загружен", Toast.LENGTH_LONG).show()
         Log.d("woof", "loaded ${language.name}")
     }
 
@@ -162,6 +162,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
                 throw FileWorkException("Вы не дали приложению доступ к памяти телефона, сохранение невозможно")
         }
         curLanguage = language
+        Log.d("launch", "json start")
         createDocumentResultLauncher.launch("${PdfWriterDaoImpl().translitName(language.name)}.json")
         Log.d("woof", "json done i hope")
     }

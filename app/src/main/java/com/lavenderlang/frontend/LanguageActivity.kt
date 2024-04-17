@@ -4,9 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
@@ -14,6 +17,9 @@ import com.lavenderlang.backend.service.exception.FileWorkException
 
 
 class LanguageActivity: AppCompatActivity() {
+    lateinit var createJSONLauncher: ActivityResultLauncher<String>
+    lateinit var createPDFLauncher : ActivityResultLauncher<String>
+
     companion object{
         var id_lang: Int = 0
         val languageDao: LanguageDaoImpl = LanguageDaoImpl()
@@ -21,6 +27,25 @@ class LanguageActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.language_activity)
+
+        createJSONLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            Log.d("json start write", "result")
+            if (uri != null) {
+                Log.d("json write", uri.toString())
+                LanguageDaoImpl().writeToJSON(uri)
+            } else {
+                Log.d("json write", "uri is null")
+            }
+        }
+
+        createPDFLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
+            Log.d("pdf start write", "result")
+            if (uri != null) {
+                LanguageDaoImpl().writeToPDF(uri)
+            } else {
+                Log.d("pdf write", "uri is null")
+            }
+        }
 
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
@@ -80,8 +105,7 @@ class LanguageActivity: AppCompatActivity() {
         val editLanguageName: EditText = findViewById(R.id.editLanguageName)
         val editDescription: EditText = findViewById(R.id.editDescription)
 
-        var lang = intent.getIntExtra("lang", -1)
-        when(lang){
+        when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
                 id_lang = nextLanguageId
                 languageDao.createLanguage("Язык$id_lang", "")
@@ -125,7 +149,7 @@ class LanguageActivity: AppCompatActivity() {
             LanguageDaoImpl().downloadLanguageJSON(
                 languages[id_lang]!!,
                 MainActivity.getInstance().storageHelper,
-                MainActivity.getInstance().createJSONLauncher)
+                createJSONLauncher)
             } catch (e: FileWorkException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
             }
@@ -138,7 +162,7 @@ class LanguageActivity: AppCompatActivity() {
             LanguageDaoImpl().downloadLanguagePDF(
                 languages[id_lang]!!,
                 MainActivity.getInstance().storageHelper,
-                MainActivity.getInstance().createPDFLauncher)
+                createPDFLauncher)
             } catch (e: FileWorkException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
             }
