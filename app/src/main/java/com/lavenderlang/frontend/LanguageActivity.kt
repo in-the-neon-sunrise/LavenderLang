@@ -92,9 +92,15 @@ class LanguageActivity: AppCompatActivity() {
         }
 
         //bottom navigation menu
+        val buttonHome: Button = findViewById(R.id.buttonHome)
+        buttonHome.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
         val buttonTranslator: Button = findViewById(R.id.buttonTranslator)
         buttonTranslator.setOnClickListener {
-            val intent = Intent(this@LanguageActivity, TranslatorActivity::class.java)
+            val intent = Intent(this, TranslatorActivity::class.java)
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }

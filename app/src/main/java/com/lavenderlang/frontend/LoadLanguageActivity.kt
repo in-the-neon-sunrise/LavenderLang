@@ -31,6 +31,12 @@ class LoadLanguageActivity: AppCompatActivity(){
             val intent = Intent(this, InstructionActivity::class.java)
             startActivity(intent)
         }
+        //bottom navigation menu
+        val buttonHome: Button = findViewById(R.id.buttonHome)
+        buttonHome.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {

@@ -168,6 +168,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, InformationActivity::class.java)
             startActivity(intent)
         }
+        //bottom navigation menu
+        val buttonTranslator: Button = findViewById(R.id.buttonTranslator)
+        buttonTranslator.setOnClickListener {
+            val intent = Intent(this, TranslatorActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {

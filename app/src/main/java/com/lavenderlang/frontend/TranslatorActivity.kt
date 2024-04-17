@@ -36,6 +36,19 @@ class TranslatorActivity : AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
+        //bottom navigation menu
+        val buttonHome: Button = findViewById(R.id.buttonHome)
+        buttonHome.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        val buttonLanguage: Button = findViewById(R.id.buttonLanguage)
+        buttonLanguage.setOnClickListener {
+            val intent = Intent(this, LanguageActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
+        }
     }
 
     override fun onStart() {
@@ -54,7 +67,8 @@ class TranslatorActivity : AppCompatActivity() {
         spinner.adapter = adapterLanguages
         adapterLanguages.notifyDataSetChanged()
         flagIsSpinnerSelected =true;
-        if(id_lang !=-1)spinner.setSelection(id_lang)
+        var stupid_id = languages.keys.toList().indexOfFirst { it == id_lang }
+        if(id_lang !=-1)spinner.setSelection(stupid_id)
         radiobutton.isChecked = true//перевод с конланга
         radiogroup.setOnCheckedChangeListener { group, checkedId ->
             translationOnConlang = checkedId != radiobutton.id
@@ -64,7 +78,7 @@ class TranslatorActivity : AppCompatActivity() {
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
             override fun onItemSelected(parent: AdapterView<*>?, item: View?, position: Int, id: Long) {
-                if(flagIsSpinnerSelected) id_lang = position
+                if(flagIsSpinnerSelected) id_lang = languages.keys.toList()[position]
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 id_lang = 0

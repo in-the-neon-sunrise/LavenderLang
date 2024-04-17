@@ -59,6 +59,26 @@ class WordActivity : AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
+        //bottom navigation menu
+        val buttonHome: Button = findViewById(R.id.buttonHome)
+        buttonHome.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        val buttonLanguage: Button = findViewById(R.id.buttonLanguage)
+        buttonLanguage.setOnClickListener {
+            val intent = Intent(this, LanguageActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
+        }
+
+        val buttonTranslator: Button = findViewById(R.id.buttonTranslator)
+        buttonTranslator.setOnClickListener {
+            val intent = Intent(this, TranslatorActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
+        }
     }
 
     override fun onStart() {
@@ -76,9 +96,6 @@ class WordActivity : AppCompatActivity() {
         }
 
         var word = intent.getIntExtra("word", -1)
-        if (word == -1 && id_word != -1){
-            id_lang = LanguageActivity.id_lang
-        }
         when (word) {
             -1 -> {
                 id_word = languages[id_lang]!!.dictionary.dict.size

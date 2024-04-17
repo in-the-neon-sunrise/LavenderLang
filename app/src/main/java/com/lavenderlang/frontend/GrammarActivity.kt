@@ -32,17 +32,17 @@ class GrammarActivity: AppCompatActivity() {
     companion object{
         var id_lang: Int = 0
         val grammarDao = GrammarDaoImpl()
-        lateinit var grammar: GrammarEntity
+        var grammar: GrammarEntity = languages[this.id_lang]!!.grammar
 
-        lateinit var gender:MutableList<CharacteristicEntity>
-        lateinit var number:MutableList<CharacteristicEntity>
-        lateinit var case:MutableList<CharacteristicEntity>
-        lateinit var time:MutableList<CharacteristicEntity>
-        lateinit var person:MutableList<CharacteristicEntity>
-        lateinit var mood:MutableList<CharacteristicEntity>
-        lateinit var type:MutableList<CharacteristicEntity>
-        lateinit var voice:MutableList<CharacteristicEntity>
-        lateinit var degreeOfComparison:MutableList<CharacteristicEntity>
+        var gender:MutableList<CharacteristicEntity> = grammar.varsGender.values.toMutableList()
+        var number:MutableList<CharacteristicEntity> = grammar.varsNumber.values.toMutableList()
+        var case:MutableList<CharacteristicEntity> = grammar.varsCase.values.toMutableList()
+        var time:MutableList<CharacteristicEntity> = grammar.varsTime.values.toMutableList()
+        var person:MutableList<CharacteristicEntity> = grammar.varsPerson.values.toMutableList()
+        var mood:MutableList<CharacteristicEntity> = grammar.varsMood.values.toMutableList()
+        var type:MutableList<CharacteristicEntity> = grammar.varsType.values.toMutableList()
+        var voice:MutableList<CharacteristicEntity> = grammar.varsVoice.values.toMutableList()
+        var degreeOfComparison:MutableList<CharacteristicEntity> = grammar.varsDegreeOfComparison.values.toMutableList()
 
         var genderNames: MutableList<String> = mutableListOf()
         var genderRusIds: MutableList<Int> = mutableListOf()
@@ -90,18 +90,93 @@ class GrammarActivity: AppCompatActivity() {
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
+        //bottom navigation menu
+        val buttonHome: Button = findViewById(R.id.buttonHome)
+        buttonHome.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        val buttonLanguage: Button = findViewById(R.id.buttonLanguage)
+        buttonLanguage.setOnClickListener {
+            val intent = Intent(this, LanguageActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
+        }
+
+        val buttonTranslator: Button = findViewById(R.id.buttonTranslator)
+        buttonTranslator.setOnClickListener {
+            val intent = Intent(this, TranslatorActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
+        }
 
         val buttonSave: Button = findViewById(R.id.buttonSave)
         buttonSave.setOnClickListener {
             var name: String
             var rusId: Int
-            Toast.makeText(this, genderNames.toString(), Toast.LENGTH_SHORT).show()
-            for(i in 0..<languages[id_lang]!!.grammar.varsGender.values.size) {
+            for((i, el) in languages[id_lang]!!.grammar.varsGender.values.withIndex()) {
                 name = genderNames[i]
                 rusId= genderRusIds[i]
                 grammarDao.updateOption(
-                    languages[id_lang]!!.grammar, i,
-                    CharacteristicEntity(i, Attributes.GENDER, name, rusId))
+                    languages[id_lang]!!.grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.GENDER, name, rusId))
+            }
+            for((i, el) in languages[id_lang]!!.grammar.varsNumber.values.withIndex()) {
+                name = numberNames[i]
+                rusId= numberRusIds[i]
+                grammarDao.updateOption(
+                    languages[id_lang]!!.grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.NUMBER, name, rusId))
+            }
+            for((i, el) in languages[id_lang]!!.grammar.varsCase.values.withIndex()) {
+                name = caseNames[i]
+                rusId= caseRusIds[i]
+                grammarDao.updateOption(
+                    languages[id_lang]!!.grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.CASE, name, rusId))
+            }
+            for((i, el) in languages[id_lang]!!.grammar.varsTime.values.withIndex()) {
+                name = timeNames[i]
+                rusId= timeRusIds[i]
+                grammarDao.updateOption(
+                    languages[id_lang]!!.grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.TIME, name, rusId))
+            }
+            for((i, el) in languages[id_lang]!!.grammar.varsPerson.values.withIndex()) {
+                name = personNames[i]
+                rusId= personRusIds[i]
+                grammarDao.updateOption(
+                    languages[id_lang]!!.grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.PERSON, name, rusId))
+            }
+            for((i, el) in languages[id_lang]!!.grammar.varsMood.values.withIndex()) {
+                name = moodNames[i]
+                rusId= moodRusIds[i]
+                grammarDao.updateOption(
+                    languages[id_lang]!!.grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.MOOD, name, rusId))
+            }
+            for((i, el) in languages[id_lang]!!.grammar.varsType.values.withIndex()) {
+                name = typeNames[i]
+                rusId= typeRusIds[i]
+                grammarDao.updateOption(
+                    languages[id_lang]!!.grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.TYPE, name, rusId))
+            }
+            for((i, el) in languages[id_lang]!!.grammar.varsVoice.values.withIndex()) {
+                name = voiceNames[i]
+                rusId= voiceRusIds[i]
+                grammarDao.updateOption(
+                    languages[id_lang]!!.grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.VOICE, name, rusId))
+            }
+            for((i, el) in languages[id_lang]!!.grammar.varsDegreeOfComparison.values.withIndex()) {
+                name = degreeOfComparisonNames[i]
+                rusId= degreeOfComparisonRusIds[i]
+                grammarDao.updateOption(
+                    languages[id_lang]!!.grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.DEGREE_OF_COMPARISON, name, rusId))
             }
         }
     }
@@ -117,16 +192,6 @@ class GrammarActivity: AppCompatActivity() {
 
             else -> {
                 id_lang = lang
-                grammar = languages[id_lang]!!.grammar
-                gender = grammar.varsGender.values.toMutableList()
-                number = grammar.varsNumber.values.toMutableList()
-                case = grammar.varsCase.values.toMutableList()
-                time = grammar.varsTime.values.toMutableList()
-                person = grammar.varsPerson.values.toMutableList()
-                mood = grammar.varsMood.values.toMutableList()
-                type = grammar.varsType.values.toMutableList()
-                voice = grammar.varsVoice.values.toMutableList()
-                degreeOfComparison = grammar.varsDegreeOfComparison.values.toMutableList()
             }
         }
     }
@@ -426,51 +491,35 @@ private class AttributeAdapter(context: Context, listOfAttributes: MutableList<C
                         }
 
                         1 -> {
-                            if (GrammarActivity.numberNames[positionAttribute] != updatedText) {
-                                GrammarActivity.numberNames[positionAttribute] = updatedText
-                            }
+                            GrammarActivity.numberNames[positionAttribute] = updatedText
                         }
 
                         2 -> {
-                            if (GrammarActivity.caseNames[positionAttribute] != updatedText) {
-                                GrammarActivity.caseNames[positionAttribute] = updatedText
-                            }
+                            GrammarActivity.caseNames[positionAttribute] = updatedText
                         }
 
                         3 -> {
-                            if (GrammarActivity.timeNames[positionAttribute] != updatedText) {
-                                GrammarActivity.timeNames[positionAttribute] = updatedText
-                            }
+                            GrammarActivity.timeNames[positionAttribute] = updatedText
                         }
 
                         4 -> {
-                            if (GrammarActivity.personNames[positionAttribute] != updatedText) {
-                                GrammarActivity.personNames[positionAttribute] = updatedText
-                            }
+                            GrammarActivity.personNames[positionAttribute] = updatedText
                         }
 
                         5 -> {
-                            if (GrammarActivity.moodNames[positionAttribute] != updatedText) {
-                                GrammarActivity.moodNames[positionAttribute] = updatedText
-                            }
+                            GrammarActivity.moodNames[positionAttribute] = updatedText
                         }
 
                         6 -> {
-                            if (GrammarActivity.typeNames[positionAttribute] != updatedText) {
-                                GrammarActivity.typeNames[positionAttribute] = updatedText
-                            }
+                            GrammarActivity.typeNames[positionAttribute] = updatedText
                         }
 
                         7 -> {
-                            if (GrammarActivity.voiceNames[positionAttribute] != updatedText) {
-                                GrammarActivity.voiceNames[positionAttribute] = updatedText
-                            }
+                            GrammarActivity.voiceNames[positionAttribute] = updatedText
                         }
 
                         else -> {
-                            if (GrammarActivity.degreeOfComparisonNames[positionAttribute] != updatedText) {
-                                GrammarActivity.degreeOfComparisonNames[positionAttribute] = updatedText
-                            }
+                            GrammarActivity.degreeOfComparisonNames[positionAttribute] = updatedText
                         }
                     }
                 }
