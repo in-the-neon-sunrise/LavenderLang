@@ -30,19 +30,20 @@ import com.lavenderlang.backend.service.*
 
 class GrammarActivity: AppCompatActivity() {
     companion object{
-        var id_lang: Int = 0
+        var id_lang: Int = -1
         val grammarDao = GrammarDaoImpl()
-        var grammar: GrammarEntity = languages[this.id_lang]!!.grammar
 
-        var gender:MutableList<CharacteristicEntity> = grammar.varsGender.values.toMutableList()
-        var number:MutableList<CharacteristicEntity> = grammar.varsNumber.values.toMutableList()
-        var case:MutableList<CharacteristicEntity> = grammar.varsCase.values.toMutableList()
-        var time:MutableList<CharacteristicEntity> = grammar.varsTime.values.toMutableList()
-        var person:MutableList<CharacteristicEntity> = grammar.varsPerson.values.toMutableList()
-        var mood:MutableList<CharacteristicEntity> = grammar.varsMood.values.toMutableList()
-        var type:MutableList<CharacteristicEntity> = grammar.varsType.values.toMutableList()
-        var voice:MutableList<CharacteristicEntity> = grammar.varsVoice.values.toMutableList()
-        var degreeOfComparison:MutableList<CharacteristicEntity> = grammar.varsDegreeOfComparison.values.toMutableList()
+        lateinit var grammar: GrammarEntity
+
+        lateinit var gender:MutableList<CharacteristicEntity>
+        lateinit var number:MutableList<CharacteristicEntity>
+        lateinit var case:MutableList<CharacteristicEntity>
+        lateinit var time:MutableList<CharacteristicEntity>
+        lateinit var person:MutableList<CharacteristicEntity>
+        lateinit var mood:MutableList<CharacteristicEntity>
+        lateinit var type:MutableList<CharacteristicEntity>
+        lateinit var voice:MutableList<CharacteristicEntity>
+        lateinit var degreeOfComparison:MutableList<CharacteristicEntity>
 
         var genderNames: MutableList<String> = mutableListOf()
         var genderRusIds: MutableList<Int> = mutableListOf()
@@ -192,6 +193,17 @@ class GrammarActivity: AppCompatActivity() {
 
             else -> {
                 id_lang = lang
+                grammar = languages[id_lang]!!.grammar
+
+                gender = grammar.varsGender.values.toMutableList()
+                number = grammar.varsNumber.values.toMutableList()
+                case = grammar.varsCase.values.toMutableList()
+                time = grammar.varsTime.values.toMutableList()
+                person = grammar.varsPerson.values.toMutableList()
+                mood = grammar.varsMood.values.toMutableList()
+                type = grammar.varsType.values.toMutableList()
+                voice = grammar.varsVoice.values.toMutableList()
+                degreeOfComparison = grammar.varsDegreeOfComparison.values.toMutableList()
             }
         }
     }
