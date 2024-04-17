@@ -52,10 +52,10 @@
 
             <Button
                 android:id="@+id/buttonNewGender"
-                android:layout_width="0dp"
+                android:layout_width="50dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="50dp"
-                android:text="+"
+                android:background="@drawable/plus"
                 app:layout_constraintStart_toEndOf="@+id/textViewGender"
                 app:layout_constraintTop_toTopOf="@+id/textViewGender"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -80,10 +80,10 @@
 
             <Button
                 android:id="@+id/buttonNewNumber"
-                android:layout_width="0dp"
+                android:layout_width="50dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="50dp"
-                android:text="+"
+                android:background="@drawable/plus"
                 app:layout_constraintStart_toEndOf="@+id/textViewNumber"
                 app:layout_constraintTop_toTopOf="@+id/textViewNumber"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -108,10 +108,10 @@
 
             <Button
                 android:id="@+id/buttonNewCase"
-                android:layout_width="0dp"
+                android:layout_width="50dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="50dp"
-                android:text="+"
+                android:background="@drawable/plus"
                 app:layout_constraintStart_toEndOf="@+id/textViewCase"
                 app:layout_constraintTop_toTopOf="@+id/textViewCase"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -136,10 +136,10 @@
 
             <Button
                 android:id="@+id/buttonNewTime"
-                android:layout_width="0dp"
+                android:layout_width="50dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="50dp"
-                android:text="+"
+                android:background="@drawable/plus"
                 app:layout_constraintStart_toEndOf="@+id/textViewTime"
                 app:layout_constraintTop_toTopOf="@+id/textViewTime"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -164,10 +164,10 @@
 
             <Button
                 android:id="@+id/buttonNewPerson"
-                android:layout_width="0dp"
+                android:layout_width="50dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="50dp"
-                android:text="+"
+                android:background="@drawable/plus"
                 app:layout_constraintStart_toEndOf="@+id/textViewPerson"
                 app:layout_constraintTop_toTopOf="@+id/textViewPerson"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -192,10 +192,10 @@
 
             <Button
                 android:id="@+id/buttonNewMood"
-                android:layout_width="0dp"
+                android:layout_width="50dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="50dp"
-                android:text="+"
+                android:background="@drawable/plus"
                 app:layout_constraintStart_toEndOf="@+id/textViewMood"
                 app:layout_constraintTop_toTopOf="@+id/textViewMood"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -220,10 +220,10 @@
 
             <Button
                 android:id="@+id/buttonNewType"
-                android:layout_width="0dp"
+                android:layout_width="50dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="50dp"
-                android:text="+"
+                android:background="@drawable/plus"
                 app:layout_constraintStart_toEndOf="@+id/textViewType"
                 app:layout_constraintTop_toTopOf="@+id/textViewType"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -248,10 +248,10 @@
 
             <Button
                 android:id="@+id/buttonNewVoice"
-                android:layout_width="0dp"
+                android:layout_width="50dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="50dp"
-                android:text="+"
+                android:background="@drawable/plus"
                 app:layout_constraintStart_toEndOf="@+id/textViewVoice"
                 app:layout_constraintTop_toTopOf="@+id/textViewVoice"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -276,10 +276,10 @@
 
             <Button
                 android:id="@+id/buttonNewDegreeOfComparison"
-                android:layout_width="0dp"
+                android:layout_width="50dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="50dp"
-                android:text="+"
+                android:background="@drawable/plus"
                 app:layout_constraintStart_toEndOf="@+id/textViewDegreeOfComparison"
                 app:layout_constraintTop_toTopOf="@+id/textViewDegreeOfComparison"
                 app:layout_constraintEnd_toEndOf="parent"/>
