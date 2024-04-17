@@ -28,7 +28,6 @@ class LanguageActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.language_activity)
 
-        Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show()
         createJSONLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
             Log.d("json start write", "result")
             if (uri != null) {

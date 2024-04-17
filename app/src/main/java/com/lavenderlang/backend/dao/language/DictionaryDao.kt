@@ -21,6 +21,8 @@ interface DictionaryDao {
     fun filterDictByPartOfSpeech(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : ArrayList<IWordEntity>
     fun sortDictByWord(dictionary: DictionaryEntity) : ArrayList<IWordEntity>
     fun sortDictByTranslation(dictionary: DictionaryEntity) : ArrayList<IWordEntity>
+    fun sortDictByWordFiltered(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : ArrayList<IWordEntity>
+    fun sortDictByTranslationFiltered(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech) : ArrayList<IWordEntity>
     fun getWordForms(dictionary: DictionaryEntity, word: String) : ArrayList<IWordEntity>
 
 }
@@ -87,6 +89,33 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
     override fun sortDictByTranslation(dictionary: DictionaryEntity): ArrayList<IWordEntity> {
         return dictionary.dict.sortedBy { it.translation } as ArrayList<IWordEntity>
     }
+
+    override fun sortDictByWordFiltered(
+        dictionary: DictionaryEntity,
+        partOfSpeech: PartOfSpeech
+    ): ArrayList<IWordEntity> {
+        val filteredDict: ArrayList<IWordEntity> = arrayListOf()
+        for (word in dictionary.dict) {
+            if (word.partOfSpeech == partOfSpeech) {
+                filteredDict.add(word)
+            }
+        }
+        return filteredDict.sortedBy { it.word } as ArrayList<IWordEntity>
+    }
+
+    override fun sortDictByTranslationFiltered(
+        dictionary: DictionaryEntity,
+        partOfSpeech: PartOfSpeech
+    ): ArrayList<IWordEntity> {
+        val filteredDict: ArrayList<IWordEntity> = arrayListOf()
+        for (word in dictionary.dict) {
+            if (word.partOfSpeech == partOfSpeech) {
+                filteredDict.add(word)
+            }
+        }
+        return filteredDict.sortedBy { it.translation } as ArrayList<IWordEntity>
+    }
+
 
     override fun getWordForms(dictionary: DictionaryEntity, word: String): ArrayList<IWordEntity> {
         for (key in dictionary.fullDict.keys) {
