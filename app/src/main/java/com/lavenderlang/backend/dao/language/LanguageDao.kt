@@ -81,6 +81,25 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
 
     override fun copyLanguage(language: LanguageEntity) {
         val newLang = language.copy(languageId = nextLanguageId, name = language.name + " копия")
+
+        newLang.grammar.languageId = nextLanguageId
+        for (rule in newLang.grammar.grammarRules) {
+            rule.languageId = nextLanguageId
+        }
+        for (rule in newLang.grammar.wordFormationRules) {
+            rule.languageId = nextLanguageId
+        }
+        for (word in newLang.dictionary.dict) {
+            word.languageId = nextLanguageId
+        }
+        for (key in newLang.dictionary.fullDict.keys) {
+            for (word in newLang.dictionary.fullDict[key]!!) {
+                word.languageId = nextLanguageId
+            }
+        }
+
+        newLang.dictionary.languageId = nextLanguageId
+
         languages[nextLanguageId++] = newLang
         MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
             languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, newLang)
