@@ -43,7 +43,7 @@ class InstructionActivity: AppCompatActivity() {
         heads.add(findViewById(R.id.textViewHead10))
         heads.add(findViewById(R.id.textViewHead11))
 
-        if(id_block!=0)scroll.post { scroll.smoothScrollTo(0, heads[id_block].top) }
+        if(id_block!=0)scroll.post { scroll.smoothScrollTo(0, heads[id_block-1].top) }
     }
 
     override fun finish() {
