@@ -40,7 +40,7 @@ import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.WordNotFoundException
 
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
-var nextLanguageId : Int = 0
+var nextLanguageId : Int = -1
 var isDark: Boolean = false
 
 class MainActivity : AppCompatActivity() {
@@ -51,9 +51,10 @@ class MainActivity : AppCompatActivity() {
 
         setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
-        if (languages.isEmpty()) {
+        if (nextLanguageId == -1 && !intent.getBooleanExtra("done", false)) {
             val intent = Intent(this, SplashScreenActivity::class.java)
             startActivity(intent)
+            if (nextLanguageId == -1) nextLanguageId = 0
         }
         setContentView(R.layout.start_activity)
 

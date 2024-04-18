@@ -30,7 +30,7 @@ interface LanguageDao {
     fun copyLanguage(language: LanguageEntity)
     fun createLanguage(name: String, description: String)
     fun deleteLanguage(id: Int)
-    fun getLanguagesFromDB(context: AppCompatActivity)
+    fun getLanguagesFromDB()
     fun downloadLanguageJSON(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>)
     fun downloadLanguagePDF(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>)
     fun getLanguageFromFile(path: String, context: AppCompatActivity)
@@ -40,9 +40,10 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         var curLanguage: LanguageEntity? = null
     }
 
-    override fun getLanguagesFromDB(context: AppCompatActivity) {
-        context.lifecycleScope.launch(Dispatchers.IO) {
-            val languageItemList = languageRepository.loadAllLanguages(context)
+    override fun getLanguagesFromDB() {
+        GlobalScope.launch(Dispatchers.IO) {
+            val languageItemList = languageRepository.loadAllLanguages(
+                MyApp.getInstance().applicationContext)
             languages = mutableMapOf()
             nextLanguageId = 0
             for (e in languageItemList) {
