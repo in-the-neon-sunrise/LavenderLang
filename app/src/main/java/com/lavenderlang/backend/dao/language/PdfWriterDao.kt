@@ -258,13 +258,13 @@ class PdfWriterDaoImpl : PdfWriterDao {
         y += lineSpacing * 2 // different space between the heading and the next line
         paint.textSize = normalTextSize
         x = lineStart
-        text = "Варианты характеристик:"
+        text = "Варианты признаков:"
         canvas.drawText(text, x, y, paint)
 
         paint.setColor(Color.BLACK)
         y += lineSpacing
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        text = "В скобках указана соответствующая характеристика в русском языке."
+        text = "В скобках указана соответствующий признак в русском языке."
         canvas.drawText(text, x, y, paint)
 
         // gender
@@ -662,7 +662,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
 
         // table heading
         y = tableTop + padding + normalTextSize
-        var textArray = arrayListOf("Слово", "Перевод", "Часть речи", "Неизм. характеристики")
+        var textArray = arrayListOf("Слово", "Перевод", "Часть речи", "Пост. признаки")
         var prev = lineStart
         for (i in 0 until columnCount) {
             text = textArray[i]
