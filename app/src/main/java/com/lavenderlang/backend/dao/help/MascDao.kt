@@ -29,7 +29,8 @@ class MascDaoImpl : MascDao {
     override fun fits(masc : MascEntity, word : IWordEntity) : Boolean {
         if (masc.partOfSpeech != word.partOfSpeech) return false
         for (attr in masc.immutableAttrs.keys) {
-            if (!word.immutableAttrs.containsKey(attr) || word.immutableAttrs[attr] != masc.immutableAttrs[attr]) {
+            if (!word.immutableAttrs.containsKey(attr) ||
+                word.immutableAttrs[attr] != masc.immutableAttrs[attr]) {
                 return false
             }
         }

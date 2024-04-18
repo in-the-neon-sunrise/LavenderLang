@@ -3,7 +3,7 @@
     <string name="new_language">Новый язык</string>
     <string name="stupid_text">Сочувствуем.</string>
     <string name="name">Name</string>
-    <string name="description">Description</string>
+    <string name="description">Описание</string>
     <string name="p">P</string>
     <string name="i">I</string>
     <string name="dictionary">Словарь</string>
@@ -16,7 +16,7 @@
     <string name="developers">Создатели:\n\n
         Арисова Елизавета @arisovaliza\n
         Макаревич Мария @programmerowl\n\n
-        Студентки НИУ ВШЭ, направление программная инженерия, 2 курс</string>
+        Студентки НИУ ВШЭ, направление "Программная инженерия", 2 курс</string>
 
     <string name="Head1">LavenderLang</string>
     <string name="Block1">

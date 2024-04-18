@@ -8,8 +8,8 @@
 
     <Button
         android:id="@+id/buttonInf"
-        android:layout_width="55dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/info"
@@ -18,8 +18,8 @@
 
     <Button
         android:id="@+id/buttonPrev"
-        android:layout_width="55dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/arrow_back"
@@ -595,8 +595,8 @@
 
     <Button
         android:id="@+id/buttonHome"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="50dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/home"
@@ -605,8 +605,8 @@
 
     <Button
         android:id="@+id/buttonLanguage"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/language"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -615,8 +615,8 @@
 
     <Button
         android:id="@+id/buttonTranslator"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/translate"

@@ -3,6 +3,7 @@ package com.lavenderlang.frontend
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock.sleep
 import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -27,10 +28,12 @@ import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
 import com.lavenderlang.backend.entity.word.AdjectiveEntity
 import com.lavenderlang.backend.entity.word.AdverbEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
 var nextLanguageId : Int = 0
@@ -73,12 +76,21 @@ class MainActivity : AppCompatActivity() {
 
         /*val languageHandler = LanguageDaoImpl()
         languageHandler.createLanguage("Пример языка", "Пример :>")
-        Log.d("create lang", languages.toString())
+        Log.d("lang created", languages.toString())
+
         val writingHandler = WritingDaoImpl()
         writingHandler.changeVowels(languages[0]!!, "a")
+        Log.d("vowels", languages[0]!!.vowels)
         writingHandler.changeConsonants(languages[0]!!, "b c d")
-        val dictionaryHandler = DictionaryDaoImpl()
+        Log.d("consonants", languages[0]!!.consonants)
+        WritingDaoImpl().addCapitalizedPartOfSpeech(languages[0]!!, PartOfSpeech.NOUN)
+        Log.d("capitalized", languages[0]!!.capitalizedPartsOfSpeech.toString())
 
+        val punctuationHandler = PunctuationDaoImpl()
+        punctuationHandler.updatePunctuationSymbol(languages[0]!!, 0, "MEOW")
+        Log.d("punctuation", languages[0]!!.puncSymbols.toString())
+
+        val dictionaryHandler = DictionaryDaoImpl()
         val word1 = NounEntity(
             0,
             "aaa",
@@ -97,26 +109,32 @@ class MainActivity : AppCompatActivity() {
         )
         val word4 = AdverbEntity(
             0,
-            "ddd",
+            "forbiddensymbols",
             "красиво"
         )
         dictionaryHandler.addWord(languages[0]!!.dictionary, word1)
         dictionaryHandler.addWord(languages[0]!!.dictionary, word2)
         dictionaryHandler.addWord(languages[0]!!.dictionary, word3)
-        dictionaryHandler.addWord(languages[0]!!.dictionary, word4)
+        try {
+            dictionaryHandler.addWord(languages[0]!!.dictionary, word4)
+        } catch (e: ForbiddenSymbolsException) {
+            Log.d("forbidden symbols", e.message.toString())
+            sleep(1000)
+        }
+        Log.d("dictionary", languages[0]!!.dictionary.dict.toString())
 
         val grammarHandler = GrammarDaoImpl()
-        val rule = GrammarRuleEntity(0,
+        val rule1 = GrammarRuleEntity(0,
             MascEntity(
                 PartOfSpeech.NOUN, mutableMapOf(Attributes.GENDER to 1)
             ),
             mutableMapOf(Attributes.NUMBER to 1, Attributes.CASE to 0),
             TransformationEntity(0, 1, "", "b")
         )
-        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule)
-        val rule1 = GrammarRuleEntity(
+        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule1)
+        val rule2 = GrammarRuleEntity(
             0, MascEntity(
-                PartOfSpeech.VERB, mutableMapOf()
+                PartOfSpeech.VERB, mutableMapOf(Attributes.TYPE to 0, Attributes.VOICE to 0)
             ), mutableMapOf(
                 Attributes.NUMBER to 1,
                 Attributes.PERSON to 0,
@@ -126,14 +144,23 @@ class MainActivity : AppCompatActivity() {
             ),
             TransformationEntity(0, 1, "", "d")
         )
-        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule1)
-        val rule2 = GrammarRuleEntity(
-            0, MascEntity(
-                PartOfSpeech.ADVERB, mutableMapOf()
-            ), mutableMapOf(Attributes.DEGREE_OF_COMPARISON to 1),
+        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule2)
+        val rule3 = GrammarRuleEntity(
+            0, MascEntity(PartOfSpeech.ADVERB),
+            mutableMapOf(Attributes.DEGREE_OF_COMPARISON to 1),
             TransformationEntity(0, 0, "", "d")
         )
-        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule2)
+        grammarHandler.addGrammarRule(languages[0]!!.grammar, rule3)
+        val rule4 = GrammarRuleEntity(
+            0, MascEntity(PartOfSpeech.ADVERB),
+            mutableMapOf(Attributes.DEGREE_OF_COMPARISON to 1),
+            TransformationEntity(0, 0, "", "f")
+        )
+        try {
+            grammarHandler.addGrammarRule(languages[0]!!.grammar, rule4)
+        } catch (e: ForbiddenSymbolsException) {
+            Log.d("forbidden symbols", e.message.toString())
+        }
 
         grammarHandler.addOption(
             languages[0]!!.grammar, CharacteristicEntity(
@@ -151,9 +178,20 @@ class MainActivity : AppCompatActivity() {
                 2
             )
         )
-        WritingDaoImpl().addCapitalizedPartOfSpeech(languages[0]!!, PartOfSpeech.NOUN)
-        PunctuationDaoImpl().updatePunctuationSymbol(languages[0]!!, 0, "MEOW")
-        */
+        Log.d("grammar", languages[0]!!.grammar.varsGender.toString())
+
+        val rule5 = WordFormationRuleEntity(
+            0, MascEntity(
+                PartOfSpeech.NOUN, mutableMapOf(Attributes.GENDER to 1), "a{3}"
+            )
+        )*/
+
+
+
+
+
+
+
 
         //button new lang listener
         val buttonNewLang: Button = findViewById(R.id.buttonNewLang)
