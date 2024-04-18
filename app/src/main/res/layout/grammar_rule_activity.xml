@@ -43,217 +43,336 @@
 
             <TextView
                 android:id="@+id/textViewInitWord"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="55dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="56dp"
+                android:layout_marginEnd="30dp"
                 android:gravity="center"
-                android:text="Признаки начального слова"
+                android:text="Начальное слово"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
                 android:id="@+id/spinnerPartOfSpeech"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewInitWord" />
 
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:gravity="center"
+                android:text="Регулярное выражение"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerPartOfSpeech" />
+
             <EditText
                 android:id="@+id/editMasc"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginStart="55dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="56dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
                 android:autofillHints=""
                 android:gravity="center"
                 android:inputType="textMultiLine"
                 android:text="Маска слова"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerPartOfSpeech" />
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:gravity="center"
+                android:text="Постоянные признаки"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editMasc" />
 
             <Spinner
                 android:id="@+id/spinnerGender"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/editMasc"/>
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
             <Spinner
                 android:id="@+id/spinnerType"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerGender"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinnerGender" />
+
             <Spinner
                 android:id="@+id/spinnerVoice"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerType"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinnerType" />
 
             <TextView
                 android:id="@+id/textViewFinishWord"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
                 android:gravity="center"
                 android:text="Признаки конечного слова"
-                android:layout_marginTop="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.504"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerVoice"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinnerVoice" />
 
             <Spinner
-            android:id="@+id/spinnerFinishGender"
-            android:layout_width="409dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/textViewFinishWord"/>
+                android:id="@+id/spinnerFinishGender"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewFinishWord" />
 
             <Spinner
                 android:id="@+id/spinnerFinishNumber"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishGender"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishGender" />
 
             <Spinner
                 android:id="@+id/spinnerFinishCase"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishNumber"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishNumber" />
 
             <Spinner
                 android:id="@+id/spinnerFinishTime"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishCase"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishCase" />
 
             <Spinner
                 android:id="@+id/spinnerFinishPerson"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishTime"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishTime" />
 
             <Spinner
                 android:id="@+id/spinnerFinishMood"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishPerson"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishPerson" />
 
             <Spinner
                 android:id="@+id/spinnerFinishDegreeOfComparison"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishMood"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishMood" />
 
             <TextView
                 android:id="@+id/textViewTransformation"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
                 android:gravity="center"
                 android:text="Трансформация"
-                android:layout_marginTop="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishDegreeOfComparison"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishDegreeOfComparison" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:text="Срезать с начала"
+                app:layout_constraintEnd_toStartOf="@+id/editTextNumberFront"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/editTextNumberFront" />
 
             <EditText
                 android:id="@+id/editTextNumberFront"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:ems="10"
-                android:inputType="number"
+                app:layout_constraintHorizontal_weight="2"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:ems="10"
                 android:hint="Срезать спереди"
+                android:inputType="number"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView6"
                 app:layout_constraintTop_toBottomOf="@+id/textViewTransformation" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:text="Дописать в начало"
+                app:layout_constraintEnd_toStartOf="@+id/editTextAddFront"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/editTextAddFront" />
 
             <EditText
                 android:id="@+id/editTextAddFront"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:ems="10"
-                android:inputType="text"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:ems="10"
                 android:hint="Вписать спереди"
+                android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@+id/textView7"
+                app:layout_constraintTop_toBottomOf="@+id/editTextNumberFront" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:text="Срезать с конца"
+                app:layout_constraintEnd_toStartOf="@+id/editTextNumberBack"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextNumberFront"/>
+                app:layout_constraintTop_toTopOf="@+id/editTextNumberBack" />
 
             <EditText
                 android:id="@+id/editTextNumberBack"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:ems="10"
-                android:inputType="number"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:ems="10"
                 android:hint="Срезать сзади"
+                android:inputType="number"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@+id/textView8"
                 app:layout_constraintTop_toBottomOf="@+id/editTextAddFront" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:text="Дописать в конец"
+                app:layout_constraintEnd_toStartOf="@+id/editTextAddBack"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/editTextAddBack" />
 
             <EditText
                 android:id="@+id/editTextAddBack"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
                 android:ems="10"
                 android:hint="Вписать сзади"
                 android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@+id/textView9"
                 app:layout_constraintTop_toBottomOf="@+id/editTextNumberBack" />
 
             <Button
                 android:id="@+id/buttonSaveGrammarRule"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/save"
-                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/buttonDelete"
                 app:layout_constraintTop_toBottomOf="@+id/editTextAddBack" />
 
             <Button
@@ -261,8 +380,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/delete"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/buttonSaveGrammarRule"
+                app:layout_constraintEnd_toStartOf="@+id/buttonSaveGrammarRule"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/buttonSaveGrammarRule" />
 
 
