@@ -5,32 +5,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WritingActivity">
+    tools:context=".frontend.WritingActivity">
 
     <Button
         android:id="@+id/buttonInf"
-        android:layout_width="55dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:text="@string/i"
+        android:background="@drawable/info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonPrev"
-        android:layout_width="55dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="@string/p"
+        android:background="@drawable/arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="723dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="100dp"
+        android:layout_marginBottom="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,65 +44,198 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textViewWritingLetters"
-                android:layout_width="300dp"
+                android:id="@+id/textViewWritingVowels"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="55dp"
-                android:layout_marginTop="60dp"
-                android:layout_marginEnd="56dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="Буквы:"
+                android:text="Гласные:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editLetters"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="55dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="56dp"
+                android:id="@+id/editTextVowels"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
                 android:autofillHints=""
                 android:gravity="center"
                 android:inputType="textMultiLine"
-                android:text="@string/russian_alphabet"
+                android:text="@string/russian_vowels"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewWritingLetters" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewWritingVowels" />
 
             <TextView
-                android:id="@+id/textViewWritingSymbols"
-                android:layout_width="300dp"
+                android:id="@+id/textViewWritingConsonants"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="55dp"
                 android:layout_marginTop="50dp"
-                android:layout_marginEnd="56dp"
                 android:gravity="center"
-                android:text="Знаки пунктуации:"
+                android:text="Согласные:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editLetters" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextVowels" />
 
             <EditText
-                android:id="@+id/editSymbols"
-                android:layout_width="300dp"
+                android:id="@+id/editTextConsonants"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="55dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="56dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
                 android:autofillHints=""
                 android:gravity="center"
                 android:inputType="textMultiLine"
-                android:text="@string/russian_alphabet"
+                android:text="@string/russian_consonants"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewWritingSymbols" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewWritingConsonants" />
+
+            <TextView
+                android:id="@+id/textViewPartsOfSpeech"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="30dp"
+                android:gravity="center"
+                android:text="Части речи, которые пишутся с заглавной буквы:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextConsonants" />
+
+            <CheckBox
+                android:id="@+id/checkBoxNoun"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Существительное"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewPartsOfSpeech" />
+
+            <CheckBox
+                android:id="@+id/checkBoxVerb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Глагол"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxNoun" />
+
+            <CheckBox
+                android:id="@+id/checkBoxAdjective"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Прилагательное"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxVerb" />
+
+            <CheckBox
+                android:id="@+id/checkBoxAdverb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Наречие"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxAdjective" />
+
+            <CheckBox
+                android:id="@+id/checkBoxParticiple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Причастие"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxAdverb" />
+
+            <CheckBox
+                android:id="@+id/checkBoxVerbParticiple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Деепричастие"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxParticiple" />
+
+            <CheckBox
+                android:id="@+id/checkBoxPronoun"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Местоимение"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxVerbParticiple" />
+
+            <CheckBox
+                android:id="@+id/checkBoxNumeral"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Числительное"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxPronoun" />
+
+            <CheckBox
+                android:id="@+id/checkBoxFuncPart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Служебное слово"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxNumeral" />
 
 
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/save"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxFuncPart" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+    <Button
+        android:id="@+id/buttonHome"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/buttonLanguage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/language"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonTranslator"
+        app:layout_constraintStart_toEndOf="@+id/buttonHome" />
+
+    <Button
+        android:id="@+id/buttonTranslator"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/translate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

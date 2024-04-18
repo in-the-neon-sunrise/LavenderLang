@@ -9,18 +9,6 @@ import com.fasterxml.jackson.databind.KeyDeserializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.lavenderlang.backend.entity.help.*
 
-class IWordEntityKeySerializer : JsonSerializer<IWordEntity>() {
-    override fun serialize(value: IWordEntity, gen: JsonGenerator, serializers: SerializerProvider) {
-        gen.writeFieldName(value.word)
-    }
-}
-
-class IWordEntityKeyDeserializer : KeyDeserializer() {
-    override fun deserializeKey(key: String, ctxt: DeserializationContext): IWordEntity {
-        return NounEntity(word = key)
-    }
-}
-
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY,
@@ -39,7 +27,7 @@ class IWordEntityKeyDeserializer : KeyDeserializer() {
     JsonSubTypes.Type(value = FuncPartEntity::class, name = "funcpart")
 )
 interface IWordEntity {
-    val languageId : Int
+    var languageId : Int
     var word : String
     var translation : String
     var mutableAttrs : MutableMap<Attributes, Int>

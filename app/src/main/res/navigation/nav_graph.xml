@@ -7,12 +7,12 @@
 
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.lavenderlang.MainActivity"
+        android:name="com.lavenderlang.frontend.MainActivity"
         android:label="start_activity"
         tools:layout="@layout/start_activity" />
     <activity
         android:id="@+id/languageActivity"
-        android:name="com.lavenderlang.LanguageActivity"
+        android:name="com.lavenderlang.frontend.LanguageActivity"
         android:label="language_activity"
         tools:layout="@layout/language_activity" />
     <action
@@ -20,7 +20,7 @@
         app:destination="@id/languageActivity" />
     <activity
         android:id="@+id/informationActivity"
-        android:name="com.lavenderlang.InformationActivity"
+        android:name="com.lavenderlang.frontend.InformationActivity"
         android:label="information_activity"
         tools:layout="@layout/information_activity" />
     <action

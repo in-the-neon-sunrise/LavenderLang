@@ -3,7 +3,7 @@ package com.lavenderlang.backend.entity.language
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 
 data class LanguageEntity(
-    val languageId : Int = 0,
+    var languageId : Int = 0,
     var name : String = "Введите название",
     var description: String = "Введите описание",
     var dictionary: DictionaryEntity = DictionaryEntity(languageId),

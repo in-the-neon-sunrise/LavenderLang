@@ -4,25 +4,25 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".GrammarActivity">
+    tools:context=".frontend.GrammarActivity">
 
     <Button
         android:id="@+id/buttonInf"
-        android:layout_width="55dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:text="@string/i"
+        android:background="@drawable/info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonPrev"
-        android:layout_width="55dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="@string/p"
+        android:background="@drawable/arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,24 +43,28 @@
             <TextView
                 android:id="@+id/textViewGender"
                 android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:gravity="center_vertical"
+                android:text="Род"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Genders"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/buttonNewGender"
-                android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/textViewGender"
-                app:layout_constraintTop_toTopOf="@+id/textViewGender"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/textViewGender" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewGender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,24 +75,29 @@
             <TextView
                 android:id="@+id/textViewNumber"
                 android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Число"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Numbers"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/listViewGender"/>
+                app:layout_constraintTop_toBottomOf="@id/listViewGender" />
 
             <Button
                 android:id="@+id/buttonNewNumber"
-                android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/textViewNumber"
-                app:layout_constraintTop_toTopOf="@+id/textViewNumber"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/textViewNumber" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,24 +108,29 @@
             <TextView
                 android:id="@+id/textViewCase"
                 android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Падеж"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Cases"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/listViewNumber"/>
+                app:layout_constraintTop_toBottomOf="@id/listViewNumber" />
 
             <Button
                 android:id="@+id/buttonNewCase"
-                android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/textViewCase"
-                app:layout_constraintTop_toTopOf="@+id/textViewCase"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/textViewCase" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewCase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,24 +141,29 @@
             <TextView
                 android:id="@+id/textViewTime"
                 android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Время"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Times"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/listViewCase"/>
+                app:layout_constraintTop_toBottomOf="@id/listViewCase" />
 
             <Button
                 android:id="@+id/buttonNewTime"
-                android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/textViewTime"
-                app:layout_constraintTop_toTopOf="@+id/textViewTime"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/textViewTime" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,24 +174,29 @@
             <TextView
                 android:id="@+id/textViewPerson"
                 android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Лицо"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Persons"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/listViewTime"/>
+                app:layout_constraintTop_toBottomOf="@id/listViewTime" />
 
             <Button
                 android:id="@+id/buttonNewPerson"
-                android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/textViewPerson"
-                app:layout_constraintTop_toTopOf="@+id/textViewPerson"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/textViewPerson" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewPerson"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -183,24 +207,29 @@
             <TextView
                 android:id="@+id/textViewMood"
                 android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Наклонение"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Moods"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/listViewPerson"/>
+                app:layout_constraintTop_toBottomOf="@id/listViewPerson" />
 
             <Button
                 android:id="@+id/buttonNewMood"
-                android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/textViewMood"
-                app:layout_constraintTop_toTopOf="@+id/textViewMood"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/textViewMood" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewMood"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -211,24 +240,29 @@
             <TextView
                 android:id="@+id/textViewType"
                 android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Вид"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Types"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/listViewMood"/>
+                app:layout_constraintTop_toBottomOf="@id/listViewMood" />
 
             <Button
                 android:id="@+id/buttonNewType"
-                android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/textViewType"
-                app:layout_constraintTop_toTopOf="@+id/textViewType"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/textViewType" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -239,24 +273,29 @@
             <TextView
                 android:id="@+id/textViewVoice"
                 android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Залог"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="Voices"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/listViewType"/>
+                app:layout_constraintTop_toBottomOf="@id/listViewType" />
 
             <Button
                 android:id="@+id/buttonNewVoice"
-                android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/textViewVoice"
-                app:layout_constraintTop_toTopOf="@+id/textViewVoice"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/textViewVoice" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewVoice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -267,24 +306,29 @@
             <TextView
                 android:id="@+id/textViewDegreeOfComparison"
                 android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="4"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Степень сравнения"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                android:text="DegreesOfComparison"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/listViewVoice"/>
+                app:layout_constraintTop_toBottomOf="@id/listViewVoice" />
 
             <Button
                 android:id="@+id/buttonNewDegreeOfComparison"
-                android:layout_width="0dp"
-                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/textViewDegreeOfComparison"
-                app:layout_constraintTop_toTopOf="@+id/textViewDegreeOfComparison"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/textViewDegreeOfComparison" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewDegreeOfComparison"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -292,24 +336,41 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewDegreeOfComparison"/>
 
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/save"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewDegreeOfComparison" />
+
             <TextView
                 android:id="@+id/textViewGrammarRule"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:gravity="center"
                 android:text="Грамматические правила:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/listViewDegreeOfComparison"/>
+                app:layout_constraintTop_toBottomOf="@id/buttonSave" />
 
             <Button
                 android:id="@+id/buttonNewGrammarRule"
-                android:layout_width="300dp"
-                android:layout_height="60dp"
-                android:text="Новое грамматическое правило"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/plus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewGrammarRule" />
 
-            <com.lavenderlang.NonScrollListView
+            <com.lavenderlang.frontend.NonScrollListView
                 android:id="@+id/listViewGrammarRules"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -321,5 +382,36 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+
+
+    <Button
+        android:id="@+id/buttonHome"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonLanguage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/language"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonTranslator"
+        app:layout_constraintStart_toEndOf="@+id/buttonHome" />
+
+    <Button
+        android:id="@+id/buttonTranslator"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/translate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

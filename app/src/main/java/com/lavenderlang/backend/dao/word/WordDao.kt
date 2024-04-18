@@ -1,156 +1,167 @@
 package com.lavenderlang.backend.dao.word
 
-import android.content.Context
+import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.word.*
-import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.languages
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.frontend.languages
 
 interface WordDao {
-    fun updateWord(word : IWordEntity, newWord : String, context: Context)
-    fun updateTranslation(word : IWordEntity, newTranslation : String, context: Context)
-    fun updateImmutableAttrs(word : IWordEntity, args : MutableMap<Attributes, Int>, context: Context)
-    fun updatePartOfSpeech(word : IWordEntity, newPartOfSpeech : PartOfSpeech, context: Context)
+    fun updateWord(word : IWordEntity, newWord : String)
+    fun updateTranslation(word : IWordEntity, newTranslation : String)
+    fun updateImmutableAttrs(word : IWordEntity, args : MutableMap<Attributes, Int>)
+    fun updatePartOfSpeech(word : IWordEntity, newPartOfSpeech : PartOfSpeech)
+    fun updateWord(word: IWordEntity, newWord: String, newTranslation: String, newImmutableAttrs: MutableMap<Attributes, Int>, newPartOfSpeech: PartOfSpeech)
+    fun getImmutableAttrsInfo(word : IWordEntity) : String
 }
 
 class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
                   private val languageRepository: LanguageRepository = LanguageRepository()
 ) : WordDao {
-    override fun updateWord(word: IWordEntity, newWord: String, context: Context) {
-        val oldWord = when (word.partOfSpeech) {
-            PartOfSpeech.NOUN -> (word as NounEntity).copy()
-            PartOfSpeech.VERB -> (word as VerbEntity).copy()
-            PartOfSpeech.ADJECTIVE -> (word as AdjectiveEntity).copy()
-            PartOfSpeech.ADVERB -> (word as AdverbEntity).copy()
-            PartOfSpeech.PARTICIPLE -> (word as ParticipleEntity).copy()
-            PartOfSpeech.VERB_PARTICIPLE -> (word as VerbParticipleEntity).copy()
-            PartOfSpeech.PRONOUN -> (word as PronounEntity).copy()
-            PartOfSpeech.NUMERAL -> (word as NumeralEntity).copy()
-            PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
+    override fun updateWord(word: IWordEntity, newWord: String) {
+        for (letter in newWord) {
+            if (!languages[word.languageId]!!.vowels.contains(letter.lowercase()) &&
+                !languages[word.languageId]!!.consonants.contains(letter.lowercase())) {
+                throw ForbiddenSymbolsException("Letter $letter is not in language")
+            }
         }
         word.word = newWord
-        Thread {
-            helper.updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
-            languageRepository.updateLanguage(
-                context, word.languageId,
-                Serializer.getInstance().serializeLanguage(languages[word.languageId]!!))
-        }.start()
     }
 
-    override fun updateTranslation(word: IWordEntity, newTranslation: String, context: Context) {
-        val oldWord = when (word.partOfSpeech) {
-            PartOfSpeech.NOUN -> (word as NounEntity).copy()
-            PartOfSpeech.VERB -> (word as VerbEntity).copy()
-            PartOfSpeech.ADJECTIVE -> (word as AdjectiveEntity).copy()
-            PartOfSpeech.ADVERB -> (word as AdverbEntity).copy()
-            PartOfSpeech.PARTICIPLE -> (word as ParticipleEntity).copy()
-            PartOfSpeech.VERB_PARTICIPLE -> (word as VerbParticipleEntity).copy()
-            PartOfSpeech.PRONOUN -> (word as PronounEntity).copy()
-            PartOfSpeech.NUMERAL -> (word as NumeralEntity).copy()
-            PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
-        }
+    override fun updateTranslation(word: IWordEntity, newTranslation: String) {
         word.translation = newTranslation
-        Thread {
-            helper.updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
-            languageRepository.updateLanguage(
-                context, word.languageId,
-                Serializer.getInstance().serializeLanguage(languages[word.languageId]!!))
-        }.start()
     }
-    override fun updateImmutableAttrs(word: IWordEntity, args: MutableMap<Attributes, Int>, context: Context) {
-        val oldWord = when (word.partOfSpeech) {
-            PartOfSpeech.NOUN -> (word as NounEntity).copy()
-            PartOfSpeech.VERB -> (word as VerbEntity).copy()
-            PartOfSpeech.ADJECTIVE -> (word as AdjectiveEntity).copy()
-            PartOfSpeech.ADVERB -> (word as AdverbEntity).copy()
-            PartOfSpeech.PARTICIPLE -> (word as ParticipleEntity).copy()
-            PartOfSpeech.VERB_PARTICIPLE -> (word as VerbParticipleEntity).copy()
-            PartOfSpeech.PRONOUN -> (word as PronounEntity).copy()
-            PartOfSpeech.NUMERAL -> (word as NumeralEntity).copy()
-            PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
-        }
-        for (attr in args.keys) {
-            word.immutableAttrs[attr] = args[attr]!!
-        }
-        Thread {
-            helper.updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
-            languageRepository.updateLanguage(
-                context, word.languageId,
-                Serializer.getInstance().serializeLanguage(languages[word.languageId]!!))
-        }.start()
+    override fun updateImmutableAttrs(word: IWordEntity, args: MutableMap<Attributes, Int>) {
+        word.immutableAttrs = args
     }
 
-    override fun updatePartOfSpeech(word: IWordEntity, newPartOfSpeech: PartOfSpeech, context: Context) {
-        val oldWord = when (word.partOfSpeech) {
-            PartOfSpeech.NOUN -> (word as NounEntity).copy()
-            PartOfSpeech.VERB -> (word as VerbEntity).copy()
-            PartOfSpeech.ADJECTIVE -> (word as AdjectiveEntity).copy()
-            PartOfSpeech.ADVERB -> (word as AdverbEntity).copy()
-            PartOfSpeech.PARTICIPLE -> (word as ParticipleEntity).copy()
-            PartOfSpeech.VERB_PARTICIPLE -> (word as VerbParticipleEntity).copy()
-            PartOfSpeech.PRONOUN -> (word as PronounEntity).copy()
-            PartOfSpeech.NUMERAL -> (word as NumeralEntity).copy()
-            PartOfSpeech.FUNC_PART -> (word as FuncPartEntity).copy()
-        }
-        /*when (newPartOfSpeech) {
+    override fun updatePartOfSpeech(word: IWordEntity, newPartOfSpeech: PartOfSpeech) {
+        val newWord = when (newPartOfSpeech) {
             PartOfSpeech.NOUN -> NounEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.VERB -> VerbEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.ADJECTIVE -> AdjectiveEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.ADVERB -> AdverbEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.PARTICIPLE -> ParticipleEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
-            PartOfSpeech.VERBPARTICIPLE -> VerbParticipleEntity(
+            PartOfSpeech.VERB_PARTICIPLE -> VerbParticipleEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.PRONOUN -> PronounEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
             PartOfSpeech.NUMERAL -> NumeralEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
-            PartOfSpeech.FUNCPART -> FuncPartEntity(
+            PartOfSpeech.FUNC_PART -> FuncPartEntity(
                 word.languageId,
                 word.word,
-                word.translation,
-                partOfSpeech=newPartOfSpeech
+                word.translation
             )
-        }*/
-        TODO("how to update the whole word???")
-        //DictionaryHelperDaoImpl().updateMadeByWord(languages[word.languageId]!!.dictionary, oldWord, word)
+        }
+        val dictionaryHandler = DictionaryDaoImpl()
+        dictionaryHandler.deleteWord(languages[word.languageId]!!.dictionary, word)
+        dictionaryHandler.addWord(languages[word.languageId]!!.dictionary, newWord)
+    }
+
+    override fun updateWord(word: IWordEntity, newWord: String, newTranslation: String, newImmutableAttrs: MutableMap<Attributes, Int>, newPartOfSpeech: PartOfSpeech) {
+        val newWordEntity = when (newPartOfSpeech) {
+            PartOfSpeech.NOUN -> NounEntity(
+                word.languageId,
+                newWord,
+                newTranslation,
+                immutableAttrs = newImmutableAttrs
+            )
+            PartOfSpeech.VERB -> VerbEntity(
+                word.languageId,
+                newWord,
+                newTranslation,
+                immutableAttrs = newImmutableAttrs
+            )
+            PartOfSpeech.ADJECTIVE -> AdjectiveEntity(
+                word.languageId,
+                newWord,
+                newTranslation,
+                immutableAttrs = newImmutableAttrs
+            )
+            PartOfSpeech.ADVERB -> AdverbEntity(
+                word.languageId,
+                newWord,
+                newTranslation,
+                immutableAttrs = newImmutableAttrs
+            )
+            PartOfSpeech.PARTICIPLE -> ParticipleEntity(
+                word.languageId,
+                newWord,
+                newTranslation,
+                immutableAttrs = newImmutableAttrs
+            )
+            PartOfSpeech.VERB_PARTICIPLE -> VerbParticipleEntity(
+                word.languageId,
+                newWord,
+                newTranslation,
+                immutableAttrs = newImmutableAttrs
+            )
+            PartOfSpeech.PRONOUN -> PronounEntity(
+                word.languageId,
+                newWord,
+                newTranslation,
+                immutableAttrs = newImmutableAttrs
+            )
+            PartOfSpeech.NUMERAL -> NumeralEntity(
+                word.languageId,
+                newWord,
+                newTranslation,
+                immutableAttrs = newImmutableAttrs
+            )
+            PartOfSpeech.FUNC_PART -> FuncPartEntity(
+                word.languageId,
+                newWord,
+                newTranslation,
+                immutableAttrs = newImmutableAttrs
+            )
+        }
+        val dictionaryHandler = DictionaryDaoImpl()
+        dictionaryHandler.deleteWord(languages[word.languageId]!!.dictionary, word)
+        dictionaryHandler.addWord(languages[word.languageId]!!.dictionary, newWordEntity)
+    }
+    override fun getImmutableAttrsInfo(word: IWordEntity): String {
+        var res = ""
+        for (attr in word.immutableAttrs.keys) {
+            res += when (attr) {
+                Attributes.GENDER -> "род: ${languages[word.languageId]!!.grammar.varsGender[word.immutableAttrs[attr]!!]?.name}, "
+                Attributes.TYPE -> "вид: ${languages[word.languageId]!!.grammar.varsType[word.immutableAttrs[attr]!!]?.name}, "
+                Attributes.VOICE -> "залог: ${languages[word.languageId]!!.grammar.varsVoice[word.immutableAttrs[attr]!!]?.name}, "
+                else -> ""
+            }
+        }
+        if (res.length < 2) return ""
+        return res.slice(0 until res.length - 2)
     }
 }

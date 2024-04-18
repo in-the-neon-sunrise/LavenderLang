@@ -1,7 +1,7 @@
 package com.lavenderlang.backend.dao.language
 
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.WordNotFoundException
+import com.lavenderlang.backend.service.exception.WordNotFoundException
 
 
 interface TranslatorDao {
@@ -11,22 +11,52 @@ interface TranslatorDao {
 
 class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = TranslatorHelperDaoImpl()) : TranslatorDao {
     override fun translateTextFromConlang(language: LanguageEntity, text: String): String {
-        val delimiters = language.puncSymbols.values.joinToString("")
+        val letters = (language.vowels + language.consonants).split(" ").joinToString("")
         var curWord = ""
         var curDelimiter = ""
         var res = ""
-        for (letter in text) {
-            if (letter == ' ') {
-                if (curWord != "") {
-                    res += try {
-                        var translatedWord = helper.translateWordFromConlang(language, curWord)
-                        if (curWord[0].isUpperCase()) translatedWord =
-                            helper.capitalizeWord(translatedWord)
-                        translatedWord
-                    } catch (e: WordNotFoundException) {
-                        curWord
+        synchronized(language) {
+            for (letter in text) {
+                if (letter == ' ') {
+                    if (curWord != "") {
+                        res += try {
+                            var translatedWord = helper.translateWordFromConlang(language, curWord)
+                            if (curWord[0].isUpperCase()) translatedWord =
+                                helper.capitalizeWord(translatedWord)
+                            translatedWord
+                        } catch (e: WordNotFoundException) {
+                            curWord
+                        }
+                        curWord = ""
                     }
-                    curWord = ""
+                    if (curDelimiter != "") {
+                        if (language.puncSymbols.containsValue(curDelimiter)) {
+                            for (key in language.puncSymbols.keys) {
+                                if (language.puncSymbols[key] == curDelimiter) {
+                                    res += key
+                                    break
+                                }
+                            }
+                        } else res += curDelimiter
+                        curDelimiter = ""
+                    }
+                    res += letter
+                    continue
+                }
+                if (!letters.contains(letter.lowercaseChar())) {
+                    if (curWord != "") {
+                        res += try {
+                            var translatedWord = helper.translateWordFromConlang(language, curWord)
+                            if (curWord[0].isUpperCase()) translatedWord =
+                                helper.capitalizeWord(translatedWord)
+                            translatedWord
+                        } catch (e: WordNotFoundException) {
+                            curWord
+                        }
+                        curWord = ""
+                    }
+                    curDelimiter += letter
+                    continue
                 }
                 if (curDelimiter != "") {
                     if (language.puncSymbols.containsValue(curDelimiter)) {
@@ -39,25 +69,18 @@ class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = Translator
                     } else res += curDelimiter
                     curDelimiter = ""
                 }
-                res += letter
-                continue
+                curWord += letter
             }
-            if (delimiters.contains(letter)) {
-                if (curWord != "") {
-                    res += try {
-                        var translatedWord = helper.translateWordFromConlang(language, curWord)
-                        if (curWord[0].isUpperCase()) translatedWord =
-                            helper.capitalizeWord(translatedWord)
-                        translatedWord
-                    } catch (e: WordNotFoundException) {
-                        curWord
-                    }
-                    curWord = ""
+            if (curWord != "") {
+                res += try {
+                    var translatedWord = helper.translateWordFromConlang(language, curWord)
+                    if (curWord[0].isUpperCase()) translatedWord =
+                        helper.capitalizeWord(translatedWord)
+                    translatedWord
+                } catch (e: WordNotFoundException) {
+                    curWord
                 }
-                curDelimiter += letter
-                continue
-            }
-            if (curDelimiter != "") {
+            } else if (curDelimiter != "") {
                 if (language.puncSymbols.containsValue(curDelimiter)) {
                     for (key in language.puncSymbols.keys) {
                         if (language.puncSymbols[key] == curDelimiter) {
@@ -66,73 +89,76 @@ class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = Translator
                         }
                     }
                 } else res += curDelimiter
-                curDelimiter = ""
             }
-            curWord += letter
+            return res
         }
-        if (curWord != "") {
-            res += try {
-                var translatedWord = helper.translateWordFromConlang(language, curWord)
-                if (curWord[0].isUpperCase()) translatedWord = helper.capitalizeWord(translatedWord)
-                translatedWord
-            } catch (e: WordNotFoundException) {
-                curWord
-            }
-        }
-        else if (curDelimiter != "") {
-            if (language.puncSymbols.containsValue(curDelimiter)) {
-                for (key in language.puncSymbols.keys) {
-                    if (language.puncSymbols[key] == curDelimiter) {
-                        res += key
-                        break
-                    }
-                }
-            } else res += curDelimiter
-        }
-        return res
     }
     override fun translateTextToConlang(language: LanguageEntity, text: String): String {
-        val delimiters = language.puncSymbols.keys.joinToString("")
+        val letters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
         var curWord = ""
         var curDelimiter = ""
         var res = ""
-        for (letter in text) {
-            if (delimiters.contains(letter)) {
-                if (curWord != "") {
-                    res += try {
-                        var translatedWord = helper.translateWordToConlang(language, curWord)
-                        if (curWord[0].isUpperCase()) translatedWord = helper.capitalizeWord(translatedWord)
-                        translatedWord
-                    } catch (e: WordNotFoundException) {
-                        curWord
+        synchronized(language) {
+            for (letter in text) {
+                if (letter == ' ') {
+                    if (curWord != "") {
+                        res += try {
+                            var translatedWord = helper.translateWordToConlang(language, curWord)
+                            if (curWord[0].isUpperCase()) translatedWord =
+                                helper.capitalizeWord(translatedWord)
+                            translatedWord
+                        } catch (e: WordNotFoundException) {
+                            curWord
+                        }
+                        curWord = ""
                     }
+                    if (curDelimiter != "") {
+                        res += if (language.puncSymbols.containsKey(curDelimiter)) {
+                            language.puncSymbols[curDelimiter]
+                        } else curDelimiter
+                        curDelimiter = ""
+                    }
+                    res += letter
+                    continue
                 }
-                curWord = ""
-                curDelimiter += letter
-            }
-            else {
-                if (curDelimiter != "") {
-                    res += if (language.puncSymbols.containsKey(curDelimiter)) {
-                        language.puncSymbols[curDelimiter]
-                    } else curDelimiter
-                    curDelimiter = ""
+                if (!letters.contains(letter.lowercaseChar())) {
+                    if (curWord != "") {
+                        res += try {
+                            var translatedWord = helper.translateWordToConlang(language, curWord)
+                            if (curWord[0].isUpperCase()) translatedWord =
+                                helper.capitalizeWord(translatedWord)
+                            translatedWord
+                        } catch (e: WordNotFoundException) {
+                            curWord
+                        }
+                    }
+                    curWord = ""
+                    curDelimiter += letter
+                } else {
+                    if (curDelimiter != "") {
+                        res += if (language.puncSymbols.containsKey(curDelimiter)) {
+                            language.puncSymbols[curDelimiter]
+                        } else curDelimiter
+                        curDelimiter = ""
+                    }
+                    curWord += letter
                 }
-                curWord += letter
             }
-        }
-        if (curWord != "") {
-            res += try {
-                var translatedWord = helper.translateWordToConlang(language, curWord)
-                if (curWord[0].isUpperCase()) translatedWord = helper.capitalizeWord(translatedWord)
-                translatedWord
-            } catch (e: WordNotFoundException) {
-                curWord
+            if (curWord != "") {
+                res += try {
+                    var translatedWord = helper.translateWordToConlang(language, curWord)
+                    if (curWord[0].isUpperCase()) translatedWord =
+                        helper.capitalizeWord(translatedWord)
+                    translatedWord
+                } catch (e: WordNotFoundException) {
+                    curWord
+                }
+            } else if (curDelimiter != "") {
+                res += if (language.puncSymbols.containsKey(curDelimiter)) {
+                    language.puncSymbols[curDelimiter]
+                } else curDelimiter
             }
-        } else if (curDelimiter != "") {
-            res += if (language.puncSymbols.containsKey(curDelimiter)) {
-                language.puncSymbols[curDelimiter]
-            } else curDelimiter
+            return res
         }
-        return res
     }
 }

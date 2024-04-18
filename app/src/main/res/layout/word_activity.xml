@@ -5,25 +5,25 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".WordActivity">
+    tools:context=".frontend.WordActivity">
 
     <Button
         android:id="@+id/buttonInf"
-        android:layout_width="55dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:text="@string/i"
+        android:background="@drawable/info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonPrev"
-        android:layout_width="55dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="@string/p"
+        android:background="@drawable/arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -42,38 +42,62 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/editConlangWord"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:autofillHints=""
-                android:gravity="center"
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Слово на конланге"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editRussianWord"
+                android:id="@+id/editConlangWord"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
                 android:autofillHints=""
                 android:gravity="center"
                 android:text="Слово на конланге"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Перевод на русский"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editConlangWord" />
 
+            <EditText
+                android:id="@+id/editRussianWord"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:autofillHints=""
+                android:gravity="center"
+                android:text="Перевод слова"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
             <Spinner
                 android:id="@+id/spinnerPartOfSpeech"
-                android:layout_width="409dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editRussianWord" />
@@ -86,7 +110,8 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="56dp"
                 android:gravity="center"
-                android:text="Характеристики начального слова"
+                android:text="Признаки слова"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerPartOfSpeech" />
@@ -122,96 +147,114 @@
                 app:layout_constraintTop_toBottomOf="@+id/spinnerType" />
 
             <TextView
-                android:id="@+id/textViewFinishWord"
+                android:id="@+id/textViewWordForms"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="55dp"
                 android:layout_marginTop="30dp"
+                android:layout_marginEnd="56dp"
                 android:gravity="center"
-                android:text="Характеристики конечного слова"
+                android:text="Формы слова"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerVoice" />
 
-            <Spinner
-                android:id="@+id/spinnerFinishGender"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listWordForms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewFinishWord" />
+                app:layout_constraintTop_toBottomOf="@id/textViewWordForms"/>
 
-            <Spinner
-                android:id="@+id/spinnerFinishNumber"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
+            <TextView
+                android:id="@+id/textViewNewWords"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="56dp"
+                android:gravity="center"
+                android:text="Слова, полученные правилами словообразования"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishGender" />
+                app:layout_constraintTop_toBottomOf="@+id/listWordForms" />
 
-            <Spinner
-                android:id="@+id/spinnerFinishCase"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishNumber" />
 
-            <Spinner
-                android:id="@+id/spinnerFinishTime"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
+            <Button
+                android:id="@+id/buttonCreateWords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Получить новые слова"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishCase" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewNewWords" />
 
-            <Spinner
-                android:id="@+id/spinnerFinishPerson"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewNewWords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishTime" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonCreateWords"/>
 
-            <Spinner
-                android:id="@+id/spinnerFinishMood"
-                android:layout_width="409dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishPerson" />
 
-            <Spinner
-                android:id="@+id/spinnerFinishDegreeOfComparison"
-                android:layout_width="409dp"
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
-                android:visibility="gone"
+                android:background="@drawable/save"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/buttonDelete"
+                app:layout_constraintTop_toBottomOf="@+id/listViewNewWords" />
+
+            <Button
+                android:id="@+id/buttonDelete"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/delete"
+                app:layout_constraintEnd_toStartOf="@+id/buttonSave"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerFinishMood" />
+                app:layout_constraintTop_toTopOf="@+id/buttonSave" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+
     <Button
-        android:id="@+id/buttonUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Обновить"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        android:id="@+id/buttonHome"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonLanguage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/language"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonTranslator"
+        app:layout_constraintStart_toEndOf="@+id/buttonHome" />
+
+    <Button
+        android:id="@+id/buttonTranslator"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/translate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

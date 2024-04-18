@@ -5,7 +5,7 @@ import com.lavenderlang.backend.entity.help.MascEntity
 import com.lavenderlang.backend.entity.help.TransformationEntity
 
 interface IRuleEntity {
-    val languageId: Int
+    var languageId: Int
     var masc: MascEntity
     var transformation: TransformationEntity
 }

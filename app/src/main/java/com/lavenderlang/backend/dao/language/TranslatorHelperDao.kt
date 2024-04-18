@@ -1,8 +1,9 @@
 package com.lavenderlang.backend.dao.language
 
+import com.chaquo.python.Python
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.WordNotFoundException
+import com.lavenderlang.backend.service.exception.WordNotFoundException
 
 interface TranslatorHelperDao {
     fun conlangToRusAttr(language: LanguageEntity, attr: Attributes, id: Int) : Int
@@ -39,7 +40,7 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
     override fun translateWordFromConlang(language: LanguageEntity, word: String): String {
         for (key in language.dictionary.fullDict.keys) {
             for (w in language.dictionary.fullDict[key]!!) {
-                if (w.word == word.lowercase()) {
+                if (w.word.lowercase() == word.lowercase()) {
                     return w.translation
                 }
             }
@@ -47,13 +48,30 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
         throw WordNotFoundException("Word not found")
     }
     override fun translateWordToConlang(language: LanguageEntity, word: String): String {
+        val py = Python.getInstance()
+        val module = py.getModule("pm3")
+        val normalForm = module.callAttr("getNormalForm", word.lowercase()).toString()
         for (key in language.dictionary.fullDict.keys) {
+            val keyWord = key.split(" ")[0]
+            val keyTranslation = key.split(" ")[1]
+            if (keyTranslation != normalForm) continue
             for (w in language.dictionary.fullDict[key]!!) {
-                if (w.translation == word.lowercase()) {
-                    if (language.capitalizedPartsOfSpeech.contains(w.partOfSpeech)) return capitalizeWord(w.word)
+                if (w.translation.lowercase() == word.lowercase()) {
+                    if (language.capitalizedPartsOfSpeech.contains(w.partOfSpeech)) {
+                        return capitalizeWord(w.word)
+                    }
                     return w.word
                 }
             }
+            if (language.dictionary.fullDict[key]!!.isEmpty()) {
+                return keyWord
+            }
+            if (language.capitalizedPartsOfSpeech.contains(
+                    language.dictionary.fullDict[key]!![0].partOfSpeech)
+                ) {
+                return capitalizeWord(keyWord)
+            }
+            return keyWord
         }
         throw WordNotFoundException("Word not found")
     }

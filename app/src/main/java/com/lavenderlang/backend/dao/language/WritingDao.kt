@@ -1,75 +1,84 @@
 package com.lavenderlang.backend.dao.language
 
-import android.content.Context
+import androidx.lifecycle.lifecycleScope
+import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 interface WritingDao {
-    fun changeVowels(language : LanguageEntity, newLetters : String, context: Context)
-    fun changeConsonants(language : LanguageEntity, newLetters : String, context: Context)
-    fun addCapitalizedPartOfSpeech(language : LanguageEntity, partOfSpeech : PartOfSpeech, context: Context)
-    fun deleteCapitalizedPartOfSpeech(language : LanguageEntity, partOfSpeech : PartOfSpeech, context: Context)
+    fun changeVowels(language : LanguageEntity, newLetters : String)
+    fun changeConsonants(language : LanguageEntity, newLetters : String)
+    fun addCapitalizedPartOfSpeech(language : LanguageEntity, partOfSpeech : PartOfSpeech)
+    fun deleteCapitalizedPartOfSpeech(language : LanguageEntity, partOfSpeech : PartOfSpeech)
 }
 
 class WritingDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) : WritingDao {
-    override fun changeVowels(language: LanguageEntity, newLetters: String, context: Context) {
-        for (letter in newLetters) {
-            if (language.consonants.contains(letter) || language.puncSymbols.values.contains(letter.toString())) {
-                throw ForbiddenSymbolsException("Letter $letter is already in consonants")
+    override fun changeVowels(language: LanguageEntity, newLetters: String) {
+        for (letter in newLetters.lowercase()) {
+            if (letter == ' ') continue
+            if (language.consonants.contains(letter)) {
+                throw ForbiddenSymbolsException("Буква $letter уже находится в согласных!")
+            }
+            for (ps in language.puncSymbols.values) {
+                if (ps.lowercase().contains(letter)) {
+                    throw ForbiddenSymbolsException("Буква $letter уже находится в символах пунктуации!")
+                }
             }
         }
-        language.vowels = newLetters
-        Thread {
-            languageRepository.updateLanguage(
-                context, language.languageId,
-                Serializer.getInstance().serializeLanguage(language)
+        language.vowels = newLetters.lowercase()
+        GlobalScope.launch(Dispatchers.IO) {
+            languageRepository.updateVowels(
+                MainActivity.getInstance(), language.languageId,
+                language.vowels
             )
-        }.start()
+        }
     }
 
-    override fun changeConsonants(language: LanguageEntity, newLetters: String, context: Context) {
-        for (letter in newLetters) {
-            if (language.vowels.contains(letter) || language.puncSymbols.values.contains(letter.toString())) {
-                throw ForbiddenSymbolsException("Letter $letter is already in consonants")
+    override fun changeConsonants(language: LanguageEntity, newLetters: String) {
+        for (letter in newLetters.lowercase()) {
+            if (letter == ' ') continue
+            if (language.vowels.contains(letter)) {
+                throw ForbiddenSymbolsException("Буква $letter уже находится в гласных!")
+            }
+            for (ps in language.puncSymbols.values) {
+                if (ps.lowercase().contains(letter)) {
+                    throw ForbiddenSymbolsException("Буква $letter уже находится в символах пунктуации!")
+                }
             }
         }
-        language.consonants = newLetters
-        Thread {
-            languageRepository.updateLanguage(
-                context, language.languageId,
-                Serializer.getInstance().serializeLanguage(language)
+        language.consonants = newLetters.lowercase()
+        GlobalScope.launch(Dispatchers.IO) {
+            languageRepository.updateConsonants(
+                MainActivity.getInstance(), language.languageId,
+                language.consonants
             )
-        }.start()
+        }
     }
 
-    override fun addCapitalizedPartOfSpeech(
-        language: LanguageEntity,
-        partOfSpeech: PartOfSpeech,
-        context: Context
-    ) {
+    override fun addCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
+        if (language.capitalizedPartsOfSpeech.contains(partOfSpeech)) return
         language.capitalizedPartsOfSpeech.add(partOfSpeech)
-        Thread {
-            languageRepository.updateLanguage(
-                context, language.languageId,
-                Serializer.getInstance().serializeLanguage(language)
+        GlobalScope.launch(Dispatchers.IO) {
+            languageRepository.updateCapitalizedPartsOfSpeech(
+                MainActivity.getInstance(), language.languageId,
+                Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
             )
-        }.start()
+        }
     }
 
-    override fun deleteCapitalizedPartOfSpeech(
-        language: LanguageEntity,
-        partOfSpeech: PartOfSpeech,
-        context: Context
-    ) {
+    override fun deleteCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
         language.capitalizedPartsOfSpeech.remove(partOfSpeech)
-        Thread {
-            languageRepository.updateLanguage(
-                context, language.languageId,
-                Serializer.getInstance().serializeLanguage(language)
+        GlobalScope.launch(Dispatchers.IO) {
+            languageRepository.updateCapitalizedPartsOfSpeech(
+                MainActivity.getInstance(), language.languageId,
+                Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
             )
-        }.start()
+        }
     }
 }

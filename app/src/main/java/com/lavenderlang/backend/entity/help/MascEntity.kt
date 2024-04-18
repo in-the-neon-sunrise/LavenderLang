@@ -1,7 +1,7 @@
 package com.lavenderlang.backend.entity.help
 
 data class MascEntity (
-    var partsOfSpeech : PartOfSpeech = PartOfSpeech.NOUN,
-    var attrs : MutableMap<Attributes, ArrayList<Int>> = mutableMapOf(), // постоянные
+    var partOfSpeech : PartOfSpeech = PartOfSpeech.NOUN,
+    var immutableAttrs : MutableMap<Attributes, Int> = mutableMapOf(),
     var regex : String = ".*"
 )

@@ -1,9 +1,7 @@
-package com.lavenderlang
+package com.lavenderlang.frontend
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -13,6 +11,9 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.isVisible
+import com.lavenderlang.R
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
@@ -21,15 +22,16 @@ import com.lavenderlang.backend.entity.help.MascEntity
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.exception.IncorrectRegexException
 
 class GrammarRuleActivity: AppCompatActivity(){
     companion object{
         var id_lang: Int = 0
         var id_rule: Int = 0
 
-        var isEverythingCreated: Boolean = false
         var idPartOfSpeech: Int = 0
-        var attrs: MutableMap<Attributes, ArrayList<Int>> = mutableMapOf()
+        var attrs: MutableMap<Attributes, Int> = mutableMapOf()
         var regex: String = ".*"
         var mutableAttrs: MutableMap<Attributes, Int> = mutableMapOf()
         var numberFront=0
@@ -42,27 +44,43 @@ class GrammarRuleActivity: AppCompatActivity(){
         val mascDao = MascDaoImpl()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.grammar_rule_activity)
-
+        if(isDark) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
-            val intent = Intent(this@GrammarRuleActivity, GrammarActivity::class.java)
-            intent.putExtra("lang", id_lang)
-            startActivity(intent)
+            finish()
         }
         val buttonInformation: Button = findViewById(R.id.buttonInf)
         buttonInformation.setOnClickListener{
-            val intent = Intent(this@GrammarRuleActivity, InformationActivity::class.java)
+            val intent = Intent(this@GrammarRuleActivity, InstructionActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            intent.putExtra("block", 8)
+            startActivity(intent)
+        }
+        //bottom navigation menu
+        val buttonHome: Button = findViewById(R.id.buttonHome)
+        buttonHome.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        val buttonLanguage: Button = findViewById(R.id.buttonLanguage)
+        buttonLanguage.setOnClickListener {
+            val intent = Intent(this, LanguageActivity::class.java)
             intent.putExtra("lang", id_lang)
             startActivity(intent)
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-
+        val buttonTranslator: Button = findViewById(R.id.buttonTranslator)
+        buttonTranslator.setOnClickListener {
+            val intent = Intent(this, TranslatorActivity::class.java)
+            intent.putExtra("lang", id_lang)
+            startActivity(intent)
+        }
         val editMasc: EditText = findViewById(R.id.editMasc)
 
         when(val lang = intent.getIntExtra("lang", -1)){
@@ -74,23 +92,36 @@ class GrammarRuleActivity: AppCompatActivity(){
                 id_lang = lang
             }
         }
-
-        when(val rule = intent.getIntExtra("grammarRule", -1)){
+        var rule = intent.getIntExtra("grammarRule", -1)
+        if (rule == -1 && id_rule != 0){
+            rule = LanguageActivity.id_lang
+        }
+        when(rule){
             -1 -> {
                 var newRule = GrammarRuleEntity(id_lang)
-                grammarDao.addGrammarRule(languages[id_lang]!!.grammar, newRule, this@GrammarRuleActivity)
+                grammarDao.addGrammarRule(languages[id_lang]!!.grammar, newRule)
                 id_rule = languages[id_lang]!!.grammar.grammarRules.size-1
-                editMasc.setText("это новое правило привет")
+                editMasc.setText(newRule.masc.regex)
             }
             else -> {
                 id_rule = rule
                 editMasc.setText(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.regex)
             }
         }
-        attrs = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.attrs
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val editMasc: EditText = findViewById(R.id.editMasc)
+
+        attrs = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs
         regex = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.regex
         mutableAttrs = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs
-        updateSpinners()
 
         val spinnerPartOfSpeech: Spinner = findViewById(R.id.spinnerPartOfSpeech)
 
@@ -107,6 +138,7 @@ class GrammarRuleActivity: AppCompatActivity(){
         val spinnerFinishDegreeOfComparison: Spinner = findViewById(R.id.spinnerFinishDegreeOfComparison)
 
         listenSpinners()
+        updateSpinners()
 
         val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf(
             "Существительное",
@@ -122,104 +154,19 @@ class GrammarRuleActivity: AppCompatActivity(){
         spinnerPartOfSpeech.adapter = spinnerAdapter
         spinnerAdapter.notifyDataSetChanged()
 
-        var partOfSpeech=languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.partsOfSpeech
+        var partOfSpeech= languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.partOfSpeech
         when (partOfSpeech){
-            PartOfSpeech.NOUN->idPartOfSpeech=0
-            PartOfSpeech.VERB->idPartOfSpeech=1
-            PartOfSpeech.ADJECTIVE->idPartOfSpeech=2
-            PartOfSpeech.ADVERB->idPartOfSpeech=3
-            PartOfSpeech.PARTICIPLE->idPartOfSpeech=4
-            PartOfSpeech.VERB_PARTICIPLE->idPartOfSpeech=5
-            PartOfSpeech.PRONOUN->idPartOfSpeech=6
-            PartOfSpeech.NUMERAL->idPartOfSpeech=7
-            PartOfSpeech.FUNC_PART->idPartOfSpeech=8
+            PartOfSpeech.NOUN-> idPartOfSpeech =0
+            PartOfSpeech.VERB-> idPartOfSpeech =1
+            PartOfSpeech.ADJECTIVE-> idPartOfSpeech =2
+            PartOfSpeech.ADVERB-> idPartOfSpeech =3
+            PartOfSpeech.PARTICIPLE-> idPartOfSpeech =4
+            PartOfSpeech.VERB_PARTICIPLE-> idPartOfSpeech =5
+            PartOfSpeech.PRONOUN-> idPartOfSpeech =6
+            PartOfSpeech.NUMERAL-> idPartOfSpeech =7
+            PartOfSpeech.FUNC_PART-> idPartOfSpeech =8
         }
         spinnerPartOfSpeech.setSelection(idPartOfSpeech)
-
-        // работа с неизменяемыми характеристиками
-
-        spinnerGender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                Toast.makeText(this@GrammarRuleActivity, "задаем гендер", Toast.LENGTH_LONG).show()
-                attrs[Attributes.GENDER] = arrayListOf(positionSpinner)
-                updateMasc()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                attrs[Attributes.TYPE] = arrayListOf(positionSpinner)
-                updateMasc()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerVoice.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                attrs[Attributes.VOICE] = arrayListOf(positionSpinner)
-                updateMasc()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        // работа с изменяемыми характеристиками
-
-        spinnerFinishGender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.GENDER] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishNumber.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.NUMBER] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishCase.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.CASE] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishTime.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.TIME] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishPerson.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.PERSON] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishMood.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.MOOD] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        spinnerFinishDegreeOfComparison.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentSpinner: AdapterView<*>?, itemSpinner: View?, positionSpinner: Int, idSpinner: Long) {
-                mutableAttrs[Attributes.DEGREE_OF_COMPARISON] = positionSpinner
-                updateMutableAttrs()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
 
         spinnerPartOfSpeech.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -244,15 +191,14 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
-                        if(positionSpinner==idPartOfSpeech){
-                            Toast.makeText(this@GrammarRuleActivity, "задаем в первый раз чр", Toast.LENGTH_LONG).show()
+                        if(positionSpinner== idPartOfSpeech){
+                            //Toast.makeText(this@GrammarRuleActivity, "задаем в первый раз чр", Toast.LENGTH_LONG).show()
                             return
                         }
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        updateRule()
                         updateSpinners()
                     }
                     1->{
@@ -270,11 +216,11 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.VISIBLE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
-                        idPartOfSpeech=positionSpinner
+                        if(positionSpinner== idPartOfSpeech)return
+                        idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
-                        mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        mutableAttrs = mutableMapOf()
+                        updateRule()
                         updateSpinners()
                     }
                     2->{
@@ -292,11 +238,11 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.VISIBLE
 
-                        idPartOfSpeech=positionSpinner
+                        if(positionSpinner== idPartOfSpeech)return
+                        idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
-                        mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        mutableAttrs = mutableMapOf()
+                        updateRule()
                         updateSpinners()
                     }
                     3->{
@@ -314,11 +260,11 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
-                        idPartOfSpeech=positionSpinner
+                        if(positionSpinner== idPartOfSpeech)return
+                        idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
-                        mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        mutableAttrs = mutableMapOf()
+                        updateRule()
                         updateSpinners()
                     }
                     4->{
@@ -336,11 +282,11 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
-                        idPartOfSpeech=positionSpinner
+                        if(positionSpinner== idPartOfSpeech)return
+                        idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
-                        mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        mutableAttrs = mutableMapOf()
+                        updateRule()
                         updateSpinners()
                     }
                     5->{
@@ -358,11 +304,11 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
-                        idPartOfSpeech=positionSpinner
+                        if(positionSpinner== idPartOfSpeech)return
+                        idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
-                        mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        mutableAttrs = mutableMapOf()
+                        updateRule()
                         updateSpinners()
                     }
                     6->{
@@ -380,11 +326,11 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
-                        idPartOfSpeech=positionSpinner
+                        if(positionSpinner== idPartOfSpeech)return
+                        idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
-                        mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        mutableAttrs = mutableMapOf()
+                        updateRule()
                         updateSpinners()
                     }
                     7->{
@@ -402,11 +348,11 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
-                        idPartOfSpeech=positionSpinner
+                        if(positionSpinner== idPartOfSpeech)return
+                        idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
-                        mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        mutableAttrs = mutableMapOf()
+                        updateRule()
                         updateSpinners()
                     }
                     else->{
@@ -424,11 +370,11 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
-                        idPartOfSpeech=positionSpinner
+                        if(positionSpinner== idPartOfSpeech)return
+                        idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
-                        mutableAttrs= mutableMapOf()
-                        updateMasc()
-                        updateMutableAttrs()
+                        mutableAttrs = mutableMapOf()
+                        updateRule()
                         updateSpinners()
                     }
                 }
@@ -447,50 +393,52 @@ class GrammarRuleActivity: AppCompatActivity(){
         val editTextAddFront: EditText = findViewById(R.id.editTextAddFront)
         val editTextAddBack: EditText = findViewById(R.id.editTextAddBack)
 
-        numberFront=languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].transformation.delFromBeginning
-        numberBack=languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].transformation.delFromEnd
-        addFront=languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].transformation.addToBeginning
-        addBack=languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].transformation.addToEnd
+        numberFront = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].transformation.delFromBeginning
+        numberBack = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].transformation.delFromEnd
+        addFront = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].transformation.addToBeginning
+        addBack = languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].transformation.addToEnd
         (editTextNumberFront as TextView).setText(numberFront.toString())
         (editTextNumberBack as TextView).setText(numberBack.toString())
         (editTextAddFront as TextView).setText(addFront)
         (editTextAddBack as TextView).setText(addBack)
 
-        editTextNumberFront.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                numberFront = s.toString().toInt()
-                updateTransformation()
-            }
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
-        editTextNumberBack.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                numberBack = s.toString().toInt()
-                updateTransformation()
-            }
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
-        editTextAddFront.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                addFront = s.toString()
-                updateTransformation()
-            }
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
-        editTextAddBack.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                addBack = s.toString()
-                updateTransformation()
-            }
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
+        var buttonSave: Button = findViewById(R.id.buttonSaveGrammarRule)
+        buttonSave.setOnClickListener{
+            if(spinnerGender.isVisible) attrs[Attributes.GENDER] = spinnerGender.selectedItemPosition
+            if(spinnerType.isVisible) attrs[Attributes.TYPE] = spinnerType.selectedItemPosition
+            if(spinnerVoice.isVisible) attrs[Attributes.VOICE] = spinnerVoice.selectedItemPosition
+
+            regex =editMasc.text.toString()
+
+            if(spinnerFinishGender.isVisible) mutableAttrs[Attributes.GENDER] = spinnerFinishGender.selectedItemPosition
+            if(spinnerFinishNumber.isVisible) mutableAttrs[Attributes.NUMBER] = spinnerFinishNumber.selectedItemPosition
+            if(spinnerFinishCase.isVisible) mutableAttrs[Attributes.CASE] = spinnerFinishCase.selectedItemPosition
+            if(spinnerFinishTime.isVisible) mutableAttrs[Attributes.TIME] = spinnerFinishTime.selectedItemPosition
+            if(spinnerFinishPerson.isVisible) mutableAttrs[Attributes.PERSON] = spinnerFinishPerson.selectedItemPosition
+            if(spinnerFinishMood.isVisible) mutableAttrs[Attributes.MOOD] = spinnerFinishMood.selectedItemPosition
+            if(spinnerFinishDegreeOfComparison.isVisible) mutableAttrs[Attributes.DEGREE_OF_COMPARISON] = spinnerFinishDegreeOfComparison.selectedItemPosition
+
+            addBack =editTextAddBack.text.toString()
+            addFront =editTextAddFront.text.toString()
+            numberFront = if (editTextNumberFront.text.toString().isNotEmpty())
+                editTextNumberFront.text.toString().toInt()
+            else 0
+            numberBack = if (editTextNumberBack.text.toString().isNotEmpty())
+                editTextNumberBack.text.toString().toInt()
+            else 0
+
+            updateRule()
+
+        }
+
+        val buttonDelete: Button = findViewById(R.id.buttonDelete)
+        buttonDelete.setOnClickListener{
+            grammarDao.deleteGrammarRule(languages[id_lang]!!.grammar, languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule])
+            finish()
+        }
 
     }
-    fun updateMasc(){
+    fun updateRule(){
         var partOfSpeech=when(idPartOfSpeech){
             0->PartOfSpeech.NOUN
             1->PartOfSpeech.VERB
@@ -502,20 +450,24 @@ class GrammarRuleActivity: AppCompatActivity(){
             7->PartOfSpeech.NUMERAL
             else->PartOfSpeech.FUNC_PART
         }
-        var newMasc = MascEntity(
-            partOfSpeech, attrs, regex
-        )
-        grammarRuleDao.updateMasc(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newMasc, this@GrammarRuleActivity)
-        Toast.makeText(this, newMasc.toString(), Toast.LENGTH_LONG).show()
-    }
-    fun updateMutableAttrs(){
-        grammarRuleDao.updateMutableAttrs(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], mutableAttrs, this@GrammarRuleActivity)
-    }
-    fun updateTransformation(){
-        var newTransformation = TransformationEntity(
-            numberFront, numberBack, addFront, addBack
-        )
-        grammarRuleDao.updateTransformation(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule], newTransformation, this@GrammarRuleActivity)
+        try {
+            var newMasc = MascEntity( partOfSpeech, attrs, regex)
+            var newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
+            grammarRuleDao.updateRule(
+                languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule],
+                newMasc,
+                newTransformation,
+                mutableAttrs
+            )
+        }catch (e:IncorrectRegexException){
+            Toast.makeText(this@GrammarRuleActivity, e.message, Toast.LENGTH_LONG).show()
+        }
+        catch (e:ForbiddenSymbolsException){
+            Toast.makeText(this@GrammarRuleActivity, e.message, Toast.LENGTH_LONG).show()
+        }
+        catch (e:Exception){
+            Toast.makeText(this@GrammarRuleActivity, "какая-то беда", Toast.LENGTH_LONG).show()
+        }
     }
     fun listenSpinners(){
 
@@ -593,17 +545,16 @@ class GrammarRuleActivity: AppCompatActivity(){
         val spinnerFinishPerson: Spinner = findViewById(R.id.spinnerFinishPerson)
         val spinnerFinishMood: Spinner = findViewById(R.id.spinnerFinishMood)
         val spinnerFinishDegreeOfComparison: Spinner = findViewById(R.id.spinnerFinishDegreeOfComparison)
-        Toast.makeText(this@GrammarRuleActivity, "обновляем гендер", Toast.LENGTH_LONG).show()
         when(idPartOfSpeech) {
             0 -> {
-                spinnerGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.attrs[Attributes.GENDER]?.get(0) ?: 0)
+                spinnerGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
 
                 spinnerFinishNumber.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.NUMBER] ?:0)
                 spinnerFinishCase.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.CASE] ?:0)
             }
             1->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.attrs[Attributes.TYPE]?.get(0) ?: 0)
-                spinnerVoice.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.attrs[Attributes.VOICE]?.get(0) ?: 0)
+                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerVoice.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
 
                 spinnerFinishGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.GENDER] ?:0)
                 spinnerFinishNumber.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.NUMBER] ?:0)
@@ -619,8 +570,8 @@ class GrammarRuleActivity: AppCompatActivity(){
             }
             3->{}
             4->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.attrs[Attributes.TYPE]?.get(0) ?: 0)
-                spinnerVoice.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.attrs[Attributes.VOICE]?.get(0) ?: 0)
+                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerVoice.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
 
                 spinnerFinishGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.GENDER] ?:0)
                 spinnerFinishNumber.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.NUMBER] ?:0)
@@ -628,10 +579,10 @@ class GrammarRuleActivity: AppCompatActivity(){
                 spinnerFinishTime.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.TIME] ?:0)
             }
             5->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.attrs[Attributes.TYPE]?.get(0) ?: 0)
+                spinnerType.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
             }
             6->{
-                spinnerGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.attrs[Attributes.GENDER]?.get(0) ?: 0)
+                spinnerGender.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
 
                 spinnerFinishNumber.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.NUMBER] ?:0)
                 spinnerFinishCase.setSelection(languages[id_lang]!!.grammar.grammarRules.toMutableList()[id_rule].mutableAttrs[Attributes.CASE] ?:0)
@@ -639,5 +590,12 @@ class GrammarRuleActivity: AppCompatActivity(){
             7->{}
             else->{}
         }
+    }
+    override fun finish(){
+        val data = Intent()
+        data.putExtra("lang", id_lang)
+        data.putExtra("grammarRule", id_rule)
+        setResult(RESULT_OK, data)
+        super.finish()
     }
 }

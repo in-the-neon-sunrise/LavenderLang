@@ -4,26 +4,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="50dp"
     android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/textViewDescription"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="конланг"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textViewConlangWord"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_weight="1"/>
 
     <TextView
         android:id="@+id/textViewConlangWord"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:text="conlang"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textViewRussianWord"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_weight="1"/>
-
-    <TextView
-        android:id="@+id/textViewRussianWord"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:text="russian"
-        app:layout_constraintStart_toEndOf="@+id/textViewConlangWord"
+        android:text="русский"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintStart_toEndOf="@+id/textViewDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_weight="1" />

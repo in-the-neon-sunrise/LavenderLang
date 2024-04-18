@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29"/>
+
+
 
     <application
         android:allowBackup="true"
@@ -10,10 +16,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LavenderLang"
+        android:theme="@style/AppTheme_Day"
+        android:requestLegacyExternalStorage="true"
         tools:targetApi="31" >
+
         <activity
-            android:name=".MainActivity"
+            android:name=".frontend.SplashScreenActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,16 +29,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LanguageActivity" />
-        <activity android:name=".InformationActivity" />
-        <activity android:name=".DictionaryActivity" />
-        <activity android:name=".GrammarActivity" />
-        <activity android:name=".PunctuationActivity" />
-        <activity android:name=".WritingActivity" />
-        <activity android:name=".WordFormationActivity" />
-        <activity android:name=".GrammarRuleActivity" />
-        <activity android:name=".TranslatorActivity" />
-        <activity android:name=".WordActivity" />
+        <activity android:name=".frontend.MainActivity" />
+        <activity android:name=".frontend.LanguageActivity" />
+        <activity android:name=".frontend.InformationActivity" />
+        <activity android:name=".frontend.DictionaryActivity" />
+        <activity android:name=".frontend.GrammarActivity" />
+        <activity android:name=".frontend.PunctuationActivity" />
+        <activity android:name=".frontend.WritingActivity" />
+        <activity android:name=".frontend.WordFormationActivity" />
+        <activity android:name=".frontend.GrammarRuleActivity" />
+        <activity android:name=".frontend.TranslatorActivity" />
+        <activity android:name=".frontend.WordActivity" />
+        <activity android:name=".frontend.WordFormationRuleActivity"/>
+        <activity android:name=".frontend.LoadLanguageActivity" />
+        <activity android:name=".frontend.InstructionActivity" />
     </application>
 
 </manifest>

@@ -7,5 +7,12 @@ import androidx.room.PrimaryKey
 class LanguageItem(
     @PrimaryKey(autoGenerate = false)
     val id : Int,
-    val lang : String
+    var name : String,
+    var description: String,
+    var dictionary: String,
+    var grammar : String,
+    var vowels : String,
+    var consonants: String,
+    var puncSymbols : String,
+    var capitalizedPartsOfSpeech : String
 )
