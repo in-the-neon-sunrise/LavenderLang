@@ -216,6 +216,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.VISIBLE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
+                        if(positionSpinner== idPartOfSpeech)return
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
@@ -237,6 +238,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.VISIBLE
 
+                        if(positionSpinner== idPartOfSpeech)return
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
@@ -258,6 +260,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
+                        if(positionSpinner== idPartOfSpeech)return
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
@@ -279,6 +282,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
+                        if(positionSpinner== idPartOfSpeech)return
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
@@ -300,6 +304,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
+                        if(positionSpinner== idPartOfSpeech)return
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
@@ -321,6 +326,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
+                        if(positionSpinner== idPartOfSpeech)return
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
@@ -342,6 +348,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
+                        if(positionSpinner== idPartOfSpeech)return
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
@@ -363,6 +370,7 @@ class GrammarRuleActivity: AppCompatActivity(){
                         spinnerFinishMood.visibility=View.GONE
                         spinnerFinishDegreeOfComparison.visibility=View.GONE
 
+                        if(positionSpinner== idPartOfSpeech)return
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
