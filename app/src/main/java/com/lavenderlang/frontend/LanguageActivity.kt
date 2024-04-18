@@ -159,7 +159,7 @@ class LanguageActivity: AppCompatActivity() {
             try {
             LanguageDaoImpl().downloadLanguageJSON(
                 languages[id_lang]!!,
-                MainActivity.getInstance().storageHelper,
+                MyApp.storageHelper!!,
                 createJSONLauncher)
             } catch (e: FileWorkException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
@@ -172,7 +172,7 @@ class LanguageActivity: AppCompatActivity() {
             try {
             LanguageDaoImpl().downloadLanguagePDF(
                 languages[id_lang]!!,
-                MainActivity.getInstance().storageHelper,
+                MyApp.storageHelper!!,
                 createPDFLauncher)
             } catch (e: FileWorkException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()

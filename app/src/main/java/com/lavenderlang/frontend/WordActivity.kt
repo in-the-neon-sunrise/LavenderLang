@@ -47,6 +47,7 @@ class WordActivity : AppCompatActivity() {
         val dictionaryDao: DictionaryDao = DictionaryDaoImpl()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("huh", "oncreate")
         setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.word_activity)
@@ -99,12 +100,12 @@ class WordActivity : AppCompatActivity() {
         var word = intent.getIntExtra("word", -1)
         when (word) {
             -1 -> {
-                Log.d("why new", "$id_lang $word")
                 id_word = languages[id_lang]!!.dictionary.dict.size
                 dictionaryDao.addWord(languages[id_lang]!!.dictionary, NounEntity(id_lang, "", "-"))
-                Log.d("create word", languages[id_lang]!!.dictionary.fullDict.toString())
+                Log.d("create word", languages[id_lang]!!.dictionary.dict[id_word].word)
             }
             else -> {
+                Log.d("old word", languages[id_lang]!!.dictionary.dict[word].word)
                 id_word = word
             }
         }
@@ -116,6 +117,7 @@ class WordActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         flagIsFirst =true
+        Log.d("huh", "onresume")
 
         var editConlangWord: EditText = findViewById(R.id.editConlangWord)
         var editRussianWord: EditText = findViewById(R.id.editRussianWord)
@@ -169,7 +171,6 @@ class WordActivity : AppCompatActivity() {
                     languages[id_lang]!!.dictionary.dict[id_word], editConlangWord.text.toString(),
                     editRussianWord.text.toString(), immutableAttrs, partOfSpeech
                 )
-                Log.d("update word", languages[id_lang]!!.dictionary.fullDict.toString())
             } catch (e: ForbiddenSymbolsException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
@@ -180,7 +181,7 @@ class WordActivity : AppCompatActivity() {
             finish()
         }
     }
-    fun setSpinners(){
+    fun setSpinners() {
         val spinnerPartOfSpeech: Spinner = findViewById(R.id.spinnerPartOfSpeech)
 
         val spinnerGender: Spinner=findViewById(R.id.spinnerGender)

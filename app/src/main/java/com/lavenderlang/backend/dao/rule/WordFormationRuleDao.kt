@@ -19,8 +19,10 @@ import com.lavenderlang.backend.entity.word.VerbParticipleEntity
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.IncorrectRegexException
+import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface WordFormationRuleDao : RuleDao {
@@ -74,9 +76,9 @@ class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepositor
         updateDescription(rule, description)
         updateImmutableAttrs(rule, newAttrs)
         updatePartOfSpeech(rule, partOfSpeech)
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
-                MainActivity.getInstance(), rule.languageId,
+                MyApp.getInstance().applicationContext, rule.languageId,
                 Serializer.getInstance().serializeGrammar(languages[rule.languageId]!!.grammar)
             )
         }

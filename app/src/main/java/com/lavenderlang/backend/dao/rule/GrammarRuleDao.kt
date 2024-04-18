@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.rule
 
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.chaquo.python.Python
 import com.lavenderlang.frontend.MainActivity
@@ -22,8 +23,10 @@ import com.lavenderlang.backend.entity.word.VerbParticipleEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.IncorrectRegexException
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface GrammarRuleDao : RuleDao {
@@ -103,6 +106,7 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
 
     override fun updateRule(rule: GrammarRuleEntity, masc: MascEntity, transformation: TransformationEntity, newAttrs: MutableMap<Attributes, Int>) {
         val oldRule = rule.copy()
+        Log.d("updateRule", "oldRule: $oldRule")
 
         try {
             masc.regex.toRegex()
@@ -125,10 +129,10 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         }
         rule.transformation = transformation
         updateMutableAttrs(rule, newAttrs)
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             helper.updateMadeByRule(languages[rule.languageId]!!.dictionary, oldRule, rule)
             languageRepository.updateGrammar(
-                MainActivity.getInstance(), rule.languageId,
+                MyApp.getInstance().applicationContext, rule.languageId,
                 Serializer.getInstance().serializeGrammar(languages[rule.languageId]!!.grammar)
             )
         }

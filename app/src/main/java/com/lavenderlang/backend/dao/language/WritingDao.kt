@@ -7,6 +7,7 @@ import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.frontend.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         language.vowels = newLetters.lowercase()
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateVowels(
-                MainActivity.getInstance(), language.languageId,
+                MyApp.getInstance().applicationContext, language.languageId,
                 language.vowels
             )
         }
@@ -55,7 +56,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         language.consonants = newLetters.lowercase()
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateConsonants(
-                MainActivity.getInstance(), language.languageId,
+                MyApp.getInstance().applicationContext, language.languageId,
                 language.consonants
             )
         }
@@ -66,7 +67,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         language.capitalizedPartsOfSpeech.add(partOfSpeech)
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateCapitalizedPartsOfSpeech(
-                MainActivity.getInstance(), language.languageId,
+                MyApp.getInstance().applicationContext, language.languageId,
                 Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
             )
         }
@@ -76,7 +77,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         language.capitalizedPartsOfSpeech.remove(partOfSpeech)
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateCapitalizedPartsOfSpeech(
-                MainActivity.getInstance(), language.languageId,
+                MyApp.getInstance().applicationContext, language.languageId,
                 Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
             )
         }

@@ -9,6 +9,7 @@ import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.entity.rule.*
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -44,7 +45,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         if (grammar.languageId !in languages) return
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
-                MainActivity.getInstance(), grammar.languageId,
+                MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
         }
@@ -75,7 +76,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         }
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
-                MainActivity.getInstance(), grammar.languageId,
+                MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
         }
@@ -103,7 +104,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         if (grammar.languageId !in languages) return
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
-                MainActivity.getInstance(), grammar.languageId,
+                MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
         }
@@ -131,11 +132,11 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
                 helper.addMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
             }
             languageRepository.updateDictionary(
-                MainActivity.getInstance(), grammar.languageId,
+                MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeDictionary(languages[grammar.languageId]!!.dictionary)
             )
             languageRepository.updateGrammar(
-                MainActivity.getInstance(), grammar.languageId,
+                MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
         }
@@ -146,13 +147,13 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         GlobalScope.launch(Dispatchers.IO) {
             helper.delMadeByRule(languages[grammar.languageId]!!.dictionary, rule)
             languageRepository.updateDictionary(
-                MainActivity.getInstance(), grammar.languageId,
+                MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeDictionary(
                     languages[grammar.languageId]!!.dictionary
                 )
             )
             languageRepository.updateGrammar(
-                MainActivity.getInstance(), grammar.languageId,
+                MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
         }
@@ -162,7 +163,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         grammar.wordFormationRules.add(rule)
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
-                MainActivity.getInstance(), grammar.languageId,
+                MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
         }
@@ -172,7 +173,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         grammar.wordFormationRules.remove(rule)
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
-                MainActivity.getInstance(), grammar.languageId,
+                MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
         }

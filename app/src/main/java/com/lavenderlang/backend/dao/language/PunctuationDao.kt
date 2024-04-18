@@ -6,6 +6,7 @@ import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -27,7 +28,7 @@ class PunctuationDaoImpl(private val languageRepository: LanguageRepository = La
         language.puncSymbols[language.puncSymbols.keys.toList()[id]] = newSymbol
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updatePuncSymbols(
-                MainActivity.getInstance(), language.languageId,
+                MyApp.getInstance().applicationContext, language.languageId,
                 Serializer.getInstance().serializePuncSymbols(language.puncSymbols)
             )
         }
