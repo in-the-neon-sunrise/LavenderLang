@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.language
 
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.dao.help.MascDaoImpl
@@ -10,8 +11,11 @@ import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.frontend.SplashScreenActivity
+import com.lavenderlang.frontend.WordActivity
 import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface DictionaryDao {
@@ -30,6 +34,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
     private val languageRepository: LanguageRepository = LanguageRepository()
 ) : DictionaryDao {
     override fun addWord(dictionary: DictionaryEntity, word: IWordEntity) {
+        Log.d("why1", dictionary.languageId.toString()+word.toString())
         for (letter in word.word) {
             if (!languages[dictionary.languageId]!!.vowels.contains(letter.lowercase()) &&
                 !languages[dictionary.languageId]!!.consonants.contains(letter.lowercase())) {
@@ -37,8 +42,10 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
             }
         }
         if (dictionary.dict.contains(word)) return
+        Log.d("why2", word.toString())
         dictionary.dict.add(word)
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
+            Log.d("why3", word.toString())
             helper.addMadeByWord(dictionary, word)
             languageRepository.updateDictionary(
                 MainActivity.getInstance(), dictionary.languageId,
@@ -49,7 +56,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
 
     override fun deleteWord(dictionary: DictionaryEntity, word: IWordEntity) {
         dictionary.dict.remove(word)
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             helper.delMadeByWord(dictionary, word)
             languageRepository.updateDictionary(
                 MainActivity.getInstance(), dictionary.languageId,

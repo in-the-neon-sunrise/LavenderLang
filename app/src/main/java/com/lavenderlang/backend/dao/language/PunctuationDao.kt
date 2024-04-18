@@ -8,6 +8,7 @@ import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface PunctuationDao {
@@ -24,7 +25,7 @@ class PunctuationDaoImpl(private val languageRepository: LanguageRepository = La
             ) throw ForbiddenSymbolsException("Буква $letter находится в алфавите языка!")
         }
         language.puncSymbols[language.puncSymbols.keys.toList()[id]] = newSymbol
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updatePuncSymbols(
                 MainActivity.getInstance(), language.languageId,
                 Serializer.getInstance().serializePuncSymbols(language.puncSymbols)

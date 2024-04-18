@@ -8,6 +8,7 @@ import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface WritingDao {
@@ -31,7 +32,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
             }
         }
         language.vowels = newLetters.lowercase()
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateVowels(
                 MainActivity.getInstance(), language.languageId,
                 language.vowels
@@ -52,7 +53,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
             }
         }
         language.consonants = newLetters.lowercase()
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateConsonants(
                 MainActivity.getInstance(), language.languageId,
                 language.consonants
@@ -63,7 +64,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
     override fun addCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
         if (language.capitalizedPartsOfSpeech.contains(partOfSpeech)) return
         language.capitalizedPartsOfSpeech.add(partOfSpeech)
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateCapitalizedPartsOfSpeech(
                 MainActivity.getInstance(), language.languageId,
                 Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
@@ -73,7 +74,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
 
     override fun deleteCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
         language.capitalizedPartsOfSpeech.remove(partOfSpeech)
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateCapitalizedPartsOfSpeech(
                 MainActivity.getInstance(), language.languageId,
                 Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)

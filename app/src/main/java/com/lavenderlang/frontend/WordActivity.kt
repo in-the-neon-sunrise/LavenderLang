@@ -99,6 +99,7 @@ class WordActivity : AppCompatActivity() {
         var word = intent.getIntExtra("word", -1)
         when (word) {
             -1 -> {
+                Log.d("why new", "$id_lang $word")
                 id_word = languages[id_lang]!!.dictionary.dict.size
                 dictionaryDao.addWord(languages[id_lang]!!.dictionary, NounEntity(id_lang, "", "-"))
                 Log.d("create word", languages[id_lang]!!.dictionary.fullDict.toString())
@@ -118,6 +119,8 @@ class WordActivity : AppCompatActivity() {
 
         var editConlangWord: EditText = findViewById(R.id.editConlangWord)
         var editRussianWord: EditText = findViewById(R.id.editRussianWord)
+
+        Log.d("full", languages[id_lang]!!.dictionary.fullDict.toString())
 
         editConlangWord.setText(languages[id_lang]!!.dictionary.dict[id_word].word)
         editRussianWord.setText(languages[id_lang]!!.dictionary.dict[id_word].translation)

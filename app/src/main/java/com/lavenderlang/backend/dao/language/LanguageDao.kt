@@ -17,6 +17,7 @@ import com.lavenderlang.backend.service.exception.FileWorkException
 import com.lavenderlang.frontend.languages
 import com.lavenderlang.frontend.nextLanguageId
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.BufferedWriter
 import java.io.File
@@ -65,14 +66,14 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     override fun changeName(language : LanguageEntity, newName : String) {
         language.name = newName
         if (language.languageId !in languages) return
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateName(MainActivity.getInstance(), language.languageId, newName)
         }
     }
     override fun changeDescription(language : LanguageEntity, newDescription: String) {
         language.description = newDescription
         if (language.languageId !in languages) return
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateDescription(MainActivity.getInstance(), language.languageId, newDescription)
         }
     }
@@ -99,7 +100,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         newLang.dictionary.languageId = nextLanguageId
 
         languages[nextLanguageId++] = newLang
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, newLang)
         }
         return
@@ -107,7 +108,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     override fun createLanguage(name: String, description: String) {
         val newLang = LanguageEntity(nextLanguageId, name, description)
         languages[nextLanguageId] = newLang
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, newLang)
         }
         ++nextLanguageId
@@ -115,7 +116,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     }
     override fun deleteLanguage(id: Int) {
         languages.remove(id)
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             languageRepository.deleteLanguage(MainActivity.getInstance(), id)
         }
     }

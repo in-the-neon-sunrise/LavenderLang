@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.language
 
+import android.util.Log
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.entity.language.DictionaryEntity
@@ -74,10 +75,12 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
     }
 
     override fun addMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
+        Log.d("addMadeByWord", "word = $word")
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
         val key = "${word.word} ${word.translation}"
         synchronized(languages[dictionary.languageId]!!) {
+            Log.d("addMadeByWord", "key = $key")
             dictionary.fullDict[key] = arrayListOf(word)
             for (rule in languages[dictionary.languageId]!!.grammar.grammarRules) {
                 if (!mascHandler.fits(rule.masc, word)) continue

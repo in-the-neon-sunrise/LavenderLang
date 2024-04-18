@@ -73,7 +73,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
         /*val languageHandler = LanguageDaoImpl()
         languageHandler.createLanguage("Пример языка", "Пример :>")
         Log.d("lang created", languages.toString())
@@ -161,6 +160,7 @@ class MainActivity : AppCompatActivity() {
         } catch (e: ForbiddenSymbolsException) {
             Log.d("forbidden symbols", e.message.toString())
         }
+        Log.d("grammar rules", languages[0]!!.grammar.grammarRules.toString())
 
         grammarHandler.addOption(
             languages[0]!!.grammar, CharacteristicEntity(
@@ -178,13 +178,29 @@ class MainActivity : AppCompatActivity() {
                 2
             )
         )
-        Log.d("grammar", languages[0]!!.grammar.varsGender.toString())
+        Log.d("vars gender", languages[0]!!.grammar.varsGender.toString())
 
         val rule5 = WordFormationRuleEntity(
             0, MascEntity(
                 PartOfSpeech.NOUN, mutableMapOf(Attributes.GENDER to 1), "a{3}"
-            )
+            ), mutableMapOf(), TransformationEntity(
+                0, 1, "", "bb"),
+            "Превращает существительное в наречие", PartOfSpeech.ADVERB
+        )
+        grammarHandler.addWordFormationRule(languages[0]!!.grammar, rule5)
+        Log.d("word formation rules", languages[0]!!.grammar.wordFormationRules.toString())
+
+        Log.d("created from",
+            dictionaryHandler.createWordsFromExisting(languages[0]!!.dictionary, word1).toString())
+
+        Log.d("filtered dict",
+            dictionaryHandler.filterDictByPartOfSpeech(
+                languages[0]!!.dictionary, PartOfSpeech.NOUN
+            ).toString()
         )*/
+
+
+
 
 
 
