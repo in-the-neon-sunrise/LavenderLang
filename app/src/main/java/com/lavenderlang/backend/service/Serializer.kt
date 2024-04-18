@@ -6,6 +6,7 @@ import com.lavenderlang.backend.entity.language.DictionaryEntity
 import com.lavenderlang.backend.entity.language.GrammarEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.LanguageNotFoundException
+import com.lavenderlang.frontend.languages
 
 class Serializer private constructor() {
     companion object {
@@ -26,7 +27,7 @@ class Serializer private constructor() {
     }
 
     fun serializeLanguage(language: LanguageEntity) : String {
-        synchronized(language) {
+        synchronized(languages) {
             return try {
                 mapper.writeValueAsString(language)
             } catch (e: Exception) {
@@ -36,7 +37,7 @@ class Serializer private constructor() {
     }
 
     fun serializeGrammar(grammar: GrammarEntity) : String {
-        synchronized(grammar) {
+        synchronized(languages) {
             return try {
                 mapper.writeValueAsString(grammar)
             } catch (e: Exception) {
@@ -54,7 +55,7 @@ class Serializer private constructor() {
     }
 
     fun serializeDictionary(dictionary: DictionaryEntity) : String {
-        synchronized(dictionary) {
+        synchronized(languages) {
             return try {
                 mapper.writeValueAsString(dictionary)
             } catch (e: Exception) {
@@ -72,7 +73,7 @@ class Serializer private constructor() {
     }
 
     fun serializePuncSymbols(puncSymbols: MutableMap<String, String>) : String {
-        synchronized(puncSymbols) {
+        synchronized(languages) {
             return try {
                 mapper.writeValueAsString(puncSymbols)
             } catch (e: Exception) {
@@ -90,7 +91,7 @@ class Serializer private constructor() {
     }
 
     fun serializeCapitalizedPartsOfSpeech(capitalizedPartsOfSpeech: ArrayList<PartOfSpeech>) : String {
-        synchronized(capitalizedPartsOfSpeech) {
+        synchronized(languages) {
             return try {
                 mapper.writeValueAsString(capitalizedPartsOfSpeech)
             } catch (e: Exception) {

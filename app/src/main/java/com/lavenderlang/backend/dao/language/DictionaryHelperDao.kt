@@ -18,9 +18,10 @@ interface DictionaryHelperDao {
 }
 class DictionaryHelperDaoImpl : DictionaryHelperDao {
     override fun delMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity) {
+        Log.d("delMadeByRule", "rule: $rule")
         val mascHandler = MascDaoImpl()
         val copyDict = HashMap(dictionary.fullDict)
-        synchronized(languages[dictionary.languageId]!!) {
+        synchronized(languages) {
             for (key in copyDict.keys) {
                 if (languages[dictionary.languageId]!!.dictionary.fullDict[key]!!.size < 2) continue
                 val keyWord = languages[dictionary.languageId]!!.dictionary.fullDict[key]!![0]
@@ -42,11 +43,12 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
     }
 
     override fun addMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity) {
+        Log.d("addMadeByRule", "rule: $rule")
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
         val copyDict = HashMap(dictionary.fullDict)
         if (dictionary.languageId !in languages) return
-        synchronized(languages[dictionary.languageId]!!) {
+        synchronized(languages) {
             for (key in copyDict.keys) {
                 if (languages[dictionary.languageId]!!.dictionary.fullDict[key]!!.isEmpty()) continue
                 val keyWord = languages[dictionary.languageId]!!.dictionary.fullDict[key]!![0]
@@ -69,18 +71,16 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
 
     override fun delMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
         val key = "${word.word} ${word.translation}"
-        synchronized(languages[dictionary.languageId]!!) {
+        synchronized(languages) {
             dictionary.fullDict.remove(key)
         }
     }
 
     override fun addMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
-        Log.d("addMadeByWord", "word = $word")
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
         val key = "${word.word} ${word.translation}"
-        synchronized(languages[dictionary.languageId]!!) {
-            Log.d("addMadeByWord", "key = $key")
+        synchronized(languages) {
             dictionary.fullDict[key] = arrayListOf(word)
             for (rule in languages[dictionary.languageId]!!.grammar.grammarRules) {
                 if (!mascHandler.fits(rule.masc, word)) continue

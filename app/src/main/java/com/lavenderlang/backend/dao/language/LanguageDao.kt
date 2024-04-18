@@ -14,6 +14,7 @@ import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.*
 import com.lavenderlang.backend.service.exception.FileWorkException
+import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.languages
 import com.lavenderlang.frontend.nextLanguageId
 import kotlinx.coroutines.Dispatchers
@@ -67,14 +68,16 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         language.name = newName
         if (language.languageId !in languages) return
         GlobalScope.launch(Dispatchers.IO) {
-            languageRepository.updateName(MainActivity.getInstance(), language.languageId, newName)
+            languageRepository.updateName(
+                MyApp.getInstance().applicationContext, language.languageId, newName)
         }
     }
     override fun changeDescription(language : LanguageEntity, newDescription: String) {
         language.description = newDescription
         if (language.languageId !in languages) return
         GlobalScope.launch(Dispatchers.IO) {
-            languageRepository.updateDescription(MainActivity.getInstance(), language.languageId, newDescription)
+            languageRepository.updateDescription(
+                MyApp.getInstance().applicationContext, language.languageId, newDescription)
         }
     }
 
@@ -101,7 +104,8 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
 
         languages[nextLanguageId++] = newLang
         GlobalScope.launch(Dispatchers.IO) {
-            languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, newLang)
+            languageRepository.insertLanguage(
+                MyApp.getInstance().applicationContext, newLang.languageId, newLang)
         }
         return
     }
@@ -109,7 +113,8 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         val newLang = LanguageEntity(nextLanguageId, name, description)
         languages[nextLanguageId] = newLang
         GlobalScope.launch(Dispatchers.IO) {
-            languageRepository.insertLanguage(MainActivity.getInstance(), newLang.languageId, newLang)
+            languageRepository.insertLanguage(
+                MyApp.getInstance().applicationContext, newLang.languageId, newLang)
         }
         ++nextLanguageId
         return
@@ -117,17 +122,19 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     override fun deleteLanguage(id: Int) {
         languages.remove(id)
         GlobalScope.launch(Dispatchers.IO) {
-            languageRepository.deleteLanguage(MainActivity.getInstance(), id)
+            languageRepository.deleteLanguage(
+                MyApp.getInstance().applicationContext, id)
         }
     }
     override fun getLanguageFromFile(path: String, context: AppCompatActivity) {
         val origFile = File(path)
-        val file = DocumentFileCompat.fromFile(context, origFile)
+        // fixme: do i need context here? or just myApp?
+        val file = DocumentFileCompat.fromFile(MyApp.getInstance().applicationContext, origFile)
         if (file == null) {
             Log.d("file", "no file")
             throw FileWorkException("Не удалось загрузить язык")
         }
-        val inputStream = file.openInputStream(context)
+        val inputStream = file.openInputStream(MyApp.getInstance().applicationContext)
         if (inputStream == null) {
             Log.d("file", "no input stream")
             throw FileWorkException("Не удалось загрузить язык")
@@ -156,18 +163,19 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
 
         languages[nextLanguageId] = language
         ++nextLanguageId
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.IO) {
-            languageRepository.insertLanguage(context, language.languageId, language)
+        GlobalScope.launch(Dispatchers.IO) {
+            languageRepository.insertLanguage(
+                MyApp.getInstance().applicationContext, language.languageId, language)
         }
         Log.d("file", "loaded ${language.name}")
     }
 
     override fun downloadLanguageJSON(language: LanguageEntity, storageHelper: SimpleStorageHelper,
                                       createDocumentResultLauncher: ActivityResultLauncher<String>) {
-        val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MainActivity.getInstance())
+        val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MyApp.getInstance().applicationContext)
         if (accessible.isEmpty()) {
             val requestCode = 123123
-            MainActivity.getInstance().storageHelper.requestStorageAccess(
+            storageHelper.requestStorageAccess(
                 requestCode,
                 null,
                 StorageType.EXTERNAL
@@ -181,10 +189,10 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     }
 
     override fun downloadLanguagePDF(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>) {
-        val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MainActivity.getInstance())
+        val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MyApp.getInstance().applicationContext)
         if (accessible.isEmpty()) {
             val requestCode = 123123
-            MainActivity.getInstance().storageHelper.requestStorageAccess(
+            storageHelper.requestStorageAccess(
                 requestCode,
                 null,
                 StorageType.EXTERNAL
@@ -199,7 +207,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
 
     fun writeToJSON(uri: Uri) {
         Log.d("woof", "writing json")
-        val context = MainActivity.getInstance()
+        val context = MyApp.getInstance().applicationContext
         if (curLanguage == null) {
             Log.d("file", "no language")
             throw FileWorkException("Не удалось сохранить файл")
@@ -215,7 +223,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     }
 
     fun writeToPDF(uri: Uri) : Boolean {
-        val context = MainActivity.getInstance()
+        val context = MyApp.getInstance().applicationContext
         if (curLanguage == null) {
             Log.d("file", "no language")
             throw FileWorkException("Не удалось сохранить файл")

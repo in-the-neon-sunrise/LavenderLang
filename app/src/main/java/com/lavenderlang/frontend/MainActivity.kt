@@ -20,7 +20,10 @@ import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
+import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
+import com.lavenderlang.backend.dao.language.TranslatorHelperDaoImpl
 import com.lavenderlang.backend.dao.language.WritingDaoImpl
+import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.CharacteristicEntity
 import com.lavenderlang.backend.entity.help.MascEntity
@@ -34,40 +37,34 @@ import com.lavenderlang.backend.entity.word.AdverbEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.backend.service.exception.WordNotFoundException
 
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
 var nextLanguageId : Int = 0
 var isDark: Boolean = false
 
 class MainActivity : AppCompatActivity() {
-    lateinit var storageHelper: SimpleStorageHelper
-
-    companion object {
-        private var instance : MainActivity? = null
-        fun getInstance() : MainActivity {
-            if (instance == null) throw Exception("MainActivity is not created")
-            return instance!!
-        }
-        fun setInstance(mainActivity: MainActivity) {
-            if (instance == null) instance = mainActivity
-        }
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         //activity creation
 
+        Log.d("MainActivity", "onCreate")
+
         setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
+        if (languages.isEmpty()) {
+            val intent = Intent(this, SplashScreenActivity::class.java)
+            startActivity(intent)
+        }
         setContentView(R.layout.start_activity)
 
         isDark=getSharedPreferences("Theme", Context.MODE_PRIVATE).getBoolean("isDark", false)
         if(isDark) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        setInstance(this)
-        storageHelper = SimpleStorageHelper(this)
+        MyApp.storageHelper = SimpleStorageHelper(this)
 
 
-        if (!Python.isStarted()) Python.start(AndroidPlatform(this))
+        if (!Python.isStarted()) Python.start(AndroidPlatform(MyApp.getInstance().applicationContext))
 
 
 
@@ -75,19 +72,19 @@ class MainActivity : AppCompatActivity() {
 
         /*val languageHandler = LanguageDaoImpl()
         languageHandler.createLanguage("Пример языка", "Пример :>")
-        Log.d("lang created", languages.toString())
+        Log.e("lang created", languages.toString())
 
         val writingHandler = WritingDaoImpl()
         writingHandler.changeVowels(languages[0]!!, "a")
-        Log.d("vowels", languages[0]!!.vowels)
+        Log.e("vowels", languages[0]!!.vowels)
         writingHandler.changeConsonants(languages[0]!!, "b c d")
-        Log.d("consonants", languages[0]!!.consonants)
+        Log.e("consonants", languages[0]!!.consonants)
         WritingDaoImpl().addCapitalizedPartOfSpeech(languages[0]!!, PartOfSpeech.NOUN)
-        Log.d("capitalized", languages[0]!!.capitalizedPartsOfSpeech.toString())
+        Log.e("capitalized", languages[0]!!.capitalizedPartsOfSpeech.toString())
 
         val punctuationHandler = PunctuationDaoImpl()
         punctuationHandler.updatePunctuationSymbol(languages[0]!!, 0, "MEOW")
-        Log.d("punctuation", languages[0]!!.puncSymbols.toString())
+        Log.e("punctuation", languages[0]!!.puncSymbols.toString())
 
         val dictionaryHandler = DictionaryDaoImpl()
         val word1 = NounEntity(
@@ -117,10 +114,11 @@ class MainActivity : AppCompatActivity() {
         try {
             dictionaryHandler.addWord(languages[0]!!.dictionary, word4)
         } catch (e: ForbiddenSymbolsException) {
-            Log.d("forbidden symbols", e.message.toString())
-            sleep(1000)
+            Log.e("forbidden symbols", e.message.toString())
         }
-        Log.d("dictionary", languages[0]!!.dictionary.dict.toString())
+        for (word in languages[0]!!.dictionary.dict) {
+            Log.e(word.word, word.toString())
+        }
 
         val grammarHandler = GrammarDaoImpl()
         val rule1 = GrammarRuleEntity(0,
@@ -158,9 +156,20 @@ class MainActivity : AppCompatActivity() {
         try {
             grammarHandler.addGrammarRule(languages[0]!!.grammar, rule4)
         } catch (e: ForbiddenSymbolsException) {
-            Log.d("forbidden symbols", e.message.toString())
+            Log.e("forbidden symbols", e.message.toString())
         }
-        Log.d("grammar rules", languages[0]!!.grammar.grammarRules.toString())
+        Log.e("grammar rules", languages[0]!!.grammar.grammarRules.toString())
+        val grammarRuleHandler = GrammarRuleDaoImpl()
+        Log.e("grammar transform",
+            grammarRuleHandler.grammarTransformByRule(rule1, word1).toString())
+        grammarRuleHandler.updateRule(rule1, rule1.masc,
+            TransformationEntity(0, 1, "", "bb"),
+            mutableMapOf(Attributes.NUMBER to 1, Attributes.CASE to 1))
+        sleep(2000)
+        Log.e("full dict 0", languages[0]!!.dictionary.fullDict["aaa кошечка"].toString())
+        grammarHandler.deleteGrammarRule(languages[0]!!.grammar,
+            languages[0]!!.grammar.grammarRules[0])
+        Log.e("grammar rules", languages[0]!!.grammar.grammarRules.toString())
 
         grammarHandler.addOption(
             languages[0]!!.grammar, CharacteristicEntity(
@@ -178,7 +187,7 @@ class MainActivity : AppCompatActivity() {
                 2
             )
         )
-        Log.d("vars gender", languages[0]!!.grammar.varsGender.toString())
+        Log.e("vars gender", languages[0]!!.grammar.varsGender.toString())
 
         val rule5 = WordFormationRuleEntity(
             0, MascEntity(
@@ -188,16 +197,41 @@ class MainActivity : AppCompatActivity() {
             "Превращает существительное в наречие", PartOfSpeech.ADVERB
         )
         grammarHandler.addWordFormationRule(languages[0]!!.grammar, rule5)
-        Log.d("word formation rules", languages[0]!!.grammar.wordFormationRules.toString())
+        Log.e("word formation rules", languages[0]!!.grammar.wordFormationRules.toString())
 
-        Log.d("created from",
+        Log.e("created from",
             dictionaryHandler.createWordsFromExisting(languages[0]!!.dictionary, word1).toString())
 
-        Log.d("filtered dict",
+        Log.e("filtered dict",
             dictionaryHandler.filterDictByPartOfSpeech(
                 languages[0]!!.dictionary, PartOfSpeech.NOUN
             ).toString()
-        )*/
+        )
+
+        val translatorHandler = TranslatorDaoImpl()
+        Log.e("text to conlang", translatorHandler.translateTextToConlang(languages[0]!!,
+            "кошечки заплакали в неизвестности."))
+        Log.e("text from conlang",
+            translatorHandler.translateTextFromConlang(languages[0]!!, "Aaa bbbMEOW"))
+
+        val translatorHelper = TranslatorHelperDaoImpl()
+        Log.e("word to conlang",
+            translatorHelper.translateWordToConlang(languages[0]!!, "кошечка"))
+        try {
+            translatorHelper.translateWordToConlang(languages[0]!!, "неизвестность")
+        } catch (e: WordNotFoundException) {
+            Log.e("word not found", e.message.toString())
+        }
+
+
+        dictionaryHandler.deleteWord(languages[0]!!.dictionary, word1)
+        for (word in languages[0]!!.dictionary.dict) {
+            Log.e(word.word, word.toString())
+        }*/
+
+
+
+
 
 
 
@@ -239,6 +273,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        Log.d("MainActivity", "onResume")
         super.onResume()
 
         val listLanguages: ListView = findViewById(R.id.listLanguages)
@@ -252,5 +287,20 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("lang", languages.values.toList()[position].languageId)
                 startActivity(intent)
             }
+    }
+
+    override fun onPause() {
+        Log.d("MainActivity", "onPause")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        Log.d("MainActivity", "onStop")
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        Log.d("MainActivity", "onDestroy")
+        super.onDestroy()
     }
 }

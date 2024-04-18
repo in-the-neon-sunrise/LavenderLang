@@ -1,11 +1,13 @@
 package com.lavenderlang.backend.dao.word
 
+import android.util.Log
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.frontend.WordActivity
 import com.lavenderlang.frontend.languages
 
 interface WordDao {
@@ -150,6 +152,7 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
         val dictionaryHandler = DictionaryDaoImpl()
         dictionaryHandler.deleteWord(languages[word.languageId]!!.dictionary, word)
         dictionaryHandler.addWord(languages[word.languageId]!!.dictionary, newWordEntity)
+        Log.d("update word", newWordEntity.word + " " + newWordEntity.translation)
     }
     override fun getImmutableAttrsInfo(word: IWordEntity): String {
         var res = ""

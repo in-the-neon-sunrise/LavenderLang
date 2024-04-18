@@ -11,6 +11,7 @@ import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.SplashScreenActivity
 import com.lavenderlang.frontend.WordActivity
 import com.lavenderlang.frontend.languages
@@ -34,7 +35,6 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
     private val languageRepository: LanguageRepository = LanguageRepository()
 ) : DictionaryDao {
     override fun addWord(dictionary: DictionaryEntity, word: IWordEntity) {
-        Log.d("why1", dictionary.languageId.toString()+word.toString())
         for (letter in word.word) {
             if (!languages[dictionary.languageId]!!.vowels.contains(letter.lowercase()) &&
                 !languages[dictionary.languageId]!!.consonants.contains(letter.lowercase())) {
@@ -42,15 +42,14 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
             }
         }
         if (dictionary.dict.contains(word)) return
-        Log.d("why2", word.toString())
         dictionary.dict.add(word)
         GlobalScope.launch(Dispatchers.IO) {
-            Log.d("why3", word.toString())
             helper.addMadeByWord(dictionary, word)
             languageRepository.updateDictionary(
-                MainActivity.getInstance(), dictionary.languageId,
+                MyApp.getInstance().applicationContext, dictionary.languageId,
                 Serializer.getInstance().serializeDictionary(dictionary)
             )
+            Log.d("updated word", word.word+" "+word.translation)
         }
     }
 
@@ -59,7 +58,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         GlobalScope.launch(Dispatchers.IO) {
             helper.delMadeByWord(dictionary, word)
             languageRepository.updateDictionary(
-                MainActivity.getInstance(), dictionary.languageId,
+                MyApp.getInstance().applicationContext, dictionary.languageId,
                 Serializer.getInstance().serializeDictionary(dictionary)
             )
         }

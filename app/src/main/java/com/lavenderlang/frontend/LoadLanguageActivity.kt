@@ -67,7 +67,12 @@ class LoadLanguageActivity: AppCompatActivity(){
 
         buttonFirst.setOnClickListener {
             val requestCode = 123123
-            MainActivity.getInstance().storageHelper.requestStorageAccess(
+            if (MyApp.storageHelper == null) {
+                Log.d("restore", "StorageHelper is null")
+                Toast.makeText(this, "Загрузка невозможна", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            MyApp.storageHelper!!.requestStorageAccess(
                 requestCode,
                 null,
                 StorageType.EXTERNAL
