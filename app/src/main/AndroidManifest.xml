@@ -29,15 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".frontend.MainActivity"
-            android:exported="true"
-            android:theme="@style/AppTheme_Day">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".frontend.MainActivity" />
         <activity android:name=".frontend.LanguageActivity" />
         <activity android:name=".frontend.InformationActivity" />
         <activity android:name=".frontend.DictionaryActivity" />

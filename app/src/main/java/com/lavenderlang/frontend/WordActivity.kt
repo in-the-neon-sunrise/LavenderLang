@@ -101,10 +101,10 @@ class WordActivity : AppCompatActivity() {
             -1 -> {
                 id_word = languages[id_lang]!!.dictionary.dict.size
                 dictionaryDao.addWord(languages[id_lang]!!.dictionary, NounEntity(id_lang, "", "-"))
+                Log.d("create word", languages[id_lang]!!.dictionary.fullDict.toString())
             }
             else -> {
                 id_word = word
-                Log.d("why", "$id_lang $word")
             }
         }
     }
@@ -166,6 +166,7 @@ class WordActivity : AppCompatActivity() {
                     languages[id_lang]!!.dictionary.dict[id_word], editConlangWord.text.toString(),
                     editRussianWord.text.toString(), immutableAttrs, partOfSpeech
                 )
+                Log.d("update word", languages[id_lang]!!.dictionary.fullDict.toString())
             } catch (e: ForbiddenSymbolsException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
