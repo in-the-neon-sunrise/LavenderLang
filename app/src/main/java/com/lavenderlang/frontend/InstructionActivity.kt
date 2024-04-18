@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
 
 class InstructionActivity: AppCompatActivity() {
@@ -13,8 +14,11 @@ class InstructionActivity: AppCompatActivity() {
         var id_block: Int = 0
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.instruction_activity)
+        if(isDark) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
             this.finish()

@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.StorageType
 import com.lavenderlang.R
@@ -18,9 +19,11 @@ import com.lavenderlang.backend.service.exception.FileWorkException
 
 class LoadLanguageActivity: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.load_language_activity)
-
+        if(isDark) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {

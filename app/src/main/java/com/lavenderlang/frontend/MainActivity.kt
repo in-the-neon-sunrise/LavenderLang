@@ -1,5 +1,6 @@
 package com.lavenderlang.frontend
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,7 +8,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.anggrayudi.storage.SimpleStorageHelper
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
@@ -31,7 +34,7 @@ import com.lavenderlang.backend.entity.word.VerbEntity
 
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
 var nextLanguageId : Int = 0
-
+var isDark: Boolean = false
 
 class MainActivity : AppCompatActivity() {
     lateinit var storageHelper: SimpleStorageHelper
@@ -49,9 +52,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         //activity creation
 
+        setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
 
+        isDark=getSharedPreferences("Theme", Context.MODE_PRIVATE).getBoolean("isDark", false)
+        if(isDark) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         setInstance(this)
         storageHelper = SimpleStorageHelper(this)

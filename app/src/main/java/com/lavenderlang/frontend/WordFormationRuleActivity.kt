@@ -11,6 +11,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.help.MascDaoImpl
@@ -53,9 +54,11 @@ class WordFormationRuleActivity: AppCompatActivity()  {
         var finishFlagIsFirst = false
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.word_formation_rule_activity)
-
+        if(isDark) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {

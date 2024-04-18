@@ -17,6 +17,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDao
@@ -77,8 +78,12 @@ class GrammarActivity: AppCompatActivity() {
     private lateinit var adapterDegreeOfComparison: ArrayAdapter<CharacteristicEntity>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.grammar_activity)
+        if(isDark) AppCompatDelegate.setDefaultNightMode(
+            AppCompatDelegate.MODE_NIGHT_YES)
+        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
