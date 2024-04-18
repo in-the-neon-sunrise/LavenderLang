@@ -32,6 +32,7 @@ class PunctuationActivity : AppCompatActivity() {
         buttonInformation.setOnClickListener{
             val intent = Intent(this@PunctuationActivity, InstructionActivity::class.java)
             intent.putExtra("lang", id_lang)
+            intent.putExtra("block", 5)
             startActivity(intent)
         }
         //bottom navigation menu

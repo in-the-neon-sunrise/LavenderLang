@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ScrollView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
@@ -27,9 +28,22 @@ class InstructionActivity: AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         id_lang = intent.getIntExtra("lang", -1)
-        id_block = intent.getIntExtra("block", -1)
-        val list: ScrollView = findViewById(R.id.scrollView2)
+        id_block = intent.getIntExtra("block", 0)
+        val scroll: ScrollView = findViewById(R.id.scrollView2)
+        var heads = mutableListOf<TextView>()
+        heads.add(findViewById(R.id.textViewHead1))
+        heads.add(findViewById(R.id.textViewHead2))
+        heads.add(findViewById(R.id.textViewHead3))
+        heads.add(findViewById(R.id.textViewHead4))
+        heads.add(findViewById(R.id.textViewHead5))
+        heads.add(findViewById(R.id.textViewHead6))
+        heads.add(findViewById(R.id.textViewHead7))
+        heads.add(findViewById(R.id.textViewHead8))
+        heads.add(findViewById(R.id.textViewHead9))
+        heads.add(findViewById(R.id.textViewHead10))
+        heads.add(findViewById(R.id.textViewHead11))
 
+        if(id_block!=0)scroll.post { scroll.smoothScrollTo(0, heads[id_block].top) }
     }
 
     override fun finish() {

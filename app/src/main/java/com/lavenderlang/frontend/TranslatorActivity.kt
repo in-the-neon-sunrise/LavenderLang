@@ -38,6 +38,7 @@ class TranslatorActivity : AppCompatActivity() {
         buttonInformation.setOnClickListener{
             val intent = Intent(this@TranslatorActivity, InstructionActivity::class.java)
             intent.putExtra("lang", id_lang)
+            intent.putExtra("block", 10)
             startActivity(intent)
         }
         //bottom navigation menu

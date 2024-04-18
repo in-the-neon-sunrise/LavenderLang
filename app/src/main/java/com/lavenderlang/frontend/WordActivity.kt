@@ -61,6 +61,7 @@ class WordActivity : AppCompatActivity() {
         buttonInformation.setOnClickListener{
             val intent = Intent(this@WordActivity, InstructionActivity::class.java)
             intent.putExtra("lang", id_lang)
+            intent.putExtra("block", 7)
             startActivity(intent)
         }
         //bottom navigation menu

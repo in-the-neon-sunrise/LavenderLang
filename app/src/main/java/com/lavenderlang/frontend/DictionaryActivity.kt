@@ -42,6 +42,7 @@ class DictionaryActivity : AppCompatActivity() {
         buttonInformation.setOnClickListener{
             val intent = Intent(this@DictionaryActivity, InstructionActivity::class.java)
             intent.putExtra("lang", id_lang)
+            intent.putExtra("block", 7)
             startActivity(intent)
         }
 

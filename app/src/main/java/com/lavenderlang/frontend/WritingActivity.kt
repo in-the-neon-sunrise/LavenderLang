@@ -34,6 +34,7 @@ class WritingActivity : AppCompatActivity() {
         buttonInformation.setOnClickListener{
             val intent = Intent(this@WritingActivity, InstructionActivity::class.java)
             intent.putExtra("lang", id_lang)
+            intent.putExtra("block", 4)
             startActivity(intent)
         }
         //bottom navigation menu

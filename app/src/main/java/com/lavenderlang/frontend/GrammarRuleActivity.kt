@@ -58,6 +58,7 @@ class GrammarRuleActivity: AppCompatActivity(){
         buttonInformation.setOnClickListener{
             val intent = Intent(this@GrammarRuleActivity, InstructionActivity::class.java)
             intent.putExtra("lang", id_lang)
+            intent.putExtra("block", 8)
             startActivity(intent)
         }
         //bottom navigation menu

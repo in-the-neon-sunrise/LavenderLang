@@ -59,6 +59,7 @@ class LanguageActivity: AppCompatActivity() {
         buttonInformation.setOnClickListener{
             val intent = Intent(this@LanguageActivity, InstructionActivity::class.java)
             intent.putExtra("lang", id_lang)
+            intent.putExtra("block", 2)
             startActivity(intent)
         }
 
