@@ -12,13 +12,16 @@ import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 class SplashScreenActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("SplashScreenActivity", "onCreate")
-        if (nextLanguageId == -1) LanguageDaoImpl().getLanguagesFromDB()
+        Log.d("SplashScreenActivity", "onCreate ${MyApp.nextLanguageId}")
+        if (MyApp.nextLanguageId == -1) {
+            Log.d("SplashScreenActivity", "getting languages from DB")
+            LanguageDaoImpl().getLanguagesFromDB()
+            if (MyApp.nextLanguageId == -1) MyApp.nextLanguageId = 0
+        }
 
         setContentView(R.layout.splash_screen_activity)
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("done", true)
             startActivity(intent)
             finish()
         }, 3000)

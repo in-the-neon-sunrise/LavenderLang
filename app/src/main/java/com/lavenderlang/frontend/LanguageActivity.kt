@@ -115,7 +115,7 @@ class LanguageActivity: AppCompatActivity() {
 
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
-                id_lang = nextLanguageId
+                id_lang = MyApp.nextLanguageId
                 languageDao.createLanguage("Язык$id_lang", "")
                 editLanguageName.setText(languages[id_lang]?.name)
             }

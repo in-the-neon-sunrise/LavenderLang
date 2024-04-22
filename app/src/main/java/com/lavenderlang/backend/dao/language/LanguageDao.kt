@@ -16,7 +16,6 @@ import com.lavenderlang.backend.service.*
 import com.lavenderlang.backend.service.exception.FileWorkException
 import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.languages
-import com.lavenderlang.frontend.nextLanguageId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -45,7 +44,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
             val languageItemList = languageRepository.loadAllLanguages(
                 MyApp.getInstance().applicationContext)
             languages = mutableMapOf()
-            nextLanguageId = 0
+            MyApp.nextLanguageId = 0
             for (e in languageItemList) {
                 languages[e.id] = LanguageEntity(
                     e.id,
@@ -59,7 +58,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
                     Serializer.getInstance()
                         .deserializeCapitalizedPartsOfSpeech(e.capitalizedPartsOfSpeech)
                 )
-                if (nextLanguageId <= e.id) nextLanguageId = e.id + 1
+                if (MyApp.nextLanguageId <= e.id) MyApp.nextLanguageId = e.id + 1
             }
         }
     }
@@ -83,27 +82,27 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     }
 
     override fun copyLanguage(language: LanguageEntity) {
-        val newLang = language.copy(languageId = nextLanguageId, name = language.name + " копия")
+        val newLang = language.copy(languageId = MyApp.nextLanguageId, name = language.name + " копия")
 
-        newLang.grammar.languageId = nextLanguageId
+        newLang.grammar.languageId = MyApp.nextLanguageId
         for (rule in newLang.grammar.grammarRules) {
-            rule.languageId = nextLanguageId
+            rule.languageId = MyApp.nextLanguageId
         }
         for (rule in newLang.grammar.wordFormationRules) {
-            rule.languageId = nextLanguageId
+            rule.languageId = MyApp.nextLanguageId
         }
         for (word in newLang.dictionary.dict) {
-            word.languageId = nextLanguageId
+            word.languageId = MyApp.nextLanguageId
         }
         for (key in newLang.dictionary.fullDict.keys) {
             for (word in newLang.dictionary.fullDict[key]!!) {
-                word.languageId = nextLanguageId
+                word.languageId = MyApp.nextLanguageId
             }
         }
 
-        newLang.dictionary.languageId = nextLanguageId
+        newLang.dictionary.languageId = MyApp.nextLanguageId
 
-        languages[nextLanguageId++] = newLang
+        languages[MyApp.nextLanguageId++] = newLang
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.insertLanguage(
                 MyApp.getInstance().applicationContext, newLang.languageId, newLang)
@@ -111,13 +110,13 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         return
     }
     override fun createLanguage(name: String, description: String) {
-        val newLang = LanguageEntity(nextLanguageId, name, description)
-        languages[nextLanguageId] = newLang
+        val newLang = LanguageEntity(MyApp.nextLanguageId, name, description)
+        languages[MyApp.nextLanguageId] = newLang
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.insertLanguage(
                 MyApp.getInstance().applicationContext, newLang.languageId, newLang)
         }
-        ++nextLanguageId
+        ++MyApp.nextLanguageId
         return
     }
     override fun deleteLanguage(id: Int) {
@@ -142,28 +141,28 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         }
         val inputString = inputStream.bufferedReader().use { it.readText() }
         val language = Serializer.getInstance().deserializeLanguage(inputString)
-        language.languageId = nextLanguageId
+        language.languageId = MyApp.nextLanguageId
 
-        language.grammar.languageId = nextLanguageId
+        language.grammar.languageId = MyApp.nextLanguageId
         for (rule in language.grammar.grammarRules) {
-            rule.languageId = nextLanguageId
+            rule.languageId = MyApp.nextLanguageId
         }
         for (rule in language.grammar.wordFormationRules) {
-                rule.languageId = nextLanguageId
+                rule.languageId = MyApp.nextLanguageId
         }
         for (word in language.dictionary.dict) {
-            word.languageId = nextLanguageId
+            word.languageId = MyApp.nextLanguageId
         }
         for (key in language.dictionary.fullDict.keys) {
             for (word in language.dictionary.fullDict[key]!!) {
-                word.languageId = nextLanguageId
+                word.languageId = MyApp.nextLanguageId
             }
         }
 
-        language.dictionary.languageId = nextLanguageId
+        language.dictionary.languageId = MyApp.nextLanguageId
 
-        languages[nextLanguageId] = language
-        ++nextLanguageId
+        languages[MyApp.nextLanguageId] = language
+        ++MyApp.nextLanguageId
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.insertLanguage(
                 MyApp.getInstance().applicationContext, language.languageId, language)

@@ -8,6 +8,7 @@ class MyApp : Application() {
     companion object {
         private var instance : MyApp? = null
         var storageHelper : SimpleStorageHelper? = null
+        var nextLanguageId : Int = -1
         fun getInstance() : MyApp {
             if (instance == null) throw Exception("MyApp is not created")
             return instance!!
@@ -20,5 +21,6 @@ class MyApp : Application() {
         super.onCreate()
         Log.d("MyApp", "onCreate")
         setInstance(this)
+        Log.d("MyApp", "instance set $nextLanguageId")
     }
 }
