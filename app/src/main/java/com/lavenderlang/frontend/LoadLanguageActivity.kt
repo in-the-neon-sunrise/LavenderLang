@@ -52,13 +52,15 @@ class LoadLanguageActivity: AppCompatActivity(){
         val buttonOpen: Button = findViewById(R.id.buttonOpen)
         val languageDao: LanguageDao = LanguageDaoImpl()
 
-        val accessible = arrayListOf<String>()
         var accessiblePathsRaw = DocumentFileCompat.getAccessibleAbsolutePaths(this)
+        val accessible = arrayListOf<String>()
         for (key in  accessiblePathsRaw.keys) {
             for (path in accessiblePathsRaw[key]!!) {
                 accessible.add(path)
             }
         }
+        Log.d("accessible", accessible.toString())
+
         //эти 3 строчки обновляют список
         var adapterPath: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item, accessible)
         spinnerPath.adapter = adapterPath

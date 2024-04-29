@@ -39,8 +39,6 @@ import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.WordNotFoundException
 
-var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
-var isDark: Boolean = false
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,10 +59,8 @@ class MainActivity : AppCompatActivity() {
         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         MyApp.storageHelper = SimpleStorageHelper(this)
-
-
         if (!Python.isStarted()) Python.start(AndroidPlatform(MyApp.getInstance().applicationContext))
-
+        if (MyApp.mainActivityContext == null) MyApp.mainActivityContext = this
 
 
 

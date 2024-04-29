@@ -18,8 +18,8 @@ import com.lavenderlang.backend.service.exception.FileWorkException
 
 
 class LanguageActivity: AppCompatActivity() {
-    lateinit var createJSONLauncher: ActivityResultLauncher<String>
-    lateinit var createPDFLauncher : ActivityResultLauncher<String>
+    private lateinit var createJSONLauncher: ActivityResultLauncher<String>
+    private lateinit var createPDFLauncher : ActivityResultLauncher<String>
 
     companion object{
         var id_lang: Int = 0

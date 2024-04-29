@@ -172,34 +172,12 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
 
     override fun downloadLanguageJSON(language: LanguageEntity, storageHelper: SimpleStorageHelper,
                                       createDocumentResultLauncher: ActivityResultLauncher<String>) {
-        val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MyApp.getInstance().applicationContext)
-        if (accessible.isEmpty()) {
-            val requestCode = 123123
-            storageHelper.requestStorageAccess(
-                requestCode,
-                null,
-                StorageType.EXTERNAL
-            )
-            if (accessible.isEmpty())
-                throw FileWorkException("Вы не дали приложению доступ к памяти телефона, сохранение невозможно")
-        }
         curLanguage = language
         createDocumentResultLauncher.launch("${PdfWriterDaoImpl().translitName(language.name)}.json")
         Log.d("file", "json done")
     }
 
     override fun downloadLanguagePDF(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>) {
-        val accessible = DocumentFileCompat.getAccessibleAbsolutePaths(MyApp.getInstance().applicationContext)
-        if (accessible.isEmpty()) {
-            val requestCode = 123123
-            storageHelper.requestStorageAccess(
-                requestCode,
-                null,
-                StorageType.EXTERNAL
-            )
-            if (accessible.isEmpty())
-                throw FileWorkException("Вы не дали приложению доступ к памяти телефона, сохранение невозможно")
-        }
         curLanguage = language
         createDocumentResultLauncher.launch("${PdfWriterDaoImpl().translitName(language.name)}.pdf")
         Log.d("file", "pdf done")
