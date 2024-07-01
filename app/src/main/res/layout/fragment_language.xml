@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.LanguageFragment">
+
+    <Button
+        android:id="@+id/buttonInf"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/ic_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonPrev"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editLanguageName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="30dp"
+        android:autofillHints=""
+        android:hint="@string/name"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editDescription"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:autofillHints=""
+        android:hint="@string/description"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editLanguageName" />
+
+    <Button
+        android:id="@+id/buttonWriting"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:text="@string/writing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editDescription" />
+
+    <Button
+        android:id="@+id/buttonPunctuation"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/punctuation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonWriting" />
+
+    <Button
+        android:id="@+id/buttonDictionary"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/dictionary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPunctuation" />
+
+    <Button
+        android:id="@+id/buttonGrammar"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/grammar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonDictionary" />
+
+    <Button
+        android:id="@+id/buttonWordFormation"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/word_formation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonGrammar" />
+
+    <Button
+        android:id="@+id/buttonFile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_download"
+        app:layout_constraintEnd_toStartOf="@+id/buttonPDF"
+        app:layout_constraintStart_toEndOf="@+id/buttonDelete"
+        app:layout_constraintTop_toTopOf="@+id/buttonPDF" />
+
+    <Button
+        android:id="@+id/buttonPDF"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/ic_download"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonFile"
+        app:layout_constraintTop_toBottomOf="@+id/editDescription" />
+
+    <Button
+        android:id="@+id/buttonCopy"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_copy"
+        app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editDescription" />
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_delete"
+        app:layout_constraintEnd_toStartOf="@+id/buttonFile"
+        app:layout_constraintStart_toEndOf="@+id/buttonCopy"
+        app:layout_constraintTop_toBottomOf="@+id/editDescription" />
+
+
+
+
+    <Button
+        android:id="@+id/buttonHome"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonTranslator"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_translator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewJson"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="JSON"
+        android:textColor="@color/md_theme_light_primary"
+        app:layout_constraintEnd_toEndOf="@+id/buttonFile"
+        app:layout_constraintStart_toStartOf="@+id/buttonFile"
+        app:layout_constraintTop_toBottomOf="@+id/buttonFile" />
+
+    <TextView
+        android:id="@+id/textViewPdf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="PDF"
+        android:textColor="@color/md_theme_light_primary"
+        app:layout_constraintEnd_toEndOf="@+id/buttonPDF"
+        app:layout_constraintStart_toStartOf="@+id/buttonPDF"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPDF" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

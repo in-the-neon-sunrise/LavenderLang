@@ -39,7 +39,7 @@
         android:id="@+id/buttonSave"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/plus"
+        android:background="@drawable/ic_plus"
         app:layout_constraintStart_toEndOf="@+id/editTextRussianWord"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDescription"/>

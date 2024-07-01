@@ -1,0 +1,22 @@
+package com.lavenderlang.ui.fragments
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.lavenderlang.databinding.FragmentGrammarRuleBinding
+import com.lavenderlang.databinding.FragmentLanguageBinding
+
+class GrammarRuleFragment : Fragment() {
+    private lateinit var binding: FragmentGrammarRuleBinding
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+
+        binding = FragmentGrammarRuleBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+}

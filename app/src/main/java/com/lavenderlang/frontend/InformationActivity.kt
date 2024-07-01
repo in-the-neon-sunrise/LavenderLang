@@ -3,7 +3,6 @@ package com.lavenderlang.frontend
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -42,15 +41,15 @@ class InformationActivity : AppCompatActivity() {
         }
 
         val switchTheme: SwitchCompat = findViewById(R.id.switch1)
-        isDark = getSavedTheme()
-        switchTheme.isChecked = isDark
+        var dark = getSavedTheme()
+        switchTheme.isChecked = dark
         switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            isDark = isChecked
+            dark = isChecked
             if(isChecked) dark()
             else light()
             saveTheme(isChecked)
         }
-        if(isDark) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        if(dark) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
     fun light(){
@@ -60,13 +59,13 @@ class InformationActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
     fun getSavedTheme(): Boolean{
-        val sp = getSharedPreferences("Theme", Context.MODE_PRIVATE)
-        return sp.getBoolean("isDark", false)
+        val sp = getSharedPreferences("pref", Context.MODE_PRIVATE)
+        return sp.getBoolean("Theme", false)
     }
-    fun saveTheme(isDark: Boolean){
-        val sp = getSharedPreferences("Theme", Context.MODE_PRIVATE)
+    fun saveTheme(dark: Boolean){
+        val sp = getSharedPreferences("pref", Context.MODE_PRIVATE)
         val editor = sp.edit()
-        editor.putBoolean("isDark", isDark)
+        editor.putBoolean("Theme", dark)
         editor.apply()
     }
     override fun onResume() {

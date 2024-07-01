@@ -34,7 +34,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/minus"
+        android:background="@drawable/ic_minus"
         app:layout_constraintStart_toEndOf="@+id/spinnerRusAttribute"
         app:layout_constraintTop_toTopOf="parent" />
 

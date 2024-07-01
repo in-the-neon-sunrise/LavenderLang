@@ -70,7 +70,7 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
     }
 
     override fun delMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
-        val key = "${word.word} ${word.translation}"
+        val key = "${word.word}:${word.translation}"
         synchronized(languages) {
             dictionary.fullDict.remove(key)
         }
@@ -79,7 +79,7 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
     override fun addMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
-        val key = "${word.word} ${word.translation}"
+        val key = "${word.word}:${word.translation}"
         synchronized(languages) {
             dictionary.fullDict[key] = arrayListOf(word)
             for (rule in languages[dictionary.languageId]!!.grammar.grammarRules) {

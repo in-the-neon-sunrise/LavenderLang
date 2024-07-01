@@ -31,6 +31,10 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -75,4 +79,5 @@ dependencies {
     implementation("com.github.librepdf:openpdf:2.0.1")
     // iText
     implementation("com.itextpdf:itextg:5.5.10")
+    // material
 }

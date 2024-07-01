@@ -52,8 +52,8 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
         val module = py.getModule("pm3")
         val normalForm = module.callAttr("getNormalForm", word.lowercase()).toString()
         for (key in language.dictionary.fullDict.keys) {
-            val keyWord = key.split(" ")[0]
-            val keyTranslation = key.split(" ")[1]
+            val keyWord = key.split(":")[0]
+            val keyTranslation = key.split(":")[1]
             if (keyTranslation != normalForm) continue
             for (w in language.dictionary.fullDict[key]!!) {
                 if (w.translation.lowercase() == word.lowercase()) {

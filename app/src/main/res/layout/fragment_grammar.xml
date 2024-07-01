@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragments.GrammarFragment">
+
+    <Button
+        android:id="@+id/buttonInf"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/ic_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonPrev"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewGender"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:gravity="center_vertical"
+                android:text="Род"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonNewGender"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/ic_plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/textViewGender"
+                app:layout_constraintTop_toTopOf="@+id/textViewGender" />
+
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewGender"/>
+
+            <TextView
+                android:id="@+id/textViewNumber"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Число"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewGender" />
+
+            <Button
+                android:id="@+id/buttonNewNumber"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/ic_plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/textViewNumber"
+                app:layout_constraintTop_toTopOf="@+id/textViewNumber" />
+
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewNumber"/>
+
+            <TextView
+                android:id="@+id/textViewCase"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Падеж"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewNumber" />
+
+            <Button
+                android:id="@+id/buttonNewCase"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/ic_plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/textViewCase"
+                app:layout_constraintTop_toTopOf="@+id/textViewCase" />
+
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewCase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewCase"/>
+
+            <TextView
+                android:id="@+id/textViewTime"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Время"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewCase" />
+
+            <Button
+                android:id="@+id/buttonNewTime"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/ic_plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/textViewTime"
+                app:layout_constraintTop_toTopOf="@+id/textViewTime" />
+
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewTime"/>
+
+            <TextView
+                android:id="@+id/textViewPerson"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Лицо"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewTime" />
+
+            <Button
+                android:id="@+id/buttonNewPerson"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/ic_plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/textViewPerson"
+                app:layout_constraintTop_toTopOf="@+id/textViewPerson" />
+
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewPerson"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewPerson"/>
+
+            <TextView
+                android:id="@+id/textViewMood"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Наклонение"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewPerson" />
+
+            <Button
+                android:id="@+id/buttonNewMood"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/ic_plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/textViewMood"
+                app:layout_constraintTop_toTopOf="@+id/textViewMood" />
+
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewMood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewMood"/>
+
+            <TextView
+                android:id="@+id/textViewType"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Вид"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewMood" />
+
+            <Button
+                android:id="@+id/buttonNewType"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/ic_plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/textViewType"
+                app:layout_constraintTop_toTopOf="@+id/textViewType" />
+
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewType"/>
+
+            <TextView
+                android:id="@+id/textViewVoice"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Залог"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewType" />
+
+            <Button
+                android:id="@+id/buttonNewVoice"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/ic_plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/textViewVoice"
+                app:layout_constraintTop_toTopOf="@+id/textViewVoice" />
+
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewVoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewVoice"/>
+
+            <TextView
+                android:id="@+id/textViewDegreeOfComparison"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Степень сравнения"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewVoice" />
+
+            <Button
+                android:id="@+id/buttonNewDegreeOfComparison"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/ic_plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/textViewDegreeOfComparison"
+                app:layout_constraintTop_toTopOf="@+id/textViewDegreeOfComparison" />
+
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewDegreeOfComparison"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewDegreeOfComparison"/>
+
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/ic_save"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listViewDegreeOfComparison" />
+
+            <TextView
+                android:id="@+id/textViewGrammarRule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:gravity="center"
+                android:text="Грамматические правила:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonSave" />
+
+            <Button
+                android:id="@+id/buttonNewGrammarRule"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/ic_plus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewGrammarRule" />
+
+            <com.lavenderlang.frontend.NonScrollListView
+                android:id="@+id/listViewGrammarRules"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonNewGrammarRule"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+
+    <Button
+        android:id="@+id/buttonHome"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonLanguage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_language"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonTranslator"
+        app:layout_constraintStart_toEndOf="@+id/buttonHome" />
+
+    <Button
+        android:id="@+id/buttonTranslator"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_translator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,17 +4,14 @@ import android.app.Application
 import android.util.Log
 import com.anggrayudi.storage.SimpleStorageHelper
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import java.lang.reflect.Array
 
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
-var isDark: Boolean = false
 
 class MyApp : Application() {
     companion object {
         private var instance : MyApp? = null
         var storageHelper : SimpleStorageHelper? = null
         var nextLanguageId : Int = -1
-        var mainActivityContext : MainActivity? = null
         fun getInstance() : MyApp {
             if (instance == null) throw Exception("MyApp is not created")
             return instance!!

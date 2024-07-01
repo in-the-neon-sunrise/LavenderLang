@@ -15,7 +15,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/info"
+        android:background="@drawable/ic_info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,7 +25,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/arrow_back"
+        android:background="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -111,7 +111,7 @@
         android:id="@+id/buttonFile"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/download"
+        android:background="@drawable/ic_download"
         app:layout_constraintEnd_toStartOf="@+id/buttonPDF"
         app:layout_constraintStart_toEndOf="@+id/buttonDelete"
         app:layout_constraintTop_toTopOf="@+id/buttonPDF" />
@@ -122,7 +122,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/download"
+        android:background="@drawable/ic_download"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonFile"
         app:layout_constraintTop_toBottomOf="@+id/editDescription" />
@@ -133,7 +133,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/copy"
+        android:background="@drawable/ic_copy"
         app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editDescription" />
@@ -143,7 +143,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/delete"
+        android:background="@drawable/ic_delete"
         app:layout_constraintEnd_toStartOf="@+id/buttonFile"
         app:layout_constraintStart_toEndOf="@+id/buttonCopy"
         app:layout_constraintTop_toBottomOf="@+id/editDescription" />
@@ -157,7 +157,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="50dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/home"
+        android:background="@drawable/ic_home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -167,7 +167,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/translate"
+        android:background="@drawable/ic_translator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

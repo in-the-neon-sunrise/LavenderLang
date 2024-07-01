@@ -54,13 +54,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
 
-        isDark=getSharedPreferences("Theme", Context.MODE_PRIVATE).getBoolean("isDark", false)
-        if(isDark) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        if(getSharedPreferences("pref", MODE_PRIVATE).getBoolean("Theme", false))
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         MyApp.storageHelper = SimpleStorageHelper(this)
         if (!Python.isStarted()) Python.start(AndroidPlatform(MyApp.getInstance().applicationContext))
-        if (MyApp.mainActivityContext == null) MyApp.mainActivityContext = this
+        //if (MyApp.mainActivityContext == null) MyApp.mainActivityContext = this
 
 
 

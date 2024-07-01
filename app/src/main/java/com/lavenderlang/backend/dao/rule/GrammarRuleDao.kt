@@ -88,17 +88,25 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         val translatorHelper = TranslatorHelperDaoImpl()
         val russianMutAttrs = arrayListOf<Int>()
         for (attr in transformedWord.mutableAttrs.keys) {
-            russianMutAttrs.add(translatorHelper.conlangToRusAttr(
-                languages[transformedWord.languageId]!!, attr, transformedWord.mutableAttrs[attr]!!)
+            russianMutAttrs.add(
+                translatorHelper.conlangToRusAttr(
+                    languages[transformedWord.languageId]!!,
+                    attr,
+                    transformedWord.mutableAttrs[attr]!!
+                )
             )
         }
         val py = Python.getInstance()
         val module = py.getModule("pm3")
-        val res = module.callAttr(
-            "inflectAttrs", word.translation,
-            word.partOfSpeech.toString(),
-            russianMutAttrs.toString()
-        ).toString()
+        val translationParts = word.translation.split(" ")
+        val res = ""
+        for (transPart in translationParts) {
+            module.callAttr(
+                "inflectAttrs", transPart,
+                word.partOfSpeech.toString(),
+                russianMutAttrs.toString()
+            ).toString()
+        }
         transformedWord.translation = res
 
         return transformedWord
