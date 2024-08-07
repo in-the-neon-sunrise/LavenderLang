@@ -19,6 +19,9 @@ import com.lavenderlang.backend.service.exception.FileWorkException
 import com.lavenderlang.databinding.FragmentLanguageBinding
 import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.languages
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 
 class LanguageFragment: Fragment() {
@@ -100,7 +103,11 @@ class LanguageFragment: Fragment() {
         when(val lang = preferences.getInt("lang", -1)){
             -1 -> {
                 idLang = MyApp.nextLanguageId
-                languageDao.createLanguage("Язык$idLang", "")
+                runBlocking {
+                    withContext(Dispatchers.IO) {
+                        languageDao.createLanguage("Язык$idLang", "")
+                    }
+                }
                 binding.editLanguageName.setText(languages[idLang]?.name)
             }
             else -> {

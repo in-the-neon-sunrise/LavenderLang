@@ -27,7 +27,7 @@ interface LanguageDao {
     fun changeName(language: LanguageEntity, newName: String)
     fun changeDescription(language: LanguageEntity, newDescription: String)
     fun copyLanguage(language: LanguageEntity)
-    fun createLanguage(name: String, description: String)
+    suspend fun createLanguage(name: String, description: String)
     fun deleteLanguage(id: Int)
     fun getLanguagesFromDB()
     fun downloadLanguageJSON(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>)
@@ -109,14 +109,17 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         }
         return
     }
-    override fun createLanguage(name: String, description: String) {
+    override suspend fun createLanguage(name: String, description: String) {
         val newLang = LanguageEntity(MyApp.nextLanguageId, name, description)
         languages[MyApp.nextLanguageId] = newLang
-        GlobalScope.launch(Dispatchers.IO) {
-            languageRepository.insertLanguage(
-                MyApp.getInstance().applicationContext, newLang.languageId, newLang)
-        }
+        languageRepository.insertLanguage(
+            MyApp.getInstance().applicationContext, newLang.languageId, newLang)
         ++MyApp.nextLanguageId
+        // get shared preferences
+        val sharedPref = MyApp.getInstance().getSharedPreferences("pref", AppCompatActivity.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putInt("lang", newLang.languageId)
+        editor.apply()
         return
     }
     override fun deleteLanguage(id: Int) {
