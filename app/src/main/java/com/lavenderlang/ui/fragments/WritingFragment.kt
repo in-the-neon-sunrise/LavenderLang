@@ -75,6 +75,9 @@ class WritingFragment : Fragment() {
                 idLang = lang
             }
         }
+
+
+
         return binding.root
     }
 }

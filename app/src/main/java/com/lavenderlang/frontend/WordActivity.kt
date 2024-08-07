@@ -101,12 +101,12 @@ class WordActivity : AppCompatActivity() {
         var word = intent.getIntExtra("word", -1)
         when (word) {
             -1 -> {
-                id_word = languages[id_lang]!!.dictionary.dict.size
-                dictionaryDao.addWord(languages[id_lang]!!.dictionary, NounEntity(id_lang, "", "-"))
-                Log.d("create word", languages[id_lang]!!.dictionary.dict[id_word].word)
+                id_word = MyApp.language!!.dictionary.dict.size
+                dictionaryDao.addWord(MyApp.language!!.dictionary, NounEntity(id_lang, "", "-"))
+                Log.d("create word", MyApp.language!!.dictionary.dict[id_word].word)
             }
             else -> {
-                Log.d("old word", languages[id_lang]!!.dictionary.dict[word].word)
+                Log.d("old word", MyApp.language!!.dictionary.dict[word].word)
                 id_word = word
             }
         }
@@ -123,12 +123,12 @@ class WordActivity : AppCompatActivity() {
         var editConlangWord: EditText = findViewById(R.id.editConlangWord)
         var editRussianWord: EditText = findViewById(R.id.editRussianWord)
 
-        Log.d("full", languages[id_lang]!!.dictionary.fullDict.toString())
+        Log.d("full", MyApp.language!!.dictionary.fullDict.toString())
 
-        editConlangWord.setText(languages[id_lang]!!.dictionary.dict[id_word].word)
-        editRussianWord.setText(languages[id_lang]!!.dictionary.dict[id_word].translation)
+        editConlangWord.setText(MyApp.language!!.dictionary.dict[id_word].word)
+        editRussianWord.setText(MyApp.language!!.dictionary.dict[id_word].translation)
 
-        partOfSpeech = languages[id_lang]!!.dictionary.dict[id_word].partOfSpeech
+        partOfSpeech = MyApp.language!!.dictionary.dict[id_word].partOfSpeech
         idPartOfSpeech = when (partOfSpeech){
             PartOfSpeech.NOUN-> 0
             PartOfSpeech.VERB-> 1
@@ -140,7 +140,7 @@ class WordActivity : AppCompatActivity() {
             PartOfSpeech.NUMERAL-> 7
             PartOfSpeech.FUNC_PART-> 8
         }
-        immutableAttrs = languages[id_lang]!!.dictionary.dict[id_word].immutableAttrs
+        immutableAttrs = MyApp.language!!.dictionary.dict[id_word].immutableAttrs
 
         setSpinners()
         updateSpinners()
@@ -169,7 +169,7 @@ class WordActivity : AppCompatActivity() {
             updateAttrs()
             try {
                 wordDao.updateWord(
-                    languages[id_lang]!!.dictionary.dict[id_word], editConlangWord.text.toString(),
+                    MyApp.language!!.dictionary.dict[id_word], editConlangWord.text.toString(),
                     editRussianWord.text.toString(), immutableAttrs, partOfSpeech
                 )
             } catch (e: ForbiddenSymbolsException) {
@@ -178,7 +178,7 @@ class WordActivity : AppCompatActivity() {
         }
         val buttonDelete: Button = findViewById(R.id.buttonDelete)
         buttonDelete.setOnClickListener {
-            dictionaryDao.deleteWord(languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word])
+            dictionaryDao.deleteWord(MyApp.language!!.dictionary, MyApp.language!!.dictionary.dict[id_word])
             finish()
         }
     }
@@ -202,17 +202,17 @@ class WordActivity : AppCompatActivity() {
         spinnerPartOfSpeech.adapter = spinnerAdapter
         spinnerAdapter.notifyDataSetChanged()
 
-        val genderNames = languages[id_lang]!!.grammar.varsGender.values.map { it.name }
+        val genderNames = MyApp.language!!.grammar.varsGender.values.map { it.name }
         var genderAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_list_item_1, genderNames)
         spinnerGender.adapter = genderAdapter
         genderAdapter.notifyDataSetChanged()
 
-        val typeNames = languages[id_lang]!!.grammar.varsType.values.map { it.name }
+        val typeNames = MyApp.language!!.grammar.varsType.values.map { it.name }
         val typeAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_list_item_1, typeNames)
         spinnerType.adapter = typeAdapter
         typeAdapter.notifyDataSetChanged()
 
-        val voiceNames = languages[id_lang]!!.grammar.varsVoice.values.map { it.name }
+        val voiceNames = MyApp.language!!.grammar.varsVoice.values.map { it.name }
         val voiceAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_list_item_1, voiceNames)
         spinnerVoice.adapter = voiceAdapter
         voiceAdapter.notifyDataSetChanged()
@@ -405,7 +405,7 @@ class WordActivity : AppCompatActivity() {
         }
     }
     fun updateWordForms(){
-        val wordForms = dictionaryDao.getWordForms(languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word].word)
+        val wordForms = dictionaryDao.getWordForms(MyApp.language!!.dictionary, MyApp.language!!.dictionary.dict[id_word].word)
         Log.d("wordForms", wordForms.toString())
         val listWordForms : ListView = findViewById(R.id.listWordForms)
         val adapterWordForms: ArrayAdapter<IWordEntity> = WordAdapter(this, wordForms)
@@ -417,7 +417,7 @@ class WordActivity : AppCompatActivity() {
         //list of new words
         val listViewNewWords : ListView = findViewById(R.id.listViewNewWords)
         val list: MutableList<Pair<String, IWordEntity>> = dictionaryDao.createWordsFromExisting(
-            languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word]).toMutableList()
+            MyApp.language!!.dictionary, MyApp.language!!.dictionary.dict[id_word]).toMutableList()
         val adapter: ArrayAdapter<Pair<String, IWordEntity>> = NewWordAdapter(this, list)
         listViewNewWords.adapter = adapter
         adapter.notifyDataSetChanged()
@@ -459,7 +459,7 @@ private class NewWordAdapter(context: Context, listOfWords: MutableList<Pair<Str
         buttonSave.setOnClickListener {
             if(position == buttonSave.tag){
                 try {
-                    dictionaryDao.addWord(languages[WordActivity.id_lang]!!.dictionary, word)
+                    dictionaryDao.addWord(MyApp.language!!.dictionary, word)
                 } catch (e: ForbiddenSymbolsException) {
                     Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                 }

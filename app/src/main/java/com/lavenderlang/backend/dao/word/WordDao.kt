@@ -7,8 +7,8 @@ import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.WordActivity
-import com.lavenderlang.frontend.languages
 
 interface WordDao {
     fun updateWord(word : IWordEntity, newWord : String)
@@ -24,8 +24,8 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
 ) : WordDao {
     override fun updateWord(word: IWordEntity, newWord: String) {
         for (letter in newWord) {
-            if (!languages[word.languageId]!!.vowels.contains(letter.lowercase()) &&
-                !languages[word.languageId]!!.consonants.contains(letter.lowercase())) {
+            if (!MyApp.language!!.vowels.contains(letter.lowercase()) &&
+                !MyApp.language!!.consonants.contains(letter.lowercase())) {
                 throw ForbiddenSymbolsException("Letter $letter is not in language")
             }
         }
@@ -88,8 +88,8 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
             )
         }
         val dictionaryHandler = DictionaryDaoImpl()
-        dictionaryHandler.deleteWord(languages[word.languageId]!!.dictionary, word)
-        dictionaryHandler.addWord(languages[word.languageId]!!.dictionary, newWord)
+        dictionaryHandler.deleteWord(MyApp.language!!.dictionary, word)
+        dictionaryHandler.addWord(MyApp.language!!.dictionary, newWord)
     }
 
     override fun updateWord(word: IWordEntity, newWord: String, newTranslation: String, newImmutableAttrs: MutableMap<Attributes, Int>, newPartOfSpeech: PartOfSpeech) {
@@ -150,17 +150,17 @@ class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelpe
             )
         }
         val dictionaryHandler = DictionaryDaoImpl()
-        dictionaryHandler.deleteWord(languages[word.languageId]!!.dictionary, word)
-        dictionaryHandler.addWord(languages[word.languageId]!!.dictionary, newWordEntity)
+        dictionaryHandler.deleteWord(MyApp.language!!.dictionary, word)
+        dictionaryHandler.addWord(MyApp.language!!.dictionary, newWordEntity)
         Log.d("update word", newWordEntity.word + " " + newWordEntity.translation)
     }
     override fun getImmutableAttrsInfo(word: IWordEntity): String {
         var res = ""
         for (attr in word.immutableAttrs.keys) {
             res += when (attr) {
-                Attributes.GENDER -> "род: ${languages[word.languageId]!!.grammar.varsGender[word.immutableAttrs[attr]!!]?.name}, "
-                Attributes.TYPE -> "вид: ${languages[word.languageId]!!.grammar.varsType[word.immutableAttrs[attr]!!]?.name}, "
-                Attributes.VOICE -> "залог: ${languages[word.languageId]!!.grammar.varsVoice[word.immutableAttrs[attr]!!]?.name}, "
+                Attributes.GENDER -> "род: ${MyApp.language!!.grammar.varsGender[word.immutableAttrs[attr]!!]?.name}, "
+                Attributes.TYPE -> "вид: ${MyApp.language!!.grammar.varsType[word.immutableAttrs[attr]!!]?.name}, "
+                Attributes.VOICE -> "залог: ${MyApp.language!!.grammar.varsVoice[word.immutableAttrs[attr]!!]?.name}, "
                 else -> ""
             }
         }

@@ -80,66 +80,66 @@ class WritingActivity : AppCompatActivity() {
 
         //letters
         val editTextVowels: EditText = findViewById(R.id.editTextVowels)
-        editTextVowels.setText(languages[id_lang]!!.vowels)
+        editTextVowels.setText(MyApp.language!!.vowels)
 
         //symbols
         val editTextConsonants: EditText = findViewById(R.id.editTextConsonants)
-        editTextConsonants.setText(languages[id_lang]?.consonants)
+        editTextConsonants.setText(MyApp.language?.consonants)
 
         val checkBoxNoun: CheckBox = findViewById(R.id.checkBoxNoun)
-        if(languages[id_lang]!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.NOUN)) checkBoxNoun.isChecked = true
+        if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.NOUN)) checkBoxNoun.isChecked = true
         val checkBoxVerb: CheckBox = findViewById(R.id.checkBoxVerb)
-        if(languages[id_lang]!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.VERB)) checkBoxVerb.isChecked = true
+        if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.VERB)) checkBoxVerb.isChecked = true
         val checkBoxAdjective: CheckBox = findViewById(R.id.checkBoxAdjective)
-        if(languages[id_lang]!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.ADJECTIVE)) checkBoxAdjective.isChecked = true
+        if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.ADJECTIVE)) checkBoxAdjective.isChecked = true
         val checkBoxAdverb: CheckBox = findViewById(R.id.checkBoxAdverb)
-        if(languages[id_lang]!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.ADVERB)) checkBoxAdverb.isChecked = true
+        if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.ADVERB)) checkBoxAdverb.isChecked = true
         val checkBoxParticiple: CheckBox = findViewById(R.id.checkBoxParticiple)
-        if(languages[id_lang]!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.PARTICIPLE)) checkBoxParticiple.isChecked = true
+        if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.PARTICIPLE)) checkBoxParticiple.isChecked = true
         val checkBoxVerbParticiple: CheckBox = findViewById(R.id.checkBoxVerbParticiple)
-        if(languages[id_lang]!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.VERB_PARTICIPLE)) checkBoxVerbParticiple.isChecked = true
+        if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.VERB_PARTICIPLE)) checkBoxVerbParticiple.isChecked = true
         val checkBoxPronoun: CheckBox = findViewById(R.id.checkBoxPronoun)
-        if(languages[id_lang]!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.PRONOUN)) checkBoxPronoun.isChecked = true
+        if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.PRONOUN)) checkBoxPronoun.isChecked = true
         val checkBoxNumeral: CheckBox = findViewById(R.id.checkBoxNumeral)
-        if(languages[id_lang]!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.NUMERAL)) checkBoxNumeral.isChecked = true
+        if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.NUMERAL)) checkBoxNumeral.isChecked = true
         val checkBoxFuncPart: CheckBox = findViewById(R.id.checkBoxFuncPart)
-        if(languages[id_lang]!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.FUNC_PART)) checkBoxFuncPart.isChecked = true
+        if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.FUNC_PART)) checkBoxFuncPart.isChecked = true
 
         val buttonSave: Button = findViewById(R.id.buttonSave)
         buttonSave.setOnClickListener {
             try{
-            writingDao.changeVowels(languages[id_lang]!!, editTextVowels.text.toString())
-            writingDao.changeConsonants(languages[id_lang]!!, editTextConsonants.text.toString())
+            writingDao.changeVowels(MyApp.language!!, editTextVowels.text.toString())
+            writingDao.changeConsonants(MyApp.language!!, editTextConsonants.text.toString())
             }catch (e: ForbiddenSymbolsException){
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
 
-            if(checkBoxNoun.isChecked) writingDao.addCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.NOUN)
-            else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.NOUN)
+            if(checkBoxNoun.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.NOUN)
+            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.NOUN)
 
-            if(checkBoxVerb.isChecked) writingDao.addCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.VERB)
-            else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.VERB)
+            if(checkBoxVerb.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.VERB)
+            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.VERB)
 
-            if(checkBoxAdjective.isChecked) writingDao.addCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.ADJECTIVE)
-            else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.ADJECTIVE)
+            if(checkBoxAdjective.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.ADJECTIVE)
+            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.ADJECTIVE)
 
-            if(checkBoxAdverb.isChecked) writingDao.addCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.ADVERB)
-            else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.ADVERB)
+            if(checkBoxAdverb.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.ADVERB)
+            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.ADVERB)
 
-            if(checkBoxParticiple.isChecked) writingDao.addCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.PARTICIPLE)
-            else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.PARTICIPLE)
+            if(checkBoxParticiple.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.PARTICIPLE)
+            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.PARTICIPLE)
 
-            if(checkBoxVerbParticiple.isChecked) writingDao.addCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.VERB_PARTICIPLE)
-            else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.VERB_PARTICIPLE)
+            if(checkBoxVerbParticiple.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.VERB_PARTICIPLE)
+            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.VERB_PARTICIPLE)
 
-            if(checkBoxPronoun.isChecked) writingDao.addCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.PRONOUN)
-            else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.PRONOUN)
+            if(checkBoxPronoun.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.PRONOUN)
+            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.PRONOUN)
 
-            if(checkBoxNumeral.isChecked) writingDao.addCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.NUMERAL)
-            else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.NUMERAL)
+            if(checkBoxNumeral.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.NUMERAL)
+            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.NUMERAL)
 
-            if(checkBoxFuncPart.isChecked) writingDao.addCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.FUNC_PART)
-            else writingDao.deleteCapitalizedPartOfSpeech(languages[id_lang]!!, PartOfSpeech.FUNC_PART)
+            if(checkBoxFuncPart.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.FUNC_PART)
+            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.FUNC_PART)
         }
     }
     override fun finish(){

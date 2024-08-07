@@ -20,7 +20,6 @@ import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.IncorrectRegexException
 import com.lavenderlang.frontend.MyApp
-import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,14 +47,14 @@ class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepositor
     override fun updateTransformation(rule: WordFormationRuleEntity, newTransformation: TransformationEntity) {
         //check if rule is correct (letters in transformation are in language)
         for (letter in newTransformation.addToBeginning) {
-            if (!languages[rule.languageId]!!.vowels.contains(letter.lowercase()) &&
-                !languages[rule.languageId]!!.consonants.contains(letter.lowercase())) {
+            if (!MyApp.language!!.vowels.contains(letter.lowercase()) &&
+                !MyApp.language!!.consonants.contains(letter.lowercase())) {
                 throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }
         for (letter in newTransformation.addToEnd) {
-            if (!languages[rule.languageId]!!.vowels.contains(letter) &&
-                !languages[rule.languageId]!!.consonants.contains(letter)) {
+            if (!MyApp.language!!.vowels.contains(letter) &&
+                !MyApp.language!!.consonants.contains(letter)) {
                 throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }
@@ -79,7 +78,7 @@ class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepositor
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
                 MyApp.getInstance().applicationContext, rule.languageId,
-                Serializer.getInstance().serializeGrammar(languages[rule.languageId]!!.grammar)
+                Serializer.getInstance().serializeGrammar(MyApp.language!!.grammar)
             )
         }
     }
@@ -115,9 +114,9 @@ class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepositor
         }
         for (attr in rule.masc.immutableAttrs.keys) {
             res += when (attr) {
-                Attributes.GENDER -> "род: ${languages[rule.languageId]!!.grammar.varsGender[rule.masc.immutableAttrs[attr]]!!.name}, "
-                Attributes.TYPE -> "вид: ${languages[rule.languageId]!!.grammar.varsType[rule.masc.immutableAttrs[attr]]!!.name}, "
-                Attributes.VOICE -> "залог: ${languages[rule.languageId]!!.grammar.varsVoice[rule.masc.immutableAttrs[attr]]!!.name}, "
+                Attributes.GENDER -> "род: ${MyApp.language!!.grammar.varsGender[rule.masc.immutableAttrs[attr]]!!.name}, "
+                Attributes.TYPE -> "вид: ${MyApp.language!!.grammar.varsType[rule.masc.immutableAttrs[attr]]!!.name}, "
+                Attributes.VOICE -> "залог: ${MyApp.language!!.grammar.varsVoice[rule.masc.immutableAttrs[attr]]!!.name}, "
                 else -> continue
             }
         }
@@ -143,9 +142,9 @@ class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepositor
         }
         for (attr in rule.immutableAttrs.keys) {
             res += when (attr) {
-                Attributes.GENDER -> "род: ${languages[rule.languageId]!!.grammar.varsGender[rule.immutableAttrs[attr]!!]?.name}, "
-                Attributes.TYPE -> "вид: ${languages[rule.languageId]!!.grammar.varsType[rule.immutableAttrs[attr]!!]?.name}, "
-                Attributes.VOICE -> "залог: ${languages[rule.languageId]!!.grammar.varsVoice[rule.immutableAttrs[attr]!!]?.name}, "
+                Attributes.GENDER -> "род: ${MyApp.language!!.grammar.varsGender[rule.immutableAttrs[attr]!!]?.name}, "
+                Attributes.TYPE -> "вид: ${MyApp.language!!.grammar.varsType[rule.immutableAttrs[attr]!!]?.name}, "
+                Attributes.VOICE -> "залог: ${MyApp.language!!.grammar.varsVoice[rule.immutableAttrs[attr]!!]?.name}, "
                 else -> ""
             }
         }

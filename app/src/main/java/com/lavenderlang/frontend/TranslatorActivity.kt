@@ -15,7 +15,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
+import kotlinx.coroutines.runBlocking
 
 class TranslatorActivity : AppCompatActivity() {
     companion object{
@@ -66,6 +68,10 @@ class TranslatorActivity : AppCompatActivity() {
         val edittext: EditText = findViewById(R.id.editTextText)
         val radiogroup: RadioGroup = findViewById(R.id.radioGroupTranslate)
         val radiobutton: RadioButton = findViewById(R.id.radioButtonFromConlang)
+        
+        val languages = runBlocking { 
+            LanguageDaoImpl().getLanguagesFromDB()
+        }
 
         id_lang = intent.getIntExtra("lang", -1)
         val languageNames = languages.values.map { it.name }
@@ -116,10 +122,10 @@ class TranslatorActivity : AppCompatActivity() {
         val translatorDao = TranslatorDaoImpl()
         if (!translationOnConlang) {
             textview.setText(
-                translatorDao.translateTextFromConlang(languages[clever_index_of_language]!!, input_text))
+                translatorDao.translateTextFromConlang(MyApp.language!!, input_text))
         } else {
             textview.setText(
-                translatorDao.translateTextToConlang(languages[clever_index_of_language]!!, input_text))
+                translatorDao.translateTextToConlang(MyApp.language!!, input_text))
         }
     }
     override fun finish(){

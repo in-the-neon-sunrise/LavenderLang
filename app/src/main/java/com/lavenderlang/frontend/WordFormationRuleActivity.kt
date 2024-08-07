@@ -107,13 +107,13 @@ class WordFormationRuleActivity: AppCompatActivity()  {
         when(rule){
             -1 -> {
                 var newRule = WordFormationRuleEntity(id_lang)
-                grammarDao.addWordFormationRule(languages[id_lang]!!.grammar, newRule)
-                id_rule = languages[id_lang]!!.grammar.wordFormationRules.size-1
+                grammarDao.addWordFormationRule(MyApp.language!!.grammar, newRule)
+                id_rule = MyApp.language!!.grammar.wordFormationRules.size-1
                 editMasc.setText(newRule.masc.regex)
             }
             else -> {
                 id_rule = rule
-                editMasc.setText(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.regex)
+                editMasc.setText(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.regex)
             }
         }
     }
@@ -128,7 +128,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
         startFlagIsFirst =true
         finishFlagIsFirst =true
 
-        var partOfSpeech= languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.partOfSpeech
+        var partOfSpeech= MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.partOfSpeech
         when (partOfSpeech){
             PartOfSpeech.NOUN-> idPartOfSpeech =0
             PartOfSpeech.VERB-> idPartOfSpeech =1
@@ -141,10 +141,10 @@ class WordFormationRuleActivity: AppCompatActivity()  {
             PartOfSpeech.FUNC_PART-> idPartOfSpeech =8
         }
 
-        attrs = languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs
-        regex = languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.regex
+        attrs = MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs
+        regex = MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.regex
 
-        partOfSpeech= languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].partOfSpeech
+        partOfSpeech= MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].partOfSpeech
         when (partOfSpeech){
             PartOfSpeech.NOUN-> finishIdPartOfSpeech =0
             PartOfSpeech.VERB-> finishIdPartOfSpeech =1
@@ -156,14 +156,14 @@ class WordFormationRuleActivity: AppCompatActivity()  {
             PartOfSpeech.NUMERAL-> finishIdPartOfSpeech =7
             PartOfSpeech.FUNC_PART-> finishIdPartOfSpeech =8
         }
-        finishAttrs = languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs
+        finishAttrs = MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs
 
-        numberFront = languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].transformation.delFromBeginning
-        numberBack = languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].transformation.delFromEnd
-        addFront = languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].transformation.addToBeginning
-        addBack = languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].transformation.addToEnd
+        numberFront = MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].transformation.delFromBeginning
+        numberBack = MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].transformation.delFromEnd
+        addFront = MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].transformation.addToBeginning
+        addBack = MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].transformation.addToEnd
 
-        description = languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].description
+        description = MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].description
 
         val spinnerPartOfSpeech: Spinner = findViewById(R.id.spinnerPartOfSpeech)
 
@@ -225,7 +225,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                 when(positionSpinner){
                     0->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.NOUN)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.NOUN)
                         spinnerGender.visibility= View.VISIBLE
                         spinnerType.visibility= View.GONE
                         spinnerVoice.visibility= View.GONE
@@ -241,7 +241,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     1->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.VERB)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.VERB)
                         spinnerGender.visibility= View.GONE
                         spinnerType.visibility= View.VISIBLE
                         spinnerVoice.visibility= View.VISIBLE
@@ -257,7 +257,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     2->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.ADJECTIVE)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.ADJECTIVE)
                         spinnerGender.visibility= View.GONE
                         spinnerType.visibility= View.GONE
                         spinnerVoice.visibility= View.GONE
@@ -274,7 +274,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     3->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.ADVERB)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.ADVERB)
                         spinnerGender.visibility= View.GONE
                         spinnerType.visibility= View.GONE
                         spinnerVoice.visibility= View.GONE
@@ -291,7 +291,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     4->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.PARTICIPLE)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.PARTICIPLE)
                         spinnerGender.visibility= View.GONE
                         spinnerType.visibility= View.VISIBLE
                         spinnerVoice.visibility= View.VISIBLE
@@ -308,7 +308,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     5->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.VERB_PARTICIPLE)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.VERB_PARTICIPLE)
                         spinnerGender.visibility= View.GONE
                         spinnerType.visibility= View.VISIBLE
                         spinnerVoice.visibility= View.GONE
@@ -325,7 +325,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     6->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.PRONOUN)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.PRONOUN)
                         spinnerGender.visibility= View.VISIBLE
                         spinnerType.visibility= View.GONE
                         spinnerVoice.visibility= View.GONE
@@ -342,7 +342,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     7->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.NUMERAL)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.NUMERAL)
                         spinnerGender.visibility= View.GONE
                         spinnerType.visibility= View.GONE
                         spinnerVoice.visibility= View.GONE
@@ -359,7 +359,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     else->{
                         mascDao.changePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.FUNC_PART)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.FUNC_PART)
                         spinnerGender.visibility= View.GONE
                         spinnerType.visibility= View.GONE
                         spinnerVoice.visibility= View.GONE
@@ -379,7 +379,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 mascDao.changePartOfSpeech(
-                    languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.NOUN)
+                    MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.NOUN)
             }
         }
         spinnerFinishPartOfSpeech.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -392,7 +392,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                 when(positionSpinner){
                     0->{
                         wordFormationRuleDao.updatePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.NOUN)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.NOUN)
                         spinnerFinishGender.visibility= View.VISIBLE
                         spinnerFinishType.visibility= View.GONE
                         spinnerFinishVoice.visibility= View.GONE
@@ -408,7 +408,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     1->{
                         wordFormationRuleDao.updatePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.VERB)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.VERB)
                         spinnerFinishGender.visibility= View.GONE
                         spinnerFinishType.visibility= View.VISIBLE
                         spinnerFinishVoice.visibility= View.VISIBLE
@@ -424,7 +424,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     2->{
                         wordFormationRuleDao.updatePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.ADJECTIVE)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.ADJECTIVE)
                         spinnerFinishGender.visibility= View.GONE
                         spinnerFinishType.visibility= View.GONE
                         spinnerFinishVoice.visibility= View.GONE
@@ -440,7 +440,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     3->{
                         wordFormationRuleDao.updatePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.ADVERB)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.ADVERB)
                         spinnerFinishGender.visibility= View.GONE
                         spinnerFinishType.visibility= View.GONE
                         spinnerFinishVoice.visibility= View.GONE
@@ -456,7 +456,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     4->{
                         wordFormationRuleDao.updatePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.PARTICIPLE)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.PARTICIPLE)
                         spinnerFinishGender.visibility= View.GONE
                         spinnerFinishType.visibility= View.VISIBLE
                         spinnerFinishVoice.visibility= View.VISIBLE
@@ -472,7 +472,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     5->{
                         wordFormationRuleDao.updatePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.VERB_PARTICIPLE)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.VERB_PARTICIPLE)
                         spinnerFinishGender.visibility= View.GONE
                         spinnerFinishType.visibility= View.VISIBLE
                         spinnerFinishVoice.visibility= View.GONE
@@ -488,7 +488,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     6->{
                         wordFormationRuleDao.updatePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.PRONOUN)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.PRONOUN)
                         spinnerFinishGender.visibility= View.VISIBLE
                         spinnerFinishType.visibility= View.GONE
                         spinnerFinishVoice.visibility= View.GONE
@@ -504,7 +504,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     7->{
                         wordFormationRuleDao.updatePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.NUMERAL)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.NUMERAL)
                         spinnerFinishGender.visibility= View.GONE
                         spinnerFinishType.visibility= View.GONE
                         spinnerFinishVoice.visibility= View.GONE
@@ -520,7 +520,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
                     }
                     else->{
                         wordFormationRuleDao.updatePartOfSpeech(
-                            languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.FUNC_PART)
+                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule], PartOfSpeech.FUNC_PART)
                         spinnerFinishGender.visibility= View.GONE
                         spinnerFinishType.visibility= View.GONE
                         spinnerFinishVoice.visibility= View.GONE
@@ -539,7 +539,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 mascDao.changePartOfSpeech(
-                    languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.NOUN)
+                    MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc, PartOfSpeech.NOUN)
             }
         }
 
@@ -569,7 +569,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
         }
         val buttonDelete: Button = findViewById(R.id.buttonDelete)
         buttonDelete.setOnClickListener{
-            grammarDao.deleteWordFormationRule(languages[id_lang]!!.grammar, languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule])
+            grammarDao.deleteWordFormationRule(MyApp.language!!.grammar, MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule])
             finish()
         }
     }
@@ -602,7 +602,7 @@ class WordFormationRuleActivity: AppCompatActivity()  {
             var newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
 
             wordFormationRuleDao.updateRule(
-                languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule],
+                MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule],
                 newMasc,
                 newTransformation,
                 description,
@@ -629,20 +629,20 @@ class WordFormationRuleActivity: AppCompatActivity()  {
         val spinnerFinishType: Spinner=findViewById(R.id.spinnerFinishType)
         val spinnerFinishVoice: Spinner=findViewById(R.id.spinnerFinishVoice)
 
-        val genderNames = languages[id_lang]!!.grammar.varsGender.values.map { it.name }
+        val genderNames = MyApp.language!!.grammar.varsGender.values.map { it.name }
         val genderAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_list_item_1, genderNames)
         spinnerGender.adapter = genderAdapter
         spinnerFinishGender.adapter = genderAdapter
         genderAdapter.notifyDataSetChanged()
 
 
-        val typeNames = languages[id_lang]!!.grammar.varsType.values.map { it.name }
+        val typeNames = MyApp.language!!.grammar.varsType.values.map { it.name }
         val typeAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_list_item_1, typeNames)
         spinnerType.adapter = typeAdapter
         spinnerFinishType.adapter = typeAdapter
         typeAdapter.notifyDataSetChanged()
 
-        val voiceNames = languages[id_lang]!!.grammar.varsVoice.values.map { it.name }
+        val voiceNames = MyApp.language!!.grammar.varsVoice.values.map { it.name }
         val voiceAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_list_item_1, voiceNames)
         spinnerVoice.adapter = voiceAdapter
         spinnerFinishVoice.adapter = voiceAdapter
@@ -655,23 +655,23 @@ class WordFormationRuleActivity: AppCompatActivity()  {
 
         when(idPartOfSpeech) {
             0 -> {
-                spinnerGender.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
+                spinnerGender.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
             }
             1->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
-                spinnerVoice.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
+                spinnerType.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerVoice.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
             }
             2->{}
             3->{}
             4->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
-                spinnerVoice.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
+                spinnerType.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerVoice.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
             }
             5->{
-                spinnerType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerType.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
             }
             6->{
-                spinnerGender.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
+                spinnerGender.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
             }
             7->{}
             else->{}
@@ -684,23 +684,23 @@ class WordFormationRuleActivity: AppCompatActivity()  {
 
         when(idPartOfSpeech) {
             0 -> {
-                spinnerFinishGender.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.GENDER] ?: 0)
+                spinnerFinishGender.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.GENDER] ?: 0)
             }
             1->{
-                spinnerFinishType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.TYPE] ?: 0)
-                spinnerFinishVoice.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.VOICE] ?: 0)
+                spinnerFinishType.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerFinishVoice.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.VOICE] ?: 0)
             }
             2->{}
             3->{}
             4->{
-                spinnerFinishType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.TYPE] ?: 0)
-                spinnerFinishVoice.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.VOICE] ?: 0)
+                spinnerFinishType.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerFinishVoice.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.VOICE] ?: 0)
             }
             5->{
-                spinnerFinishType.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.TYPE] ?: 0)
+                spinnerFinishType.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.TYPE] ?: 0)
             }
             6->{
-                spinnerFinishGender.setSelection(languages[id_lang]!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.GENDER] ?: 0)
+                spinnerFinishGender.setSelection(MyApp.language!!.grammar.wordFormationRules.toMutableList()[id_rule].immutableAttrs[Attributes.GENDER] ?: 0)
             }
             7->{}
             else->{}

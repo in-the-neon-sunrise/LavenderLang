@@ -14,7 +14,6 @@ import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.SplashScreenActivity
 import com.lavenderlang.frontend.WordActivity
-import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -36,8 +35,8 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
 ) : DictionaryDao {
     override fun addWord(dictionary: DictionaryEntity, word: IWordEntity) {
         for (letter in word.word) {
-            if (!languages[dictionary.languageId]!!.vowels.contains(letter.lowercase()) &&
-                !languages[dictionary.languageId]!!.consonants.contains(letter.lowercase())) {
+            if (!MyApp.language!!.vowels.contains(letter.lowercase()) &&
+                !MyApp.language!!.consonants.contains(letter.lowercase())) {
                 throw ForbiddenSymbolsException("Буква $letter не находится в алфавите языка!")
             }
         }
@@ -65,11 +64,10 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
     }
 
     override fun createWordsFromExisting(dictionary: DictionaryEntity, word: IWordEntity): List<Pair<String, IWordEntity>> {
-        if (dictionary.languageId !in languages) return arrayListOf()
         val possibleWords: ArrayList<Pair<String, IWordEntity>> = arrayListOf()
         val wfrHandler = WordFormationRuleDaoImpl()
         val mascHandler = MascDaoImpl()
-        for (rule in languages[dictionary.languageId]!!.grammar.wordFormationRules) {
+        for (rule in MyApp.language!!.grammar.wordFormationRules) {
             if (!mascHandler.fits(rule.masc, word)) continue
             val posWord = wfrHandler.wordFormationTransformByRule(word, rule)
             if (dictionary.fullDict.containsKey("${posWord.word} ${posWord.translation}")) continue

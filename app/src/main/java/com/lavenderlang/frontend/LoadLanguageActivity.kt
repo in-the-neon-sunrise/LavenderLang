@@ -115,7 +115,8 @@ class LoadLanguageActivity: AppCompatActivity(){
                 return@setOnClickListener
             }
             val intent = Intent(this, LanguageActivity::class.java)
-            intent.putExtra("lang", languages.keys.toMutableList().last())
+            // oh well, we need to pass the language id
+            // intent.putExtra("lang", languages.keys.toMutableList().last())
             startActivity(intent)
         }
     }

@@ -131,14 +131,14 @@ class LanguageActivity: AppCompatActivity() {
                         languageDao.createLanguage("Язык$id_lang", "")
                     }
                 }
-                editLanguageName.setText(languages[id_lang]?.name)
+                editLanguageName.setText(MyApp.language?.name)
             }
             else -> {
                 id_lang = lang
-                editLanguageName.setText(languages[id_lang]?.name)
+                editLanguageName.setText(MyApp.language?.name)
             }
         }
-        if(languages[id_lang]?.description != "") editDescription.setText(languages[id_lang]?.description)
+        if(MyApp.language?.description != "") editDescription.setText(MyApp.language?.description)
     }
 
     override fun onResume() {
@@ -154,7 +154,7 @@ class LanguageActivity: AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable) {
                 runBlocking {
-                    languageDao.changeName(languages[id_lang]!!, editLanguageName.text.toString())
+                    languageDao.changeName(MyApp.language!!, editLanguageName.text.toString())
                 }
             }
         })
@@ -166,7 +166,7 @@ class LanguageActivity: AppCompatActivity() {
             override fun afterTextChanged(s: Editable) {
                 runBlocking {
                     languageDao.changeDescription(
-                        languages[id_lang]!!,
+                        MyApp.language!!,
                         editDescription.text.toString()
                     )
                 }
@@ -177,7 +177,7 @@ class LanguageActivity: AppCompatActivity() {
         buttonFile.setOnClickListener {
             try {
             LanguageDaoImpl().downloadLanguageJSON(
-                languages[id_lang]!!,
+                MyApp.language!!,
                 MyApp.storageHelper!!,
                 createJSONLauncher)
             } catch (e: FileWorkException) {
@@ -190,7 +190,7 @@ class LanguageActivity: AppCompatActivity() {
         buttonPDF.setOnClickListener {
             try {
             LanguageDaoImpl().downloadLanguagePDF(
-                languages[id_lang]!!,
+                MyApp.language!!,
                 MyApp.storageHelper!!,
                 createPDFLauncher)
             } catch (e: FileWorkException) {
@@ -202,7 +202,7 @@ class LanguageActivity: AppCompatActivity() {
         val buttonCopy: Button = findViewById(R.id.buttonCopy)
         buttonCopy.setOnClickListener {
             runBlocking {
-                languageDao.copyLanguage(languages[id_lang]!!)
+                languageDao.copyLanguage(MyApp.language!!)
             }
             val intent = Intent(this@LanguageActivity, MainActivity::class.java)
             startActivity(intent)

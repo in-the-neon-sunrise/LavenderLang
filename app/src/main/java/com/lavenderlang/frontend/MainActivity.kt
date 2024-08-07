@@ -38,6 +38,7 @@ import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.entity.word.VerbEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.WordNotFoundException
+import kotlinx.coroutines.runBlocking
 
 
 class MainActivity : AppCompatActivity() {
@@ -270,6 +271,10 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         Log.d("MainActivity", "onResume")
         super.onResume()
+
+        val languages = runBlocking {
+            LanguageDaoImpl().getLanguagesFromDB()
+        }
 
         val listLanguages: ListView = findViewById(R.id.listLanguages)
         val adapter: ArrayAdapter<LanguageEntity> =

@@ -92,7 +92,7 @@ class WordFormationActivity : AppCompatActivity() {
 
         //list of rules
         val listWordFormationRules : ListView = findViewById(R.id.listViewWordFormationRules)
-        val adapterWordFormationRules: ArrayAdapter<WordFormationRuleEntity> = WordFormationRuleAdapter(this, languages[id_lang]!!.grammar.wordFormationRules.toMutableList())
+        val adapterWordFormationRules: ArrayAdapter<WordFormationRuleEntity> = WordFormationRuleAdapter(this, MyApp.language!!.grammar.wordFormationRules.toMutableList())
         listWordFormationRules.adapter = adapterWordFormationRules
         adapterWordFormationRules.notifyDataSetChanged()
 
