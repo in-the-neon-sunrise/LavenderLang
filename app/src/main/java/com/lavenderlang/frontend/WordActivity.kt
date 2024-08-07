@@ -406,6 +406,7 @@ class WordActivity : AppCompatActivity() {
     }
     fun updateWordForms(){
         val wordForms = dictionaryDao.getWordForms(languages[id_lang]!!.dictionary, languages[id_lang]!!.dictionary.dict[id_word].word)
+        Log.d("wordForms", wordForms.toString())
         val listWordForms : ListView = findViewById(R.id.listWordForms)
         val adapterWordForms: ArrayAdapter<IWordEntity> = WordAdapter(this, wordForms)
         listWordForms.adapter = adapterWordForms

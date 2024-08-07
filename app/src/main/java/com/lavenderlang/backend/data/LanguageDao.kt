@@ -13,11 +13,11 @@ interface LanguageDao {
     @Query("SELECT * FROM language_table")
     fun selectAll() : List<LanguageItem>
 
+    @Query("SELECT * FROM language_table WHERE id = :id")
+    fun getLanguage(id: Int): LanguageItem
+
     @Query("DELETE FROM language_table WHERE id = :id")
     fun deleteById(id: Int)
-
-    /*@Update
-    fun update(languageItem: LanguageItem)*/
 
     @Query("UPDATE language_table SET name = :name WHERE id = :id")
     fun updateName(id: Int, name: String)
@@ -42,4 +42,8 @@ interface LanguageDao {
 
     @Query("UPDATE language_table SET capitalizedPartsOfSpeech = :capitalizedPartsOfSpeech WHERE id = :id")
     fun updateCapitalizedPartsOfSpeech(id: Int, capitalizedPartsOfSpeech: String)
+
+    // check if the language exists
+    @Query("SELECT EXISTS(SELECT 1 FROM language_table WHERE id = :id)")
+    fun exists(id: Int): Boolean
 }

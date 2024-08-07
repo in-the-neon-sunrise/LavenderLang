@@ -18,7 +18,7 @@ import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.service.exception.FileWorkException
 import com.lavenderlang.databinding.FragmentLanguageBinding
 import com.lavenderlang.frontend.MyApp
-import com.lavenderlang.frontend.languages
+//import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -30,7 +30,7 @@ class LanguageFragment: Fragment() {
     private lateinit var binding: FragmentLanguageBinding
 
     companion object{
-        var idLang: Int = 0
+        var idLang: Int = -1
         val languageDao: LanguageDaoImpl = LanguageDaoImpl()
     }
 
@@ -73,6 +73,7 @@ class LanguageFragment: Fragment() {
 
         //parts of language
         binding.buttonDictionary.setOnClickListener {
+            Log.d("language", "dictionary: ${MyApp.language!!.languageId}")
             findNavController().navigate(R.id.action_languageFragment_to_dictionaryFragment)
         }
         binding.buttonGrammar.setOnClickListener {
@@ -100,7 +101,7 @@ class LanguageFragment: Fragment() {
         val preferences =
             requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE)
         //how it was started?
-        when(val lang = preferences.getInt("lang", -1)){
+        when(val lang = preferences.getInt("lang", -1)) {
             -1 -> {
                 idLang = MyApp.nextLanguageId
                 runBlocking {
@@ -108,15 +109,25 @@ class LanguageFragment: Fragment() {
                         languageDao.createLanguage("Язык$idLang", "")
                     }
                 }
-                binding.editLanguageName.setText(languages[idLang]?.name)
+                Log.d("language", "new language: ${MyApp.language!!.languageId}")
             }
+
             else -> {
                 idLang = lang
-                binding.editLanguageName.setText(languages[idLang]?.name)
+                runBlocking {
+                    withContext(Dispatchers.IO) {
+                        languageDao.getLanguage(lang)
+                        if (MyApp.language == null) {
+                            languageDao.createLanguage("Язык$idLang", "")
+                        }
+                    }
+                }
             }
         }
-        if(languages[idLang]?.description != "")
-            binding.editDescription.setText(languages[idLang]?.description)
+        binding.editLanguageName.setText(MyApp.language!!.name)
+
+        if(MyApp.language?.description != "")
+            binding.editDescription.setText(MyApp.language!!.description)
 
         //check changing
         binding.editLanguageName.addTextChangedListener(object : TextWatcher {
@@ -125,7 +136,12 @@ class LanguageFragment: Fragment() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changeName(languages[idLang]!!, binding.editLanguageName.text.toString())
+                runBlocking {
+                    languageDao.changeName(
+                        MyApp.language!!,
+                        binding.editLanguageName.text.toString()
+                    )
+                }
             }
         })
         binding.editDescription.addTextChangedListener(object : TextWatcher {
@@ -134,14 +150,19 @@ class LanguageFragment: Fragment() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changeDescription(languages[idLang]!!, binding.editDescription.text.toString())
+                runBlocking {
+                    languageDao.changeDescription(
+                        MyApp.language!!,
+                        binding.editDescription.text.toString()
+                    )
+                }
             }
         })
 
         binding.buttonFile.setOnClickListener {
             try {
                 LanguageDaoImpl().downloadLanguageJSON(
-                    languages[idLang]!!,
+                    MyApp.language!!,
                     MyApp.storageHelper!!,
                     createJSONLauncher)
             } catch (e: FileWorkException) {
@@ -153,7 +174,7 @@ class LanguageFragment: Fragment() {
         binding.buttonPDF.setOnClickListener {
             try {
                 LanguageDaoImpl().downloadLanguagePDF(
-                    languages[idLang]!!,
+                    MyApp.language!!,
                     MyApp.storageHelper!!,
                     createPDFLauncher)
             } catch (e: FileWorkException) {
@@ -163,11 +184,15 @@ class LanguageFragment: Fragment() {
             }
         }
         binding.buttonCopy.setOnClickListener {
-            languageDao.copyLanguage(languages[idLang]!!)
+            runBlocking {
+                languageDao.copyLanguage(MyApp.language!!)
+            }
             findNavController().navigate(R.id.action_languageFragment_to_mainFragment)
         }
         binding.buttonDelete.setOnClickListener {
-            languageDao.deleteLanguage(idLang)
+            runBlocking {
+                Companion.languageDao.deleteLanguage(idLang)
+            }
             findNavController().navigate(R.id.action_languageFragment_to_mainFragment)
         }
         return binding.root

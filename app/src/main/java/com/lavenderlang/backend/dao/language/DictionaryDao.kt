@@ -125,7 +125,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
 
     override fun getWordForms(dictionary: DictionaryEntity, word: String): ArrayList<IWordEntity> {
         for (key in dictionary.fullDict.keys) {
-            if (key.split(" ")[0] == word) return dictionary.fullDict[key]!!
+            if (key.split(":")[0] == word) return dictionary.fullDict[key]!!
         }
         return arrayListOf()
     }

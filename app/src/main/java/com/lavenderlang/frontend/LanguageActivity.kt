@@ -14,7 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.backend.service.exception.FileWorkException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 
 class LanguageActivity: AppCompatActivity() {
@@ -24,8 +30,11 @@ class LanguageActivity: AppCompatActivity() {
     companion object{
         var id_lang: Int = 0
         val languageDao: LanguageDaoImpl = LanguageDaoImpl()
+//        lateinit var language: LanguageEntity
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+//        language = Serializer.getInstance().deserializeLanguage(
+//            LanguageRepository().getLanguage(this, id_lang))
         setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.language_activity)
@@ -117,7 +126,11 @@ class LanguageActivity: AppCompatActivity() {
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
                 id_lang = MyApp.nextLanguageId
-                languageDao.createLanguage("Язык$id_lang", "")
+                runBlocking {
+                    withContext(Dispatchers.IO) {
+                        languageDao.createLanguage("Язык$id_lang", "")
+                    }
+                }
                 editLanguageName.setText(languages[id_lang]?.name)
             }
             else -> {
@@ -127,9 +140,7 @@ class LanguageActivity: AppCompatActivity() {
         }
         if(languages[id_lang]?.description != "") editDescription.setText(languages[id_lang]?.description)
     }
-    override fun onStart() {
-        super.onStart()
-    }
+
     override fun onResume() {
         super.onResume()
 
@@ -142,7 +153,9 @@ class LanguageActivity: AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changeName(languages[id_lang]!!, editLanguageName.text.toString())
+                runBlocking {
+                    languageDao.changeName(languages[id_lang]!!, editLanguageName.text.toString())
+                }
             }
         })
         editDescription.addTextChangedListener(object : TextWatcher {
@@ -151,7 +164,12 @@ class LanguageActivity: AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                languageDao.changeDescription(languages[id_lang]!!, editDescription.text.toString())
+                runBlocking {
+                    languageDao.changeDescription(
+                        languages[id_lang]!!,
+                        editDescription.text.toString()
+                    )
+                }
             }
         })
 
@@ -183,13 +201,17 @@ class LanguageActivity: AppCompatActivity() {
         }
         val buttonCopy: Button = findViewById(R.id.buttonCopy)
         buttonCopy.setOnClickListener {
-            languageDao.copyLanguage(languages[id_lang]!!)
+            runBlocking {
+                languageDao.copyLanguage(languages[id_lang]!!)
+            }
             val intent = Intent(this@LanguageActivity, MainActivity::class.java)
             startActivity(intent)
         }
         val buttonDelete: Button = findViewById(R.id.buttonDelete)
         buttonDelete.setOnClickListener {
-            languageDao.deleteLanguage(id_lang)
+            runBlocking {
+                languageDao.deleteLanguage(id_lang)
+            }
             val intent = Intent(this@LanguageActivity, MainActivity::class.java)
             startActivity(intent)
         }

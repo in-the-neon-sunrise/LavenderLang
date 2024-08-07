@@ -18,12 +18,18 @@ import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
+import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
+import com.lavenderlang.backend.entity.language.DictionaryEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
+import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.databinding.FragmentDictionaryBinding
 import com.lavenderlang.frontend.LanguageActivity
+import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.WordActivity
-import com.lavenderlang.frontend.languages
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class DictionaryFragment : Fragment() {
     private lateinit var binding: FragmentDictionaryBinding
@@ -32,6 +38,7 @@ class DictionaryFragment : Fragment() {
         val dictionaryDao: DictionaryDao = DictionaryDaoImpl()
         var sort: Int = 0
         var filter: Int = 0
+        lateinit var dictionary: DictionaryEntity
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +48,6 @@ class DictionaryFragment : Fragment() {
 
         binding = FragmentDictionaryBinding.inflate(inflater, container, false)
 
-        //top navigation menu
         //top navigation menu
         binding.buttonPrev.setOnClickListener {
             findNavController().popBackStack()
@@ -76,6 +82,7 @@ class DictionaryFragment : Fragment() {
             }
         }
 
+        dictionary = MyApp.language!!.dictionary
 
         var flag = mutableListOf("по конлангу", "по переводу")
         var adapter: ArrayAdapter<String> =
@@ -133,7 +140,6 @@ class DictionaryFragment : Fragment() {
     }
 
     fun allWords() {
-        var dictionary = languages[idLang]!!.dictionary
         var list = dictionary.dict.toList()
         if (sort == 0) {
             when (filter) {
@@ -192,12 +198,11 @@ class DictionaryFragment : Fragment() {
         binding.listWords.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 val id: Int =
-                    languages[idLang]!!.dictionary.dict.indexOfFirst { it.word == list[position].word }
+                    dictionary.dict.indexOfFirst { it.word == list[position].word }
                 val argsToSend = Bundle()
                 argsToSend.putInt("word", id)
                 findNavController().navigate(R.id.action_dictionaryFragment_to_wordFragment, argsToSend)
             }
-
     }
 }
 

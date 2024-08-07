@@ -16,6 +16,7 @@ import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.service.exception.FileWorkException
+import kotlinx.coroutines.runBlocking
 
 class LoadLanguageActivity: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +103,9 @@ class LoadLanguageActivity: AppCompatActivity(){
             }
             Log.d("path", "${accessible[pathPositionSpinner]}/${path}")
             try {
-                languageDao.getLanguageFromFile("${accessible[pathPositionSpinner]}/${path}", this)
+                runBlocking {
+                languageDao.getLanguageFromFile("${accessible[pathPositionSpinner]}/${path}", this@LoadLanguageActivity)
+            }
             } catch (e: FileWorkException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
                 return@setOnClickListener

@@ -9,80 +9,115 @@ import com.anggrayudi.storage.SimpleStorageHelper
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.StorageType
 import com.anggrayudi.storage.file.openInputStream
+import com.lavenderlang.backend.data.LanguageItem
 import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.*
 import com.lavenderlang.backend.service.exception.FileWorkException
 import com.lavenderlang.frontend.MyApp
-import com.lavenderlang.frontend.languages
+//import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedWriter
 import java.io.File
 import java.io.OutputStreamWriter
 
 interface LanguageDao {
-    fun changeName(language: LanguageEntity, newName: String)
-    fun changeDescription(language: LanguageEntity, newDescription: String)
-    fun copyLanguage(language: LanguageEntity)
+    suspend fun changeName(language: LanguageEntity, newName: String)
+    suspend fun changeDescription(language: LanguageEntity, newDescription: String)
+    suspend fun copyLanguage(language: LanguageEntity)
     suspend fun createLanguage(name: String, description: String)
-    fun deleteLanguage(id: Int)
-    fun getLanguagesFromDB()
-    fun downloadLanguageJSON(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>)
-    fun downloadLanguagePDF(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>)
-    fun getLanguageFromFile(path: String, context: AppCompatActivity)
+    suspend fun getLanguage(id: Int): LanguageEntity?
+    suspend fun deleteLanguage(id: Int)
+    suspend fun getLanguagesFromDB(): MutableMap<Int, LanguageEntity>
+    fun downloadLanguageJSON(
+        language: LanguageEntity,
+        storageHelper: SimpleStorageHelper,
+        createDocumentResultLauncher: ActivityResultLauncher<String>
+    )
+
+    fun downloadLanguagePDF(
+        language: LanguageEntity,
+        storageHelper: SimpleStorageHelper,
+        createDocumentResultLauncher: ActivityResultLauncher<String>
+    )
+
+    suspend fun getLanguageFromFile(path: String, context: AppCompatActivity)
 }
-class LanguageDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) : LanguageDao {
+
+class LanguageDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) :
+    LanguageDao {
     companion object {
         var curLanguage: LanguageEntity? = null
     }
 
-    override fun getLanguagesFromDB() {
-        GlobalScope.launch(Dispatchers.IO) {
-            val languageItemList = languageRepository.loadAllLanguages(
-                MyApp.getInstance().applicationContext)
-            languages = mutableMapOf()
-            MyApp.nextLanguageId = 0
-            for (e in languageItemList) {
-                languages[e.id] = LanguageEntity(
-                    e.id,
-                    e.name,
-                    e.description,
-                    Serializer.getInstance().deserializeDictionary(e.dictionary),
-                    Serializer.getInstance().deserializeGrammar(e.grammar),
-                    e.vowels,
-                    e.consonants,
-                    Serializer.getInstance().deserializePuncSymbols(e.puncSymbols),
-                    Serializer.getInstance()
-                        .deserializeCapitalizedPartsOfSpeech(e.capitalizedPartsOfSpeech)
-                )
-                if (MyApp.nextLanguageId <= e.id) MyApp.nextLanguageId = e.id + 1
-            }
+    override suspend fun getLanguagesFromDB(): MutableMap<Int, LanguageEntity> {
+        val languages = mutableMapOf<Int, LanguageEntity>()
+        var languageItemList: List<LanguageItem>
+        withContext(Dispatchers.IO) {
+            languageItemList = languageRepository.loadAllLanguages(
+                MyApp.getInstance().applicationContext
+            )
         }
+        MyApp.nextLanguageId = 0
+        for (e in languageItemList) {
+            languages[e.id] = LanguageEntity(
+                e.id,
+                e.name,
+                e.description,
+                Serializer.getInstance().deserializeDictionary(e.dictionary),
+                Serializer.getInstance().deserializeGrammar(e.grammar),
+                e.vowels,
+                e.consonants,
+                Serializer.getInstance().deserializePuncSymbols(e.puncSymbols),
+                Serializer.getInstance()
+                    .deserializeCapitalizedPartsOfSpeech(e.capitalizedPartsOfSpeech)
+            )
+            if (MyApp.nextLanguageId <= e.id) MyApp.nextLanguageId = e.id + 1
+        }
+        return languages
     }
 
 
-    override fun changeName(language : LanguageEntity, newName : String) {
+    override suspend fun changeName(language: LanguageEntity, newName: String) {
         language.name = newName
-        if (language.languageId !in languages) return
+        withContext(Dispatchers.IO) {
+            if (languageRepository.exists(
+                    MyApp.getInstance().applicationContext,
+                    language.languageId
+                )
+            ) return@withContext
+            // TODO: оно так работает???
+        }
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.updateName(
-                MyApp.getInstance().applicationContext, language.languageId, newName)
-        }
-    }
-    override fun changeDescription(language : LanguageEntity, newDescription: String) {
-        language.description = newDescription
-        if (language.languageId !in languages) return
-        GlobalScope.launch(Dispatchers.IO) {
-            languageRepository.updateDescription(
-                MyApp.getInstance().applicationContext, language.languageId, newDescription)
+                MyApp.getInstance().applicationContext, language.languageId, newName
+            )
         }
     }
 
-    override fun copyLanguage(language: LanguageEntity) {
-        val newLang = language.copy(languageId = MyApp.nextLanguageId, name = language.name + " копия")
+    override suspend fun changeDescription(language: LanguageEntity, newDescription: String) {
+        language.description = newDescription
+        withContext(Dispatchers.IO) {
+            if (languageRepository.exists(
+                    MyApp.getInstance().applicationContext,
+                    language.languageId
+                )
+            ) return@withContext
+        }
+        GlobalScope.launch(Dispatchers.IO) {
+            languageRepository.updateDescription(
+                MyApp.getInstance().applicationContext, language.languageId, newDescription
+            )
+        }
+    }
+
+    override suspend fun copyLanguage(language: LanguageEntity) {
+        val newLang =
+            language.copy(languageId = MyApp.nextLanguageId, name = language.name + " копия")
 
         newLang.grammar.languageId = MyApp.nextLanguageId
         for (rule in newLang.grammar.grammarRules) {
@@ -99,37 +134,78 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
                 word.languageId = MyApp.nextLanguageId
             }
         }
-
         newLang.dictionary.languageId = MyApp.nextLanguageId
 
-        languages[MyApp.nextLanguageId++] = newLang
-        GlobalScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             languageRepository.insertLanguage(
-                MyApp.getInstance().applicationContext, newLang.languageId, newLang)
+                MyApp.getInstance().applicationContext, newLang.languageId, newLang
+            )
         }
-        return
-    }
-    override suspend fun createLanguage(name: String, description: String) {
-        val newLang = LanguageEntity(MyApp.nextLanguageId, name, description)
-        languages[MyApp.nextLanguageId] = newLang
-        languageRepository.insertLanguage(
-            MyApp.getInstance().applicationContext, newLang.languageId, newLang)
         ++MyApp.nextLanguageId
         // get shared preferences
-        val sharedPref = MyApp.getInstance().getSharedPreferences("pref", AppCompatActivity.MODE_PRIVATE)
+        val sharedPref =
+            MyApp.getInstance().getSharedPreferences("pref", AppCompatActivity.MODE_PRIVATE)
         val editor = sharedPref.edit()
         editor.putInt("lang", newLang.languageId)
         editor.apply()
+        // set MyApp.language
+        MyApp.language = newLang
+    }
+
+    override suspend fun createLanguage(name: String, description: String) {
+        val newLang = LanguageEntity(MyApp.nextLanguageId, name, description)
+        withContext(Dispatchers.IO) {
+            languageRepository.insertLanguage(
+                MyApp.getInstance().applicationContext, newLang.languageId, newLang
+            )
+        }
+        ++MyApp.nextLanguageId
+        // get shared preferences
+        val sharedPref =
+            MyApp.getInstance().getSharedPreferences("pref", AppCompatActivity.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putInt("lang", newLang.languageId)
+        editor.apply()
+        // set MyApp.language
+        MyApp.language = newLang
         return
     }
-    override fun deleteLanguage(id: Int) {
-        languages.remove(id)
+
+    override suspend fun getLanguage(id: Int): LanguageEntity? {
+        val language: LanguageEntity?
+        var check = false
+        withContext(Dispatchers.IO) {
+            if (languageRepository.exists(MyApp.getInstance().applicationContext, id))
+                check = true
+        }
+        if (!check) return null
+        val languageItem: LanguageItem
+        withContext(Dispatchers.IO) {
+            languageItem = languageRepository.getLanguage(
+                MyApp.getInstance().applicationContext, id
+            )
+        }
+        language = Serializer.getInstance().getLanguageEntityFromLanguageItem(languageItem)
+        // get shared preferences
+        val sharedPref =
+            MyApp.getInstance().getSharedPreferences("pref", AppCompatActivity.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putInt("lang", language.languageId)
+        editor.apply()
+        // set MyApp.language
+        MyApp.language = language
+        return language
+    }
+
+    override suspend fun deleteLanguage(id: Int) {
         GlobalScope.launch(Dispatchers.IO) {
             languageRepository.deleteLanguage(
-                MyApp.getInstance().applicationContext, id)
+                MyApp.getInstance().applicationContext, id
+            )
         }
     }
-    override fun getLanguageFromFile(path: String, context: AppCompatActivity) {
+
+    override suspend fun getLanguageFromFile(path: String, context: AppCompatActivity) {
         val origFile = File(path)
         // fixme: do i need context here? or just myApp?
         val file = DocumentFileCompat.fromFile(MyApp.getInstance().applicationContext, origFile)
@@ -151,7 +227,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
             rule.languageId = MyApp.nextLanguageId
         }
         for (rule in language.grammar.wordFormationRules) {
-                rule.languageId = MyApp.nextLanguageId
+            rule.languageId = MyApp.nextLanguageId
         }
         for (word in language.dictionary.dict) {
             word.languageId = MyApp.nextLanguageId
@@ -164,23 +240,35 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
 
         language.dictionary.languageId = MyApp.nextLanguageId
 
-        languages[MyApp.nextLanguageId] = language
         ++MyApp.nextLanguageId
-        GlobalScope.launch(Dispatchers.IO) {
-            languageRepository.insertLanguage(
-                MyApp.getInstance().applicationContext, language.languageId, language)
-        }
+        languageRepository.insertLanguage(
+            MyApp.getInstance().applicationContext, language.languageId, language
+        )
+        // get shared preferences
+        val sharedPref =
+            MyApp.getInstance().getSharedPreferences("pref", AppCompatActivity.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putInt("lang", language.languageId)
+        editor.apply()
+        // set MyApp.language
+        MyApp.language = language
         Log.d("file", "loaded ${language.name}")
     }
 
-    override fun downloadLanguageJSON(language: LanguageEntity, storageHelper: SimpleStorageHelper,
-                                      createDocumentResultLauncher: ActivityResultLauncher<String>) {
+    override fun downloadLanguageJSON(
+        language: LanguageEntity, storageHelper: SimpleStorageHelper,
+        createDocumentResultLauncher: ActivityResultLauncher<String>
+    ) {
         curLanguage = language
         createDocumentResultLauncher.launch("${PdfWriterDaoImpl().translitName(language.name)}.json")
         Log.d("file", "json done")
     }
 
-    override fun downloadLanguagePDF(language: LanguageEntity, storageHelper: SimpleStorageHelper, createDocumentResultLauncher: ActivityResultLauncher<String>) {
+    override fun downloadLanguagePDF(
+        language: LanguageEntity,
+        storageHelper: SimpleStorageHelper,
+        createDocumentResultLauncher: ActivityResultLauncher<String>
+    ) {
         curLanguage = language
         createDocumentResultLauncher.launch("${PdfWriterDaoImpl().translitName(language.name)}.pdf")
         Log.d("file", "pdf done")
@@ -203,7 +291,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         }
     }
 
-    fun writeToPDF(uri: Uri) : Boolean {
+    fun writeToPDF(uri: Uri): Boolean {
         val context = MyApp.getInstance().applicationContext
         if (curLanguage == null) {
             Log.d("file", "no language")

@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.frontend.MyApp
+import kotlinx.coroutines.runBlocking
 
 
 class MainActivity2: AppCompatActivity() {
@@ -26,15 +27,9 @@ class MainActivity2: AppCompatActivity() {
         setContentView(R.layout.activity_main2)
 
         if (MyApp.nextLanguageId == -1) {
-            LanguageDaoImpl().getLanguagesFromDB()
+            runBlocking { LanguageDaoImpl().getLanguagesFromDB() }
             if (MyApp.nextLanguageId == -1) MyApp.nextLanguageId = 0
         }
-
-
-//        if (isDarkTheme != (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)) {
-//            Log.d("Theme", "recreate")
-//            recreate()
-//        }
     }
 
     // Обработка навигации вверх

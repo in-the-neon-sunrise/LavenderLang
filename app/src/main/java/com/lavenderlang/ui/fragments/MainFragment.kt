@@ -14,10 +14,12 @@ import com.anggrayudi.storage.SimpleStorageHelper
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.lavenderlang.R
+import com.lavenderlang.backend.dao.language.LanguageDao
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.databinding.FragmentMainBinding
 import com.lavenderlang.frontend.MyApp
-import com.lavenderlang.frontend.languages
+import kotlinx.coroutines.runBlocking
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
@@ -64,8 +66,13 @@ class MainFragment : Fragment() {
                 }
 
                 R.id.action_language -> {
-                    findNavController().navigate(R.id.action_mainFragment_to_languageFragment)
-                    true
+                    if (MyApp.nextLanguageId == -1) {
+                        true
+                    }
+                    else {
+                        findNavController().navigate(R.id.action_mainFragment_to_languageFragment)
+                        true
+                    }
                 }
 
                 R.id.action_translator -> {
@@ -75,6 +82,10 @@ class MainFragment : Fragment() {
 
                 else -> false
             }
+        }
+
+        val languages = runBlocking {
+            LanguageDaoImpl().getLanguagesFromDB()
         }
 
         val adapter: ArrayAdapter<LanguageEntity> =

@@ -1,6 +1,7 @@
 package com.lavenderlang.backend.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.lavenderlang.backend.data.LanguageItem
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.DictionaryEntity
 import com.lavenderlang.backend.entity.language.GrammarEntity
@@ -111,5 +112,19 @@ class Serializer private constructor() {
         } catch (e : Exception) {
             throw LanguageNotFoundException(e.message?:"")
         }
+    }
+
+    fun getLanguageEntityFromLanguageItem(languageItem: LanguageItem) : LanguageEntity {
+        return LanguageEntity(
+            languageItem.id,
+            languageItem.name,
+            languageItem.description,
+            deserializeDictionary(languageItem.dictionary),
+            deserializeGrammar(languageItem.grammar),
+            languageItem.vowels,
+            languageItem.consonants,
+            deserializePuncSymbols(languageItem.puncSymbols),
+            deserializeCapitalizedPartsOfSpeech(languageItem.capitalizedPartsOfSpeech)
+        )
     }
 }

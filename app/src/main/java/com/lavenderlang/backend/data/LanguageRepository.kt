@@ -91,4 +91,16 @@ class LanguageRepository {
 
         languageDao.updateCapitalizedPartsOfSpeech(id, capitalizedPartsOfSpeech)
     }
+
+    fun getLanguage(context: Context, id: Int) : LanguageItem {
+        val languageDB: LanguageDB = LanguageDB.getInstance(context)
+        val languageDao: LanguageDao = languageDB.languageDao()
+        return languageDao.getLanguage(id)
+    }
+
+    fun exists(context: Context, id: Int) : Boolean {
+        val languageDB: LanguageDB = LanguageDB.getInstance(context)
+        val languageDao: LanguageDao = languageDB.languageDao()
+        return languageDao.exists(id)
+    }
 }

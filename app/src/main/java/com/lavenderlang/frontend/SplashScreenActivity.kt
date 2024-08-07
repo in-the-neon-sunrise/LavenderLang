@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import kotlinx.coroutines.runBlocking
 
 class SplashScreenActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +16,9 @@ class SplashScreenActivity: AppCompatActivity() {
         Log.d("SplashScreenActivity", "onCreate ${MyApp.nextLanguageId}")
         if (MyApp.nextLanguageId == -1) {
             Log.d("SplashScreenActivity", "getting languages from DB")
-            LanguageDaoImpl().getLanguagesFromDB()
+            runBlocking {
+                LanguageDaoImpl().getLanguagesFromDB()
+            }
             if (MyApp.nextLanguageId == -1) MyApp.nextLanguageId = 0
         }
 

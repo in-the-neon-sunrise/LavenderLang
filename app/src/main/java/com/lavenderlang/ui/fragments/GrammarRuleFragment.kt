@@ -34,8 +34,8 @@ import com.lavenderlang.frontend.GrammarRuleActivity
 import com.lavenderlang.frontend.InstructionActivity
 import com.lavenderlang.frontend.LanguageActivity
 import com.lavenderlang.frontend.MainActivity
+import com.lavenderlang.frontend.MyApp
 import com.lavenderlang.frontend.TranslatorActivity
-import com.lavenderlang.frontend.languages
 
 class GrammarRuleFragment : Fragment() {
     private lateinit var binding: FragmentGrammarRuleBinding
@@ -110,20 +110,20 @@ class GrammarRuleFragment : Fragment() {
         when(rule){
             -1 -> {
                 val newRule = GrammarRuleEntity(idLang)
-                grammarDao.addGrammarRule(languages[idLang]!!.grammar, newRule)
-                idRule = languages[idLang]!!.grammar.grammarRules.size-1
+                grammarDao.addGrammarRule(MyApp.language!!.grammar, newRule)
+                idRule = MyApp.language!!.grammar.grammarRules.size-1
                 binding.editMasc.setText(newRule.masc.regex)
             }
             else -> {
                 idRule = rule
-                binding.editMasc.setText(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.regex)
+                binding.editMasc.setText(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.regex)
             }
         }
 
 
-        GrammarRuleActivity.attrs = languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs
-        GrammarRuleActivity.regex = languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.regex
-        GrammarRuleActivity.mutableAttrs = languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs
+        GrammarRuleActivity.attrs = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs
+        GrammarRuleActivity.regex = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.regex
+        GrammarRuleActivity.mutableAttrs = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs
 
 
         listenSpinners()
@@ -143,7 +143,7 @@ class GrammarRuleFragment : Fragment() {
         binding.spinnerPartOfSpeech.adapter = spinnerAdapter
         spinnerAdapter.notifyDataSetChanged()
 
-        var partOfSpeech= languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech
+        var partOfSpeech= MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech
         when (partOfSpeech){
             PartOfSpeech.NOUN-> idPartOfSpeech =0
             PartOfSpeech.VERB-> idPartOfSpeech =1
@@ -167,7 +167,7 @@ class GrammarRuleFragment : Fragment() {
                 when(positionSpinner){
                     0->{
                         mascDao.changePartOfSpeech(
-                            languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.NOUN)
+                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.NOUN)
                         binding.spinnerGender.visibility=View.VISIBLE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -192,7 +192,7 @@ class GrammarRuleFragment : Fragment() {
                     }
                     1->{
                         mascDao.changePartOfSpeech(
-                            languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.VERB)
+                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.VERB)
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.VISIBLE
                         binding.spinnerVoice.visibility=View.VISIBLE
@@ -214,7 +214,7 @@ class GrammarRuleFragment : Fragment() {
                     }
                     2->{
                         mascDao.changePartOfSpeech(
-                            languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.ADJECTIVE)
+                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.ADJECTIVE)
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -236,7 +236,7 @@ class GrammarRuleFragment : Fragment() {
                     }
                     3->{
                         mascDao.changePartOfSpeech(
-                            languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.ADVERB)
+                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.ADVERB)
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -258,7 +258,7 @@ class GrammarRuleFragment : Fragment() {
                     }
                     4->{
                         mascDao.changePartOfSpeech(
-                            languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.PARTICIPLE)
+                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.PARTICIPLE)
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.VISIBLE
                         binding.spinnerVoice.visibility=View.VISIBLE
@@ -280,7 +280,7 @@ class GrammarRuleFragment : Fragment() {
                     }
                     5->{
                         mascDao.changePartOfSpeech(
-                            languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.VERB_PARTICIPLE)
+                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.VERB_PARTICIPLE)
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.VISIBLE
                         binding.spinnerVoice.visibility=View.GONE
@@ -302,7 +302,7 @@ class GrammarRuleFragment : Fragment() {
                     }
                     6->{
                         mascDao.changePartOfSpeech(
-                            languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.PRONOUN)
+                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.PRONOUN)
                         binding.spinnerGender.visibility=View.VISIBLE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -324,7 +324,7 @@ class GrammarRuleFragment : Fragment() {
                     }
                     7->{
                         mascDao.changePartOfSpeech(
-                            languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.NUMERAL)
+                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.NUMERAL)
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -346,7 +346,7 @@ class GrammarRuleFragment : Fragment() {
                     }
                     else->{
                         mascDao.changePartOfSpeech(
-                            languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.FUNC_PART)
+                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.FUNC_PART)
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -371,16 +371,16 @@ class GrammarRuleFragment : Fragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 mascDao.changePartOfSpeech(
-                    languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.NOUN)
+                    MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.NOUN)
             }
         }
 
         // edit texts
 
-        numberFront = languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].transformation.delFromBeginning
-        numberBack = languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].transformation.delFromEnd
-        addFront = languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].transformation.addToBeginning
-        addBack = languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].transformation.addToEnd
+        numberFront = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].transformation.delFromBeginning
+        numberBack = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].transformation.delFromEnd
+        addFront = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].transformation.addToBeginning
+        addBack = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].transformation.addToEnd
         (binding.editTextNumberFront as TextView).setText(GrammarRuleActivity.numberFront.toString())
         (binding.editTextNumberBack as TextView).setText(GrammarRuleActivity.numberBack.toString())
         (binding.editTextAddFront as TextView).setText(GrammarRuleActivity.addFront)
@@ -416,7 +416,7 @@ class GrammarRuleFragment : Fragment() {
         }
 
         binding.buttonDelete.setOnClickListener{
-            grammarDao.deleteGrammarRule(languages[idLang]!!.grammar, languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule])
+            grammarDao.deleteGrammarRule(MyApp.language!!.grammar, MyApp.language!!.grammar.grammarRules.toMutableList()[idRule])
             findNavController().popBackStack()
         }
         return binding.root
@@ -438,7 +438,7 @@ class GrammarRuleFragment : Fragment() {
             var newMasc = MascEntity(partOfSpeech, attrs, regex)
             var newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
             grammarRuleDao.updateRule(
-                languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule],
+                MyApp.language!!.grammar.grammarRules.toMutableList()[idRule],
                 newMasc,
                 newTransformation,
                 mutableAttrs
@@ -455,17 +455,17 @@ class GrammarRuleFragment : Fragment() {
     }
     fun listenSpinners(){
 
-        val genderNames = languages[idLang]!!.grammar.varsGender.values.map { it.name }
+        val genderNames = MyApp.language!!.grammar.varsGender.values.map { it.name }
         var genderAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, genderNames)
         binding.spinnerGender.adapter = genderAdapter
         genderAdapter.notifyDataSetChanged()
 
-        val typeNames = languages[idLang]!!.grammar.varsType.values.map { it.name }
+        val typeNames = MyApp.language!!.grammar.varsType.values.map { it.name }
         val typeAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, typeNames)
         binding.spinnerType.adapter = typeAdapter
         typeAdapter.notifyDataSetChanged()
 
-        val voiceNames = languages[idLang]!!.grammar.varsVoice.values.map { it.name }
+        val voiceNames = MyApp.language!!.grammar.varsVoice.values.map { it.name }
         val voiceAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, voiceNames)
         binding.spinnerVoice.adapter = voiceAdapter
         voiceAdapter.notifyDataSetChanged()
@@ -474,32 +474,32 @@ class GrammarRuleFragment : Fragment() {
         binding.spinnerFinishGender.adapter = finishGenderAdapter
         finishGenderAdapter.notifyDataSetChanged()
 
-        val numberNames = languages[idLang]!!.grammar.varsNumber.values.map { it.name }
+        val numberNames = MyApp.language!!.grammar.varsNumber.values.map { it.name }
         val finishNumberAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, numberNames)
         binding.spinnerFinishNumber.adapter = finishNumberAdapter
         finishNumberAdapter.notifyDataSetChanged()
 
-        val caseNames = languages[idLang]!!.grammar.varsCase.values.map { it.name }
+        val caseNames = MyApp.language!!.grammar.varsCase.values.map { it.name }
         val finishCaseAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, caseNames)
         binding.spinnerFinishCase.adapter = finishCaseAdapter
         finishCaseAdapter.notifyDataSetChanged()
 
-        val timeNames = languages[idLang]!!.grammar.varsTime.values.map { it.name }
+        val timeNames = MyApp.language!!.grammar.varsTime.values.map { it.name }
         val finishTimeAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, timeNames)
         binding.spinnerFinishTime.adapter = finishTimeAdapter
         finishTimeAdapter.notifyDataSetChanged()
 
-        val personNames = languages[idLang]!!.grammar.varsPerson.values.map { it.name }
+        val personNames = MyApp.language!!.grammar.varsPerson.values.map { it.name }
         val finishPersonAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, personNames)
         binding.spinnerFinishPerson.adapter = finishPersonAdapter
         finishPersonAdapter.notifyDataSetChanged()
 
-        val moodNames = languages[idLang]!!.grammar.varsMood.values.map { it.name }
+        val moodNames = MyApp.language!!.grammar.varsMood.values.map { it.name }
         val finishMoodAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, moodNames)
         binding.spinnerFinishMood.adapter = finishMoodAdapter
         finishMoodAdapter.notifyDataSetChanged()
 
-        val degreeOfComparisonNames = languages[idLang]!!.grammar.varsDegreeOfComparison.values.map { it.name }
+        val degreeOfComparisonNames = MyApp.language!!.grammar.varsDegreeOfComparison.values.map { it.name }
         val finishDegreeOfComparisonAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, degreeOfComparisonNames)
         binding.spinnerFinishDegreeOfComparison.adapter = finishDegreeOfComparisonAdapter
         finishDegreeOfComparisonAdapter.notifyDataSetChanged()
@@ -507,45 +507,45 @@ class GrammarRuleFragment : Fragment() {
     fun updateSpinners(){
         when(idPartOfSpeech) {
             0 -> {
-                binding.spinnerGender.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
+                binding.spinnerGender.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
 
-                binding.spinnerFinishNumber.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.NUMBER] ?:0)
-                binding.spinnerFinishCase.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.CASE] ?:0)
+                binding.spinnerFinishNumber.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.NUMBER] ?:0)
+                binding.spinnerFinishCase.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.CASE] ?:0)
             }
             1->{
-                binding.spinnerType.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
-                binding.spinnerVoice.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
+                binding.spinnerType.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                binding.spinnerVoice.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
 
-                binding.spinnerFinishGender.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.GENDER] ?:0)
-                binding.spinnerFinishNumber.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.NUMBER] ?:0)
-                binding.spinnerFinishTime.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.TIME] ?:0)
-                binding.spinnerFinishPerson.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.PERSON] ?:0)
-                binding.spinnerFinishMood.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.MOOD] ?:0)
+                binding.spinnerFinishGender.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.GENDER] ?:0)
+                binding.spinnerFinishNumber.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.NUMBER] ?:0)
+                binding.spinnerFinishTime.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.TIME] ?:0)
+                binding.spinnerFinishPerson.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.PERSON] ?:0)
+                binding.spinnerFinishMood.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.MOOD] ?:0)
             }
             2-> {
-                binding.spinnerFinishGender.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.GENDER] ?:0)
-                binding.spinnerFinishNumber.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.NUMBER] ?:0)
-                binding.spinnerFinishCase.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.CASE] ?:0)
-                binding.spinnerFinishDegreeOfComparison.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.DEGREE_OF_COMPARISON] ?:0)
+                binding.spinnerFinishGender.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.GENDER] ?:0)
+                binding.spinnerFinishNumber.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.NUMBER] ?:0)
+                binding.spinnerFinishCase.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.CASE] ?:0)
+                binding.spinnerFinishDegreeOfComparison.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.DEGREE_OF_COMPARISON] ?:0)
             }
             3->{}
             4->{
-                binding.spinnerType.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
-                binding.spinnerVoice.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
+                binding.spinnerType.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                binding.spinnerVoice.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.VOICE] ?: 0)
 
-                binding.spinnerFinishGender.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.GENDER] ?:0)
-                binding.spinnerFinishNumber.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.NUMBER] ?:0)
-                binding.spinnerFinishCase.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.CASE] ?:0)
-                binding.spinnerFinishTime.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.TIME] ?:0)
+                binding.spinnerFinishGender.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.GENDER] ?:0)
+                binding.spinnerFinishNumber.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.NUMBER] ?:0)
+                binding.spinnerFinishCase.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.CASE] ?:0)
+                binding.spinnerFinishTime.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.TIME] ?:0)
             }
             5->{
-                binding.spinnerType.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
+                binding.spinnerType.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.TYPE] ?: 0)
             }
             6->{
-                binding.spinnerGender.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
+                binding.spinnerGender.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs[Attributes.GENDER] ?: 0)
 
-                binding.spinnerFinishNumber.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.NUMBER] ?:0)
-                binding.spinnerFinishCase.setSelection(languages[idLang]!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.CASE] ?:0)
+                binding.spinnerFinishNumber.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.NUMBER] ?:0)
+                binding.spinnerFinishCase.setSelection(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs[Attributes.CASE] ?:0)
             }
             7->{}
             else->{}

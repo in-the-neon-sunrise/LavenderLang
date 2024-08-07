@@ -6,8 +6,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.frontend.languages
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +26,7 @@ import com.lavenderlang.backend.entity.language.GrammarEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.databinding.FragmentGrammarBinding
 import com.lavenderlang.backend.service.*
+import com.lavenderlang.frontend.MyApp
 
 class GrammarFragment : Fragment() {
     private lateinit var binding: FragmentGrammarBinding
@@ -84,13 +83,13 @@ class GrammarFragment : Fragment() {
     ): View {
         binding = FragmentGrammarBinding.inflate(inflater, container, false)
 
+
         //top navigation menu
         binding.buttonPrev.setOnClickListener {
             findNavController().popBackStack()
         }
         binding.buttonInf.setOnClickListener {
             val argsToSend = Bundle()
-            argsToSend.putInt("lang", idLang)
             argsToSend.putInt("block", 8)
             findNavController().navigate(
                 R.id.action_dictionaryFragment_to_instructionFragment,
@@ -103,95 +102,89 @@ class GrammarFragment : Fragment() {
         }
 
         binding.buttonLanguage.setOnClickListener {
-            val argsToSend = Bundle()
-            argsToSend.putInt("lang", idLang)
             findNavController().navigate(
-                R.id.action_grammarFragment_to_languageFragment,
-                argsToSend
+                R.id.action_grammarFragment_to_languageFragment
             )
         }
 
         binding.buttonTranslator.setOnClickListener {
-            val argsToSend = Bundle()
-            argsToSend.putInt("lang", idLang)
             findNavController().navigate(
-                R.id.action_grammarFragment_to_translatorFragment,
-                argsToSend
+                R.id.action_grammarFragment_to_translatorFragment
             )
         }
 
         binding.buttonSave.setOnClickListener {
             var name: String
             var rusId: Int
-            for ((i, el) in languages[idLang]!!.grammar.varsGender.values.withIndex()) {
+            for ((i, el) in MyApp.language!!.grammar.varsGender.values.withIndex()) {
                 name = genderNames[i]
                 rusId = genderRusIds[i]
                 grammarDao.updateOption(
-                    languages[idLang]!!.grammar, el.characteristicId,
+                    MyApp.language!!.grammar, el.characteristicId,
                     CharacteristicEntity(el.characteristicId, Attributes.GENDER, name, rusId)
                 )
             }
-            for ((i, el) in languages[idLang]!!.grammar.varsNumber.values.withIndex()) {
+            for ((i, el) in MyApp.language!!.grammar.varsNumber.values.withIndex()) {
                 name = numberNames[i]
                 rusId = numberRusIds[i]
                 grammarDao.updateOption(
-                    languages[idLang]!!.grammar, el.characteristicId,
+                    MyApp.language!!.grammar, el.characteristicId,
                     CharacteristicEntity(el.characteristicId, Attributes.NUMBER, name, rusId)
                 )
             }
-            for ((i, el) in languages[idLang]!!.grammar.varsCase.values.withIndex()) {
+            for ((i, el) in MyApp.language!!.grammar.varsCase.values.withIndex()) {
                 name = caseNames[i]
                 rusId = caseRusIds[i]
                 grammarDao.updateOption(
-                    languages[idLang]!!.grammar, el.characteristicId,
+                    MyApp.language!!.grammar, el.characteristicId,
                     CharacteristicEntity(el.characteristicId, Attributes.CASE, name, rusId)
                 )
             }
-            for ((i, el) in languages[idLang]!!.grammar.varsTime.values.withIndex()) {
+            for ((i, el) in MyApp.language!!.grammar.varsTime.values.withIndex()) {
                 name = timeNames[i]
                 rusId = timeRusIds[i]
                 grammarDao.updateOption(
-                    languages[idLang]!!.grammar, el.characteristicId,
+                    MyApp.language!!.grammar, el.characteristicId,
                     CharacteristicEntity(el.characteristicId, Attributes.TIME, name, rusId)
                 )
             }
-            for ((i, el) in languages[idLang]!!.grammar.varsPerson.values.withIndex()) {
+            for ((i, el) in MyApp.language!!.grammar.varsPerson.values.withIndex()) {
                 name = personNames[i]
                 rusId = personRusIds[i]
                 grammarDao.updateOption(
-                    languages[idLang]!!.grammar, el.characteristicId,
+                    MyApp.language!!.grammar, el.characteristicId,
                     CharacteristicEntity(el.characteristicId, Attributes.PERSON, name, rusId)
                 )
             }
-            for ((i, el) in languages[idLang]!!.grammar.varsMood.values.withIndex()) {
+            for ((i, el) in MyApp.language!!.grammar.varsMood.values.withIndex()) {
                 name = moodNames[i]
                 rusId = moodRusIds[i]
                 grammarDao.updateOption(
-                    languages[idLang]!!.grammar, el.characteristicId,
+                    MyApp.language!!.grammar, el.characteristicId,
                     CharacteristicEntity(el.characteristicId, Attributes.MOOD, name, rusId)
                 )
             }
-            for ((i, el) in languages[idLang]!!.grammar.varsType.values.withIndex()) {
+            for ((i, el) in MyApp.language!!.grammar.varsType.values.withIndex()) {
                 name = typeNames[i]
                 rusId = typeRusIds[i]
                 grammarDao.updateOption(
-                    languages[idLang]!!.grammar, el.characteristicId,
+                    MyApp.language!!.grammar, el.characteristicId,
                     CharacteristicEntity(el.characteristicId, Attributes.TYPE, name, rusId)
                 )
             }
-            for ((i, el) in languages[idLang]!!.grammar.varsVoice.values.withIndex()) {
+            for ((i, el) in MyApp.language!!.grammar.varsVoice.values.withIndex()) {
                 name = voiceNames[i]
                 rusId = voiceRusIds[i]
                 grammarDao.updateOption(
-                    languages[idLang]!!.grammar, el.characteristicId,
+                    MyApp.language!!.grammar, el.characteristicId,
                     CharacteristicEntity(el.characteristicId, Attributes.VOICE, name, rusId)
                 )
             }
-            for ((i, el) in languages[idLang]!!.grammar.varsDegreeOfComparison.values.withIndex()) {
+            for ((i, el) in MyApp.language!!.grammar.varsDegreeOfComparison.values.withIndex()) {
                 name = degreeOfComparisonNames[i]
                 rusId = degreeOfComparisonRusIds[i]
                 grammarDao.updateOption(
-                    languages[idLang]!!.grammar, el.characteristicId,
+                    MyApp.language!!.grammar, el.characteristicId,
                     CharacteristicEntity(
                         el.characteristicId,
                         Attributes.DEGREE_OF_COMPARISON,
@@ -210,7 +203,7 @@ class GrammarFragment : Fragment() {
 
             else -> {
                 idLang = lang
-                grammar = languages[idLang]!!.grammar
+                grammar = MyApp.language!!.grammar
 
                 gender = grammar.varsGender.values.toMutableList()
                 number = grammar.varsNumber.values.toMutableList()
@@ -224,69 +217,69 @@ class GrammarFragment : Fragment() {
             }
         }
         Log.d("GrammarFragment", "idLang = $idLang")
-        gender = languages[idLang]!!.grammar.varsGender.values.toMutableList()
-        number = languages[idLang]!!.grammar.varsNumber.values.toMutableList()
-        case = languages[idLang]!!.grammar.varsCase.values.toMutableList()
-        time = languages[idLang]!!.grammar.varsTime.values.toMutableList()
-        person = languages[idLang]!!.grammar.varsPerson.values.toMutableList()
-        mood = languages[idLang]!!.grammar.varsMood.values.toMutableList()
-        type = languages[idLang]!!.grammar.varsType.values.toMutableList()
-        voice = languages[idLang]!!.grammar.varsVoice.values.toMutableList()
+        gender = MyApp.language!!.grammar.varsGender.values.toMutableList()
+        number = MyApp.language!!.grammar.varsNumber.values.toMutableList()
+        case = MyApp.language!!.grammar.varsCase.values.toMutableList()
+        time = MyApp.language!!.grammar.varsTime.values.toMutableList()
+        person = MyApp.language!!.grammar.varsPerson.values.toMutableList()
+        mood = MyApp.language!!.grammar.varsMood.values.toMutableList()
+        type = MyApp.language!!.grammar.varsType.values.toMutableList()
+        voice = MyApp.language!!.grammar.varsVoice.values.toMutableList()
         degreeOfComparison =
-            languages[idLang]!!.grammar.varsDegreeOfComparison.values.toMutableList()
+            MyApp.language!!.grammar.varsDegreeOfComparison.values.toMutableList()
 
-        genderNames = languages[idLang]!!.grammar.varsGender.values.toMutableList().map { it.name }
+        genderNames = MyApp.language!!.grammar.varsGender.values.toMutableList().map { it.name }
             .toMutableList()
-        numberNames = languages[idLang]!!.grammar.varsNumber.values.toMutableList().map { it.name }
+        numberNames = MyApp.language!!.grammar.varsNumber.values.toMutableList().map { it.name }
             .toMutableList()
-        caseNames = languages[idLang]!!.grammar.varsCase.values.toMutableList().map { it.name }
+        caseNames = MyApp.language!!.grammar.varsCase.values.toMutableList().map { it.name }
             .toMutableList()
-        timeNames = languages[idLang]!!.grammar.varsTime.values.toMutableList().map { it.name }
+        timeNames = MyApp.language!!.grammar.varsTime.values.toMutableList().map { it.name }
             .toMutableList()
-        personNames = languages[idLang]!!.grammar.varsPerson.values.toMutableList().map { it.name }
+        personNames = MyApp.language!!.grammar.varsPerson.values.toMutableList().map { it.name }
             .toMutableList()
-        moodNames = languages[idLang]!!.grammar.varsMood.values.toMutableList().map { it.name }
+        moodNames = MyApp.language!!.grammar.varsMood.values.toMutableList().map { it.name }
             .toMutableList()
-        typeNames = languages[idLang]!!.grammar.varsType.values.toMutableList().map { it.name }
+        typeNames = MyApp.language!!.grammar.varsType.values.toMutableList().map { it.name }
             .toMutableList()
-        voiceNames = languages[idLang]!!.grammar.varsVoice.values.toMutableList().map { it.name }
+        voiceNames = MyApp.language!!.grammar.varsVoice.values.toMutableList().map { it.name }
             .toMutableList()
         degreeOfComparisonNames =
-            languages[idLang]!!.grammar.varsDegreeOfComparison.values.toMutableList()
+            MyApp.language!!.grammar.varsDegreeOfComparison.values.toMutableList()
                 .map { it.name }.toMutableList()
 
         genderRusIds =
-            languages[idLang]!!.grammar.varsGender.values.toMutableList().map { it.russianId }
+            MyApp.language!!.grammar.varsGender.values.toMutableList().map { it.russianId }
                 .toMutableList()
         numberRusIds =
-            languages[idLang]!!.grammar.varsNumber.values.toMutableList().map { it.russianId }
+            MyApp.language!!.grammar.varsNumber.values.toMutableList().map { it.russianId }
                 .toMutableList()
         caseRusIds =
-            languages[idLang]!!.grammar.varsCase.values.toMutableList().map { it.russianId }
+            MyApp.language!!.grammar.varsCase.values.toMutableList().map { it.russianId }
                 .toMutableList()
         timeRusIds =
-            languages[idLang]!!.grammar.varsTime.values.toMutableList().map { it.russianId }
+            MyApp.language!!.grammar.varsTime.values.toMutableList().map { it.russianId }
                 .toMutableList()
         personRusIds =
-            languages[idLang]!!.grammar.varsPerson.values.toMutableList().map { it.russianId }
+            MyApp.language!!.grammar.varsPerson.values.toMutableList().map { it.russianId }
                 .toMutableList()
         moodRusIds =
-            languages[idLang]!!.grammar.varsMood.values.toMutableList().map { it.russianId }
+            MyApp.language!!.grammar.varsMood.values.toMutableList().map { it.russianId }
                 .toMutableList()
         typeRusIds =
-            languages[idLang]!!.grammar.varsType.values.toMutableList().map { it.russianId }
+            MyApp.language!!.grammar.varsType.values.toMutableList().map { it.russianId }
                 .toMutableList()
         voiceRusIds =
-            languages[idLang]!!.grammar.varsVoice.values.toMutableList().map { it.russianId }
+            MyApp.language!!.grammar.varsVoice.values.toMutableList().map { it.russianId }
                 .toMutableList()
         degreeOfComparisonRusIds =
-            languages[idLang]!!.grammar.varsDegreeOfComparison.values.toMutableList()
+            MyApp.language!!.grammar.varsDegreeOfComparison.values.toMutableList()
                 .map { it.russianId }.toMutableList()
 
         //list of genders
         adapterGender = AttributeAdapter(
             requireContext(),
-            languages[idLang]!!.grammar.varsGender.values.toMutableList(),
+            MyApp.language!!.grammar.varsGender.values.toMutableList(),
             0
         )
         binding.listViewGender.adapter = adapterGender
@@ -294,10 +287,10 @@ class GrammarFragment : Fragment() {
 
         binding.buttonNewGender.setOnClickListener {
             val newGender = CharacteristicEntity(
-                languages[idLang]!!.grammar.nextIds[Attributes.GENDER] ?: 0,
+                MyApp.language!!.grammar.nextIds[Attributes.GENDER] ?: 0,
                 Attributes.GENDER
             )
-            grammarDao.addOption(languages[idLang]!!.grammar, newGender)
+            grammarDao.addOption(MyApp.language!!.grammar, newGender)
             genderNames.add("")
             genderRusIds.add(0)
             updateAdapter(0)
@@ -306,7 +299,7 @@ class GrammarFragment : Fragment() {
         //list of numbers
         adapterNumber = AttributeAdapter(
             requireContext(),
-            languages[idLang]!!.grammar.varsNumber.values.toMutableList(),
+            MyApp.language!!.grammar.varsNumber.values.toMutableList(),
             1
         )
         binding.listViewNumber.adapter = adapterNumber
@@ -314,10 +307,10 @@ class GrammarFragment : Fragment() {
 
         binding.buttonNewNumber.setOnClickListener {
             val newNumber = CharacteristicEntity(
-                languages[idLang]!!.grammar.nextIds[Attributes.NUMBER] ?: 0,
+                MyApp.language!!.grammar.nextIds[Attributes.NUMBER] ?: 0,
                 Attributes.NUMBER
             )
-            grammarDao.addOption(languages[idLang]!!.grammar, newNumber)
+            grammarDao.addOption(MyApp.language!!.grammar, newNumber)
             numberNames.add("")
             numberRusIds.add(0)
             updateAdapter(1)
@@ -325,16 +318,16 @@ class GrammarFragment : Fragment() {
 
         //list of cases
         adapterCase =
-            AttributeAdapter(requireContext(), languages[idLang]!!.grammar.varsCase.values.toMutableList(), 2)
+            AttributeAdapter(requireContext(), MyApp.language!!.grammar.varsCase.values.toMutableList(), 2)
         binding.listViewCase.adapter = adapterCase
         adapterCase.notifyDataSetChanged()
 
         binding.buttonNewCase.setOnClickListener {
             val newCase = CharacteristicEntity(
-                languages[idLang]!!.grammar.nextIds[Attributes.CASE] ?: 0,
+                MyApp.language!!.grammar.nextIds[Attributes.CASE] ?: 0,
                 Attributes.CASE
             )
-            grammarDao.addOption(languages[idLang]!!.grammar, newCase)
+            grammarDao.addOption(MyApp.language!!.grammar, newCase)
             caseNames.add("")
             caseRusIds.add(0)
             updateAdapter(2)
@@ -342,16 +335,16 @@ class GrammarFragment : Fragment() {
 
         //list of times
         adapterTime =
-            AttributeAdapter(requireContext(), languages[idLang]!!.grammar.varsTime.values.toMutableList(), 3)
+            AttributeAdapter(requireContext(), MyApp.language!!.grammar.varsTime.values.toMutableList(), 3)
         binding.listViewTime.adapter = adapterTime
         adapterTime.notifyDataSetChanged()
 
         binding.buttonNewTime.setOnClickListener {
             val newTime = CharacteristicEntity(
-                languages[idLang]!!.grammar.nextIds[Attributes.TIME] ?: 0,
+                MyApp.language!!.grammar.nextIds[Attributes.TIME] ?: 0,
                 Attributes.TIME
             )
-            grammarDao.addOption(languages[idLang]!!.grammar, newTime)
+            grammarDao.addOption(MyApp.language!!.grammar, newTime)
             timeNames.add("")
             timeRusIds.add(0)
             updateAdapter(3)
@@ -360,7 +353,7 @@ class GrammarFragment : Fragment() {
         //list of persons
         adapterPerson = AttributeAdapter(
             requireContext(),
-            languages[idLang]!!.grammar.varsPerson.values.toMutableList(),
+            MyApp.language!!.grammar.varsPerson.values.toMutableList(),
             4
         )
         binding.listViewPerson.adapter = adapterPerson
@@ -368,10 +361,10 @@ class GrammarFragment : Fragment() {
 
         binding.buttonNewPerson.setOnClickListener {
             val newPerson = CharacteristicEntity(
-                languages[idLang]!!.grammar.nextIds[Attributes.PERSON] ?: 0,
+                MyApp.language!!.grammar.nextIds[Attributes.PERSON] ?: 0,
                 Attributes.PERSON
             )
-            grammarDao.addOption(languages[idLang]!!.grammar, newPerson)
+            grammarDao.addOption(MyApp.language!!.grammar, newPerson)
             personNames.add("")
             personRusIds.add(0)
             updateAdapter(4)
@@ -379,16 +372,16 @@ class GrammarFragment : Fragment() {
 
         //list of moods
         adapterMood =
-            AttributeAdapter(requireContext(), languages[idLang]!!.grammar.varsMood.values.toMutableList(), 5)
+            AttributeAdapter(requireContext(), MyApp.language!!.grammar.varsMood.values.toMutableList(), 5)
         binding.listViewMood.adapter = adapterMood
         adapterMood.notifyDataSetChanged()
 
         binding.buttonNewMood.setOnClickListener {
             val newMood = CharacteristicEntity(
-                languages[idLang]!!.grammar.nextIds[Attributes.MOOD] ?: 0,
+                MyApp.language!!.grammar.nextIds[Attributes.MOOD] ?: 0,
                 Attributes.MOOD
             )
-            grammarDao.addOption(languages[idLang]!!.grammar, newMood)
+            grammarDao.addOption(MyApp.language!!.grammar, newMood)
             moodNames.add("")
             moodRusIds.add(0)
             updateAdapter(5)
@@ -396,16 +389,16 @@ class GrammarFragment : Fragment() {
 
         //list of types
         adapterType =
-            AttributeAdapter(requireContext(), languages[idLang]!!.grammar.varsType.values.toMutableList(), 6)
+            AttributeAdapter(requireContext(), MyApp.language!!.grammar.varsType.values.toMutableList(), 6)
         binding.listViewType.adapter = adapterType
         adapterType.notifyDataSetChanged()
 
         binding.buttonNewType.setOnClickListener {
             val newType = CharacteristicEntity(
-                languages[idLang]!!.grammar.nextIds[Attributes.TYPE] ?: 0,
+                MyApp.language!!.grammar.nextIds[Attributes.TYPE] ?: 0,
                 Attributes.TYPE
             )
-            grammarDao.addOption(languages[idLang]!!.grammar, newType)
+            grammarDao.addOption(MyApp.language!!.grammar, newType)
             typeNames.add("")
             typeRusIds.add(0)
             updateAdapter(6)
@@ -413,16 +406,16 @@ class GrammarFragment : Fragment() {
 
         //list of voices
         adapterVoice =
-            AttributeAdapter(requireContext(), languages[idLang]!!.grammar.varsVoice.values.toMutableList(), 7)
+            AttributeAdapter(requireContext(), MyApp.language!!.grammar.varsVoice.values.toMutableList(), 7)
         binding.listViewVoice.adapter = adapterVoice
         adapterVoice.notifyDataSetChanged()
 
         binding.buttonNewVoice.setOnClickListener {
             val newVoice = CharacteristicEntity(
-                languages[idLang]!!.grammar.nextIds[Attributes.VOICE] ?: 0,
+                MyApp.language!!.grammar.nextIds[Attributes.VOICE] ?: 0,
                 Attributes.VOICE
             )
-            grammarDao.addOption(languages[idLang]!!.grammar, newVoice)
+            grammarDao.addOption(MyApp.language!!.grammar, newVoice)
             voiceNames.add("")
             voiceRusIds.add(0)
             updateAdapter(7)
@@ -431,7 +424,7 @@ class GrammarFragment : Fragment() {
         //list of voices
         adapterDegreeOfComparison = AttributeAdapter(
             requireContext(),
-            languages[idLang]!!.grammar.varsDegreeOfComparison.values.toMutableList(),
+            MyApp.language!!.grammar.varsDegreeOfComparison.values.toMutableList(),
             8
         )
         binding.listViewDegreeOfComparison.adapter = adapterDegreeOfComparison
@@ -439,10 +432,10 @@ class GrammarFragment : Fragment() {
 
         binding.buttonNewDegreeOfComparison.setOnClickListener {
             val newDegreeOfComparison = CharacteristicEntity(
-                languages[idLang]!!.grammar.nextIds[Attributes.DEGREE_OF_COMPARISON] ?: 0,
+                MyApp.language!!.grammar.nextIds[Attributes.DEGREE_OF_COMPARISON] ?: 0,
                 Attributes.DEGREE_OF_COMPARISON
             )
-            grammarDao.addOption(languages[idLang]!!.grammar, newDegreeOfComparison)
+            grammarDao.addOption(MyApp.language!!.grammar, newDegreeOfComparison)
             degreeOfComparisonNames.add("")
             degreeOfComparisonRusIds.add(0)
             updateAdapter(8)
@@ -452,7 +445,6 @@ class GrammarFragment : Fragment() {
         //button new grammar rule listener
         binding.buttonNewGrammarRule.setOnClickListener {
             val argsToSend = Bundle()
-            argsToSend.putInt("lang", idLang)
             argsToSend.putInt("grammarRule", -1)
             findNavController().navigate(
                 R.id.action_grammarFragment_to_grammarRuleFragment,
@@ -462,7 +454,7 @@ class GrammarFragment : Fragment() {
 
         //list of rules
         val adapterGrammarRules: ArrayAdapter<GrammarRuleEntity> =
-            GrammarRuleAdapter(requireContext(), languages[idLang]!!.grammar.grammarRules.toMutableList())
+            GrammarRuleAdapter(requireContext(), MyApp.language!!.grammar.grammarRules.toMutableList())
         binding.listViewGrammarRules.adapter = adapterGrammarRules
         adapterGrammarRules.notifyDataSetChanged()
 
@@ -470,7 +462,6 @@ class GrammarFragment : Fragment() {
         binding.listViewGrammarRules.onItemClickListener =
             AdapterView.OnItemClickListener { parent, itemClicked, position, id ->
                 val argsToSend = Bundle()
-                argsToSend.putInt("lang", idLang)
                 argsToSend.putInt("grammarRule", position)
                 findNavController().navigate(
                     R.id.action_grammarFragment_to_grammarRuleFragment,
@@ -485,7 +476,7 @@ class GrammarFragment : Fragment() {
             0 -> {
                 adapterGender = AttributeAdapter(
                     requireContext(),
-                    languages[idLang]!!.grammar.varsGender.values.toMutableList(),
+                    MyApp.language!!.grammar.varsGender.values.toMutableList(),
                     0
                 )
                 binding.listViewGender.adapter = adapterGender
@@ -495,7 +486,7 @@ class GrammarFragment : Fragment() {
             1 -> {
                 adapterNumber = AttributeAdapter(
                     requireContext(),
-                    languages[idLang]!!.grammar.varsNumber.values.toMutableList(),
+                    MyApp.language!!.grammar.varsNumber.values.toMutableList(),
                     1
                 )
                 binding.listViewNumber.adapter = adapterNumber
@@ -505,7 +496,7 @@ class GrammarFragment : Fragment() {
             2 -> {
                 adapterCase = AttributeAdapter(
                     requireContext(),
-                    languages[idLang]!!.grammar.varsCase.values.toMutableList(),
+                    MyApp.language!!.grammar.varsCase.values.toMutableList(),
                     2
                 )
                 binding.listViewCase.adapter = adapterCase
@@ -515,7 +506,7 @@ class GrammarFragment : Fragment() {
             3 -> {
                 adapterTime = AttributeAdapter(
                     requireContext(),
-                    languages[idLang]!!.grammar.varsTime.values.toMutableList(),
+                    MyApp.language!!.grammar.varsTime.values.toMutableList(),
                     3
                 )
                 binding.listViewTime.adapter = adapterTime
@@ -525,7 +516,7 @@ class GrammarFragment : Fragment() {
             4 -> {
                 adapterPerson = AttributeAdapter(
                     requireContext(),
-                    languages[idLang]!!.grammar.varsPerson.values.toMutableList(),
+                    MyApp.language!!.grammar.varsPerson.values.toMutableList(),
                     4
                 )
                 binding.listViewPerson.adapter = adapterPerson
@@ -535,7 +526,7 @@ class GrammarFragment : Fragment() {
             5 -> {
                 adapterMood = AttributeAdapter(
                     requireContext(),
-                    languages[idLang]!!.grammar.varsMood.values.toMutableList(),
+                    MyApp.language!!.grammar.varsMood.values.toMutableList(),
                     5
                 )
                 binding.listViewMood.adapter = adapterMood
@@ -545,7 +536,7 @@ class GrammarFragment : Fragment() {
             6 -> {
                 adapterType = AttributeAdapter(
                     requireContext(),
-                    languages[idLang]!!.grammar.varsType.values.toMutableList(),
+                    MyApp.language!!.grammar.varsType.values.toMutableList(),
                     6
                 )
                 binding.listViewType.adapter = adapterType
@@ -555,7 +546,7 @@ class GrammarFragment : Fragment() {
             7 -> {
                 adapterVoice = AttributeAdapter(
                     requireContext(),
-                    languages[idLang]!!.grammar.varsVoice.values.toMutableList(),
+                    MyApp.language!!.grammar.varsVoice.values.toMutableList(),
                     7
                 )
                 binding.listViewVoice.adapter = adapterVoice
@@ -565,7 +556,7 @@ class GrammarFragment : Fragment() {
             else -> {
                 adapterDegreeOfComparison = AttributeAdapter(
                     requireContext(),
-                    languages[idLang]!!.grammar.varsDegreeOfComparison.values.toMutableList(),
+                    MyApp.language!!.grammar.varsDegreeOfComparison.values.toMutableList(),
                     8
                 )
                 binding.listViewDegreeOfComparison.adapter = adapterDegreeOfComparison
@@ -765,8 +756,8 @@ class AttributeAdapter(
             when (idAttribute) {
                 0 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarFragment.idLang]!!.grammar,
-                        languages[GrammarFragment.idLang]!!.grammar.varsGender.values.toMutableList()[positionAttribute]
+                        MyApp.language!!.grammar,
+                        MyApp.language!!.grammar.varsGender.values.toMutableList()[positionAttribute]
                     )
                     GrammarFragment.genderNames.removeAt(positionAttribute)
                     GrammarFragment.genderRusIds.removeAt(positionAttribute)
@@ -775,8 +766,8 @@ class AttributeAdapter(
 
                 1 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarFragment.idLang]!!.grammar,
-                        languages[GrammarFragment.idLang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute]
+                        MyApp.language!!.grammar,
+                        MyApp.language!!.grammar.varsNumber.values.toMutableList()[positionAttribute]
                     )
                     GrammarFragment.numberNames.removeAt(positionAttribute)
                     GrammarFragment.numberRusIds.removeAt(positionAttribute)
@@ -785,8 +776,8 @@ class AttributeAdapter(
 
                 2 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarFragment.idLang]!!.grammar,
-                        languages[GrammarFragment.idLang]!!.grammar.varsCase.values.toMutableList()[positionAttribute]
+                        MyApp.language!!.grammar,
+                        MyApp.language!!.grammar.varsCase.values.toMutableList()[positionAttribute]
                     )
                     GrammarFragment.caseNames.removeAt(positionAttribute)
                     GrammarFragment.caseRusIds.removeAt(positionAttribute)
@@ -795,8 +786,8 @@ class AttributeAdapter(
 
                 3 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarFragment.idLang]!!.grammar,
-                        languages[GrammarFragment.idLang]!!.grammar.varsTime.values.toMutableList()[positionAttribute]
+                        MyApp.language!!.grammar,
+                        MyApp.language!!.grammar.varsTime.values.toMutableList()[positionAttribute]
                     )
                     GrammarFragment.timeNames.removeAt(positionAttribute)
                     GrammarFragment.timeRusIds.removeAt(positionAttribute)
@@ -805,8 +796,8 @@ class AttributeAdapter(
 
                 4 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarFragment.idLang]!!.grammar,
-                        languages[GrammarFragment.idLang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute]
+                        MyApp.language!!.grammar,
+                        MyApp.language!!.grammar.varsPerson.values.toMutableList()[positionAttribute]
                     )
                     GrammarFragment.personNames.removeAt(positionAttribute)
                     GrammarFragment.personRusIds.removeAt(positionAttribute)
@@ -815,8 +806,8 @@ class AttributeAdapter(
 
                 5 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarFragment.idLang]!!.grammar,
-                        languages[GrammarFragment.idLang]!!.grammar.varsMood.values.toMutableList()[positionAttribute]
+                        MyApp.language!!.grammar,
+                        MyApp.language!!.grammar.varsMood.values.toMutableList()[positionAttribute]
                     )
                     GrammarFragment.moodNames.removeAt(positionAttribute)
                     GrammarFragment.moodRusIds.removeAt(positionAttribute)
@@ -825,8 +816,8 @@ class AttributeAdapter(
 
                 6 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarFragment.idLang]!!.grammar,
-                        languages[GrammarFragment.idLang]!!.grammar.varsType.values.toMutableList()[positionAttribute]
+                        MyApp.language!!.grammar,
+                        MyApp.language!!.grammar.varsType.values.toMutableList()[positionAttribute]
                     )
                     GrammarFragment.typeNames.removeAt(positionAttribute)
                     GrammarFragment.typeRusIds.removeAt(positionAttribute)
@@ -835,8 +826,8 @@ class AttributeAdapter(
 
                 7 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarFragment.idLang]!!.grammar,
-                        languages[GrammarFragment.idLang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute]
+                        MyApp.language!!.grammar,
+                        MyApp.language!!.grammar.varsVoice.values.toMutableList()[positionAttribute]
                     )
                     GrammarFragment.voiceNames.removeAt(positionAttribute)
                     GrammarFragment.voiceRusIds.removeAt(positionAttribute)
@@ -845,8 +836,8 @@ class AttributeAdapter(
 
                 else -> {
                     grammarDao.deleteOption(
-                        languages[GrammarFragment.idLang]!!.grammar,
-                        languages[GrammarFragment.idLang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute]
+                        MyApp.language!!.grammar,
+                        MyApp.language!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute]
                     )
                     GrammarFragment.degreeOfComparisonNames.removeAt(positionAttribute)
                     GrammarFragment.degreeOfComparisonRusIds.removeAt(positionAttribute)

@@ -3,6 +3,7 @@ package com.lavenderlang.frontend
 import android.app.Application
 import android.util.Log
 import com.anggrayudi.storage.SimpleStorageHelper
+import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.LanguageEntity
 
 var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
@@ -12,6 +13,7 @@ class MyApp : Application() {
         private var instance : MyApp? = null
         var storageHelper : SimpleStorageHelper? = null
         var nextLanguageId : Int = -1
+        var language : LanguageEntity? = null
         fun getInstance() : MyApp {
             if (instance == null) throw Exception("MyApp is not created")
             return instance!!

@@ -35,7 +35,7 @@ class InstructionFragment : Fragment() {
         idLang = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("lang", -1)
         requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("block", 0)
 
-        var heads = mutableListOf<TextView>()
+        val heads = mutableListOf<TextView>()
         heads.add(binding.textViewHead1)
         heads.add(binding.textViewHead2)
         heads.add(binding.textViewHead3)

@@ -22,6 +22,7 @@ import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDao
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
+import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.CharacteristicEntity
 import com.lavenderlang.backend.entity.language.GrammarEntity
@@ -86,6 +87,7 @@ class GrammarActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
+
         //top navigation menu
         val buttonPrev: Button = findViewById(R.id.buttonPrev)
         buttonPrev.setOnClickListener {
@@ -119,88 +121,6 @@ class GrammarActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val buttonSave: Button = findViewById(R.id.buttonSave)
-        buttonSave.setOnClickListener {
-            var name: String
-            var rusId: Int
-            for ((i, el) in languages[id_lang]!!.grammar.varsGender.values.withIndex()) {
-                name = genderNames[i]
-                rusId = genderRusIds[i]
-                grammarDao.updateOption(
-                    languages[id_lang]!!.grammar, el.characteristicId,
-                    CharacteristicEntity(el.characteristicId, Attributes.GENDER, name, rusId)
-                )
-            }
-            for ((i, el) in languages[id_lang]!!.grammar.varsNumber.values.withIndex()) {
-                name = numberNames[i]
-                rusId = numberRusIds[i]
-                grammarDao.updateOption(
-                    languages[id_lang]!!.grammar, el.characteristicId,
-                    CharacteristicEntity(el.characteristicId, Attributes.NUMBER, name, rusId)
-                )
-            }
-            for ((i, el) in languages[id_lang]!!.grammar.varsCase.values.withIndex()) {
-                name = caseNames[i]
-                rusId = caseRusIds[i]
-                grammarDao.updateOption(
-                    languages[id_lang]!!.grammar, el.characteristicId,
-                    CharacteristicEntity(el.characteristicId, Attributes.CASE, name, rusId)
-                )
-            }
-            for ((i, el) in languages[id_lang]!!.grammar.varsTime.values.withIndex()) {
-                name = timeNames[i]
-                rusId = timeRusIds[i]
-                grammarDao.updateOption(
-                    languages[id_lang]!!.grammar, el.characteristicId,
-                    CharacteristicEntity(el.characteristicId, Attributes.TIME, name, rusId)
-                )
-            }
-            for ((i, el) in languages[id_lang]!!.grammar.varsPerson.values.withIndex()) {
-                name = personNames[i]
-                rusId = personRusIds[i]
-                grammarDao.updateOption(
-                    languages[id_lang]!!.grammar, el.characteristicId,
-                    CharacteristicEntity(el.characteristicId, Attributes.PERSON, name, rusId)
-                )
-            }
-            for ((i, el) in languages[id_lang]!!.grammar.varsMood.values.withIndex()) {
-                name = moodNames[i]
-                rusId = moodRusIds[i]
-                grammarDao.updateOption(
-                    languages[id_lang]!!.grammar, el.characteristicId,
-                    CharacteristicEntity(el.characteristicId, Attributes.MOOD, name, rusId)
-                )
-            }
-            for ((i, el) in languages[id_lang]!!.grammar.varsType.values.withIndex()) {
-                name = typeNames[i]
-                rusId = typeRusIds[i]
-                grammarDao.updateOption(
-                    languages[id_lang]!!.grammar, el.characteristicId,
-                    CharacteristicEntity(el.characteristicId, Attributes.TYPE, name, rusId)
-                )
-            }
-            for ((i, el) in languages[id_lang]!!.grammar.varsVoice.values.withIndex()) {
-                name = voiceNames[i]
-                rusId = voiceRusIds[i]
-                grammarDao.updateOption(
-                    languages[id_lang]!!.grammar, el.characteristicId,
-                    CharacteristicEntity(el.characteristicId, Attributes.VOICE, name, rusId)
-                )
-            }
-            for ((i, el) in languages[id_lang]!!.grammar.varsDegreeOfComparison.values.withIndex()) {
-                name = degreeOfComparisonNames[i]
-                rusId = degreeOfComparisonRusIds[i]
-                grammarDao.updateOption(
-                    languages[id_lang]!!.grammar, el.characteristicId,
-                    CharacteristicEntity(
-                        el.characteristicId,
-                        Attributes.DEGREE_OF_COMPARISON,
-                        name,
-                        rusId
-                    )
-                )
-            }
-        }
         //how it was started?
         when (val lang = intent.getIntExtra("lang", id_lang)) {
             -1 -> {
@@ -210,7 +130,8 @@ class GrammarActivity : AppCompatActivity() {
 
             else -> {
                 id_lang = lang
-                grammar = languages[id_lang]!!.grammar
+                grammar = Serializer.getInstance().deserializeGrammar(
+                    LanguageRepository().getLanguage(this, id_lang).grammar)
 
                 gender = grammar.varsGender.values.toMutableList()
                 number = grammar.varsNumber.values.toMutableList()
@@ -223,79 +144,147 @@ class GrammarActivity : AppCompatActivity() {
                 degreeOfComparison = grammar.varsDegreeOfComparison.values.toMutableList()
             }
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
+        val buttonSave: Button = findViewById(R.id.buttonSave)
+        buttonSave.setOnClickListener {
+            var name: String
+            var rusId: Int
+            for ((i, el) in grammar.varsGender.values.withIndex()) {
+                name = genderNames[i]
+                rusId = genderRusIds[i]
+                grammarDao.updateOption(
+                    grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.GENDER, name, rusId)
+                )
+            }
+            for ((i, el) in grammar.varsNumber.values.withIndex()) {
+                name = numberNames[i]
+                rusId = numberRusIds[i]
+                grammarDao.updateOption(
+                    grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.NUMBER, name, rusId)
+                )
+            }
+            for ((i, el) in grammar.varsCase.values.withIndex()) {
+                name = caseNames[i]
+                rusId = caseRusIds[i]
+                grammarDao.updateOption(
+                    grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.CASE, name, rusId)
+                )
+            }
+            for ((i, el) in grammar.varsTime.values.withIndex()) {
+                name = timeNames[i]
+                rusId = timeRusIds[i]
+                grammarDao.updateOption(
+                    grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.TIME, name, rusId)
+                )
+            }
+            for ((i, el) in grammar.varsPerson.values.withIndex()) {
+                name = personNames[i]
+                rusId = personRusIds[i]
+                grammarDao.updateOption(
+                    grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.PERSON, name, rusId)
+                )
+            }
+            for ((i, el) in grammar.varsMood.values.withIndex()) {
+                name = moodNames[i]
+                rusId = moodRusIds[i]
+                grammarDao.updateOption(
+                    grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.MOOD, name, rusId)
+                )
+            }
+            for ((i, el) in grammar.varsType.values.withIndex()) {
+                name = typeNames[i]
+                rusId = typeRusIds[i]
+                grammarDao.updateOption(
+                    grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.TYPE, name, rusId)
+                )
+            }
+            for ((i, el) in grammar.varsVoice.values.withIndex()) {
+                name = voiceNames[i]
+                rusId = voiceRusIds[i]
+                grammarDao.updateOption(
+                    grammar, el.characteristicId,
+                    CharacteristicEntity(el.characteristicId, Attributes.VOICE, name, rusId)
+                )
+            }
+            for ((i, el) in grammar.varsDegreeOfComparison.values.withIndex()) {
+                name = degreeOfComparisonNames[i]
+                rusId = degreeOfComparisonRusIds[i]
+                grammarDao.updateOption(
+                    grammar, el.characteristicId,
+                    CharacteristicEntity(
+                        el.characteristicId,
+                        Attributes.DEGREE_OF_COMPARISON,
+                        name,
+                        rusId
+                    )
+                )
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        gender = languages[id_lang]!!.grammar.varsGender.values.toMutableList()
-        number = languages[id_lang]!!.grammar.varsNumber.values.toMutableList()
-        case = languages[id_lang]!!.grammar.varsCase.values.toMutableList()
-        time = languages[id_lang]!!.grammar.varsTime.values.toMutableList()
-        person = languages[id_lang]!!.grammar.varsPerson.values.toMutableList()
-        mood = languages[id_lang]!!.grammar.varsMood.values.toMutableList()
-        type = languages[id_lang]!!.grammar.varsType.values.toMutableList()
-        voice = languages[id_lang]!!.grammar.varsVoice.values.toMutableList()
-        degreeOfComparison =
-            languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()
+        gender = grammar.varsGender.values.toMutableList()
+        number = grammar.varsNumber.values.toMutableList()
+        case = grammar.varsCase.values.toMutableList()
+        time = grammar.varsTime.values.toMutableList()
+        person = grammar.varsPerson.values.toMutableList()
+        mood = grammar.varsMood.values.toMutableList()
+        type = grammar.varsType.values.toMutableList()
+        voice = grammar.varsVoice.values.toMutableList()
+        degreeOfComparison = grammar.varsDegreeOfComparison.values.toMutableList()
 
-        genderNames = languages[id_lang]!!.grammar.varsGender.values.toMutableList().map { it.name }
+        genderNames = grammar.varsGender.values.toMutableList().map { it.name }
             .toMutableList()
-        numberNames = languages[id_lang]!!.grammar.varsNumber.values.toMutableList().map { it.name }
+        numberNames = grammar.varsNumber.values.toMutableList().map { it.name }
             .toMutableList()
-        caseNames = languages[id_lang]!!.grammar.varsCase.values.toMutableList().map { it.name }
+        caseNames = grammar.varsCase.values.toMutableList().map { it.name }
             .toMutableList()
-        timeNames = languages[id_lang]!!.grammar.varsTime.values.toMutableList().map { it.name }
+        timeNames = grammar.varsTime.values.toMutableList().map { it.name }
             .toMutableList()
-        personNames = languages[id_lang]!!.grammar.varsPerson.values.toMutableList().map { it.name }
+        personNames = grammar.varsPerson.values.toMutableList().map { it.name }
             .toMutableList()
-        moodNames = languages[id_lang]!!.grammar.varsMood.values.toMutableList().map { it.name }
+        moodNames = grammar.varsMood.values.toMutableList().map { it.name }
             .toMutableList()
-        typeNames = languages[id_lang]!!.grammar.varsType.values.toMutableList().map { it.name }
+        typeNames = grammar.varsType.values.toMutableList().map { it.name }
             .toMutableList()
-        voiceNames = languages[id_lang]!!.grammar.varsVoice.values.toMutableList().map { it.name }
+        voiceNames = grammar.varsVoice.values.toMutableList().map { it.name }
             .toMutableList()
-        degreeOfComparisonNames =
-            languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()
+        degreeOfComparisonNames = grammar.varsDegreeOfComparison.values.toMutableList()
                 .map { it.name }.toMutableList()
 
-        genderRusIds =
-            languages[id_lang]!!.grammar.varsGender.values.toMutableList().map { it.russianId }
+        genderRusIds = grammar.varsGender.values.toMutableList().map { it.russianId }
                 .toMutableList()
-        numberRusIds =
-            languages[id_lang]!!.grammar.varsNumber.values.toMutableList().map { it.russianId }
+        numberRusIds = grammar.varsNumber.values.toMutableList().map { it.russianId }
                 .toMutableList()
-        caseRusIds =
-            languages[id_lang]!!.grammar.varsCase.values.toMutableList().map { it.russianId }
+        caseRusIds = grammar.varsCase.values.toMutableList().map { it.russianId }
                 .toMutableList()
-        timeRusIds =
-            languages[id_lang]!!.grammar.varsTime.values.toMutableList().map { it.russianId }
+        timeRusIds = grammar.varsTime.values.toMutableList().map { it.russianId }
                 .toMutableList()
-        personRusIds =
-            languages[id_lang]!!.grammar.varsPerson.values.toMutableList().map { it.russianId }
+        personRusIds = grammar.varsPerson.values.toMutableList().map { it.russianId }
                 .toMutableList()
-        moodRusIds =
-            languages[id_lang]!!.grammar.varsMood.values.toMutableList().map { it.russianId }
+        moodRusIds = grammar.varsMood.values.toMutableList().map { it.russianId }
                 .toMutableList()
-        typeRusIds =
-            languages[id_lang]!!.grammar.varsType.values.toMutableList().map { it.russianId }
+        typeRusIds = grammar.varsType.values.toMutableList().map { it.russianId }
                 .toMutableList()
-        voiceRusIds =
-            languages[id_lang]!!.grammar.varsVoice.values.toMutableList().map { it.russianId }
+        voiceRusIds = grammar.varsVoice.values.toMutableList().map { it.russianId }
                 .toMutableList()
-        degreeOfComparisonRusIds =
-            languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()
+        degreeOfComparisonRusIds = grammar.varsDegreeOfComparison.values.toMutableList()
                 .map { it.russianId }.toMutableList()
 
         //list of genders
         val listGender: ListView = findViewById(R.id.listViewGender)
         adapterGender = AttributeAdapter(
             this,
-            languages[id_lang]!!.grammar.varsGender.values.toMutableList(),
+            grammar.varsGender.values.toMutableList(),
             0
         )
         listGender.adapter = adapterGender
@@ -304,10 +293,10 @@ class GrammarActivity : AppCompatActivity() {
         val buttonNewGender: Button = findViewById(R.id.buttonNewGender)
         buttonNewGender.setOnClickListener {
             val newGender = CharacteristicEntity(
-                languages[id_lang]!!.grammar.nextIds[Attributes.GENDER] ?: 0,
+                grammar.nextIds[Attributes.GENDER] ?: 0,
                 Attributes.GENDER
             )
-            grammarDao.addOption(languages[id_lang]!!.grammar, newGender)
+            grammarDao.addOption(grammar, newGender)
             genderNames.add("")
             genderRusIds.add(0)
             updateAdapter(0)
@@ -317,7 +306,7 @@ class GrammarActivity : AppCompatActivity() {
         val listNumber: ListView = findViewById(R.id.listViewNumber)
         adapterNumber = AttributeAdapter(
             this,
-            languages[id_lang]!!.grammar.varsNumber.values.toMutableList(),
+            grammar.varsNumber.values.toMutableList(),
             1
         )
         listNumber.adapter = adapterNumber
@@ -326,10 +315,10 @@ class GrammarActivity : AppCompatActivity() {
         val buttonNewNumber: Button = findViewById(R.id.buttonNewNumber)
         buttonNewNumber.setOnClickListener {
             val newNumber = CharacteristicEntity(
-                languages[id_lang]!!.grammar.nextIds[Attributes.NUMBER] ?: 0,
+                grammar.nextIds[Attributes.NUMBER] ?: 0,
                 Attributes.NUMBER
             )
-            grammarDao.addOption(languages[id_lang]!!.grammar, newNumber)
+            grammarDao.addOption(grammar, newNumber)
             numberNames.add("")
             numberRusIds.add(0)
             updateAdapter(1)
@@ -338,17 +327,17 @@ class GrammarActivity : AppCompatActivity() {
         //list of cases
         val listCase: ListView = findViewById(R.id.listViewCase)
         adapterCase =
-            AttributeAdapter(this, languages[id_lang]!!.grammar.varsCase.values.toMutableList(), 2)
+            AttributeAdapter(this, grammar.varsCase.values.toMutableList(), 2)
         listCase.adapter = adapterCase
         adapterCase.notifyDataSetChanged()
 
         val buttonNewCase: Button = findViewById(R.id.buttonNewCase)
         buttonNewCase.setOnClickListener {
             val newCase = CharacteristicEntity(
-                languages[id_lang]!!.grammar.nextIds[Attributes.CASE] ?: 0,
+                grammar.nextIds[Attributes.CASE] ?: 0,
                 Attributes.CASE
             )
-            grammarDao.addOption(languages[id_lang]!!.grammar, newCase)
+            grammarDao.addOption(grammar, newCase)
             caseNames.add("")
             caseRusIds.add(0)
             updateAdapter(2)
@@ -357,17 +346,17 @@ class GrammarActivity : AppCompatActivity() {
         //list of times
         val listTime: ListView = findViewById(R.id.listViewTime)
         adapterTime =
-            AttributeAdapter(this, languages[id_lang]!!.grammar.varsTime.values.toMutableList(), 3)
+            AttributeAdapter(this, grammar.varsTime.values.toMutableList(), 3)
         listTime.adapter = adapterTime
         adapterTime.notifyDataSetChanged()
 
         val buttonNewTime: Button = findViewById(R.id.buttonNewTime)
         buttonNewTime.setOnClickListener {
             val newTime = CharacteristicEntity(
-                languages[id_lang]!!.grammar.nextIds[Attributes.TIME] ?: 0,
+                grammar.nextIds[Attributes.TIME] ?: 0,
                 Attributes.TIME
             )
-            grammarDao.addOption(languages[id_lang]!!.grammar, newTime)
+            grammarDao.addOption(grammar, newTime)
             timeNames.add("")
             timeRusIds.add(0)
             updateAdapter(3)
@@ -377,7 +366,7 @@ class GrammarActivity : AppCompatActivity() {
         val listPerson: ListView = findViewById(R.id.listViewPerson)
         adapterPerson = AttributeAdapter(
             this,
-            languages[id_lang]!!.grammar.varsPerson.values.toMutableList(),
+            grammar.varsPerson.values.toMutableList(),
             4
         )
         listPerson.adapter = adapterPerson
@@ -386,10 +375,10 @@ class GrammarActivity : AppCompatActivity() {
         val buttonNewPerson: Button = findViewById(R.id.buttonNewPerson)
         buttonNewPerson.setOnClickListener {
             val newPerson = CharacteristicEntity(
-                languages[id_lang]!!.grammar.nextIds[Attributes.PERSON] ?: 0,
+                grammar.nextIds[Attributes.PERSON] ?: 0,
                 Attributes.PERSON
             )
-            grammarDao.addOption(languages[id_lang]!!.grammar, newPerson)
+            grammarDao.addOption(grammar, newPerson)
             personNames.add("")
             personRusIds.add(0)
             updateAdapter(4)
@@ -398,17 +387,17 @@ class GrammarActivity : AppCompatActivity() {
         //list of moods
         val listMood: ListView = findViewById(R.id.listViewMood)
         adapterMood =
-            AttributeAdapter(this, languages[id_lang]!!.grammar.varsMood.values.toMutableList(), 5)
+            AttributeAdapter(this, grammar.varsMood.values.toMutableList(), 5)
         listMood.adapter = adapterMood
         adapterMood.notifyDataSetChanged()
 
         val buttonNewMood: Button = findViewById(R.id.buttonNewMood)
         buttonNewMood.setOnClickListener {
             val newMood = CharacteristicEntity(
-                languages[id_lang]!!.grammar.nextIds[Attributes.MOOD] ?: 0,
+                grammar.nextIds[Attributes.MOOD] ?: 0,
                 Attributes.MOOD
             )
-            grammarDao.addOption(languages[id_lang]!!.grammar, newMood)
+            grammarDao.addOption(grammar, newMood)
             moodNames.add("")
             moodRusIds.add(0)
             updateAdapter(5)
@@ -417,17 +406,17 @@ class GrammarActivity : AppCompatActivity() {
         //list of types
         val listType: ListView = findViewById(R.id.listViewType)
         adapterType =
-            AttributeAdapter(this, languages[id_lang]!!.grammar.varsType.values.toMutableList(), 6)
+            AttributeAdapter(this, grammar.varsType.values.toMutableList(), 6)
         listType.adapter = adapterType
         adapterType.notifyDataSetChanged()
 
         val buttonNewType: Button = findViewById(R.id.buttonNewType)
         buttonNewType.setOnClickListener {
             val newType = CharacteristicEntity(
-                languages[id_lang]!!.grammar.nextIds[Attributes.TYPE] ?: 0,
+                grammar.nextIds[Attributes.TYPE] ?: 0,
                 Attributes.TYPE
             )
-            grammarDao.addOption(languages[id_lang]!!.grammar, newType)
+            grammarDao.addOption(grammar, newType)
             typeNames.add("")
             typeRusIds.add(0)
             updateAdapter(6)
@@ -436,17 +425,17 @@ class GrammarActivity : AppCompatActivity() {
         //list of voices
         val listVoice: ListView = findViewById(R.id.listViewVoice)
         adapterVoice =
-            AttributeAdapter(this, languages[id_lang]!!.grammar.varsVoice.values.toMutableList(), 7)
+            AttributeAdapter(this, grammar.varsVoice.values.toMutableList(), 7)
         listVoice.adapter = adapterVoice
         adapterVoice.notifyDataSetChanged()
 
         val buttonNewVoice: Button = findViewById(R.id.buttonNewVoice)
         buttonNewVoice.setOnClickListener {
             val newVoice = CharacteristicEntity(
-                languages[id_lang]!!.grammar.nextIds[Attributes.VOICE] ?: 0,
+                grammar.nextIds[Attributes.VOICE] ?: 0,
                 Attributes.VOICE
             )
-            grammarDao.addOption(languages[id_lang]!!.grammar, newVoice)
+            grammarDao.addOption(grammar, newVoice)
             voiceNames.add("")
             voiceRusIds.add(0)
             updateAdapter(7)
@@ -456,7 +445,7 @@ class GrammarActivity : AppCompatActivity() {
         val listDegreeOfComparison: ListView = findViewById(R.id.listViewDegreeOfComparison)
         adapterDegreeOfComparison = AttributeAdapter(
             this,
-            languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList(),
+            grammar.varsDegreeOfComparison.values.toMutableList(),
             8
         )
         listDegreeOfComparison.adapter = adapterDegreeOfComparison
@@ -465,10 +454,10 @@ class GrammarActivity : AppCompatActivity() {
         val buttonNewDegreeOfComparison: Button = findViewById(R.id.buttonNewDegreeOfComparison)
         buttonNewDegreeOfComparison.setOnClickListener {
             val newDegreeOfComparison = CharacteristicEntity(
-                languages[id_lang]!!.grammar.nextIds[Attributes.DEGREE_OF_COMPARISON] ?: 0,
+                grammar.nextIds[Attributes.DEGREE_OF_COMPARISON] ?: 0,
                 Attributes.DEGREE_OF_COMPARISON
             )
-            grammarDao.addOption(languages[id_lang]!!.grammar, newDegreeOfComparison)
+            grammarDao.addOption(grammar, newDegreeOfComparison)
             degreeOfComparisonNames.add("")
             degreeOfComparisonRusIds.add(0)
             updateAdapter(8)
@@ -487,7 +476,7 @@ class GrammarActivity : AppCompatActivity() {
         //list of rules
         val listGrammarRules: ListView = findViewById(R.id.listViewGrammarRules)
         val adapterGrammarRules: ArrayAdapter<GrammarRuleEntity> =
-            GrammarRuleAdapter(this, languages[id_lang]!!.grammar.grammarRules.toMutableList())
+            GrammarRuleAdapter(this, grammar.grammarRules.toMutableList())
         listGrammarRules.adapter = adapterGrammarRules
         adapterGrammarRules.notifyDataSetChanged()
 
@@ -508,7 +497,7 @@ class GrammarActivity : AppCompatActivity() {
                 val listCharacteristic: ListView = findViewById(R.id.listViewGender)
                 adapterGender = AttributeAdapter(
                     this,
-                    languages[id_lang]!!.grammar.varsGender.values.toMutableList(),
+                    grammar.varsGender.values.toMutableList(),
                     0
                 )
                 listCharacteristic.adapter = adapterGender
@@ -519,7 +508,7 @@ class GrammarActivity : AppCompatActivity() {
                 val listCharacteristic: ListView = findViewById(R.id.listViewNumber)
                 adapterNumber = AttributeAdapter(
                     this,
-                    languages[id_lang]!!.grammar.varsNumber.values.toMutableList(),
+                    grammar.varsNumber.values.toMutableList(),
                     1
                 )
                 listCharacteristic.adapter = adapterNumber
@@ -530,7 +519,7 @@ class GrammarActivity : AppCompatActivity() {
                 val listCharacteristic: ListView = findViewById(R.id.listViewCase)
                 adapterCase = AttributeAdapter(
                     this,
-                    languages[id_lang]!!.grammar.varsCase.values.toMutableList(),
+                    grammar.varsCase.values.toMutableList(),
                     2
                 )
                 listCharacteristic.adapter = adapterCase
@@ -541,7 +530,7 @@ class GrammarActivity : AppCompatActivity() {
                 val listCharacteristic: ListView = findViewById(R.id.listViewTime)
                 adapterTime = AttributeAdapter(
                     this,
-                    languages[id_lang]!!.grammar.varsTime.values.toMutableList(),
+                    grammar.varsTime.values.toMutableList(),
                     3
                 )
                 listCharacteristic.adapter = adapterTime
@@ -552,7 +541,7 @@ class GrammarActivity : AppCompatActivity() {
                 val listCharacteristic: ListView = findViewById(R.id.listViewPerson)
                 adapterPerson = AttributeAdapter(
                     this,
-                    languages[id_lang]!!.grammar.varsPerson.values.toMutableList(),
+                    grammar.varsPerson.values.toMutableList(),
                     4
                 )
                 listCharacteristic.adapter = adapterPerson
@@ -563,7 +552,7 @@ class GrammarActivity : AppCompatActivity() {
                 val listCharacteristic: ListView = findViewById(R.id.listViewMood)
                 adapterMood = AttributeAdapter(
                     this,
-                    languages[id_lang]!!.grammar.varsMood.values.toMutableList(),
+                    grammar.varsMood.values.toMutableList(),
                     5
                 )
                 listCharacteristic.adapter = adapterMood
@@ -574,7 +563,7 @@ class GrammarActivity : AppCompatActivity() {
                 val listCharacteristic: ListView = findViewById(R.id.listViewType)
                 adapterType = AttributeAdapter(
                     this,
-                    languages[id_lang]!!.grammar.varsType.values.toMutableList(),
+                    grammar.varsType.values.toMutableList(),
                     6
                 )
                 listCharacteristic.adapter = adapterType
@@ -585,7 +574,7 @@ class GrammarActivity : AppCompatActivity() {
                 val listCharacteristic: ListView = findViewById(R.id.listViewVoice)
                 adapterVoice = AttributeAdapter(
                     this,
-                    languages[id_lang]!!.grammar.varsVoice.values.toMutableList(),
+                    grammar.varsVoice.values.toMutableList(),
                     7
                 )
                 listCharacteristic.adapter = adapterVoice
@@ -596,7 +585,7 @@ class GrammarActivity : AppCompatActivity() {
                 val listCharacteristic: ListView = findViewById(R.id.listViewDegreeOfComparison)
                 adapterDegreeOfComparison = AttributeAdapter(
                     this,
-                    languages[id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList(),
+                    grammar.varsDegreeOfComparison.values.toMutableList(),
                     8
                 )
                 listCharacteristic.adapter = adapterDegreeOfComparison
@@ -803,8 +792,8 @@ private class AttributeAdapter(
             when (idAttribute) {
                 0 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarActivity.id_lang]!!.grammar,
-                        languages[GrammarActivity.id_lang]!!.grammar.varsGender.values.toMutableList()[positionAttribute]
+                        GrammarActivity.grammar,
+                        GrammarActivity.grammar.varsGender.values.toMutableList()[positionAttribute]
                     )
                     GrammarActivity.genderNames.removeAt(positionAttribute)
                     GrammarActivity.genderRusIds.removeAt(positionAttribute)
@@ -813,8 +802,8 @@ private class AttributeAdapter(
 
                 1 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarActivity.id_lang]!!.grammar,
-                        languages[GrammarActivity.id_lang]!!.grammar.varsNumber.values.toMutableList()[positionAttribute]
+                        GrammarActivity.grammar,
+                        GrammarActivity.grammar.varsNumber.values.toMutableList()[positionAttribute]
                     )
                     GrammarActivity.numberNames.removeAt(positionAttribute)
                     GrammarActivity.numberRusIds.removeAt(positionAttribute)
@@ -823,8 +812,8 @@ private class AttributeAdapter(
 
                 2 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarActivity.id_lang]!!.grammar,
-                        languages[GrammarActivity.id_lang]!!.grammar.varsCase.values.toMutableList()[positionAttribute]
+                        GrammarActivity.grammar,
+                        GrammarActivity.grammar.varsCase.values.toMutableList()[positionAttribute]
                     )
                     GrammarActivity.caseNames.removeAt(positionAttribute)
                     GrammarActivity.caseRusIds.removeAt(positionAttribute)
@@ -833,8 +822,8 @@ private class AttributeAdapter(
 
                 3 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarActivity.id_lang]!!.grammar,
-                        languages[GrammarActivity.id_lang]!!.grammar.varsTime.values.toMutableList()[positionAttribute]
+                        GrammarActivity.grammar,
+                        GrammarActivity.grammar.varsTime.values.toMutableList()[positionAttribute]
                     )
                     GrammarActivity.timeNames.removeAt(positionAttribute)
                     GrammarActivity.timeRusIds.removeAt(positionAttribute)
@@ -843,8 +832,8 @@ private class AttributeAdapter(
 
                 4 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarActivity.id_lang]!!.grammar,
-                        languages[GrammarActivity.id_lang]!!.grammar.varsPerson.values.toMutableList()[positionAttribute]
+                        GrammarActivity.grammar,
+                        GrammarActivity.grammar.varsPerson.values.toMutableList()[positionAttribute]
                     )
                     GrammarActivity.personNames.removeAt(positionAttribute)
                     GrammarActivity.personRusIds.removeAt(positionAttribute)
@@ -853,8 +842,8 @@ private class AttributeAdapter(
 
                 5 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarActivity.id_lang]!!.grammar,
-                        languages[GrammarActivity.id_lang]!!.grammar.varsMood.values.toMutableList()[positionAttribute]
+                        GrammarActivity.grammar,
+                        GrammarActivity.grammar.varsMood.values.toMutableList()[positionAttribute]
                     )
                     GrammarActivity.moodNames.removeAt(positionAttribute)
                     GrammarActivity.moodRusIds.removeAt(positionAttribute)
@@ -863,8 +852,8 @@ private class AttributeAdapter(
 
                 6 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarActivity.id_lang]!!.grammar,
-                        languages[GrammarActivity.id_lang]!!.grammar.varsType.values.toMutableList()[positionAttribute]
+                        GrammarActivity.grammar,
+                        GrammarActivity.grammar.varsType.values.toMutableList()[positionAttribute]
                     )
                     GrammarActivity.typeNames.removeAt(positionAttribute)
                     GrammarActivity.typeRusIds.removeAt(positionAttribute)
@@ -873,8 +862,8 @@ private class AttributeAdapter(
 
                 7 -> {
                     grammarDao.deleteOption(
-                        languages[GrammarActivity.id_lang]!!.grammar,
-                        languages[GrammarActivity.id_lang]!!.grammar.varsVoice.values.toMutableList()[positionAttribute]
+                        GrammarActivity.grammar,
+                        GrammarActivity.grammar.varsVoice.values.toMutableList()[positionAttribute]
                     )
                     GrammarActivity.voiceNames.removeAt(positionAttribute)
                     GrammarActivity.voiceRusIds.removeAt(positionAttribute)
@@ -883,8 +872,8 @@ private class AttributeAdapter(
 
                 else -> {
                     grammarDao.deleteOption(
-                        languages[GrammarActivity.id_lang]!!.grammar,
-                        languages[GrammarActivity.id_lang]!!.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute]
+                        GrammarActivity.grammar,
+                        GrammarActivity.grammar.varsDegreeOfComparison.values.toMutableList()[positionAttribute]
                     )
                     GrammarActivity.degreeOfComparisonNames.removeAt(positionAttribute)
                     GrammarActivity.degreeOfComparisonRusIds.removeAt(positionAttribute)

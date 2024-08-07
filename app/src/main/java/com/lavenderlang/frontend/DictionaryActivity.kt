@@ -17,8 +17,10 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
+import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.word.IWordEntity
+import com.lavenderlang.backend.service.Serializer
 
 class DictionaryActivity : AppCompatActivity() {
     companion object {
@@ -159,7 +161,8 @@ class DictionaryActivity : AppCompatActivity() {
     }
 
     fun allWords() {
-        var dictionary = languages[id_lang]!!.dictionary
+        val dictionary = Serializer.getInstance().deserializeDictionary(
+            LanguageRepository().getLanguage(this, id_lang).dictionary)
         var list = dictionary.dict.toList()
         if (sort == 0) {
             when (filter) {
@@ -217,15 +220,13 @@ class DictionaryActivity : AppCompatActivity() {
         listWords.adapter = adapter
         adapter.notifyDataSetChanged()
         listWords.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, itemClicked, position, id ->
+            AdapterView.OnItemClickListener { _, _, position, _ ->
                 val intent = Intent(this@DictionaryActivity, WordActivity::class.java)
-                val id: Int =
-                    languages[id_lang]!!.dictionary.dict.indexOfFirst { it.word == list[position].word }
+                val id: Int = dictionary.dict.indexOfFirst { it.word == list[position].word }
                 intent.putExtra("lang", id_lang)
                 intent.putExtra("word", id)
                 startActivity(intent)
             }
-
     }
 }
 

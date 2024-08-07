@@ -11,9 +11,13 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
+import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 import com.lavenderlang.databinding.FragmentTranslatorBinding
-import com.lavenderlang.frontend.languages
+import com.lavenderlang.frontend.MyApp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class TranslatorFragment : Fragment() {
 
@@ -57,6 +61,11 @@ class TranslatorFragment : Fragment() {
 
 
         idLang = requireContext().getSharedPreferences("pref", MODE_PRIVATE).getInt("lang", 0)
+        val languages = runBlocking {
+            withContext(Dispatchers.IO) {
+                LanguageDaoImpl().getLanguagesFromDB()
+            }
+        }
         val languageNames = languages.values.map { it.name }
         val adapterLanguages: ArrayAdapter<String> = ArrayAdapter(
             requireContext(), android.R.layout.simple_spinner_item, languageNames
@@ -95,10 +104,10 @@ class TranslatorFragment : Fragment() {
         val translatorDao = TranslatorDaoImpl()
         if (!translationOnConlang) {
             binding.textViewTranslation.text =
-                translatorDao.translateTextFromConlang(languages[idLang]!!, inputText)
+                translatorDao.translateTextFromConlang(MyApp.language!!, inputText)
         } else {
             binding.textViewTranslation.text =
-                translatorDao.translateTextToConlang(languages[idLang]!!, inputText)
+                translatorDao.translateTextToConlang(MyApp.language!!, inputText)
         }
     }
 
