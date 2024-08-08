@@ -93,7 +93,8 @@ class WordFragment : Fragment() {
             }
         }
 
-        var word = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("word", -1)
+        // get word from argsToSend
+        var word = arguments?.getInt("word", -1) ?: -1
         when (word) {
             -1 -> {
                 idWord = MyApp.language!!.dictionary.dict.size

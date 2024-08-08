@@ -70,16 +70,16 @@ class TranslatorActivity : AppCompatActivity() {
         val radiobutton: RadioButton = findViewById(R.id.radioButtonFromConlang)
         
         val languages = runBlocking { 
-            LanguageDaoImpl().getLanguagesFromDB()
+            LanguageDaoImpl().getShortLanguagesFromDB()
         }
 
         id_lang = intent.getIntExtra("lang", -1)
-        val languageNames = languages.values.map { it.name }
+        val languageNames = languages.map { it.second }
         val adapterLanguages: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item, languageNames)
         spinner.adapter = adapterLanguages
         adapterLanguages.notifyDataSetChanged()
         flagIsSpinnerSelected =true;
-        var stupid_id = languages.keys.toList().indexOfFirst { it == id_lang }
+        var stupid_id = languages.indexOfFirst { it.first == id_lang }
         if(id_lang !=-1)spinner.setSelection(stupid_id)
         radiobutton.isChecked = true//перевод с конланга
         radiogroup.setOnCheckedChangeListener { group, checkedId ->
@@ -90,7 +90,7 @@ class TranslatorActivity : AppCompatActivity() {
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
             override fun onItemSelected(parent: AdapterView<*>?, item: View?, position: Int, id: Long) {
-                if(flagIsSpinnerSelected) id_lang = languages.keys.toList()[position]
+                if(flagIsSpinnerSelected) id_lang = languages.toList()[position].first
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 id_lang = 0

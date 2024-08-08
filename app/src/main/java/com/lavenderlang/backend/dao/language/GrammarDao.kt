@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.language
 
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.dao.word.WordDaoImpl
@@ -122,6 +123,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
             }
         }
 
+        Log.d("addGrammarRule", "rule: $rule")
         grammar.grammarRules.add(rule)
         GlobalScope.launch(Dispatchers.IO) {
             if (rule.masc.immutableAttrs.isNotEmpty()) {

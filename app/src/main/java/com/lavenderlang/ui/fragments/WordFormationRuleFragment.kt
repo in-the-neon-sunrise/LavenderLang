@@ -99,7 +99,7 @@ class WordFormationRuleFragment : Fragment() {
                 idLang = lang
             }
         }
-        var rule = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("wordFormationRule", -1)
+        var rule = arguments?.getInt("rule", -1) ?: -1
         when(rule){
             -1 -> {
                 var newRule = WordFormationRuleEntity(idLang)

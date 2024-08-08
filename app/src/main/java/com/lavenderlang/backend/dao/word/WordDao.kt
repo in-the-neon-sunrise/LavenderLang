@@ -19,9 +19,7 @@ interface WordDao {
     fun getImmutableAttrsInfo(word : IWordEntity) : String
 }
 
-class WordDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
-                  private val languageRepository: LanguageRepository = LanguageRepository()
-) : WordDao {
+class WordDaoImpl : WordDao {
     override fun updateWord(word: IWordEntity, newWord: String) {
         for (letter in newWord) {
             if (!MyApp.language!!.vowels.contains(letter.lowercase()) &&

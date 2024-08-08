@@ -46,4 +46,8 @@ interface LanguageDao {
     // check if the language exists
     @Query("SELECT EXISTS(SELECT 1 FROM language_table WHERE id = :id)")
     fun exists(id: Int): Boolean
+
+    // get all language names and ids
+    @Query("SELECT id, name FROM language_table")
+    fun getShortLanguages(): List<LanguageIdAndName>
 }

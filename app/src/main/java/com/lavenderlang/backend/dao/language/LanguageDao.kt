@@ -30,6 +30,7 @@ interface LanguageDao {
     suspend fun getLanguage(id: Int): LanguageEntity?
     suspend fun deleteLanguage(id: Int)
     suspend fun getLanguagesFromDB(): MutableMap<Int, LanguageEntity>
+    suspend fun getShortLanguagesFromDB(): ArrayList<Pair<Int, String>>
     fun downloadLanguageJSON(
         language: LanguageEntity,
         storageHelper: SimpleStorageHelper,
@@ -74,6 +75,17 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
                     .deserializeCapitalizedPartsOfSpeech(e.capitalizedPartsOfSpeech)
             )
             if (MyApp.nextLanguageId <= e.id) MyApp.nextLanguageId = e.id + 1
+        }
+        return languages
+    }
+
+    override suspend fun getShortLanguagesFromDB(): ArrayList<Pair<Int, String>> {
+        var languages: ArrayList<Pair<Int, String>>
+        withContext(Dispatchers.IO) {
+            val items = languageRepository.getShortLanguageItems(
+                MyApp.getInstance().applicationContext
+            )
+            languages = ArrayList(items.map { Pair(it.id, it.name) })
         }
         return languages
     }

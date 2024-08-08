@@ -444,12 +444,8 @@ class GrammarFragment : Fragment() {
 
         //button new grammar rule listener
         binding.buttonNewGrammarRule.setOnClickListener {
-            val argsToSend = Bundle()
-            argsToSend.putInt("grammarRule", -1)
             findNavController().navigate(
-                R.id.action_grammarFragment_to_grammarRuleFragment,
-                argsToSend
-            )
+                R.id.action_grammarFragment_to_grammarRuleFragment,            )
         }
 
         //list of rules
@@ -462,7 +458,7 @@ class GrammarFragment : Fragment() {
         binding.listViewGrammarRules.onItemClickListener =
             AdapterView.OnItemClickListener { parent, itemClicked, position, id ->
                 val argsToSend = Bundle()
-                argsToSend.putInt("grammarRule", position)
+                argsToSend.putInt("rule", position)
                 findNavController().navigate(
                     R.id.action_grammarFragment_to_grammarRuleFragment,
                     argsToSend

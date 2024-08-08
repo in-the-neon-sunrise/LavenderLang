@@ -81,7 +81,11 @@ class WordFormationFragment : Fragment() {
         //click listener
         binding.listViewWordFormationRules.onItemClickListener =
             AdapterView.OnItemClickListener { parent, itemClicked, position, id ->
-                findNavController().navigate(R.id.action_wordFormationFragment_to_wordFormationRuleFragment)
+                val argsToSend = Bundle()
+                argsToSend.putInt("rule", -1)
+                findNavController().navigate(
+                    R.id.action_wordFormationFragment_to_wordFormationRuleFragment,
+                    argsToSend)
             }
         return binding.root
     }

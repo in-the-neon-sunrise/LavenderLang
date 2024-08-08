@@ -6,8 +6,6 @@ import com.anggrayudi.storage.SimpleStorageHelper
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.LanguageEntity
 
-//var languages : MutableMap<Int, LanguageEntity> = mutableMapOf()
-
 class MyApp : Application() {
     companion object {
         private var instance : MyApp? = null

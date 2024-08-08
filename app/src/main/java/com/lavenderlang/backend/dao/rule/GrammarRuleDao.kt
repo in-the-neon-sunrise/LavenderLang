@@ -97,20 +97,28 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         }
         val py = Python.getInstance()
         val module = py.getModule("pm3")
-//        val translationParts = word.translation.split(" ")
-//        val res = ""
-//        for (transPart in translationParts) {
-//            module.callAttr(
-//                "inflectAttrs", transPart,
-//                word.partOfSpeech.toString(),
-//                russianMutAttrs.toString()
-//            ).toString()
-//        }
-        val res = module.callAttr(
-            "inflectAttrs", word.translation,
-            word.partOfSpeech.toString(),
-            russianMutAttrs.toString()
-        ).toString()
+        var res = ""
+
+        if (word.translation.contains(' ')) {
+            val translationParts = word.translation.split(" ")
+            for (transPart in translationParts) {
+                res +=
+                    module.callAttr(
+                        "inflectAttrs", transPart,
+                        word.partOfSpeech.toString(),
+                        russianMutAttrs.toString()
+                    ).toString()
+                res += " "
+            }
+            res = res.slice(0 until res.length - 1)
+        } else {
+            res = module.callAttr(
+                "inflectAttrs", word.translation,
+                word.partOfSpeech.toString(),
+                russianMutAttrs.toString()
+            ).toString()
+        }
+
         transformedWord.translation = res
 
         return transformedWord
@@ -146,6 +154,10 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
             languageRepository.updateGrammar(
                 MyApp.getInstance().applicationContext, rule.languageId,
                 Serializer.getInstance().serializeGrammar(MyApp.language!!.grammar)
+            )
+            languageRepository.updateDictionary(
+                MyApp.getInstance().applicationContext, rule.languageId,
+                Serializer.getInstance().serializeDictionary(MyApp.language!!.dictionary)
             )
         }
     }

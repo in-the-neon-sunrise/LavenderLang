@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.language
 
+import android.util.Log
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.WordNotFoundException
 
@@ -11,15 +12,20 @@ interface TranslatorDao {
 
 class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = TranslatorHelperDaoImpl()) : TranslatorDao {
     override fun translateTextFromConlang(language: LanguageEntity, text: String): String {
+        Log.d("dict", "dict: ${language.dictionary.fullDict}")
+        Log.d("rules", "rules: ${language.grammar.grammarRules}")
         val letters = (language.vowels + language.consonants).split(" ").joinToString("")
         var curWord = ""
         var curDelimiter = ""
         var res = ""
+        Log.d("text", "text: $text, letters: $letters")
         synchronized(language) {
             for (letter in text) {
+                Log.d("letter", "letter: $letter, $curWord")
                 if (letter == ' ') {
                     if (curWord != "") {
                         res += try {
+                            Log.d("word", "word: $curWord")
                             var translatedWord = helper.translateWordFromConlang(language, curWord)
                             if (curWord[0].isUpperCase()) translatedWord =
                                 helper.capitalizeWord(translatedWord)
@@ -71,6 +77,8 @@ class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = Translator
                 }
                 curWord += letter
             }
+
+
             if (curWord != "") {
                 res += try {
                     var translatedWord = helper.translateWordFromConlang(language, curWord)
@@ -90,6 +98,8 @@ class TranslatorDaoImpl(private val helper: TranslatorHelperDaoImpl = Translator
                     }
                 } else res += curDelimiter
             }
+
+            Log.d("translated", "translated: $res")
             return res
         }
     }

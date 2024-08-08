@@ -8,7 +8,11 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.lavenderlang.R
+import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
+import com.lavenderlang.backend.entity.help.Attributes
+import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.frontend.MyApp
 import kotlinx.coroutines.runBlocking
 

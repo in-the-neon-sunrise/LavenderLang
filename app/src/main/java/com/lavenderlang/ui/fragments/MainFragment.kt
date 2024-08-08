@@ -85,14 +85,14 @@ class MainFragment : Fragment() {
         }
 
         val languages = runBlocking {
-            LanguageDaoImpl().getLanguagesFromDB()
+            LanguageDaoImpl().getShortLanguagesFromDB()
         }
 
-        val adapter: ArrayAdapter<LanguageEntity> =
+        val adapter: ArrayAdapter<String> =
             ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_list_item_1,
-                languages.values.toList()
+                languages.map { it.second }
             )
         binding.listLanguages.adapter = adapter
         adapter.notifyDataSetChanged()
@@ -100,7 +100,7 @@ class MainFragment : Fragment() {
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 val preferences = requireContext().getSharedPreferences("pref", MODE_PRIVATE)
                 val prefEditor = preferences.edit()
-                prefEditor.putInt("lang", languages.values.toList()[position].languageId)
+                prefEditor.putInt("lang", languages.toList()[position].first)
                 prefEditor.apply()
                 findNavController().navigate(R.id.action_mainFragment_to_languageFragment)
             }

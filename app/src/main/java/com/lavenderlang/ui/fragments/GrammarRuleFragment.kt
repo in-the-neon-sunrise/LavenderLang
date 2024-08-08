@@ -3,6 +3,7 @@ package com.lavenderlang.ui.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -96,12 +97,11 @@ class GrammarRuleFragment : Fragment() {
             }
         }
 
-        var rule =
-            requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("rule", -1)
-        if (rule == -1 && idRule != 0){
+        var rule = arguments?.getInt("rule", -1) ?: -1
+        if (rule == -1 && idRule != 0) {
             rule = LanguageFragment.idLang
         }
-        when(rule){
+        when(rule) {
             -1 -> {
                 val newRule = GrammarRuleEntity(idLang)
                 grammarDao.addGrammarRule(MyApp.language!!.grammar, newRule)
@@ -382,6 +382,7 @@ class GrammarRuleFragment : Fragment() {
 
 
         binding.buttonSaveGrammarRule.setOnClickListener{
+            Log.d("save", "save grammar rule")
             if(binding.spinnerGender.isVisible) attrs[Attributes.GENDER] = binding.spinnerGender.selectedItemPosition
             if(binding.spinnerType.isVisible) attrs[Attributes.TYPE] = binding.spinnerType.selectedItemPosition
             if(binding.spinnerVoice.isVisible) attrs[Attributes.VOICE] = binding.spinnerVoice.selectedItemPosition
@@ -437,6 +438,7 @@ class GrammarRuleFragment : Fragment() {
                 newTransformation,
                 mutableAttrs
             )
+            Log.d("rule in frag", "rule: ${MyApp.language!!.grammar.grammarRules.toMutableList()[idRule]}")
         }catch (e:IncorrectRegexException){
             Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
         }

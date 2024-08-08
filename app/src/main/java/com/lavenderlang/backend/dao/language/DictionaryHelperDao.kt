@@ -21,7 +21,7 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
         Log.d("delMadeByRule", "rule: $rule")
         val mascHandler = MascDaoImpl()
         val copyDict = HashMap(dictionary.fullDict)
-        synchronized(MyApp.language!!) {
+        synchronized(MyApp) {
             for (key in copyDict.keys) {
                 if (MyApp.language!!.dictionary.fullDict[key]!!.size < 2) continue
                 val keyWord = MyApp.language!!.dictionary.fullDict[key]!![0]
@@ -47,7 +47,7 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
         val copyDict = HashMap(dictionary.fullDict)
-        synchronized(MyApp.language!!) {
+        synchronized(MyApp) {
             for (key in copyDict.keys) {
                 if (MyApp.language!!.dictionary.fullDict[key]!!.isEmpty()) continue
                 val keyWord = MyApp.language!!.dictionary.fullDict[key]!![0]
@@ -70,7 +70,7 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
 
     override fun delMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
         val key = "${word.word}:${word.translation}"
-        synchronized(MyApp.language!!) {
+        synchronized(MyApp) {
             dictionary.fullDict.remove(key)
         }
     }
@@ -79,7 +79,7 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
         val key = "${word.word}:${word.translation}"
-        synchronized(MyApp.language!!) {
+        synchronized(MyApp) {
             dictionary.fullDict[key] = arrayListOf(word)
             for (rule in MyApp.language!!.grammar.grammarRules) {
                 if (!mascHandler.fits(rule.masc, word)) continue

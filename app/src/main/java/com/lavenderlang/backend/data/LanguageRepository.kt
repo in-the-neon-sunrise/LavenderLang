@@ -103,4 +103,10 @@ class LanguageRepository {
         val languageDao: LanguageDao = languageDB.languageDao()
         return languageDao.exists(id)
     }
+
+    fun getShortLanguageItems(context: Context) : List<LanguageIdAndName> {
+        val languageDB: LanguageDB = LanguageDB.getInstance(context)
+        val languageDao: LanguageDao = languageDB.languageDao()
+        return languageDao.getShortLanguages()
+    }
 }

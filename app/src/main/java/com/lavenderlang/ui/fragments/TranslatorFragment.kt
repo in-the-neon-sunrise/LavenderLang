@@ -63,18 +63,18 @@ class TranslatorFragment : Fragment() {
         idLang = requireContext().getSharedPreferences("pref", MODE_PRIVATE).getInt("lang", 0)
         val languages = runBlocking {
             withContext(Dispatchers.IO) {
-                LanguageDaoImpl().getLanguagesFromDB()
+                LanguageDaoImpl().getShortLanguagesFromDB()
             }
         }
-        val languageNames = languages.values.map { it.name }
+        val languageNames = languages.map { it.second }
         val adapterLanguages: ArrayAdapter<String> = ArrayAdapter(
             requireContext(), android.R.layout.simple_spinner_item, languageNames
         )
         binding.spinnerChooseLanguage.adapter = adapterLanguages
         adapterLanguages.notifyDataSetChanged()
         flagIsSpinnerSelected =true
-        val stupidId = languages.keys.toList().indexOfFirst { it == idLang }
-        if(idLang !=-1)binding.spinnerChooseLanguage.setSelection(stupidId)
+        val stupidId = languages.indexOfFirst { it.first == idLang }
+        if(idLang !=-1) binding.spinnerChooseLanguage.setSelection(stupidId)
         binding.radioButtonFromConlang.isChecked = true//перевод с конланга
         binding.radioGroupTranslate.setOnCheckedChangeListener { _, checkedId ->
             translationOnConlang = checkedId != binding.radioButtonFromConlang.id
@@ -83,7 +83,16 @@ class TranslatorFragment : Fragment() {
         binding.spinnerChooseLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
             override fun onItemSelected(parent: AdapterView<*>?, item: View?, position: Int, id: Long) {
-                if(flagIsSpinnerSelected) idLang = languages.keys.toList()[position]
+                if(flagIsSpinnerSelected) {
+                    idLang = languages[position].first
+                    val preferences = requireContext().getSharedPreferences("pref", MODE_PRIVATE)
+                    val prefEditor = preferences.edit()
+                    prefEditor.putInt("lang", idLang)
+                    prefEditor.apply()
+                    runBlocking {
+                        MyApp.language = LanguageDaoImpl().getLanguage(idLang)
+                    }
+                }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 idLang = 0

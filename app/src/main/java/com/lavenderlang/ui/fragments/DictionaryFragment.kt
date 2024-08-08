@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,6 +70,12 @@ class DictionaryFragment : Fragment() {
 
         binding.buttonLanguage.setOnClickListener {
             findNavController().navigate(R.id.action_dictionaryFragment_to_languageFragment)
+        }
+
+        binding.buttonNewWord.setOnClickListener {
+            requireContext().getSharedPreferences("pref", MODE_PRIVATE).edit().putInt("word", -1)
+                .apply()
+            findNavController().navigate(R.id.action_dictionaryFragment_to_wordFragment)
         }
         //how it was started?
         when (val lang =
@@ -197,9 +204,11 @@ class DictionaryFragment : Fragment() {
         adapter.notifyDataSetChanged()
         binding.listWords.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
+                Log.d("dict", "${MyApp.language!!.dictionary.fullDict}")
                 val id: Int =
                     dictionary.dict.indexOfFirst { it.word == list[position].word }
                 val argsToSend = Bundle()
+                Log.d("id", "${list[position].word}, $id")
                 argsToSend.putInt("word", id)
                 findNavController().navigate(R.id.action_dictionaryFragment_to_wordFragment, argsToSend)
             }
