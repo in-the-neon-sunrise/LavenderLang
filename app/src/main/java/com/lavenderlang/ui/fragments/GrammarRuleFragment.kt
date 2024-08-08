@@ -29,13 +29,7 @@ import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.databinding.FragmentGrammarRuleBinding
 import com.lavenderlang.databinding.FragmentLanguageBinding
-import com.lavenderlang.frontend.GrammarActivity
-import com.lavenderlang.frontend.GrammarRuleActivity
-import com.lavenderlang.frontend.InstructionActivity
-import com.lavenderlang.frontend.LanguageActivity
-import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.frontend.MyApp
-import com.lavenderlang.frontend.TranslatorActivity
 
 class GrammarRuleFragment : Fragment() {
     private lateinit var binding: FragmentGrammarRuleBinding
@@ -121,9 +115,9 @@ class GrammarRuleFragment : Fragment() {
         }
 
 
-        GrammarRuleActivity.attrs = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs
-        GrammarRuleActivity.regex = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.regex
-        GrammarRuleActivity.mutableAttrs = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs
+        attrs = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.immutableAttrs
+        regex = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.regex
+        mutableAttrs = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].mutableAttrs
 
 
         listenSpinners()
@@ -381,18 +375,18 @@ class GrammarRuleFragment : Fragment() {
         numberBack = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].transformation.delFromEnd
         addFront = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].transformation.addToBeginning
         addBack = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].transformation.addToEnd
-        (binding.editTextNumberFront as TextView).setText(GrammarRuleActivity.numberFront.toString())
-        (binding.editTextNumberBack as TextView).setText(GrammarRuleActivity.numberBack.toString())
-        (binding.editTextAddFront as TextView).setText(GrammarRuleActivity.addFront)
-        (binding.editTextAddBack as TextView).setText(GrammarRuleActivity.addBack)
+        (binding.editTextNumberFront as TextView).setText(numberFront.toString())
+        (binding.editTextNumberBack as TextView).setText(numberBack.toString())
+        (binding.editTextAddFront as TextView).setText(addFront)
+        (binding.editTextAddBack as TextView).setText(addBack)
 
 
         binding.buttonSaveGrammarRule.setOnClickListener{
-            if(binding.spinnerGender.isVisible) GrammarRuleActivity.attrs[Attributes.GENDER] = binding.spinnerGender.selectedItemPosition
-            if(binding.spinnerType.isVisible) GrammarRuleActivity.attrs[Attributes.TYPE] = binding.spinnerType.selectedItemPosition
-            if(binding.spinnerVoice.isVisible) GrammarRuleActivity.attrs[Attributes.VOICE] = binding.spinnerVoice.selectedItemPosition
+            if(binding.spinnerGender.isVisible) attrs[Attributes.GENDER] = binding.spinnerGender.selectedItemPosition
+            if(binding.spinnerType.isVisible) attrs[Attributes.TYPE] = binding.spinnerType.selectedItemPosition
+            if(binding.spinnerVoice.isVisible) attrs[Attributes.VOICE] = binding.spinnerVoice.selectedItemPosition
 
-            GrammarRuleActivity.regex =binding.editMasc.text.toString()
+            regex =binding.editMasc.text.toString()
 
             if(binding.spinnerFinishGender.isVisible) mutableAttrs[Attributes.GENDER] = binding.spinnerFinishGender.selectedItemPosition
             if(binding.spinnerFinishNumber.isVisible) mutableAttrs[Attributes.NUMBER] = binding.spinnerFinishNumber.selectedItemPosition
@@ -402,12 +396,12 @@ class GrammarRuleFragment : Fragment() {
             if(binding.spinnerFinishMood.isVisible) mutableAttrs[Attributes.MOOD] = binding.spinnerFinishMood.selectedItemPosition
             if(binding.spinnerFinishDegreeOfComparison.isVisible) mutableAttrs[Attributes.DEGREE_OF_COMPARISON] = binding.spinnerFinishDegreeOfComparison.selectedItemPosition
 
-            GrammarRuleActivity.addBack =binding.editTextAddBack.text.toString()
-            GrammarRuleActivity.addFront =binding.editTextAddFront.text.toString()
-            GrammarRuleActivity.numberFront = if (binding.editTextNumberFront.text.toString().isNotEmpty())
+            addBack =binding.editTextAddBack.text.toString()
+            addFront =binding.editTextAddFront.text.toString()
+            numberFront = if (binding.editTextNumberFront.text.toString().isNotEmpty())
                 binding.editTextNumberFront.text.toString().toInt()
             else 0
-            GrammarRuleActivity.numberBack = if (binding.editTextNumberBack.text.toString().isNotEmpty())
+            numberBack = if (binding.editTextNumberBack.text.toString().isNotEmpty())
                 binding.editTextNumberBack.text.toString().toInt()
             else 0
 

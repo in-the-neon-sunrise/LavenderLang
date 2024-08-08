@@ -1,16 +1,14 @@
 package com.lavenderlang.backend.dao.language
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.anggrayudi.storage.SimpleStorageHelper
 import com.anggrayudi.storage.file.DocumentFileCompat
-import com.anggrayudi.storage.file.StorageType
 import com.anggrayudi.storage.file.openInputStream
 import com.lavenderlang.backend.data.LanguageItem
-import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.*
@@ -44,7 +42,7 @@ interface LanguageDao {
         createDocumentResultLauncher: ActivityResultLauncher<String>
     )
 
-    suspend fun getLanguageFromFile(path: String, context: AppCompatActivity)
+    suspend fun getLanguageFromFile(path: String, context: Context)
 }
 
 class LanguageDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) :
@@ -204,7 +202,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         }
     }
 
-    override suspend fun getLanguageFromFile(path: String, context: AppCompatActivity) {
+    override suspend fun getLanguageFromFile(path: String, context: Context) {
         val origFile = File(path)
         // fixme: do i need context here? or just myApp?
         val file = DocumentFileCompat.fromFile(MyApp.getInstance().applicationContext, origFile)

@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.databinding.FragmentInstructionBinding
 import com.lavenderlang.databinding.FragmentLanguageBinding
-import com.lavenderlang.frontend.InstructionActivity
 
 class InstructionFragment : Fragment() {
     private lateinit var binding: FragmentInstructionBinding
