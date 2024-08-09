@@ -1,7 +1,6 @@
 package com.lavenderlang.ui.fragments
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,9 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -29,8 +25,7 @@ import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.databinding.FragmentGrammarRuleBinding
-import com.lavenderlang.databinding.FragmentLanguageBinding
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 
 class GrammarRuleFragment : Fragment() {
     private lateinit var binding: FragmentGrammarRuleBinding

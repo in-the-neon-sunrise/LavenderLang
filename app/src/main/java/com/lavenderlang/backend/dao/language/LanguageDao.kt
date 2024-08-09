@@ -13,7 +13,7 @@ import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.service.*
 import com.lavenderlang.backend.service.exception.FileWorkException
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -101,7 +101,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
             ) return@withContext
             // TODO: оно так работает???
         }
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateName(
                 MyApp.getInstance().applicationContext, language.languageId, newName
             )
@@ -117,7 +117,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
                 )
             ) return@withContext
         }
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateDescription(
                 MyApp.getInstance().applicationContext, language.languageId, newDescription
             )
@@ -207,7 +207,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     }
 
     override suspend fun deleteLanguage(id: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.deleteLanguage(
                 MyApp.getInstance().applicationContext, id
             )

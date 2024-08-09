@@ -82,5 +82,5 @@ def inflectAttrs(word, partOfSpeech, attrs):
 
 def getNormalForm(word):
     if ' ' in word:
-            return ' '.join([getNormalForm(word) for word in expression.split()])
+            return ' '.join([getNormalForm(w) for w in word.split()])
     return morph.parse(word)[0].normal_form

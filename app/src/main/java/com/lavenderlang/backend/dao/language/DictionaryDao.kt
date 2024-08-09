@@ -1,9 +1,9 @@
 package com.lavenderlang.backend.dao.language
 
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
-import com.lavenderlang.frontend.MainActivity
+import com.chaquo.python.Python
 import com.lavenderlang.backend.dao.help.MascDaoImpl
+import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
@@ -11,11 +11,8 @@ import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.frontend.MyApp
-import com.lavenderlang.frontend.SplashScreenActivity
-import com.lavenderlang.frontend.WordActivity
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface DictionaryDao {
@@ -42,7 +39,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         }
         if (dictionary.dict.contains(word)) return
         dictionary.dict.add(word)
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             helper.addMadeByWord(dictionary, word)
             languageRepository.updateDictionary(
                 MyApp.getInstance().applicationContext, dictionary.languageId,
@@ -54,7 +51,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
 
     override fun deleteWord(dictionary: DictionaryEntity, word: IWordEntity) {
         dictionary.dict.remove(word)
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             helper.delMadeByWord(dictionary, word)
             languageRepository.updateDictionary(
                 MyApp.getInstance().applicationContext, dictionary.languageId,

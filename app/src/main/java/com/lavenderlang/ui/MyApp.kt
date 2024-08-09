@@ -1,9 +1,9 @@
-package com.lavenderlang.frontend
+package com.lavenderlang.ui
 
 import android.app.Application
 import android.util.Log
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.anggrayudi.storage.SimpleStorageHelper
-import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.language.LanguageEntity
 
 class MyApp : Application() {
@@ -12,6 +12,7 @@ class MyApp : Application() {
         var storageHelper : SimpleStorageHelper? = null
         var nextLanguageId : Int = -1
         var language : LanguageEntity? = null
+        var lifecycleScope: LifecycleCoroutineScope? = null
         fun getInstance() : MyApp {
             if (instance == null) throw Exception("MyApp is not created")
             return instance!!

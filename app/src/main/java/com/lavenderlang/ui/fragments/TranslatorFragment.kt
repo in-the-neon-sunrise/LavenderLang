@@ -7,14 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 import com.lavenderlang.databinding.FragmentTranslatorBinding
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext

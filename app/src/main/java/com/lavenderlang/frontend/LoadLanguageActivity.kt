@@ -16,6 +16,7 @@ import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.service.exception.FileWorkException
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.runBlocking
 
 class LoadLanguageActivity: AppCompatActivity(){

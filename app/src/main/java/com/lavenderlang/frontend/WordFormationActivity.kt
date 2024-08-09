@@ -17,6 +17,7 @@ import com.lavenderlang.R
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDao
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
+import com.lavenderlang.ui.MyApp
 
 class WordFormationActivity : AppCompatActivity() {
     companion object{

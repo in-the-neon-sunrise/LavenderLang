@@ -1,9 +1,7 @@
 package com.lavenderlang.backend.dao.rule
 
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
 import com.chaquo.python.Python
-import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.dao.help.TransformationDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorHelperDaoImpl
@@ -23,7 +21,7 @@ import com.lavenderlang.backend.entity.word.VerbParticipleEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.IncorrectRegexException
 import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -149,7 +147,7 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         }
         rule.transformation = transformation
         updateMutableAttrs(rule, newAttrs)
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             helper.updateMadeByRule(MyApp.language!!.dictionary, oldRule, rule)
             languageRepository.updateGrammar(
                 MyApp.getInstance().applicationContext, rule.languageId,

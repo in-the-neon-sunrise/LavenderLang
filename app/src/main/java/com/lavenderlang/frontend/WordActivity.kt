@@ -31,6 +31,7 @@ import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.ui.MyApp
 
 class WordActivity : AppCompatActivity() {
     companion object{

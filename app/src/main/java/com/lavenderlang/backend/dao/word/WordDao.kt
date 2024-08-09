@@ -2,13 +2,10 @@ package com.lavenderlang.backend.dao.word
 
 import android.util.Log
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
-import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
-import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
 import com.lavenderlang.backend.entity.word.*
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
-import com.lavenderlang.frontend.MyApp
-import com.lavenderlang.frontend.WordActivity
+import com.lavenderlang.ui.MyApp
 
 interface WordDao {
     fun updateWord(word : IWordEntity, newWord : String)

@@ -1,8 +1,6 @@
 package com.lavenderlang.backend.dao.language
 
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
-import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.dao.word.WordDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.*
@@ -10,7 +8,7 @@ import com.lavenderlang.backend.entity.language.*
 import com.lavenderlang.backend.entity.rule.*
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -42,7 +40,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
             Attributes.IS_INFINITIVE -> return
         }
         grammar.nextIds[option.type] = grammar.nextIds[option.type]!! + 1
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
@@ -72,7 +70,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
                 wordDao.updateWord(word, word.word, word.translation, immutAttrs, word.partOfSpeech)
             }
         }
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
@@ -99,7 +97,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         }
         if (!map.contains(optionId)) return
         map[optionId] = newOption
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
@@ -125,7 +123,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
 
         Log.d("addGrammarRule", "rule: $rule")
         grammar.grammarRules.add(rule)
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             if (rule.masc.immutableAttrs.isNotEmpty()) {
                 helper.addMadeByRule(MyApp.language!!.dictionary, rule)
             }
@@ -142,7 +140,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
 
     override fun deleteGrammarRule(grammar: GrammarEntity, rule: GrammarRuleEntity) {
         grammar.grammarRules.remove(rule)
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             helper.delMadeByRule(MyApp.language!!.dictionary, rule)
             languageRepository.updateDictionary(
                 MyApp.getInstance().applicationContext, grammar.languageId,
@@ -159,7 +157,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
 
     override fun addWordFormationRule(grammar: GrammarEntity, rule: WordFormationRuleEntity) {
         grammar.wordFormationRules.add(rule)
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
@@ -169,7 +167,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
 
     override fun deleteWordFormationRule(grammar: GrammarEntity, rule: WordFormationRuleEntity) {
         grammar.wordFormationRules.remove(rule)
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)

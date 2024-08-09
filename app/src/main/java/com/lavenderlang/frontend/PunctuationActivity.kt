@@ -11,6 +11,7 @@ import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.PunctuationDao
 import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.ui.MyApp
 
 class PunctuationActivity : AppCompatActivity() {
     companion object{

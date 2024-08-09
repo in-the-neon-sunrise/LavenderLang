@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.runBlocking
 
 class SplashScreenActivity: AppCompatActivity() {

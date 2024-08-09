@@ -7,7 +7,7 @@ import com.lavenderlang.backend.entity.language.DictionaryEntity
 import com.lavenderlang.backend.entity.language.GrammarEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.LanguageNotFoundException
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 
 class Serializer private constructor() {
     companion object {

@@ -1,15 +1,12 @@
 package com.lavenderlang.ui.fragments
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -28,9 +25,8 @@ import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.IncorrectRegexException
-import com.lavenderlang.databinding.FragmentLanguageBinding
 import com.lavenderlang.databinding.FragmentWordFormationRuleBinding
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 
 class WordFormationRuleFragment : Fragment() {
     private lateinit var binding: FragmentWordFormationRuleBinding

@@ -1,7 +1,6 @@
 package com.lavenderlang.ui.fragments
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -30,9 +28,8 @@ import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.word.IWordEntity
 import com.lavenderlang.backend.entity.word.NounEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
-import com.lavenderlang.databinding.FragmentLanguageBinding
 import com.lavenderlang.databinding.FragmentWordBinding
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 
 class WordFragment : Fragment() {
     private lateinit var binding: FragmentWordBinding

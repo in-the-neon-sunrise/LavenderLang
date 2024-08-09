@@ -1,12 +1,13 @@
 package com.lavenderlang.backend.dao.language
 
 import android.util.Log
+import com.chaquo.python.Python
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.entity.language.DictionaryEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 
 interface DictionaryHelperDao {
     fun delMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity)
@@ -69,7 +70,10 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
     }
 
     override fun delMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
-        val key = "${word.word}:${word.translation}"
+        val py = Python.getInstance()
+        val module = py.getModule("pm3")
+        val normalForm = module.callAttr("getNormalForm", word.translation.lowercase()).toString()
+        val key = "${word.word}:${normalForm}"
         synchronized(MyApp) {
             dictionary.fullDict.remove(key)
         }
@@ -78,7 +82,10 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
     override fun addMadeByWord(dictionary: DictionaryEntity, word: IWordEntity) {
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
-        val key = "${word.word}:${word.translation}"
+        val py = Python.getInstance()
+        val module = py.getModule("pm3")
+        val normalForm = module.callAttr("getNormalForm", word.translation.lowercase()).toString()
+        val key = "${word.word}:${normalForm}"
         synchronized(MyApp) {
             dictionary.fullDict[key] = arrayListOf(word)
             for (rule in MyApp.language!!.grammar.grammarRules) {

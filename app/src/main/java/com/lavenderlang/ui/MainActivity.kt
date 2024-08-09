@@ -2,18 +2,12 @@ package com.lavenderlang.ui
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.lavenderlang.R
-import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
-import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.word.NounEntity
-import com.lavenderlang.frontend.MyApp
 import kotlinx.coroutines.runBlocking
 
 
@@ -29,6 +23,8 @@ class MainActivity2: AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
+
+        MyApp.lifecycleScope = lifecycleScope
 
         if (MyApp.nextLanguageId == -1) {
             runBlocking { LanguageDaoImpl().getLanguagesFromDB() }

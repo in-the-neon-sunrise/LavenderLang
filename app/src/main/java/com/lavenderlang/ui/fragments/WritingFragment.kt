@@ -1,12 +1,10 @@
 package com.lavenderlang.ui.fragments
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -15,9 +13,8 @@ import com.lavenderlang.backend.dao.language.WritingDao
 import com.lavenderlang.backend.dao.language.WritingDaoImpl
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
-import com.lavenderlang.databinding.FragmentLanguageBinding
 import com.lavenderlang.databinding.FragmentWritingBinding
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 
 class WritingFragment : Fragment() {
     private lateinit var binding: FragmentWritingBinding

@@ -17,7 +17,7 @@ import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.service.exception.FileWorkException
 import com.lavenderlang.databinding.FragmentLanguageBinding
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 //import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking

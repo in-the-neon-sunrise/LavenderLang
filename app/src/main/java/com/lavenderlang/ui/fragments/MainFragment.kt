@@ -7,18 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.anggrayudi.storage.SimpleStorageHelper
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.lavenderlang.R
-import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.databinding.FragmentMainBinding
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.runBlocking
 
 class MainFragment : Fragment() {

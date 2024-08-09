@@ -1,13 +1,11 @@
 package com.lavenderlang.backend.dao.language
 
-import androidx.lifecycle.lifecycleScope
-import com.lavenderlang.frontend.MainActivity
 import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.LanguageEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,7 +31,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
             }
         }
         language.vowels = newLetters.lowercase()
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateVowels(
                 MyApp.getInstance().applicationContext, language.languageId,
                 language.vowels
@@ -54,7 +52,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
             }
         }
         language.consonants = newLetters.lowercase()
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateConsonants(
                 MyApp.getInstance().applicationContext, language.languageId,
                 language.consonants
@@ -65,7 +63,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
     override fun addCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
         if (language.capitalizedPartsOfSpeech.contains(partOfSpeech)) return
         language.capitalizedPartsOfSpeech.add(partOfSpeech)
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateCapitalizedPartsOfSpeech(
                 MyApp.getInstance().applicationContext, language.languageId,
                 Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
@@ -75,7 +73,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
 
     override fun deleteCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
         language.capitalizedPartsOfSpeech.remove(partOfSpeech)
-        GlobalScope.launch(Dispatchers.IO) {
+        MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             languageRepository.updateCapitalizedPartsOfSpeech(
                 MyApp.getInstance().applicationContext, language.languageId,
                 Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)

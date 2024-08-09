@@ -2,7 +2,6 @@ package com.lavenderlang.ui.fragments
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,27 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.Spinner
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
-import com.lavenderlang.backend.data.LanguageRepository
 import com.lavenderlang.backend.entity.help.PartOfSpeech
 import com.lavenderlang.backend.entity.language.DictionaryEntity
 import com.lavenderlang.backend.entity.word.IWordEntity
-import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.databinding.FragmentDictionaryBinding
-import com.lavenderlang.frontend.LanguageActivity
-import com.lavenderlang.frontend.MyApp
-import com.lavenderlang.frontend.WordActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.lavenderlang.ui.MyApp
 
 class DictionaryFragment : Fragment() {
     private lateinit var binding: FragmentDictionaryBinding
@@ -73,9 +62,9 @@ class DictionaryFragment : Fragment() {
         }
 
         binding.buttonNewWord.setOnClickListener {
-            requireContext().getSharedPreferences("pref", MODE_PRIVATE).edit().putInt("word", -1)
-                .apply()
-            findNavController().navigate(R.id.action_dictionaryFragment_to_wordFragment)
+            val argsToSend = Bundle()
+            argsToSend.putInt("word", -1)
+            findNavController().navigate(R.id.action_dictionaryFragment_to_wordFragment, argsToSend)
         }
         //how it was started?
         when (val lang =

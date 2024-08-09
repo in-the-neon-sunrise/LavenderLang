@@ -26,6 +26,7 @@ import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
 import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.exception.IncorrectRegexException
+import com.lavenderlang.ui.MyApp
 
 class WordFormationRuleActivity: AppCompatActivity()  {
     companion object {

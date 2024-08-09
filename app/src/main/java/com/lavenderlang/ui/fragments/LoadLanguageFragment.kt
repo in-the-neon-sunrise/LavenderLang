@@ -1,14 +1,11 @@
 package com.lavenderlang.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -19,9 +16,8 @@ import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDao
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.service.exception.FileWorkException
-import com.lavenderlang.databinding.FragmentLanguageBinding
 import com.lavenderlang.databinding.FragmentLoadLanguageBinding
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.runBlocking
 
 class LoadLanguageFragment : Fragment() {

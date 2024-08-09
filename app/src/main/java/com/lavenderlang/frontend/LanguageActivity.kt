@@ -14,10 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.data.LanguageRepository
-import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.backend.service.exception.FileWorkException
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext

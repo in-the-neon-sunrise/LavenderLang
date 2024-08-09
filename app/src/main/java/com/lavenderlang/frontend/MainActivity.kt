@@ -1,43 +1,21 @@
 package com.lavenderlang.frontend
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock.sleep
 import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.anggrayudi.storage.SimpleStorageHelper
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.lavenderlang.R
-import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
-import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
-import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
-import com.lavenderlang.backend.dao.language.TranslatorHelperDaoImpl
-import com.lavenderlang.backend.dao.language.WritingDaoImpl
-import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
-import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.CharacteristicEntity
-import com.lavenderlang.backend.entity.help.MascEntity
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.help.TransformationEntity
 import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
-import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
-import com.lavenderlang.backend.entity.word.AdjectiveEntity
-import com.lavenderlang.backend.entity.word.AdverbEntity
-import com.lavenderlang.backend.entity.word.NounEntity
-import com.lavenderlang.backend.entity.word.VerbEntity
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
-import com.lavenderlang.backend.service.exception.WordNotFoundException
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.runBlocking
 
 

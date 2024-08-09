@@ -1,5 +1,6 @@
 package com.lavenderlang.backend.dao.language
 
+import android.util.Log
 import com.chaquo.python.Python
 import com.lavenderlang.backend.entity.help.Attributes
 import com.lavenderlang.backend.entity.language.LanguageEntity
@@ -51,12 +52,16 @@ class TranslatorHelperDaoImpl : TranslatorHelperDao {
         val py = Python.getInstance()
         val module = py.getModule("pm3")
         val normalForm = module.callAttr("getNormalForm", word.lowercase()).toString()
+        //Log.d("helper", "orig: $word, $normalForm")
         for (key in language.dictionary.fullDict.keys) {
             val keyWord = key.split(":")[0]
             val keyTranslation = key.split(":")[1]
             if (keyTranslation != normalForm) continue
+            //Log.d("helper", "$keyWord, $keyTranslation")
             for (w in language.dictionary.fullDict[key]!!) {
+                //Log.d("helper", "${w.word}, \"${w.translation}\"!=\"$word\"")
                 if (w.translation.lowercase() == word.lowercase()) {
+                    //Log.d("helper", "found: ${w.word}")
                     if (language.capitalizedPartsOfSpeech.contains(w.partOfSpeech)) {
                         return capitalizeWord(w.word)
                     }

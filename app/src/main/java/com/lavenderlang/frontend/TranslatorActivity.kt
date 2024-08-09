@@ -2,7 +2,6 @@ package com.lavenderlang.frontend
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -17,6 +16,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
+import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.runBlocking
 
 class TranslatorActivity : AppCompatActivity() {

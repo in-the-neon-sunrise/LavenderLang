@@ -26,7 +26,7 @@ import com.lavenderlang.backend.entity.language.GrammarEntity
 import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
 import com.lavenderlang.databinding.FragmentGrammarBinding
 import com.lavenderlang.backend.service.*
-import com.lavenderlang.frontend.MyApp
+import com.lavenderlang.ui.MyApp
 
 class GrammarFragment : Fragment() {
     private lateinit var binding: FragmentGrammarBinding
