@@ -52,35 +52,6 @@ class MainFragment : Fragment() {
         binding.buttonInf.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_informationFragment)
         }
-        //bottom navigation menu
-        val bottomNavigationView = binding.bottomNavigation
-
-        bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.action_home -> {
-                    // show that the user is already on the home page
-                    true
-                }
-
-                R.id.action_language -> {
-                    if (MyApp.nextLanguageId == -1) {
-                        true
-                    }
-                    else {
-                        findNavController().navigate(R.id.action_mainFragment_to_languageFragment)
-                        true
-                    }
-                }
-
-                R.id.action_translator -> {
-                    findNavController().navigate(R.id.action_mainFragment_to_translatorFragment)
-                    true
-                }
-
-                else -> false
-            }
-        }
-
         val languages = runBlocking {
             LanguageDaoImpl().getShortLanguagesFromDB()
         }
