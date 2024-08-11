@@ -1,4 +1,4 @@
-package com.lavenderlang.frontend
+package com.lavenderlang.legacy.frontend
 
 import android.content.Context
 import android.content.Intent

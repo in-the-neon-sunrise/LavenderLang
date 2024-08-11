@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
     id("com.chaquo.python")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -79,5 +80,8 @@ dependencies {
     implementation("com.github.librepdf:openpdf:2.0.1")
     // iText
     implementation("com.itextpdf:itextg:5.5.10")
-    // material
+    // firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
 }

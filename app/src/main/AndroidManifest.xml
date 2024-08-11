@@ -21,7 +21,7 @@
         android:requestLegacyExternalStorage="true"
         tools:targetApi="31" >
 
-        <activity android:name=".frontend.MainActivity" />
+        <activity android:name=".legacy.frontend.MainActivity" />
         <activity
             android:name=".ui.MainActivity2"
             android:exported="true">
@@ -31,20 +31,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".frontend.SplashScreenActivity" />
-        <activity android:name=".frontend.LanguageActivity" />
-        <activity android:name=".frontend.InformationActivity" />
-        <activity android:name=".frontend.DictionaryActivity" />
-        <activity android:name=".frontend.GrammarActivity" />
-        <activity android:name=".frontend.PunctuationActivity" />
-        <activity android:name=".frontend.WritingActivity" />
-        <activity android:name=".frontend.WordFormationActivity" />
-        <activity android:name=".frontend.GrammarRuleActivity" />
-        <activity android:name=".frontend.TranslatorActivity" />
-        <activity android:name=".frontend.WordActivity" />
-        <activity android:name=".frontend.WordFormationRuleActivity"/>
-        <activity android:name=".frontend.LoadLanguageActivity" />
-        <activity android:name=".frontend.InstructionActivity" />
+        <activity android:name=".legacy.frontend.SplashScreenActivity" />
+        <activity android:name=".legacy.frontend.LanguageActivity" />
+        <activity android:name=".legacy.frontend.InformationActivity" />
+        <activity android:name=".legacy.frontend.DictionaryActivity" />
+        <activity android:name=".legacy.frontend.GrammarActivity" />
+        <activity android:name=".legacy.frontend.PunctuationActivity" />
+        <activity android:name=".legacy.frontend.WritingActivity" />
+        <activity android:name=".legacy.frontend.WordFormationActivity" />
+        <activity android:name=".legacy.frontend.GrammarRuleActivity" />
+        <activity android:name=".legacy.frontend.TranslatorActivity" />
+        <activity android:name=".legacy.frontend.WordActivity" />
+        <activity android:name=".legacy.frontend.WordFormationRuleActivity"/>
+        <activity android:name=".legacy.frontend.LoadLanguageActivity" />
+        <activity android:name=".legacy.frontend.InstructionActivity" />
     </application>
 
 </manifest>

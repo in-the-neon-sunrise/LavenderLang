@@ -1,5 +1,9 @@
 package com.lavenderlang.ui
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -14,12 +18,15 @@ import kotlinx.coroutines.runBlocking
 import com.lavenderlang.databinding.ActivityMain2Binding
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import kotlin.math.log
 
 
 class MainActivity2: AppCompatActivity() {
     private lateinit var binding: ActivityMain2Binding
     private lateinit var navController: NavController
+    private var currentFragmentId: Int = R.id.mainFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         val isDarkTheme = getSharedPreferences("pref", MODE_PRIVATE).getBoolean("Theme", false)
         Log.d("Theme", "start. $isDarkTheme")
@@ -69,6 +76,28 @@ class MainActivity2: AppCompatActivity() {
             }
             true
         }
+
+        currentFragmentId = getSharedPreferences(
+            "pref", MODE_PRIVATE).getInt("Fragment", R.id.startingFragment)
+
+        if (isNetworkAvailable(this)) {
+            val user = FirebaseAuth.getInstance().currentUser
+            user?.reload()?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    if (currentFragmentId != R.id.startingFragment) {
+                        navController.navigate(currentFragmentId)
+                    }
+                    else {
+                        navController.navigate(R.id.mainFragment)
+                    }
+                } else {
+                    navController.navigate(R.id.loginFragment)
+                }
+            } ?: navController.navigate(R.id.loginFragment)
+        } else {
+            Snackbar.make(binding.root, "No internet connection", Snackbar.LENGTH_LONG).show()
+        }
+
         //navView.setupWithNavController(navController)
         setContentView(binding.root)
     }
@@ -78,5 +107,17 @@ class MainActivity2: AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         val navController = navHostFragment.navController
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+}
+
+fun isNetworkAvailable(context: Context): Boolean {
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = connectivityManager.activeNetwork ?: return false
+    val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return when {
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        else -> false
     }
 }

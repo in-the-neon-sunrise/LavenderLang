@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".frontend.WordActivity">
+    tools:context=".legacy.frontend.WordActivity">
 
     <Button
         android:id="@+id/buttonInf"
@@ -160,7 +160,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerVoice" />
 
-            <com.lavenderlang.frontend.NonScrollListView
+            <com.lavenderlang.legacy.frontend.NonScrollListView
                 android:id="@+id/listWordForms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -195,7 +195,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewNewWords" />
 
-            <com.lavenderlang.frontend.NonScrollListView
+            <com.lavenderlang.legacy.frontend.NonScrollListView
                 android:id="@+id/listViewNewWords"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
