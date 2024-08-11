@@ -14,6 +14,7 @@ import kotlinx.coroutines.runBlocking
 import com.lavenderlang.databinding.ActivityMain2Binding
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupWithNavController
+import kotlin.math.log
 
 
 class MainActivity2: AppCompatActivity() {
@@ -50,22 +51,25 @@ class MainActivity2: AppCompatActivity() {
             )
         )
         navController = navHostFragment.navController
-        /*binding.bottomNavigation.setOnItemSelectedListener { item ->
+
+        navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.mainFragment -> {
+                    Log.d("BottomNav", "Navigating to mainFragment")
                     navController.navigate(R.id.mainFragment)
                 }
                 R.id.languageFragment -> {
+                    Log.d("BottomNav", "Navigating to languageFragment")
                     navController.navigate(R.id.languageFragment)
                 }
                 R.id.translatorFragment -> {
+                    Log.d("BottomNav", "Navigating to translatorFragment")
                     navController.navigate(R.id.translatorFragment)
                 }
             }
             true
-        }*/
-
-        navView.setupWithNavController(navController)
+        }
+        //navView.setupWithNavController(navController)
         setContentView(binding.root)
     }
 
