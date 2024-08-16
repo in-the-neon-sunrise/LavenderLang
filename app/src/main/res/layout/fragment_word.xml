@@ -160,7 +160,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerVoice" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listWordForms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -195,7 +195,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewNewWords" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewNewWords"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

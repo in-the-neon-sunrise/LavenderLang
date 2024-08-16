@@ -7,7 +7,7 @@ import com.lavenderlang.domain.db.LanguageIdAndName
 import com.lavenderlang.domain.db.LanguageItem
 
 
-class LanguageRepository {
+class LanguageRepositoryDEPRECATED {
     fun insertLanguage(context: Context, id: Int, language: LanguageEntity) {
         val languageDB: LanguageDB = LanguageDB.getInstance(context)
         val languageDao: LanguageDao = languageDB.languageDao()

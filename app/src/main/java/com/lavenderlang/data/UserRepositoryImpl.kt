@@ -1,8 +1,9 @@
 package com.lavenderlang.data
 
 import com.google.firebase.auth.FirebaseAuth
-import com.lavenderlang.domain.auth.UserRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import com.lavenderlang.domain.auth.UserModel
+import com.lavenderlang.domain.auth.UserRepository
 import kotlinx.coroutines.tasks.await
 
 
@@ -21,5 +22,6 @@ class UserRepositoryImpl : UserRepository {
             user.password
         ).await()
     }
+
 
 }

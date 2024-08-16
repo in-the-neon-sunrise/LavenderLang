@@ -10,7 +10,7 @@ import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.openInputStream
 import com.google.firebase.auth.FirebaseAuth
 import com.lavenderlang.domain.db.LanguageItem
-import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.data.LanguageRepositoryDEPRECATED
 import com.lavenderlang.backend.service.*
 import com.lavenderlang.domain.exception.FileWorkException
 import com.lavenderlang.ui.MyApp
@@ -21,7 +21,6 @@ import java.io.BufferedWriter
 import java.io.File
 import java.io.OutputStreamWriter
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.lavenderlang.domain.model.language.LanguageEntity
 
 interface LanguageDao {
@@ -48,7 +47,7 @@ interface LanguageDao {
     suspend fun getLanguageFromFile(path: String, context: Context)
 }
 
-class LanguageDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) :
+class LanguageDaoImpl(private val languageRepositoryDEPRECATED: LanguageRepositoryDEPRECATED = LanguageRepositoryDEPRECATED()) :
     LanguageDao {
     companion object {
         var curLanguage: LanguageEntity? = null
@@ -84,7 +83,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     override suspend fun getShortLanguagesFromDB(): ArrayList<Pair<Int, String>> {
         var languages: ArrayList<Pair<Int, String>>
         withContext(Dispatchers.IO) {
-            val items = languageRepository.getShortLanguageItems(
+            val items = languageRepositoryDEPRECATED.getShortLanguageItems(
                 MyApp.getInstance().applicationContext
             )
             languages = ArrayList(items.map { Pair(it.id, it.name) })
@@ -96,14 +95,14 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     override suspend fun changeName(language: LanguageEntity, newName: String) {
         language.name = newName
         withContext(Dispatchers.IO) {
-            if (languageRepository.exists(
+            if (languageRepositoryDEPRECATED.exists(
                     MyApp.getInstance().applicationContext,
                     language.languageId
                 )
             ) return@withContext
         }
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateName(
+            languageRepositoryDEPRECATED.updateName(
                 MyApp.getInstance().applicationContext, language.languageId, newName
             )
         }
@@ -112,14 +111,14 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
     override suspend fun changeDescription(language: LanguageEntity, newDescription: String) {
         language.description = newDescription
         withContext(Dispatchers.IO) {
-            if (languageRepository.exists(
+            if (languageRepositoryDEPRECATED.exists(
                     MyApp.getInstance().applicationContext,
                     language.languageId
                 )
             ) return@withContext
         }
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateDescription(
+            languageRepositoryDEPRECATED.updateDescription(
                 MyApp.getInstance().applicationContext, language.languageId, newDescription
             )
         }
@@ -149,7 +148,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
 //        newLang.dictionary.languageId = MyApp.nextLanguageId
 
         withContext(Dispatchers.IO) {
-            languageRepository.insertLanguage(
+            languageRepositoryDEPRECATED.insertLanguage(
                 MyApp.getInstance().applicationContext, newLang.languageId, newLang
             )
         }
@@ -168,7 +167,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         // fixme: shared prefs
         // val newLang = LanguageEntity(MyApp.nextLanguageId, name, description)
         val newLang = LanguageEntity(0, name, description)
-        LanguageRepository().insertLanguage(
+        LanguageRepositoryDEPRECATED().insertLanguage(
             MyApp.getInstance().applicationContext, newLang.languageId, newLang
         )
         // ++MyApp.nextLanguageId
@@ -226,13 +225,13 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
         val language: LanguageEntity?
         var check = false
         withContext(Dispatchers.IO) {
-            if (languageRepository.exists(MyApp.getInstance().applicationContext, id))
+            if (languageRepositoryDEPRECATED.exists(MyApp.getInstance().applicationContext, id))
                 check = true
         }
         if (!check) return null
         val languageItem: LanguageItem
         withContext(Dispatchers.IO) {
-            languageItem = languageRepository.getLanguage(
+            languageItem = languageRepositoryDEPRECATED.getLanguage(
                 MyApp.getInstance().applicationContext, id
             )
         }
@@ -253,7 +252,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
 
     override suspend fun deleteLanguage(id: Int) {
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.deleteLanguage(
+            languageRepositoryDEPRECATED.deleteLanguage(
                 MyApp.getInstance().applicationContext, id
             )
         }
@@ -295,7 +294,7 @@ class LanguageDaoImpl(private val languageRepository: LanguageRepository = Langu
 //        language.dictionary.languageId = MyApp.nextLanguageId
 //
 //        ++MyApp.nextLanguageId
-        languageRepository.insertLanguage(
+        languageRepositoryDEPRECATED.insertLanguage(
             MyApp.getInstance().applicationContext, language.languageId, language
         )
         // get shared preferences

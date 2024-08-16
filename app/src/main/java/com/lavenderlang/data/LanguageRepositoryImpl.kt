@@ -1,18 +1,14 @@
 package com.lavenderlang.data
 
-import android.content.Context
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.lavenderlang.backend.data.LanguageDB
-import com.lavenderlang.backend.data.LanguageDao
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.domain.db.LanguageIdAndName
 import com.lavenderlang.domain.db.LanguageItem
 import com.lavenderlang.domain.db.LanguageRepository
 import com.lavenderlang.domain.model.language.LanguageEntity
-import com.lavenderlang.ui.MyApp
+import kotlinx.coroutines.tasks.await
 
 class LanguageRepositoryImpl : LanguageRepository {
     override suspend fun insertLanguage(id: Int, language: LanguageEntity) {
@@ -30,12 +26,12 @@ class LanguageRepositoryImpl : LanguageRepository {
             "capitalizedPartsOfSpeech" to Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
         )
 
-        userDocumentRef.collection("languages").document(language.languageId.toString()).set(languageData)
+        userDocumentRef.collection("languages").document(id.toString()).set(languageData)
             .addOnSuccessListener {
-                Log.d("firebase", "DocumentSnapshot added with ID: ${language.languageId}")
+                Log.d("firebase", "language added with ID: $id")
             }
             .addOnFailureListener { e ->
-                Log.d("firebase", "Error adding document", e)
+                Log.d("firebase", "Error adding language", e)
             }
     }
 
@@ -150,10 +146,7 @@ class LanguageRepositoryImpl : LanguageRepository {
             }
     }
 
-    override suspend fun updateCapitalizedPartsOfSpeech(
-        id: Int,
-        capitalizedPartsOfSpeech: String
-    ) {
+    override suspend fun updateCapitalizedPartsOfSpeech(id: Int, capitalizedPartsOfSpeech: String) {
         // change language capitalized parts of speech in database
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
         val userDocumentRef = FirebaseFirestore.getInstance().collection("users").document(userId)
@@ -168,85 +161,104 @@ class LanguageRepositoryImpl : LanguageRepository {
     }
 
     override suspend fun getLanguage(id: Int): LanguageItem? {
-        var languageItem: LanguageItem? = null
-        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-        val userDocumentRef = FirebaseFirestore.getInstance().collection("users").document(userId)
-        // find language with this id in firebase
-        userDocumentRef.collection("languages").document(id.toString()).get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    languageItem = LanguageItem(
-                        (document.data?.get("id") as Long).toInt(),
-                        document.data?.get("name") as String,
-                        document.data?.get("description") as String,
-                        document.data?.get("dictionary") as String,
-                        document.data?.get("grammar") as String,
-                        document.data?.get("vowels") as String,
-                        document.data?.get("consonants") as String,
-                        document.data?.get("puncSymbols") as String,
-                        document.data?.get("capitalizedPartsOfSpeech") as String
-                    )
-                    Log.d("firebase", "success getting")
-                } else {
-                    Log.d("firebase", "No such document")
-                }
+        return try {
+            var languageItem: LanguageItem? = null
+            val userId = FirebaseAuth.getInstance().currentUser!!.uid
+            val userDocumentRef =
+                FirebaseFirestore.getInstance().collection("users").document(userId)
+            // find language with this id in firebase
+            val document =
+                userDocumentRef.collection("languages").document(id.toString()).get().await()
+            if (document != null) {
+                languageItem = LanguageItem(
+                    (document.data?.get("id") as Long).toInt(),
+                    document.data?.get("name") as String,
+                    document.data?.get("description") as String,
+                    document.data?.get("dictionary") as String,
+                    document.data?.get("grammar") as String,
+                    document.data?.get("vowels") as String,
+                    document.data?.get("consonants") as String,
+                    document.data?.get("puncSymbols") as String,
+                    document.data?.get("capitalizedPartsOfSpeech") as String
+                )
+                Log.d("firebase", "success getting")
+            } else {
+                Log.d("firebase", "No such document")
             }
-            .addOnFailureListener { exception ->
-                Log.d("firebase", "Error getting language", exception)
-            }
-        return languageItem
+            languageItem
+        } catch (e: Exception) {
+            Log.d("firebase", "Error getting language", e)
+            null
+        }
     }
 
     override suspend fun exists(id: Int): Boolean {
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
         val userDocumentRef = FirebaseFirestore.getInstance().collection("users").document(userId)
-        // find language with this id in firebase
-        var existence = false
-        userDocumentRef.collection("languages").document(id.toString()).get()
-            .addOnSuccessListener { document ->
-                existence = document != null
-            }
-            .addOnFailureListener { e ->
-                Log.d("firebase", "Error exists", e)
-            }
-        return existence
+        return try {
+            val document =
+                userDocumentRef.collection("languages").document(id.toString()).get().await()
+            document.exists()
+        } catch (e: Exception) {
+            Log.d("firebase", "Error getting language", e)
+            false
+        }
     }
 
     override suspend fun getShortLanguageItems(): List<LanguageIdAndName> {
-        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-        val userDocumentRef = FirebaseFirestore.getInstance().collection("users").document(userId)
-        val languageItems = mutableListOf<LanguageIdAndName>()
-        userDocumentRef.collection("languages").get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    languageItems.add(LanguageIdAndName(
+        return try {
+            val userId = FirebaseAuth.getInstance().currentUser!!.uid
+            val userDocumentRef =
+                FirebaseFirestore.getInstance().collection("users").document(userId)
+            val languageItems = mutableListOf<LanguageIdAndName>()
+            // get all languages from the collection
+            val result = userDocumentRef.collection("languages").get().await()
+            for (document in result) {
+                languageItems.add(
+                    LanguageIdAndName(
                         (document.data["id"] as Long).toInt(),
                         document.data["name"] as String
-                    ))
-                }
+                    )
+                )
             }
-            .addOnFailureListener { exception ->
-                Log.d("firebase", "Error getting languages", exception)
-            }
-        return languageItems
+            Log.d("LanguageRepositoryImpl", languageItems.toString())
+            languageItems
+        } catch (e: Exception) {
+            Log.d("LanguageRepositoryImpl", "Error getting languages")
+            emptyList()
+        }
     }
 
     override suspend fun getMaxId(): Int {
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
         val userDocumentRef = FirebaseFirestore.getInstance().collection("users").document(userId)
         var maxId = 0
-        userDocumentRef.collection("languages").get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val id = (document.data["id"] as Long).toInt()
-                    if (id > maxId) {
-                        maxId = id
-                    }
+        return try {
+            val result = userDocumentRef.collection("languages").get().await()
+            for (document in result) {
+                val id = (document.data["id"] as Long).toInt()
+                if (id > maxId) {
+                    maxId = id
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.d("firebase", "Error getting max id", exception)
+            maxId
+        }
+        catch (e: Exception) {
+            Log.d("firebase", "Error getting max id", e)
+            0
+        }
+    }
+
+    override suspend fun createUser() {
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+        // create user empty document in users collection
+        val userCollection: MutableMap<String, Any> = HashMap()
+        FirebaseFirestore.getInstance().collection("users").document(userId).set(userCollection)
+            .addOnSuccessListener {
+                Log.d("firebase", "DocumentSnapshot added with ID: $userId")
             }
-        return maxId
+            .addOnFailureListener { e ->
+                Log.d("firebase", "Error adding document", e)
+            }
     }
 }

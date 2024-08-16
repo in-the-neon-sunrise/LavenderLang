@@ -74,9 +74,11 @@ class MainFragment : Fragment() {
             var languages = emptyList<Pair<Int, String>>()
             withContext(Dispatchers.IO) {
                 val items = GetShortLanguagesUseCase.execute(LanguageRepositoryImpl())
+                Log.d("main:items", items.toString())
                 languages = items.map { it.id to it.name }
             }
 
+            Log.d("main:langs", languages.toString())
             binding.blockingView.visibility = View.GONE
             binding.progressBar.visibility = View.GONE
 
@@ -98,6 +100,7 @@ class MainFragment : Fragment() {
                     findNavController().navigate(R.id.action_mainFragment_to_languageFragment)
                 }
         }
+        Log.d("meow", "we're here 2")
         return binding.root
     }
 

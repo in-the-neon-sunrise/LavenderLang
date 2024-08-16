@@ -64,7 +64,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textViewGender"
                 app:layout_constraintTop_toTopOf="@+id/textViewGender" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewGender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textViewNumber"
                 app:layout_constraintTop_toTopOf="@+id/textViewNumber" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textViewCase"
                 app:layout_constraintTop_toTopOf="@+id/textViewCase" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewCase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textViewTime"
                 app:layout_constraintTop_toTopOf="@+id/textViewTime" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -196,7 +196,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textViewPerson"
                 app:layout_constraintTop_toTopOf="@+id/textViewPerson" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewPerson"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -229,7 +229,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textViewMood"
                 app:layout_constraintTop_toTopOf="@+id/textViewMood" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewMood"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -262,7 +262,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textViewType"
                 app:layout_constraintTop_toTopOf="@+id/textViewType" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -295,7 +295,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textViewVoice"
                 app:layout_constraintTop_toTopOf="@+id/textViewVoice" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewVoice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -328,7 +328,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textViewDegreeOfComparison"
                 app:layout_constraintTop_toTopOf="@+id/textViewDegreeOfComparison" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewDegreeOfComparison"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -370,7 +370,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewGrammarRule" />
 
-            <com.lavenderlang.legacy.frontend.NonScrollListView
+            <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewGrammarRules"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

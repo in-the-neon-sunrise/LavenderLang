@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.data.UserRepositoryImpl
 import com.lavenderlang.domain.usecase.RegisterUseCase
 import com.lavenderlang.domain.auth.State
@@ -21,11 +22,10 @@ class SignupViewModel : ViewModel() {
         emit(State.LOADING)
 
         try {
-            val repo = UserRepositoryImpl()
-
             RegisterUseCase.execute(
                 UserModel(email, password),
-                repo
+                UserRepositoryImpl(),
+                LanguageRepositoryImpl()
             )
 
             emit(State.SUCCESS)

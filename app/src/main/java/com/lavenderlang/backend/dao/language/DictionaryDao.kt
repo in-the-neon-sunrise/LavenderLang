@@ -1,11 +1,9 @@
 package com.lavenderlang.backend.dao.language
 
 import android.util.Log
-import com.chaquo.python.Python
 import com.lavenderlang.backend.dao.help.MascDaoImpl
-import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
-import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.data.LanguageRepositoryDEPRECATED
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
@@ -28,7 +26,7 @@ interface DictionaryDao {
 
 }
 class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
-    private val languageRepository: LanguageRepository = LanguageRepository()
+    private val languageRepositoryDEPRECATED: LanguageRepositoryDEPRECATED = LanguageRepositoryDEPRECATED()
 ) : DictionaryDao {
     override fun addWord(dictionary: DictionaryEntity, word: IWordEntity) {
         for (letter in word.word) {
@@ -41,7 +39,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         dictionary.dict.add(word)
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             helper.addMadeByWord(dictionary, word)
-            languageRepository.updateDictionary(
+            languageRepositoryDEPRECATED.updateDictionary(
                 MyApp.getInstance().applicationContext, dictionary.languageId,
                 Serializer.getInstance().serializeDictionary(dictionary)
             )
@@ -53,7 +51,7 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
         dictionary.dict.remove(word)
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             helper.delMadeByWord(dictionary, word)
-            languageRepository.updateDictionary(
+            languageRepositoryDEPRECATED.updateDictionary(
                 MyApp.getInstance().applicationContext, dictionary.languageId,
                 Serializer.getInstance().serializeDictionary(dictionary)
             )

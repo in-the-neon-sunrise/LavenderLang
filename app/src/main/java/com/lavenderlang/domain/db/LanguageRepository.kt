@@ -32,4 +32,5 @@ interface LanguageRepository {
     suspend fun getShortLanguageItems() : List<LanguageIdAndName>
 
     suspend fun getMaxId() : Int
+    suspend fun createUser()
 }

@@ -3,28 +3,24 @@ package com.lavenderlang.ui
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.lavenderlang.R
-import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import kotlinx.coroutines.runBlocking
-import com.lavenderlang.databinding.ActivityMain2Binding
-import androidx.navigation.NavController
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.lavenderlang.backend.data.LanguageRepository
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.lavenderlang.R
 import com.lavenderlang.data.LanguageRepositoryImpl
+import com.lavenderlang.databinding.ActivityMain2Binding
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import kotlin.math.log
+import kotlinx.coroutines.runBlocking
 
 
 class MainActivity2: AppCompatActivity() {

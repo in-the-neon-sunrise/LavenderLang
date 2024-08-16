@@ -5,7 +5,7 @@ import com.chaquo.python.Python
 import com.lavenderlang.backend.dao.help.TransformationDaoImpl
 import com.lavenderlang.backend.dao.language.DictionaryHelperDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorHelperDaoImpl
-import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.data.LanguageRepositoryDEPRECATED
 import com.lavenderlang.domain.model.word.AdjectiveEntity
 import com.lavenderlang.domain.model.word.AdverbEntity
 import com.lavenderlang.domain.model.word.FuncPartEntity
@@ -27,7 +27,6 @@ import com.lavenderlang.domain.model.rule.GrammarRuleEntity
 import com.lavenderlang.domain.model.rule.IRuleEntity
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface GrammarRuleDao : RuleDao {
@@ -37,7 +36,7 @@ interface GrammarRuleDao : RuleDao {
     fun updateRule(rule : GrammarRuleEntity, masc: MascEntity, transformation: TransformationEntity, newAttrs: MutableMap<Attributes, Int>)
 }
 class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
-                         private val languageRepository: LanguageRepository = LanguageRepository()
+                         private val languageRepositoryDEPRECATED: LanguageRepositoryDEPRECATED = LanguageRepositoryDEPRECATED()
 ) : GrammarRuleDao {
     override fun updateMasc(rule : IRuleEntity, newMasc : MascEntity) {
         try {
@@ -153,11 +152,11 @@ class GrammarRuleDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictiona
         updateMutableAttrs(rule, newAttrs)
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             helper.updateMadeByRule(MyApp.language!!.dictionary, oldRule, rule)
-            languageRepository.updateGrammar(
+            languageRepositoryDEPRECATED.updateGrammar(
                 MyApp.getInstance().applicationContext, rule.languageId,
                 Serializer.getInstance().serializeGrammar(MyApp.language!!.grammar)
             )
-            languageRepository.updateDictionary(
+            languageRepositoryDEPRECATED.updateDictionary(
                 MyApp.getInstance().applicationContext, rule.languageId,
                 Serializer.getInstance().serializeDictionary(MyApp.language!!.dictionary)
             )

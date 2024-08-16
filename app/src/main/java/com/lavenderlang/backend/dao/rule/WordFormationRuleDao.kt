@@ -1,7 +1,7 @@
 package com.lavenderlang.backend.dao.rule
 
 import com.lavenderlang.backend.dao.help.TransformationDaoImpl
-import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.data.LanguageRepositoryDEPRECATED
 import com.lavenderlang.domain.model.word.AdjectiveEntity
 import com.lavenderlang.domain.model.word.AdverbEntity
 import com.lavenderlang.domain.model.word.FuncPartEntity
@@ -23,7 +23,6 @@ import com.lavenderlang.domain.model.rule.IRuleEntity
 import com.lavenderlang.domain.model.rule.WordFormationRuleEntity
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface WordFormationRuleDao : RuleDao {
@@ -35,7 +34,7 @@ interface WordFormationRuleDao : RuleDao {
     fun wordFormationTransformByRule(word : IWordEntity, rule : WordFormationRuleEntity) : IWordEntity
 
 }
-class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository())
+class WordFormationRuleDaoImpl(private val languageRepositoryDEPRECATED: LanguageRepositoryDEPRECATED = LanguageRepositoryDEPRECATED())
     : WordFormationRuleDao {
     override fun updateMasc(rule: IRuleEntity, newMasc: MascEntity) {
         try {
@@ -78,7 +77,7 @@ class WordFormationRuleDaoImpl(private val languageRepository: LanguageRepositor
         updateImmutableAttrs(rule, newAttrs)
         updatePartOfSpeech(rule, partOfSpeech)
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateGrammar(
+            languageRepositoryDEPRECATED.updateGrammar(
                 MyApp.getInstance().applicationContext, rule.languageId,
                 Serializer.getInstance().serializeGrammar(MyApp.language!!.grammar)
             )

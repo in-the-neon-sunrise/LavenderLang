@@ -1,13 +1,12 @@
 package com.lavenderlang.backend.dao.language
 
-import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.data.LanguageRepositoryDEPRECATED
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.language.LanguageEntity
 import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface WritingDao {
@@ -17,7 +16,7 @@ interface WritingDao {
     fun deleteCapitalizedPartOfSpeech(language : LanguageEntity, partOfSpeech : PartOfSpeech)
 }
 
-class WritingDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()) : WritingDao {
+class WritingDaoImpl(private val languageRepositoryDEPRECATED: LanguageRepositoryDEPRECATED = LanguageRepositoryDEPRECATED()) : WritingDao {
     override fun changeVowels(language: LanguageEntity, newLetters: String) {
         for (letter in newLetters.lowercase()) {
             if (letter == ' ') continue
@@ -32,7 +31,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         }
         language.vowels = newLetters.lowercase()
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateVowels(
+            languageRepositoryDEPRECATED.updateVowels(
                 MyApp.getInstance().applicationContext, language.languageId,
                 language.vowels
             )
@@ -53,7 +52,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         }
         language.consonants = newLetters.lowercase()
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateConsonants(
+            languageRepositoryDEPRECATED.updateConsonants(
                 MyApp.getInstance().applicationContext, language.languageId,
                 language.consonants
             )
@@ -64,7 +63,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
         if (language.capitalizedPartsOfSpeech.contains(partOfSpeech)) return
         language.capitalizedPartsOfSpeech.add(partOfSpeech)
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateCapitalizedPartsOfSpeech(
+            languageRepositoryDEPRECATED.updateCapitalizedPartsOfSpeech(
                 MyApp.getInstance().applicationContext, language.languageId,
                 Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
             )
@@ -74,7 +73,7 @@ class WritingDaoImpl(private val languageRepository: LanguageRepository = Langua
     override fun deleteCapitalizedPartOfSpeech(language: LanguageEntity, partOfSpeech: PartOfSpeech) {
         language.capitalizedPartsOfSpeech.remove(partOfSpeech)
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateCapitalizedPartsOfSpeech(
+            languageRepositoryDEPRECATED.updateCapitalizedPartsOfSpeech(
                 MyApp.getInstance().applicationContext, language.languageId,
                 Serializer.getInstance().serializeCapitalizedPartsOfSpeech(language.capitalizedPartsOfSpeech)
             )

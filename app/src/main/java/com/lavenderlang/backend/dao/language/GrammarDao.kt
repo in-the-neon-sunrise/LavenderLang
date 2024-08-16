@@ -2,7 +2,7 @@ package com.lavenderlang.backend.dao.language
 
 import android.util.Log
 import com.lavenderlang.backend.dao.word.WordDaoImpl
-import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.data.LanguageRepositoryDEPRECATED
 import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.domain.model.help.Attributes
@@ -12,7 +12,6 @@ import com.lavenderlang.domain.model.rule.GrammarRuleEntity
 import com.lavenderlang.domain.model.rule.WordFormationRuleEntity
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface GrammarDao {
@@ -26,7 +25,7 @@ interface GrammarDao {
 }
 
 class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
-                     private val languageRepository: LanguageRepository = LanguageRepository()
+                     private val languageRepositoryDEPRECATED: LanguageRepositoryDEPRECATED = LanguageRepositoryDEPRECATED()
 ) : GrammarDao {
     override fun addOption(grammar: GrammarEntity, option: CharacteristicEntity) {
         when (option.type) {
@@ -43,7 +42,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         }
         grammar.nextIds[option.type] = grammar.nextIds[option.type]!! + 1
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateGrammar(
+            languageRepositoryDEPRECATED.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
@@ -73,7 +72,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
             }
         }
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateGrammar(
+            languageRepositoryDEPRECATED.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
@@ -100,7 +99,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         if (!map.contains(optionId)) return
         map[optionId] = newOption
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateGrammar(
+            languageRepositoryDEPRECATED.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
@@ -129,11 +128,11 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
             if (rule.masc.immutableAttrs.isNotEmpty()) {
                 helper.addMadeByRule(MyApp.language!!.dictionary, rule)
             }
-            languageRepository.updateDictionary(
+            languageRepositoryDEPRECATED.updateDictionary(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeDictionary(MyApp.language!!.dictionary)
             )
-            languageRepository.updateGrammar(
+            languageRepositoryDEPRECATED.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
@@ -144,13 +143,13 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
         grammar.grammarRules.remove(rule)
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
             helper.delMadeByRule(MyApp.language!!.dictionary, rule)
-            languageRepository.updateDictionary(
+            languageRepositoryDEPRECATED.updateDictionary(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeDictionary(
                     MyApp.language!!.dictionary
                 )
             )
-            languageRepository.updateGrammar(
+            languageRepositoryDEPRECATED.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
@@ -160,7 +159,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
     override fun addWordFormationRule(grammar: GrammarEntity, rule: WordFormationRuleEntity) {
         grammar.wordFormationRules.add(rule)
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateGrammar(
+            languageRepositoryDEPRECATED.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )
@@ -170,7 +169,7 @@ class GrammarDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHe
     override fun deleteWordFormationRule(grammar: GrammarEntity, rule: WordFormationRuleEntity) {
         grammar.wordFormationRules.remove(rule)
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updateGrammar(
+            languageRepositoryDEPRECATED.updateGrammar(
                 MyApp.getInstance().applicationContext, grammar.languageId,
                 Serializer.getInstance().serializeGrammar(grammar)
             )

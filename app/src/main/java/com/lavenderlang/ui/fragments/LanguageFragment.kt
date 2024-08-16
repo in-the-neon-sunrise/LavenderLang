@@ -19,7 +19,11 @@ import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.domain.exception.FileWorkException
 import com.lavenderlang.databinding.FragmentLanguageBinding
+import com.lavenderlang.domain.usecase.language.ChangeDescriptionUseCase
+import com.lavenderlang.domain.usecase.language.ChangeNameUseCase
+import com.lavenderlang.domain.usecase.language.CopyLanguageUseCase
 import com.lavenderlang.domain.usecase.language.CreateLanguageUseCase
+import com.lavenderlang.domain.usecase.language.DeleteLanguageUseCase
 import com.lavenderlang.domain.usecase.language.GetLanguageUseCase
 import com.lavenderlang.ui.MyApp
 //import com.lavenderlang.frontend.languages
@@ -35,7 +39,6 @@ class LanguageFragment: Fragment() {
 
     companion object{
         var idLang: Int = -1
-        val languageDao: LanguageDaoImpl = LanguageDaoImpl()
     }
 
     override fun onCreateView(
@@ -126,11 +129,15 @@ class LanguageFragment: Fragment() {
                 idLang = lang
                 runBlocking {
                     withContext(Dispatchers.IO) {
-                        languageDao.getLanguage(lang)
+                        MyApp.language = GetLanguageUseCase.execute(lang, LanguageRepositoryImpl())
                         if (MyApp.language == null) {
-                            languageDao.createLanguage("Язык$idLang", "")
+                            MyApp.language = CreateLanguageUseCase.execute(
+                                "Язык$lang",
+                                "",
+                                LanguageRepositoryImpl(),
+                                lang
+                            )
                         }
-
                     }
                 }
             }
@@ -148,10 +155,7 @@ class LanguageFragment: Fragment() {
 
             override fun afterTextChanged(s: Editable) {
                 runBlocking {
-                    languageDao.changeName(
-                        MyApp.language!!,
-                        binding.editLanguageName.text.toString()
-                    )
+                    ChangeNameUseCase.execute(MyApp.language!!, binding.editLanguageName.text.toString(), LanguageRepositoryImpl())
                 }
             }
         })
@@ -162,10 +166,7 @@ class LanguageFragment: Fragment() {
 
             override fun afterTextChanged(s: Editable) {
                 runBlocking {
-                    languageDao.changeDescription(
-                        MyApp.language!!,
-                        binding.editDescription.text.toString()
-                    )
+                    ChangeDescriptionUseCase.execute(MyApp.language!!, binding.editDescription.text.toString(), LanguageRepositoryImpl())
                 }
             }
         })
@@ -196,13 +197,14 @@ class LanguageFragment: Fragment() {
         }
         binding.buttonCopy.setOnClickListener {
             runBlocking {
-                languageDao.copyLanguage(MyApp.language!!)
+                val nextLanguageId = preferences.getInt("nextLanguageId", 0)
+                CopyLanguageUseCase.execute(MyApp.language!!, nextLanguageId, LanguageRepositoryImpl())
             }
             findNavController().navigate(R.id.action_languageFragment_to_mainFragment)
         }
         binding.buttonDelete.setOnClickListener {
             runBlocking {
-                Companion.languageDao.deleteLanguage(idLang)
+                DeleteLanguageUseCase.execute(MyApp.language!!.languageId, LanguageRepositoryImpl())
             }
             findNavController().navigate(R.id.action_languageFragment_to_mainFragment)
         }

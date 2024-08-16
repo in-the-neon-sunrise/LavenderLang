@@ -1,19 +1,18 @@
 package com.lavenderlang.backend.dao.language
 
-import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.backend.data.LanguageRepositoryDEPRECATED
 import com.lavenderlang.domain.model.language.LanguageEntity
 import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 interface PunctuationDao {
     fun updatePunctuationSymbol(language: LanguageEntity, id: Int, newSymbol: String)
 }
 
-class PunctuationDaoImpl(private val languageRepository: LanguageRepository = LanguageRepository()): PunctuationDao {
+class PunctuationDaoImpl(private val languageRepositoryDEPRECATED: LanguageRepositoryDEPRECATED = LanguageRepositoryDEPRECATED()): PunctuationDao {
     override fun updatePunctuationSymbol(language: LanguageEntity, id: Int, newSymbol: String) {
         //check if symbol is in language
         for (letter in newSymbol) {
@@ -23,7 +22,7 @@ class PunctuationDaoImpl(private val languageRepository: LanguageRepository = La
         }
         language.puncSymbols[language.puncSymbols.keys.toList()[id]] = newSymbol
         MyApp.lifecycleScope!!.launch(Dispatchers.IO) {
-            languageRepository.updatePuncSymbols(
+            languageRepositoryDEPRECATED.updatePuncSymbols(
                 MyApp.getInstance().applicationContext, language.languageId,
                 Serializer.getInstance().serializePuncSymbols(language.puncSymbols)
             )
