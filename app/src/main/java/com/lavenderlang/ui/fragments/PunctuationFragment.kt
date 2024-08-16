@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.PunctuationDao
 import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.databinding.FragmentPunctuationBinding
 import com.lavenderlang.ui.MyApp
 

@@ -19,13 +19,13 @@ import com.lavenderlang.backend.dao.language.GrammarDao
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDao
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
-import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.MascEntity
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.help.TransformationEntity
-import com.lavenderlang.backend.entity.rule.WordFormationRuleEntity
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
-import com.lavenderlang.backend.service.exception.IncorrectRegexException
+import com.lavenderlang.domain.model.help.Attributes
+import com.lavenderlang.domain.model.help.MascEntity
+import com.lavenderlang.domain.model.help.PartOfSpeech
+import com.lavenderlang.domain.model.help.TransformationEntity
+import com.lavenderlang.domain.model.rule.WordFormationRuleEntity
+import com.lavenderlang.domain.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.exception.IncorrectRegexException
 import com.lavenderlang.ui.MyApp
 
 class WordFormationRuleActivity: AppCompatActivity()  {
@@ -577,15 +577,15 @@ class WordFormationRuleActivity: AppCompatActivity()  {
 
     fun updateRule(){
         var partOfSpeech=when(idPartOfSpeech){
-            0->PartOfSpeech.NOUN
-            1->PartOfSpeech.VERB
-            2->PartOfSpeech.ADJECTIVE
-            3->PartOfSpeech.ADVERB
-            4->PartOfSpeech.PARTICIPLE
-            5->PartOfSpeech.VERB_PARTICIPLE
-            6->PartOfSpeech.PRONOUN
-            7->PartOfSpeech.NUMERAL
-            else->PartOfSpeech.FUNC_PART
+            0-> PartOfSpeech.NOUN
+            1-> PartOfSpeech.VERB
+            2-> PartOfSpeech.ADJECTIVE
+            3-> PartOfSpeech.ADVERB
+            4-> PartOfSpeech.PARTICIPLE
+            5-> PartOfSpeech.VERB_PARTICIPLE
+            6-> PartOfSpeech.PRONOUN
+            7-> PartOfSpeech.NUMERAL
+            else-> PartOfSpeech.FUNC_PART
         }
         try {
             var newMasc = MascEntity(partOfSpeech, attrs, regex)

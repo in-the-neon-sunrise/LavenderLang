@@ -2,10 +2,9 @@ package com.lavenderlang.ui.fragments.login
 
 import androidx.lifecycle.ViewModel
 import com.lavenderlang.data.UserRepositoryImpl
-import com.lavenderlang.domain.LoginUseCase
-import com.lavenderlang.domain.RegisterUseCase
-import com.lavenderlang.domain.State
-import com.lavenderlang.domain.model.UserModel
+import com.lavenderlang.domain.usecase.LoginUseCase
+import com.lavenderlang.domain.auth.State
+import com.lavenderlang.domain.auth.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

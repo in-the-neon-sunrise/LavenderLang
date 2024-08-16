@@ -1,7 +1,7 @@
 package com.lavenderlang.backend.dao.rule
 
-import com.lavenderlang.backend.entity.help.MascEntity
-import com.lavenderlang.backend.entity.rule.IRuleEntity
+import com.lavenderlang.domain.model.help.MascEntity
+import com.lavenderlang.domain.model.rule.IRuleEntity
 
 interface RuleDao {
     fun updateMasc(rule : IRuleEntity, newMasc : MascEntity)

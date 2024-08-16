@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.PunctuationDao
 import com.lavenderlang.backend.dao.language.PunctuationDaoImpl
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.ui.MyApp
 
 class PunctuationActivity : AppCompatActivity() {
@@ -141,7 +141,7 @@ class PunctuationActivity : AppCompatActivity() {
                 punctuationDao.updatePunctuationSymbol(MyApp.language!!, 16, editTextConlangSymbol17.text.toString())
                 punctuationDao.updatePunctuationSymbol(MyApp.language!!, 17, editTextConlangSymbol18.text.toString())
                 punctuationDao.updatePunctuationSymbol(MyApp.language!!, 18, editTextConlangSymbol19.text.toString())
-            }catch (e:ForbiddenSymbolsException){
+            }catch (e: ForbiddenSymbolsException){
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
         }

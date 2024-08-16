@@ -18,8 +18,8 @@ import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.word.IWordEntity
+import com.lavenderlang.domain.model.help.PartOfSpeech
+import com.lavenderlang.domain.model.word.IWordEntity
 import com.lavenderlang.backend.service.Serializer
 
 class DictionaryActivity : AppCompatActivity() {

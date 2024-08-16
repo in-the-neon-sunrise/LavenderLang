@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.WritingDao
 import com.lavenderlang.backend.dao.language.WritingDaoImpl
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.model.help.PartOfSpeech
+import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.ui.MyApp
 
 class WritingActivity : AppCompatActivity() {

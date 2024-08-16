@@ -6,11 +6,11 @@ import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.language.*
-import com.lavenderlang.backend.entity.word.*
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.model.help.PartOfSpeech
+import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.domain.model.language.DictionaryEntity
+import com.lavenderlang.domain.model.word.IWordEntity
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

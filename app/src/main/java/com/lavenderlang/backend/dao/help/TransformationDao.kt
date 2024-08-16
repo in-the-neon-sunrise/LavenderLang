@@ -1,6 +1,6 @@
 package com.lavenderlang.backend.dao.help
 
-import com.lavenderlang.backend.entity.help.TransformationEntity
+import com.lavenderlang.domain.model.help.TransformationEntity
 
 interface TransformationDao {
     fun updateDelFromBeginning(transformation: TransformationEntity, newNum : Int)

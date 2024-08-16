@@ -13,10 +13,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.anggrayudi.storage.extension.launchOnUiThread
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.service.exception.FileWorkException
+import com.lavenderlang.data.LanguageRepositoryImpl
+import com.lavenderlang.domain.exception.FileWorkException
 import com.lavenderlang.databinding.FragmentLanguageBinding
+import com.lavenderlang.domain.usecase.language.CreateLanguageUseCase
+import com.lavenderlang.domain.usecase.language.GetLanguageUseCase
 import com.lavenderlang.ui.MyApp
 //import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
@@ -103,13 +107,19 @@ class LanguageFragment: Fragment() {
         //how it was started?
         when(val lang = preferences.getInt("lang", -1)) {
             -1 -> {
-                idLang = MyApp.nextLanguageId
+                // get nextLanguageId from shared preferences
+                idLang = preferences.getInt("nextLanguageId", 0)
                 runBlocking {
                     withContext(Dispatchers.IO) {
-                        languageDao.createLanguage("Язык$idLang", "")
+                        MyApp.language = CreateLanguageUseCase.execute(
+                            "Язык$idLang",
+                            "",
+                            LanguageRepositoryImpl(),
+                            idLang
+                        )
                     }
                 }
-                Log.d("language", "new language: ${MyApp.language!!.languageId}")
+                preferences.edit().putInt("nextLanguageId", idLang + 1).apply()
             }
 
             else -> {
@@ -120,6 +130,7 @@ class LanguageFragment: Fragment() {
                         if (MyApp.language == null) {
                             languageDao.createLanguage("Язык$idLang", "")
                         }
+
                     }
                 }
             }

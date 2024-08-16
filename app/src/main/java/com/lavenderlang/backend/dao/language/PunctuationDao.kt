@@ -1,8 +1,8 @@
 package com.lavenderlang.backend.dao.language
 
 import com.lavenderlang.backend.data.LanguageRepository
-import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.model.language.LanguageEntity
+import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers

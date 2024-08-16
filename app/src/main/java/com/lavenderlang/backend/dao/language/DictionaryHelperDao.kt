@@ -4,9 +4,9 @@ import android.util.Log
 import com.chaquo.python.Python
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
-import com.lavenderlang.backend.entity.language.DictionaryEntity
-import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
-import com.lavenderlang.backend.entity.word.IWordEntity
+import com.lavenderlang.domain.model.language.DictionaryEntity
+import com.lavenderlang.domain.model.rule.GrammarRuleEntity
+import com.lavenderlang.domain.model.word.IWordEntity
 import com.lavenderlang.ui.MyApp
 
 interface DictionaryHelperDao {

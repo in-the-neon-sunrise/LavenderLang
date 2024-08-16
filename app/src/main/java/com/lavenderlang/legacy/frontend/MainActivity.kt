@@ -14,7 +14,7 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.domain.model.language.LanguageEntity
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.runBlocking
 
@@ -25,10 +25,11 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("MainActivity", "onCreate")
 
-        if (MyApp.nextLanguageId == -1) {
-            val intent = Intent(this, SplashScreenActivity::class.java)
-            startActivity(intent)
-        }
+        // fixme: shared prefs
+//        if (MyApp.nextLanguageId == -1) {
+//            val intent = Intent(this, SplashScreenActivity::class.java)
+//            startActivity(intent)
+//        }
         setTheme(R.style.AppTheme_Night)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_activity)
@@ -250,21 +251,21 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "onResume")
         super.onResume()
 
-        val languages = runBlocking {
-            LanguageDaoImpl().getLanguagesFromDB()
-        }
-
-        val listLanguages: ListView = findViewById(R.id.listLanguages)
-        val adapter: ArrayAdapter<LanguageEntity> =
-            ArrayAdapter(this, android.R.layout.simple_list_item_1, languages.values.toList())
-        listLanguages.adapter = adapter
-        adapter.notifyDataSetChanged()
-        listLanguages.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, itemClicked, position, id ->
-                val intent = Intent(this@MainActivity, LanguageActivity::class.java)
-                intent.putExtra("lang", languages.values.toList()[position].languageId)
-                startActivity(intent)
-            }
+//        val languages = runBlocking {
+//            LanguageDaoImpl().getLanguagesFromDB()
+//        }
+//
+//        val listLanguages: ListView = findViewById(R.id.listLanguages)
+//        val adapter: ArrayAdapter<LanguageEntity> =
+//            ArrayAdapter(this, android.R.layout.simple_list_item_1, languages.values.toList())
+//        listLanguages.adapter = adapter
+//        adapter.notifyDataSetChanged()
+//        listLanguages.onItemClickListener =
+//            AdapterView.OnItemClickListener { parent, itemClicked, position, id ->
+//                val intent = Intent(this@MainActivity, LanguageActivity::class.java)
+//                intent.putExtra("lang", languages.values.toList()[position].languageId)
+//                startActivity(intent)
+//            }
     }
 
     override fun onPause() {

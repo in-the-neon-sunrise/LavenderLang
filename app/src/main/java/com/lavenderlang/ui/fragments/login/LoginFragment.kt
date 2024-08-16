@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lavenderlang.R
 import com.lavenderlang.databinding.FragmentLoginBinding
-import com.lavenderlang.domain.State
+import com.lavenderlang.domain.auth.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -39,67 +39,75 @@ class LoginFragment : Fragment() {
 
         binding.loginButton.setOnClickListener {
 
-            lifecycleScope.launch {
-                viewModel.login(
-                    binding.inputLogin2.text.toString(),
-                    binding.inputPassword2.text.toString()
-                ).collect { value ->
-                    binding.apply {
-                        when (value) {
+            if (binding.inputLogin2.text.toString().isEmpty())
+                    Snackbar.make(binding.root, "Введите логин!", Snackbar.LENGTH_SHORT).show()
+            if (binding.inputPassword2.text.toString().isEmpty())
+                    Snackbar.make(binding.root, "Введите пароль!", Snackbar.LENGTH_SHORT).show()
+            else {
 
-                            State.LOADING -> {
-                                blockingView.visibility = View.VISIBLE
-                                progressBar.visibility = View.VISIBLE
-                            }
+                lifecycleScope.launch {
+                    viewModel.login(
+                        binding.inputLogin2.text.toString(),
+                        binding.inputPassword2.text.toString()
+                    ).collect { value ->
+                        binding.apply {
+                            when (value) {
 
-                            State.SUCCESS -> {
-
-                                progressBar.setVisibilityAfterHide(View.GONE)
-                                progressBar.hide()
-
-                                val anim = ObjectAnimator.ofFloat(
-                                    blockingView,
-                                    "alpha",
-                                    0.5f,
-                                    0f
-                                )
-
-                                anim.duration = 500
-                                anim.start()
-
-                                withContext(Dispatchers.IO) {
-                                    Thread.sleep(500)
+                                State.LOADING -> {
+                                    blockingView.visibility = View.VISIBLE
+                                    progressBar.visibility = View.VISIBLE
                                 }
 
-                                blockingView.visibility = View.GONE
+                                State.SUCCESS -> {
 
-                                findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
-                            }
+                                    progressBar.setVisibilityAfterHide(View.GONE)
+                                    progressBar.hide()
 
-                            State.ERROR -> {
+                                    val anim = ObjectAnimator.ofFloat(
+                                        blockingView,
+                                        "alpha",
+                                        0.5f,
+                                        0f
+                                    )
 
-                                Snackbar.make(binding.root, "ERROR!", Snackbar.LENGTH_SHORT).show()
+                                    anim.duration = 500
+                                    anim.start()
 
-                                progressBar.setVisibilityAfterHide(View.GONE)
-                                progressBar.hide()
+                                    withContext(Dispatchers.IO) {
+                                        Thread.sleep(500)
+                                    }
 
-                                val anim = ObjectAnimator.ofFloat(
-                                    blockingView,
-                                    "alpha",
-                                    0.5f,
-                                    0f
-                                )
+                                    blockingView.visibility = View.GONE
 
-                                anim.duration = 500
-                                anim.start()
-
-                                withContext(Dispatchers.IO) {
-                                    Thread.sleep(500)
+                                    findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
                                 }
 
-                                blockingView.visibility = View.GONE
-                            }
+                                else -> {
 
+                                    Snackbar.make(binding.root, "Неверный логин или пароль!", Snackbar.LENGTH_SHORT)
+                                        .show()
+
+                                    progressBar.setVisibilityAfterHide(View.GONE)
+                                    progressBar.hide()
+
+                                    val anim = ObjectAnimator.ofFloat(
+                                        blockingView,
+                                        "alpha",
+                                        0.5f,
+                                        0f
+                                    )
+
+                                    anim.duration = 500
+                                    anim.start()
+
+                                    withContext(Dispatchers.IO) {
+                                        Thread.sleep(500)
+                                    }
+
+                                    blockingView.visibility = View.GONE
+                                }
+
+                            }
                         }
                     }
                 }

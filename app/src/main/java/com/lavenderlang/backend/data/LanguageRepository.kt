@@ -1,17 +1,13 @@
 package com.lavenderlang.backend.data
 
 import android.content.Context
-import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.domain.model.language.LanguageEntity
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.domain.db.LanguageIdAndName
+import com.lavenderlang.domain.db.LanguageItem
 
 
 class LanguageRepository {
-    fun loadAllLanguages(context: Context) : ArrayList<LanguageItem> {
-        val languageDB: LanguageDB = LanguageDB.getInstance(context)
-        val languageDao: LanguageDao = languageDB.languageDao()
-        return languageDao.selectAll() as ArrayList<LanguageItem>
-    }
-
     fun insertLanguage(context: Context, id: Int, language: LanguageEntity) {
         val languageDB: LanguageDB = LanguageDB.getInstance(context)
         val languageDao: LanguageDao = languageDB.languageDao()
@@ -108,5 +104,11 @@ class LanguageRepository {
         val languageDB: LanguageDB = LanguageDB.getInstance(context)
         val languageDao: LanguageDao = languageDB.languageDao()
         return languageDao.getShortLanguages()
+    }
+
+    fun getMaxId(context: Context) : Int {
+        val languageDB: LanguageDB = LanguageDB.getInstance(context)
+        val languageDao: LanguageDao = languageDB.languageDao()
+        return languageDao.getMaxId()
     }
 }

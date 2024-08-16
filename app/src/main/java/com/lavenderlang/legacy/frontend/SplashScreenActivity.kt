@@ -14,14 +14,12 @@ import kotlinx.coroutines.runBlocking
 class SplashScreenActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("SplashScreenActivity", "onCreate ${MyApp.nextLanguageId}")
-        if (MyApp.nextLanguageId == -1) {
-            Log.d("SplashScreenActivity", "getting languages from DB")
-            runBlocking {
-                LanguageDaoImpl().getLanguagesFromDB()
-            }
-            if (MyApp.nextLanguageId == -1) MyApp.nextLanguageId = 0
-        }
+//        if (MyApp.nextLanguageId == -1) {
+//            runBlocking {
+//                //LanguageDaoImpl().getLanguagesFromDB()
+//            }
+//            if (MyApp.nextLanguageId == -1) MyApp.nextLanguageId = 0
+//        }
 
         setContentView(R.layout.splash_screen_activity)
         Handler(Looper.getMainLooper()).postDelayed({

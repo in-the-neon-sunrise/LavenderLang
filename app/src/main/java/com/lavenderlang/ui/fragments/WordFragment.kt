@@ -23,11 +23,11 @@ import com.lavenderlang.backend.dao.rule.WordFormationRuleDao
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.dao.word.WordDao
 import com.lavenderlang.backend.dao.word.WordDaoImpl
-import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.word.IWordEntity
-import com.lavenderlang.backend.entity.word.NounEntity
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.model.help.Attributes
+import com.lavenderlang.domain.model.help.PartOfSpeech
+import com.lavenderlang.domain.model.word.IWordEntity
+import com.lavenderlang.domain.model.word.NounEntity
+import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.databinding.FragmentWordBinding
 import com.lavenderlang.ui.MyApp
 

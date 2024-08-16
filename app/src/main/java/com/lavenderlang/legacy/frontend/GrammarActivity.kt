@@ -15,7 +15,6 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
@@ -23,11 +22,20 @@ import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDao
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
-import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.CharacteristicEntity
-import com.lavenderlang.backend.entity.language.GrammarEntity
-import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.domain.model.help.Attributes
+import com.lavenderlang.domain.model.help.CharacteristicEntity
+import com.lavenderlang.domain.model.language.GrammarEntity
+import com.lavenderlang.domain.model.rule.GrammarRuleEntity
 import com.lavenderlang.backend.service.*
+import com.lavenderlang.domain.rusCase
+import com.lavenderlang.domain.rusDegreeOfComparison
+import com.lavenderlang.domain.rusGender
+import com.lavenderlang.domain.rusMood
+import com.lavenderlang.domain.rusNumber
+import com.lavenderlang.domain.rusPerson
+import com.lavenderlang.domain.rusTime
+import com.lavenderlang.domain.rusType
+import com.lavenderlang.domain.rusVoice
 
 
 class GrammarActivity : AppCompatActivity() {

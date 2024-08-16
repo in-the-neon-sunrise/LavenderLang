@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.anggrayudi.storage.SimpleStorageHelper
-import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.domain.model.language.LanguageEntity
 
 class MyApp : Application() {
     companion object {

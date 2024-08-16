@@ -18,15 +18,15 @@ import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
-import com.lavenderlang.backend.entity.help.Attributes
-import com.lavenderlang.backend.entity.help.MascEntity
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.help.TransformationEntity
-import com.lavenderlang.backend.entity.language.GrammarEntity
-import com.lavenderlang.backend.entity.rule.GrammarRuleEntity
+import com.lavenderlang.domain.model.help.Attributes
+import com.lavenderlang.domain.model.help.MascEntity
+import com.lavenderlang.domain.model.help.PartOfSpeech
+import com.lavenderlang.domain.model.help.TransformationEntity
+import com.lavenderlang.domain.model.language.GrammarEntity
+import com.lavenderlang.domain.model.rule.GrammarRuleEntity
 import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
-import com.lavenderlang.backend.service.exception.IncorrectRegexException
+import com.lavenderlang.domain.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.exception.IncorrectRegexException
 
 class GrammarRuleActivity: AppCompatActivity(){
     companion object{
@@ -448,15 +448,15 @@ class GrammarRuleActivity: AppCompatActivity(){
     }
     fun updateRule(){
         var partOfSpeech=when(idPartOfSpeech){
-            0->PartOfSpeech.NOUN
-            1->PartOfSpeech.VERB
-            2->PartOfSpeech.ADJECTIVE
-            3->PartOfSpeech.ADVERB
-            4->PartOfSpeech.PARTICIPLE
-            5->PartOfSpeech.VERB_PARTICIPLE
-            6->PartOfSpeech.PRONOUN
-            7->PartOfSpeech.NUMERAL
-            else->PartOfSpeech.FUNC_PART
+            0-> PartOfSpeech.NOUN
+            1-> PartOfSpeech.VERB
+            2-> PartOfSpeech.ADJECTIVE
+            3-> PartOfSpeech.ADVERB
+            4-> PartOfSpeech.PARTICIPLE
+            5-> PartOfSpeech.VERB_PARTICIPLE
+            6-> PartOfSpeech.PRONOUN
+            7-> PartOfSpeech.NUMERAL
+            else-> PartOfSpeech.FUNC_PART
         }
         try {
             var newMasc = MascEntity( partOfSpeech, attrs, regex)
@@ -467,10 +467,10 @@ class GrammarRuleActivity: AppCompatActivity(){
                 newTransformation,
                 mutableAttrs
             )
-        }catch (e:IncorrectRegexException){
+        }catch (e: IncorrectRegexException){
             Toast.makeText(this@GrammarRuleActivity, e.message, Toast.LENGTH_LONG).show()
         }
-        catch (e:ForbiddenSymbolsException){
+        catch (e: ForbiddenSymbolsException){
             Toast.makeText(this@GrammarRuleActivity, e.message, Toast.LENGTH_LONG).show()
         }
         catch (e:Exception){

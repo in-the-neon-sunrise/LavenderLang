@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.lavenderlang.domain.db.LanguageIdAndName
+import com.lavenderlang.domain.db.LanguageItem
 
 @Dao
 interface LanguageDao {
@@ -50,4 +52,8 @@ interface LanguageDao {
     // get all language names and ids
     @Query("SELECT id, name FROM language_table")
     fun getShortLanguages(): List<LanguageIdAndName>
+
+    fun getMaxId(): Int {
+        return selectAll().maxByOrNull { it.id }?.id ?: -1
+    }
 }

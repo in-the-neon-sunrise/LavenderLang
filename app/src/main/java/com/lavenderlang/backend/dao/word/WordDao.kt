@@ -2,9 +2,19 @@ package com.lavenderlang.backend.dao.word
 
 import android.util.Log
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
-import com.lavenderlang.backend.entity.help.*
-import com.lavenderlang.backend.entity.word.*
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.model.help.Attributes
+import com.lavenderlang.domain.model.help.PartOfSpeech
+import com.lavenderlang.domain.model.word.AdjectiveEntity
+import com.lavenderlang.domain.model.word.AdverbEntity
+import com.lavenderlang.domain.model.word.FuncPartEntity
+import com.lavenderlang.domain.model.word.IWordEntity
+import com.lavenderlang.domain.model.word.NounEntity
+import com.lavenderlang.domain.model.word.NumeralEntity
+import com.lavenderlang.domain.model.word.ParticipleEntity
+import com.lavenderlang.domain.model.word.PronounEntity
+import com.lavenderlang.domain.model.word.VerbEntity
+import com.lavenderlang.domain.model.word.VerbParticipleEntity
 import com.lavenderlang.ui.MyApp
 
 interface WordDao {

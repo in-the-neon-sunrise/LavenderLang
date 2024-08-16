@@ -15,9 +15,9 @@ import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.language.DictionaryEntity
-import com.lavenderlang.backend.entity.word.IWordEntity
+import com.lavenderlang.domain.model.help.PartOfSpeech
+import com.lavenderlang.domain.model.language.DictionaryEntity
+import com.lavenderlang.domain.model.word.IWordEntity
 import com.lavenderlang.databinding.FragmentDictionaryBinding
 import com.lavenderlang.ui.MyApp
 

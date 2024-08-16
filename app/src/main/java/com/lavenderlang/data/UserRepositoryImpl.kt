@@ -1,8 +1,8 @@
 package com.lavenderlang.data
 
 import com.google.firebase.auth.FirebaseAuth
-import com.lavenderlang.domain.UserRepository
-import com.lavenderlang.domain.model.UserModel
+import com.lavenderlang.domain.auth.UserRepository
+import com.lavenderlang.domain.auth.UserModel
 import kotlinx.coroutines.tasks.await
 
 

@@ -20,6 +20,10 @@ import androidx.navigation.NavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.lavenderlang.backend.data.LanguageRepository
+import com.lavenderlang.data.LanguageRepositoryImpl
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.math.log
 
 
@@ -41,9 +45,13 @@ class MainActivity2: AppCompatActivity() {
 
         MyApp.lifecycleScope = lifecycleScope
 
-        if (MyApp.nextLanguageId == -1) {
-            runBlocking { LanguageDaoImpl().getLanguagesFromDB() }
-            if (MyApp.nextLanguageId == -1) MyApp.nextLanguageId = 0
+        // store nextLanguageId in shared preferences
+        runBlocking(Dispatchers.IO) {
+            getSharedPreferences("pref", MODE_PRIVATE).edit()
+                .putInt("nextLanguageId",
+                    try {LanguageRepositoryImpl().getMaxId() + 1}
+                catch (e : Exception) {0}
+                ).apply()
         }
 
         val navView: BottomNavigationView = binding.bottomNavigation
@@ -78,17 +86,19 @@ class MainActivity2: AppCompatActivity() {
         }
 
         currentFragmentId = getSharedPreferences(
-            "pref", MODE_PRIVATE).getInt("Fragment", R.id.startingFragment)
+            "pref", MODE_PRIVATE).getInt("Fragment", R.id.mainFragment)
+        getSharedPreferences("pref", MODE_PRIVATE).edit().putInt("Fragment", R.id.mainFragment).apply()
 
         if (isNetworkAvailable(this)) {
             val user = FirebaseAuth.getInstance().currentUser
             user?.reload()?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    if (currentFragmentId != R.id.startingFragment) {
+                    Log.d("cur frag", currentFragmentId.toString())
+                    Log.d("real cur", navController.currentDestination?.id.toString())
+                    Log.d("ids", "${R.id.mainFragment} ${R.id.startingFragment}")
+
+                    if (currentFragmentId != navController.currentDestination?.id) {
                         navController.navigate(currentFragmentId)
-                    }
-                    else {
-                        navController.navigate(R.id.mainFragment)
                     }
                 } else {
                     navController.navigate(R.id.loginFragment)
@@ -98,7 +108,6 @@ class MainActivity2: AppCompatActivity() {
             Snackbar.make(binding.root, "No internet connection", Snackbar.LENGTH_LONG).show()
         }
 
-        //navView.setupWithNavController(navController)
         setContentView(binding.root)
     }
 

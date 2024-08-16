@@ -13,8 +13,17 @@ import com.anggrayudi.storage.file.openOutputStream
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.dao.word.WordDaoImpl
-import com.lavenderlang.backend.entity.help.PartOfSpeech
-import com.lavenderlang.backend.entity.language.LanguageEntity
+import com.lavenderlang.domain.model.help.PartOfSpeech
+import com.lavenderlang.domain.model.language.LanguageEntity
+import com.lavenderlang.domain.rusCase
+import com.lavenderlang.domain.rusDegreeOfComparison
+import com.lavenderlang.domain.rusGender
+import com.lavenderlang.domain.rusMood
+import com.lavenderlang.domain.rusNumber
+import com.lavenderlang.domain.rusPerson
+import com.lavenderlang.domain.rusTime
+import com.lavenderlang.domain.rusType
+import com.lavenderlang.domain.rusVoice
 
 interface PdfWriterDao {
     fun translitName(name: String) : String
@@ -270,7 +279,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
         // gender
         y += lineSpacing
         text = "РОД: "
-        for (characteristic in language.grammar.varsGender.values) text += "${characteristic.name} (${com.lavenderlang.backend.service.rusGender[characteristic.russianId]}), "
+        for (characteristic in language.grammar.varsGender.values) text += "${characteristic.name} (${rusGender[characteristic.russianId]}), "
         y = drawMultipleLines(
             canvas,
             paint,
@@ -291,7 +300,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
         // number
         y += lineSpacing
         text = "ЧИСЛО: "
-        for (characteristic in language.grammar.varsNumber.values) text += "${characteristic.name} (${com.lavenderlang.backend.service.rusNumber[characteristic.russianId]}), "
+        for (characteristic in language.grammar.varsNumber.values) text += "${characteristic.name} (${rusNumber[characteristic.russianId]}), "
         y = drawMultipleLines(
             canvas,
             paint,
@@ -312,7 +321,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
         // case
         y += lineSpacing
         text = "ПАДЕЖ: "
-        for (characteristic in language.grammar.varsCase.values) text += "${characteristic.name} (${com.lavenderlang.backend.service.rusCase[characteristic.russianId]}), "
+        for (characteristic in language.grammar.varsCase.values) text += "${characteristic.name} (${rusCase[characteristic.russianId]}), "
         y = drawMultipleLines(
             canvas,
             paint,
@@ -333,7 +342,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
         // time
         y += lineSpacing
         text = "ВРЕМЯ: "
-        for (characteristic in language.grammar.varsTime.values) text += "${characteristic.name} (${com.lavenderlang.backend.service.rusTime[characteristic.russianId]}), "
+        for (characteristic in language.grammar.varsTime.values) text += "${characteristic.name} (${rusTime[characteristic.russianId]}), "
         y = drawMultipleLines(
             canvas,
             paint,
@@ -354,7 +363,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
         // person
         y += lineSpacing
         text = "ЛИЦО: "
-        for (characteristic in language.grammar.varsPerson.values) text += "${characteristic.name} (${com.lavenderlang.backend.service.rusPerson[characteristic.russianId]}), "
+        for (characteristic in language.grammar.varsPerson.values) text += "${characteristic.name} (${rusPerson[characteristic.russianId]}), "
         y = drawMultipleLines(
             canvas,
             paint,
@@ -375,7 +384,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
         // mood
         y += lineSpacing
         text = "НАКЛОНЕНИЕ: "
-        for (characteristic in language.grammar.varsMood.values) text += "${characteristic.name} (${com.lavenderlang.backend.service.rusMood[characteristic.russianId]}), "
+        for (characteristic in language.grammar.varsMood.values) text += "${characteristic.name} (${rusMood[characteristic.russianId]}), "
         y = drawMultipleLines(
             canvas,
             paint,
@@ -396,7 +405,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
         // type
         y += lineSpacing
         text = "ВИД: "
-        for (characteristic in language.grammar.varsType.values) text += "${characteristic.name} (${com.lavenderlang.backend.service.rusType[characteristic.russianId]}), "
+        for (characteristic in language.grammar.varsType.values) text += "${characteristic.name} (${rusType[characteristic.russianId]}), "
         y = drawMultipleLines(
             canvas,
             paint,
@@ -417,7 +426,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
         // voice
         y += lineSpacing
         text = "ЗАЛОГ: "
-        for (characteristic in language.grammar.varsVoice.values) text += "${characteristic.name} (${com.lavenderlang.backend.service.rusVoice[characteristic.russianId]}), "
+        for (characteristic in language.grammar.varsVoice.values) text += "${characteristic.name} (${rusVoice[characteristic.russianId]}), "
         y = drawMultipleLines(
             canvas,
             paint,
@@ -438,7 +447,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
         // degree of comparison
         y += lineSpacing
         text = "СТЕПЕНЬ СРАВНЕНИЯ: "
-        for (characteristic in language.grammar.varsDegreeOfComparison.values) text += "${characteristic.name} (${com.lavenderlang.backend.service.rusDegreeOfComparison[characteristic.russianId]}), "
+        for (characteristic in language.grammar.varsDegreeOfComparison.values) text += "${characteristic.name} (${rusDegreeOfComparison[characteristic.russianId]}), "
         y = drawMultipleLines(
             canvas,
             paint,

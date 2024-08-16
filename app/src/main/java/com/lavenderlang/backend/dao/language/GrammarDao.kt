@@ -3,11 +3,13 @@ package com.lavenderlang.backend.dao.language
 import android.util.Log
 import com.lavenderlang.backend.dao.word.WordDaoImpl
 import com.lavenderlang.backend.data.LanguageRepository
-import com.lavenderlang.backend.entity.help.*
-import com.lavenderlang.backend.entity.language.*
-import com.lavenderlang.backend.entity.rule.*
-import com.lavenderlang.backend.service.exception.ForbiddenSymbolsException
+import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.domain.model.help.Attributes
+import com.lavenderlang.domain.model.help.CharacteristicEntity
+import com.lavenderlang.domain.model.language.GrammarEntity
+import com.lavenderlang.domain.model.rule.GrammarRuleEntity
+import com.lavenderlang.domain.model.rule.WordFormationRuleEntity
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

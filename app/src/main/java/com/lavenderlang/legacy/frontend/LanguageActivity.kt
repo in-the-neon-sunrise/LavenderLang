@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
-import com.lavenderlang.backend.service.exception.FileWorkException
+import com.lavenderlang.domain.exception.FileWorkException
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -123,7 +123,8 @@ class LanguageActivity: AppCompatActivity() {
 
         when(val lang = intent.getIntExtra("lang", -1)){
             -1 -> {
-                id_lang = MyApp.nextLanguageId
+                // fixme: shared prefs
+                id_lang = 0 // MyApp.nextLanguageId
                 runBlocking {
                     withContext(Dispatchers.IO) {
                         languageDao.createLanguage("Язык$id_lang", "")

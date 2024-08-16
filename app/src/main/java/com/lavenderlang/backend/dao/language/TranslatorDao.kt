@@ -1,8 +1,8 @@
 package com.lavenderlang.backend.dao.language
 
 import android.util.Log
-import com.lavenderlang.backend.entity.language.LanguageEntity
-import com.lavenderlang.backend.service.exception.WordNotFoundException
+import com.lavenderlang.domain.model.language.LanguageEntity
+import com.lavenderlang.domain.exception.WordNotFoundException
 
 
 interface TranslatorDao {

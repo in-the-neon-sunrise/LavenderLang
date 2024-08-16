@@ -1,9 +1,10 @@
 package com.lavenderlang.backend.dao.help
 
-import android.util.Log
-import com.lavenderlang.backend.entity.help.*
-import com.lavenderlang.backend.entity.word.IWordEntity
-import com.lavenderlang.backend.service.exception.IncorrectRegexException
+import com.lavenderlang.domain.model.word.IWordEntity
+import com.lavenderlang.domain.exception.IncorrectRegexException
+import com.lavenderlang.domain.model.help.Attributes
+import com.lavenderlang.domain.model.help.MascEntity
+import com.lavenderlang.domain.model.help.PartOfSpeech
 
 interface MascDao {
     fun changePartOfSpeech(masc : MascEntity, partOfSpeech: PartOfSpeech)
