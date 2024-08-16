@@ -5,7 +5,7 @@ import com.lavenderlang.domain.model.language.LanguageEntity
 
 class CopyLanguageUseCase {
     companion object {
-        suspend fun execute(language: LanguageEntity, id: Int, repo: LanguageRepository) {
+        suspend fun execute(language: LanguageEntity, id: Int, repo: LanguageRepository) : LanguageEntity {
             val newLang =
                 language.copy(languageId = id, name = language.name + " копия")
 
@@ -27,6 +27,8 @@ class CopyLanguageUseCase {
             newLang.dictionary.languageId = id
 
             repo.insertLanguage(id, newLang)
+
+            return newLang
         }
     }
 }

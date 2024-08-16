@@ -122,6 +122,7 @@ class LanguageFragment: Fragment() {
                         )
                     }
                 }
+                preferences.edit().putInt("lang", idLang).apply()
                 preferences.edit().putInt("nextLanguageId", idLang + 1).apply()
             }
 
@@ -138,6 +139,8 @@ class LanguageFragment: Fragment() {
                                 lang
                             )
                         }
+                        preferences.edit().putInt("lang", lang).apply()
+                        preferences.edit().putInt("nextLanguageId", lang + 1).apply()
                     }
                 }
             }
@@ -198,7 +201,9 @@ class LanguageFragment: Fragment() {
         binding.buttonCopy.setOnClickListener {
             runBlocking {
                 val nextLanguageId = preferences.getInt("nextLanguageId", 0)
-                CopyLanguageUseCase.execute(MyApp.language!!, nextLanguageId, LanguageRepositoryImpl())
+                MyApp.language = CopyLanguageUseCase.execute(MyApp.language!!, nextLanguageId, LanguageRepositoryImpl())
+                preferences.edit().putInt("nextLanguageId", nextLanguageId + 1).apply()
+
             }
             findNavController().navigate(R.id.action_languageFragment_to_mainFragment)
         }

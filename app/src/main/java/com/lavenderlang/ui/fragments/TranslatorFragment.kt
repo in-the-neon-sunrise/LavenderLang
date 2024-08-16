@@ -12,7 +12,9 @@ import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
+import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.databinding.FragmentTranslatorBinding
+import com.lavenderlang.domain.usecase.language.GetShortLanguagesUseCase
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -62,17 +64,17 @@ class TranslatorFragment : Fragment() {
         idLang = requireContext().getSharedPreferences("pref", MODE_PRIVATE).getInt("lang", 0)
         val languages = runBlocking {
             withContext(Dispatchers.IO) {
-                LanguageDaoImpl().getShortLanguagesFromDB()
+                GetShortLanguagesUseCase.execute(LanguageRepositoryImpl())
             }
         }
-        val languageNames = languages.map { it.second }
+        val languageNames = languages.map { it.name }
         val adapterLanguages: ArrayAdapter<String> = ArrayAdapter(
             requireContext(), android.R.layout.simple_spinner_item, languageNames
         )
         binding.spinnerChooseLanguage.adapter = adapterLanguages
         adapterLanguages.notifyDataSetChanged()
         flagIsSpinnerSelected =true
-        val stupidId = languages.indexOfFirst { it.first == idLang }
+        val stupidId = languages.indexOfFirst { it.id == idLang }
         if(idLang !=-1) binding.spinnerChooseLanguage.setSelection(stupidId)
         binding.radioButtonFromConlang.isChecked = true//перевод с конланга
         binding.radioGroupTranslate.setOnCheckedChangeListener { _, checkedId ->
@@ -83,7 +85,7 @@ class TranslatorFragment : Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, item: View?, position: Int, id: Long) {
                 if(flagIsSpinnerSelected) {
-                    idLang = languages[position].first
+                    idLang = languages[position].id
                     val preferences = requireContext().getSharedPreferences("pref", MODE_PRIVATE)
                     val prefEditor = preferences.edit()
                     prefEditor.putInt("lang", idLang)
