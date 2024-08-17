@@ -96,15 +96,6 @@ class LanguageFragment: Fragment() {
             findNavController().navigate(R.id.action_languageFragment_to_wordFormationFragment)
         }
 
-        //bottom navigation menu
-        binding.buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_languageFragment_to_mainFragment)
-        }
-
-        binding.buttonTranslator.setOnClickListener {
-            findNavController().navigate(R.id.action_languageFragment_to_translatorFragment)
-        }
-
         val preferences =
             requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE)
         //how it was started?
@@ -144,31 +135,31 @@ class LanguageFragment: Fragment() {
                 }
             }
         }
-        binding.editLanguageName.setText(MyApp.language!!.name)
+        binding.editLanguageName.editText?.setText(MyApp.language!!.name)
 
         if(MyApp.language?.description != "")
-            binding.editDescription.setText(MyApp.language!!.description)
+            binding.editDescription.editText?.setText(MyApp.language!!.description)
 
         //check changing
-        binding.editLanguageName.addTextChangedListener(object : TextWatcher {
+        binding.editLanguageName.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
                 runBlocking {
-                    ChangeNameUseCase.execute(MyApp.language!!, binding.editLanguageName.text.toString(), LanguageRepositoryImpl())
+                    ChangeNameUseCase.execute(MyApp.language!!, binding.editLanguageName.editText?.text.toString(), LanguageRepositoryImpl())
                 }
             }
         })
-        binding.editDescription.addTextChangedListener(object : TextWatcher {
+        binding.editDescription.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
                 runBlocking {
-                    ChangeDescriptionUseCase.execute(MyApp.language!!, binding.editDescription.text.toString(), LanguageRepositoryImpl())
+                    ChangeDescriptionUseCase.execute(MyApp.language!!, binding.editDescription.editText?.text.toString(), LanguageRepositoryImpl())
                 }
             }
         })

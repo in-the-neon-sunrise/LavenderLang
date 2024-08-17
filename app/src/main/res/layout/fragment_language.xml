@@ -29,33 +29,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="?attr/textInputFilledStyle"
         android:id="@+id/editLanguageName"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="56dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="96dp"
         android:layout_marginEnd="24dp"
-        android:autofillHints=""
-        android:hint="@string/name"
-        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:hint="Название языка"
+        android:inputType="text">
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="?attr/textInputFilledStyle"
         android:id="@+id/editDescription"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="104dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
-        android:autofillHints=""
-        android:hint="@string/description"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editLanguageName" />
+        app:layout_constraintTop_toBottomOf="@+id/editLanguageName"
+        android:hint="@string/description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonWriting"
@@ -71,7 +86,7 @@
         android:id="@+id/buttonPunctuation"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:text="@string/punctuation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +96,7 @@
         android:id="@+id/buttonDictionary"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:text="@string/dictionary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +106,7 @@
         android:id="@+id/buttonGrammar"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:text="@string/grammar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +116,7 @@
         android:id="@+id/buttonWordFormation"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:text="@string/word_formation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,73 +124,52 @@
 
     <Button
         android:id="@+id/buttonFile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/ic_download"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/download"
         app:layout_constraintEnd_toStartOf="@+id/buttonPDF"
         app:layout_constraintStart_toEndOf="@+id/buttonDelete"
         app:layout_constraintTop_toTopOf="@+id/buttonPDF" />
 
     <Button
         android:id="@+id/buttonPDF"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/ic_download"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/download"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonFile"
         app:layout_constraintTop_toBottomOf="@+id/editDescription" />
 
     <Button
         android:id="@+id/buttonCopy"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/ic_copy"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/content_copy"
+        android:contentDescription="Копировать язык"
         app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editDescription" />
 
     <Button
         android:id="@+id/buttonDelete"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/ic_delete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/delete"
         app:layout_constraintEnd_toStartOf="@+id/buttonFile"
         app:layout_constraintStart_toEndOf="@+id/buttonCopy"
         app:layout_constraintTop_toBottomOf="@+id/editDescription" />
 
 
-
-
-    <Button
-        android:id="@+id/buttonHome"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/ic_home"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/buttonTranslator"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/ic_translator"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <TextView
         android:id="@+id/textViewJson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
         android:text="JSON"
         android:textColor="@color/md_theme_light_primary"
         app:layout_constraintEnd_toEndOf="@+id/buttonFile"
@@ -186,7 +180,7 @@
         android:id="@+id/textViewPdf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
         android:text="PDF"
         android:textColor="@color/md_theme_light_primary"
         app:layout_constraintEnd_toEndOf="@+id/buttonPDF"

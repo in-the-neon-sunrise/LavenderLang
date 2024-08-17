@@ -52,15 +52,6 @@ class DictionaryFragment : Fragment() {
             )
         }
 
-        //bottom navigation menu
-        binding.buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_dictionaryFragment_to_mainFragment)
-        }
-
-        binding.buttonLanguage.setOnClickListener {
-            findNavController().navigate(R.id.action_dictionaryFragment_to_languageFragment)
-        }
-
         binding.buttonNewWord.setOnClickListener {
             val argsToSend = Bundle()
             argsToSend.putInt("word", -1)

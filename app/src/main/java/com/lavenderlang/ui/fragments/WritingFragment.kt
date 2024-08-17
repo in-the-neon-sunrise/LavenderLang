@@ -43,23 +43,6 @@ class WritingFragment : Fragment() {
                 argsToSend
             )
         }
-        //bottom navigation menu
-        binding.buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_writingFragment_to_mainFragment)
-        }
-
-        binding.buttonLanguage.setOnClickListener {
-            findNavController().navigate(R.id.action_writingFragment_to_languageFragment)
-        }
-
-        binding.buttonTranslator.setOnClickListener {
-            val argsToSend = Bundle()
-            argsToSend.putInt("lang", idLang)
-            findNavController().navigate(
-                R.id.action_writingFragment_to_translatorFragment,
-                argsToSend
-            )
-        }
         //how it was started?
         when (val lang =
             requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("lang", -1)) {
@@ -73,10 +56,10 @@ class WritingFragment : Fragment() {
         }
 
         //letters
-        binding.editTextVowels.setText(MyApp.language!!.vowels)
+        binding.editTextVowels.editText?.setText(MyApp.language!!.vowels)
 
         //symbols
-        binding.editTextConsonants.setText(MyApp.language?.consonants)
+        binding.editTextConsonants.editText?.setText(MyApp.language?.consonants)
 
         if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.NOUN)) binding.checkBoxNoun.isChecked = true
         if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.VERB)) binding.checkBoxVerb.isChecked = true
@@ -90,8 +73,8 @@ class WritingFragment : Fragment() {
 
         binding.buttonSave.setOnClickListener {
             try{
-                writingDao.changeVowels(MyApp.language!!, binding.editTextVowels.text.toString())
-                writingDao.changeConsonants(MyApp.language!!, binding.editTextConsonants.text.toString())
+                writingDao.changeVowels(MyApp.language!!, binding.editTextVowels.editText?.text.toString())
+                writingDao.changeConsonants(MyApp.language!!, binding.editTextConsonants.editText?.text.toString())
             }catch (e: ForbiddenSymbolsException){
                 Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
             }
