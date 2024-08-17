@@ -17,18 +17,26 @@ import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
-import com.lavenderlang.backend.dao.language.LanguageDao
-import com.lavenderlang.backend.dao.rule.WordFormationRuleDao
-import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
-import com.lavenderlang.backend.dao.word.WordDao
-import com.lavenderlang.backend.dao.word.WordDaoImpl
+import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.domain.model.help.Attributes
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.word.IWordEntity
 import com.lavenderlang.domain.model.word.NounEntity
 import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.databinding.FragmentWordBinding
+import com.lavenderlang.domain.model.word.AdjectiveEntity
+import com.lavenderlang.domain.model.word.AdverbEntity
+import com.lavenderlang.domain.model.word.FuncPartEntity
+import com.lavenderlang.domain.model.word.NumeralEntity
+import com.lavenderlang.domain.model.word.ParticipleEntity
+import com.lavenderlang.domain.model.word.PronounEntity
+import com.lavenderlang.domain.model.word.VerbEntity
+import com.lavenderlang.domain.model.word.VerbParticipleEntity
+import com.lavenderlang.domain.usecase.dictionary.AddWordUseCase
+import com.lavenderlang.domain.usecase.dictionary.DeleteWordUseCase
 import com.lavenderlang.ui.MyApp
+import com.lavenderlang.ui.MyApp.Companion.lifecycleScope
+import kotlinx.coroutines.runBlocking
 
 class WordFragment : Fragment() {
     private lateinit var binding: FragmentWordBinding
@@ -41,7 +49,6 @@ class WordFragment : Fragment() {
         var partOfSpeech: PartOfSpeech = PartOfSpeech.NOUN
         var flagIsFirst:Boolean = true
 
-        val wordDao: WordDao = WordDaoImpl()
         val dictionaryDao: DictionaryDao = DictionaryDaoImpl()
     }
     override fun onCreateView(
@@ -93,10 +100,15 @@ class WordFragment : Fragment() {
         when (word) {
             -1 -> {
                 idWord = MyApp.language!!.dictionary.dict.size
-                dictionaryDao.addWord(
-                    MyApp.language!!.dictionary, NounEntity(
-                        idLang, "", "-")
-                )
+                runBlocking {
+                    AddWordUseCase.execute(
+                        MyApp.language!!.dictionary,
+                        NounEntity(MyApp.language!!.languageId, "", "-"),
+                        MyApp.language!!.grammar.grammarRules,
+                        LanguageRepositoryImpl(),
+                        lifecycleScope!!
+                    )
+                }
                 Log.d("create word", MyApp.language!!.dictionary.dict[idWord].word)
             }
             else -> {
@@ -151,19 +163,103 @@ class WordFragment : Fragment() {
             }
             updateAttrs()
             try {
-                wordDao.updateWord(
-                    MyApp.language!!.dictionary.dict[idWord], binding.editConlangWord.text.toString(),
-                    binding.editRussianWord.text.toString(), immutableAttrs, partOfSpeech
-                )
+                val oldWord = MyApp.language!!.dictionary.dict[idWord]
+                val newWord = binding.editConlangWord.text.toString()
+                val newTranslation = binding.editRussianWord.text.toString()
+                val newImmutableAttrs = immutableAttrs
+                val newPartOfSpeech = partOfSpeech
+                val newWordEntity = when (newPartOfSpeech) {
+                    PartOfSpeech.NOUN -> NounEntity(
+                        oldWord.languageId,
+                        newWord,
+                        newTranslation,
+                        immutableAttrs = newImmutableAttrs
+                    )
+
+                    PartOfSpeech.VERB -> VerbEntity(
+                        oldWord.languageId,
+                        newWord,
+                        newTranslation,
+                        immutableAttrs = newImmutableAttrs
+                    )
+
+                    PartOfSpeech.ADJECTIVE -> AdjectiveEntity(
+                        oldWord.languageId,
+                        newWord,
+                        newTranslation,
+                        immutableAttrs = newImmutableAttrs
+                    )
+
+                    PartOfSpeech.ADVERB -> AdverbEntity(
+                        oldWord.languageId,
+                        newWord,
+                        newTranslation,
+                        immutableAttrs = newImmutableAttrs
+                    )
+
+                    PartOfSpeech.PARTICIPLE -> ParticipleEntity(
+                        oldWord.languageId,
+                        newWord,
+                        newTranslation,
+                        immutableAttrs = newImmutableAttrs
+                    )
+
+                    PartOfSpeech.VERB_PARTICIPLE -> VerbParticipleEntity(
+                        oldWord.languageId,
+                        newWord,
+                        newTranslation,
+                        immutableAttrs = newImmutableAttrs
+                    )
+
+                    PartOfSpeech.PRONOUN -> PronounEntity(
+                        oldWord.languageId,
+                        newWord,
+                        newTranslation,
+                        immutableAttrs = newImmutableAttrs
+                    )
+
+                    PartOfSpeech.NUMERAL -> NumeralEntity(
+                        oldWord.languageId,
+                        newWord,
+                        newTranslation,
+                        immutableAttrs = newImmutableAttrs
+                    )
+
+                    PartOfSpeech.FUNC_PART -> FuncPartEntity(
+                        oldWord.languageId,
+                        newWord,
+                        newTranslation,
+                        immutableAttrs = newImmutableAttrs
+                    )
+                }
+
+                    runBlocking {
+                        DeleteWordUseCase.execute(
+                            MyApp.language!!.dictionary,
+                            oldWord,
+                            LanguageRepositoryImpl(),
+                            lifecycleScope!!
+                        )
+                        AddWordUseCase.execute(
+                            MyApp.language!!.dictionary, newWordEntity, MyApp.language!!.grammar.grammarRules,
+                            LanguageRepositoryImpl(), lifecycleScope!!
+                        )
+                    }
             } catch (e: ForbiddenSymbolsException) {
                 Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
             }
         }
+
+
         binding.buttonDelete.setOnClickListener {
-            dictionaryDao.deleteWord(
-                MyApp.language!!.dictionary,
-                MyApp.language!!.dictionary.dict[idWord]
-            )
+            runBlocking {
+                DeleteWordUseCase.execute(
+                    MyApp.language!!.dictionary,
+                    MyApp.language!!.dictionary.dict[idWord],
+                    LanguageRepositoryImpl(),
+                    lifecycleScope!!
+                )
+            }
             findNavController().popBackStack()
         }
         return binding.root
@@ -387,10 +483,6 @@ class WordFragment : Fragment() {
 }
 private class NewWordAdapter(context: Context, listOfWords: MutableList<Pair<String, IWordEntity>>) :
     ArrayAdapter<Pair<String, IWordEntity>>(context, R.layout.new_word_line_activity, listOfWords) {
-    companion object{
-        val wordFormationRuleDao: WordFormationRuleDao = WordFormationRuleDaoImpl()
-        val dictionaryDao: DictionaryDao = DictionaryDaoImpl()
-    }
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var newView = convertView
@@ -411,9 +503,15 @@ private class NewWordAdapter(context: Context, listOfWords: MutableList<Pair<Str
         editTextRussianWord.setText(word.translation)
         buttonSave.tag = position
         buttonSave.setOnClickListener {
-            if(position == buttonSave.tag){
+            if (position == buttonSave.tag) {
+                val language = MyApp.language!!
                 try {
-                    dictionaryDao.addWord(MyApp.language!!.dictionary, word)
+                    runBlocking {
+                        AddWordUseCase.execute(
+                            language.dictionary, word, language.grammar.grammarRules,
+                            LanguageRepositoryImpl(), lifecycleScope!!
+                        )
+                    }
                 } catch (e: ForbiddenSymbolsException) {
                     Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                 }

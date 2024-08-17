@@ -12,7 +12,6 @@ import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.openOutputStream
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
-import com.lavenderlang.backend.dao.word.WordDaoImpl
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.language.LanguageEntity
 
@@ -715,7 +714,6 @@ class PdfWriterDaoImpl : PdfWriterDao {
 
 
             paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-            val wordHandler = WordDaoImpl()
             for (word in language.dictionary.dict.slice(curWordId..<curWordId + rowCount - 1)) {
                 ++curWordId
                 textArray = arrayListOf(
@@ -733,7 +731,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
                 // separately for the last column with characteristics
                 if (word.partOfSpeech == PartOfSpeech.VERB ||
                     word.partOfSpeech == PartOfSpeech.PARTICIPLE) {
-                    val textList = wordHandler.getImmutableAttrsInfo(word).split(", ")
+                    val textList = getImmutableAttrsInfo(word).split(", ")
                     text = textList[0]
                     x = prev + (columnWidths[3] - paint.measureText(text)) / 2
                     canvas.drawText(text, x, y, paint)
@@ -743,7 +741,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
                     canvas.drawText(text, x, y, paint)
                     y += rowHeight / 2
                 } else {
-                    text = wordHandler.getImmutableAttrsInfo(word)
+                    text = getImmutableAttrsInfo(word)
                     if (text.isEmpty()) text = "-"
                     x = prev + (columnWidths[3] - paint.measureText(text)) / 2
                     canvas.drawText(text, x, y, paint)

@@ -15,14 +15,13 @@ interface DictionaryHelperDao {
     fun updateMadeByRule(dictionary: DictionaryEntity, oldRule : GrammarRuleEntity, newRule: GrammarRuleEntity)
     fun delMadeByWord(dictionary: DictionaryEntity, word: IWordEntity)
     fun addMadeByWord(dictionary: DictionaryEntity, word: IWordEntity)
-    fun updateMadeByWord(dictionary: DictionaryEntity, oldWord: IWordEntity, newWord: IWordEntity)
 }
 class DictionaryHelperDaoImpl : DictionaryHelperDao {
     override fun delMadeByRule(dictionary: DictionaryEntity, rule: GrammarRuleEntity) {
         Log.d("delMadeByRule", "rule: $rule")
         val mascHandler = MascDaoImpl()
         val copyDict = HashMap(dictionary.fullDict)
-        synchronized(MyApp) {
+        synchronized(dictionary) {
             for (key in copyDict.keys) {
                 if (MyApp.language!!.dictionary.fullDict[key]!!.size < 2) continue
                 val keyWord = MyApp.language!!.dictionary.fullDict[key]!![0]
@@ -48,7 +47,7 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
         val mascHandler = MascDaoImpl()
         val ruleHandler = GrammarRuleDaoImpl()
         val copyDict = HashMap(dictionary.fullDict)
-        synchronized(MyApp) {
+        synchronized(dictionary) {
             for (key in copyDict.keys) {
                 if (MyApp.language!!.dictionary.fullDict[key]!!.isEmpty()) continue
                 val keyWord = MyApp.language!!.dictionary.fullDict[key]!![0]
@@ -93,10 +92,5 @@ class DictionaryHelperDaoImpl : DictionaryHelperDao {
                 dictionary.fullDict[key]!!.add(ruleHandler.grammarTransformByRule(rule, word))
             }
         }
-    }
-
-    override fun updateMadeByWord(dictionary: DictionaryEntity, oldWord: IWordEntity, newWord: IWordEntity) {
-        delMadeByWord(dictionary, oldWord)
-        addMadeByWord(dictionary, newWord)
     }
 }
