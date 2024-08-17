@@ -1,4 +1,4 @@
-package com.lavenderlang.ui.fragments.login
+package com.lavenderlang.ui.fragments
 
 import androidx.lifecycle.ViewModel
 import com.lavenderlang.data.UserRepositoryImpl

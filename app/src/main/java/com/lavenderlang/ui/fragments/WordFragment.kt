@@ -18,7 +18,6 @@ import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.backend.dao.language.LanguageDao
-import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDao
 import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.dao.word.WordDao
@@ -43,7 +42,6 @@ class WordFragment : Fragment() {
         var flagIsFirst:Boolean = true
 
         val wordDao: WordDao = WordDaoImpl()
-        val languageDao: LanguageDao = LanguageDaoImpl()
         val dictionaryDao: DictionaryDao = DictionaryDaoImpl()
     }
     override fun onCreateView(

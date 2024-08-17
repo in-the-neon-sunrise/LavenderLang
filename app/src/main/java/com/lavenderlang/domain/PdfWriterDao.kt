@@ -1,4 +1,4 @@
-package com.lavenderlang.backend.dao.language
+package com.lavenderlang.domain
 
 import android.content.Context
 import android.graphics.Canvas
@@ -15,15 +15,6 @@ import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.dao.word.WordDaoImpl
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.language.LanguageEntity
-import com.lavenderlang.domain.rusCase
-import com.lavenderlang.domain.rusDegreeOfComparison
-import com.lavenderlang.domain.rusGender
-import com.lavenderlang.domain.rusMood
-import com.lavenderlang.domain.rusNumber
-import com.lavenderlang.domain.rusPerson
-import com.lavenderlang.domain.rusTime
-import com.lavenderlang.domain.rusType
-import com.lavenderlang.domain.rusVoice
 
 interface PdfWriterDao {
     fun translitName(name: String) : String

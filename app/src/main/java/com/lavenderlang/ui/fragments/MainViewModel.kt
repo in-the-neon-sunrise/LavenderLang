@@ -1,4 +1,4 @@
-package com.lavenderlang.ui.fragments.main
+package com.lavenderlang.ui.fragments
 
 import androidx.lifecycle.ViewModel
 import com.lavenderlang.data.LanguageRepositoryImpl

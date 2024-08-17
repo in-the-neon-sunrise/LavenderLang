@@ -10,10 +10,10 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
-import com.lavenderlang.backend.dao.language.LanguageDaoImpl
 import com.lavenderlang.backend.dao.language.TranslatorDaoImpl
 import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.databinding.FragmentTranslatorBinding
+import com.lavenderlang.domain.usecase.language.GetLanguageUseCase
 import com.lavenderlang.domain.usecase.language.GetShortLanguagesUseCase
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
@@ -91,7 +91,10 @@ class TranslatorFragment : Fragment() {
                     prefEditor.putInt("lang", idLang)
                     prefEditor.apply()
                     runBlocking {
-                        MyApp.language = LanguageDaoImpl().getLanguage(idLang)
+                        MyApp.language = GetLanguageUseCase.execute(
+                            idLang,
+                            LanguageRepositoryImpl()
+                        )
                     }
                 }
             }

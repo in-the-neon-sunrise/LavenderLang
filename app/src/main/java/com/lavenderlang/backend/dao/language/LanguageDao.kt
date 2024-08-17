@@ -21,6 +21,7 @@ import java.io.BufferedWriter
 import java.io.File
 import java.io.OutputStreamWriter
 import com.google.firebase.firestore.FirebaseFirestore
+import com.lavenderlang.domain.PdfWriterDaoImpl
 import com.lavenderlang.domain.model.language.LanguageEntity
 
 interface LanguageDao {
@@ -260,7 +261,6 @@ class LanguageDaoImpl(private val languageRepositoryDEPRECATED: LanguageReposito
 
     override suspend fun getLanguageFromFile(path: String, context: Context) {
         val origFile = File(path)
-        // fixme: do i need context here? or just myApp?
         val file = DocumentFileCompat.fromFile(MyApp.getInstance().applicationContext, origFile)
         if (file == null) {
             Log.d("file", "no file")

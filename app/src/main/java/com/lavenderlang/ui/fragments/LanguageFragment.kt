@@ -13,9 +13,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.anggrayudi.storage.extension.launchOnUiThread
 import com.lavenderlang.R
-import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.domain.PdfWriterDaoImpl
 import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.domain.exception.FileWorkException
 import com.lavenderlang.databinding.FragmentLanguageBinding
@@ -24,9 +23,10 @@ import com.lavenderlang.domain.usecase.language.ChangeNameUseCase
 import com.lavenderlang.domain.usecase.language.CopyLanguageUseCase
 import com.lavenderlang.domain.usecase.language.CreateLanguageUseCase
 import com.lavenderlang.domain.usecase.language.DeleteLanguageUseCase
+import com.lavenderlang.domain.usecase.language.WriteToPdfUseCase
 import com.lavenderlang.domain.usecase.language.GetLanguageUseCase
+import com.lavenderlang.domain.usecase.language.WriteToJonUseCase
 import com.lavenderlang.ui.MyApp
-//import com.lavenderlang.frontend.languages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -53,7 +53,7 @@ class LanguageFragment: Fragment() {
             Log.d("json start write", "result")
             if (uri != null) {
                 Log.d("json write", uri.toString())
-                LanguageDaoImpl().writeToJSON(uri)
+                WriteToJonUseCase.execute(uri, MyApp.language!!, requireContext())
             } else {
                 Log.d("json write", "uri is null")
             }
@@ -62,7 +62,7 @@ class LanguageFragment: Fragment() {
         createPDFLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
             Log.d("pdf start write", "result")
             if (uri != null) {
-                LanguageDaoImpl().writeToPDF(uri)
+                WriteToPdfUseCase.execute(uri, MyApp.language!!, requireContext())
             } else {
                 Log.d("pdf write", "uri is null")
             }
@@ -128,20 +128,19 @@ class LanguageFragment: Fragment() {
 
             else -> {
                 idLang = lang
-                runBlocking {
-                    withContext(Dispatchers.IO) {
-                        MyApp.language = GetLanguageUseCase.execute(lang, LanguageRepositoryImpl())
-                        if (MyApp.language == null) {
-                            MyApp.language = CreateLanguageUseCase.execute(
-                                "Язык$lang",
-                                "",
-                                LanguageRepositoryImpl(),
-                                lang
-                            )
-                        }
-                        preferences.edit().putInt("lang", lang).apply()
-                        preferences.edit().putInt("nextLanguageId", lang + 1).apply()
+                runBlocking(Dispatchers.IO) {
+                    MyApp.language = GetLanguageUseCase.execute(lang, LanguageRepositoryImpl())
+                    if (MyApp.language == null) {
+                        idLang = preferences.getInt("nextLanguageId", 0)
+                        MyApp.language = CreateLanguageUseCase.execute(
+                            "Язык$idLang",
+                            "",
+                            LanguageRepositoryImpl(),
+                            idLang
+                        )
+                        preferences.edit().putInt("nextLanguageId", idLang + 1).apply()
                     }
+                    preferences.edit().putInt("lang", idLang).apply()
                 }
             }
         }
@@ -176,10 +175,8 @@ class LanguageFragment: Fragment() {
 
         binding.buttonFile.setOnClickListener {
             try {
-                LanguageDaoImpl().downloadLanguageJSON(
-                    MyApp.language!!,
-                    MyApp.storageHelper!!,
-                    createJSONLauncher)
+                createJSONLauncher.launch("${PdfWriterDaoImpl().translitName(
+                    MyApp.language!!.name)}.json")
             } catch (e: FileWorkException) {
                 Toast.makeText(this.requireContext(), e.message, Toast.LENGTH_LONG).show()
             }
@@ -188,10 +185,9 @@ class LanguageFragment: Fragment() {
         }
         binding.buttonPDF.setOnClickListener {
             try {
-                LanguageDaoImpl().downloadLanguagePDF(
-                    MyApp.language!!,
-                    MyApp.storageHelper!!,
-                    createPDFLauncher)
+                createPDFLauncher.launch(
+                    "${PdfWriterDaoImpl().translitName(
+                        MyApp.language!!.name)}.pdf")
             } catch (e: FileWorkException) {
                 Toast.makeText(this.requireContext(), e.message, Toast.LENGTH_LONG).show()
             }
@@ -203,13 +199,15 @@ class LanguageFragment: Fragment() {
                 val nextLanguageId = preferences.getInt("nextLanguageId", 0)
                 MyApp.language = CopyLanguageUseCase.execute(MyApp.language!!, nextLanguageId, LanguageRepositoryImpl())
                 preferences.edit().putInt("nextLanguageId", nextLanguageId + 1).apply()
-
+                preferences.edit().putInt("lang", nextLanguageId).apply()
             }
             findNavController().navigate(R.id.action_languageFragment_to_mainFragment)
         }
         binding.buttonDelete.setOnClickListener {
             runBlocking {
                 DeleteLanguageUseCase.execute(MyApp.language!!.languageId, LanguageRepositoryImpl())
+                MyApp.language = null
+                preferences.edit().putInt("lang", -1).apply()
             }
             findNavController().navigate(R.id.action_languageFragment_to_mainFragment)
         }

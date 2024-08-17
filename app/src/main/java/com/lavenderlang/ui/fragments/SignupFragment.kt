@@ -1,4 +1,4 @@
-package com.lavenderlang.ui.fragments.login
+package com.lavenderlang.ui.fragments
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -11,44 +11,48 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lavenderlang.R
-import com.lavenderlang.databinding.FragmentLoginBinding
+import com.lavenderlang.databinding.FragmentSignupBinding
 import com.lavenderlang.domain.auth.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LoginFragment : Fragment() {
+class SignupFragment : Fragment() {
 
-    lateinit var binding: FragmentLoginBinding
-    private lateinit var viewModel: LoginViewModel
+    lateinit var binding: FragmentSignupBinding
+    private lateinit var viewModel: SignupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        binding = FragmentSignupBinding.inflate(inflater, container, false)
 
-        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        // viewModel = MainViewModel()  -  НЕ СМЕЙ
+        viewModel = ViewModelProvider(this)[SignupViewModel::class.java]
 
         binding.blockingView.setOnClickListener { }
 
-        binding.signupButton.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
+        binding.loginButton.setOnClickListener {
+            findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
         }
 
-        binding.loginButton.setOnClickListener {
-
-            if (binding.inputLogin2.text.toString().isEmpty())
-                    Snackbar.make(binding.root, "Введите логин!", Snackbar.LENGTH_SHORT).show()
-            if (binding.inputPassword2.text.toString().isEmpty())
-                    Snackbar.make(binding.root, "Введите пароль!", Snackbar.LENGTH_SHORT).show()
+        binding.signupButton.setOnClickListener {
+            if (binding.inputLogin.text.toString().isEmpty())
+                Snackbar.make(binding.root, "Введите логин!", Snackbar.LENGTH_SHORT).show()
+            if (binding.inputPassword.text.toString().isEmpty())
+                Snackbar.make(binding.root, "Введите пароль!", Snackbar.LENGTH_SHORT).show()
+            if (binding.inputPasswordRepeat.text.toString().isEmpty())
+                Snackbar.make(binding.root, "Повторите пароль!", Snackbar.LENGTH_SHORT).show()
+            if (binding.inputPassword.text.toString() != binding.inputPasswordRepeat.text.toString())
+                Snackbar.make(binding.root, "Пароли не совпадают!", Snackbar.LENGTH_SHORT).show()
             else {
 
                 lifecycleScope.launch {
-                    viewModel.login(
-                        binding.inputLogin2.text.toString(),
-                        binding.inputPassword2.text.toString()
+                    viewModel.register(
+                        binding.inputLogin.text.toString(),
+                        binding.inputPassword.text.toString()
                     ).collect { value ->
                         binding.apply {
                             when (value) {
@@ -79,13 +83,21 @@ class LoginFragment : Fragment() {
 
                                     blockingView.visibility = View.GONE
 
-                                    findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                                    findNavController().navigate(R.id.action_signupFragment_to_mainFragment)
                                 }
 
                                 else -> {
-
-                                    Snackbar.make(binding.root, "Неверный логин или пароль!", Snackbar.LENGTH_SHORT)
-                                        .show()
+                                    when (value) {
+                                        State.ERROR -> Snackbar.make(binding.root, "Не удалось зарегистрироваться.", Snackbar.LENGTH_SHORT)
+                                            .show()
+                                        State.ERROR_USER_ALREADY_EXISTS -> Snackbar.make(binding.root, "Пользователь с таким логином уже существует.", Snackbar.LENGTH_SHORT)
+                                            .show()
+                                        State.ERROR_WEAK_PASSWORD -> Snackbar.make(binding.root, "Слишком слабый пароль.", Snackbar.LENGTH_SHORT)
+                                            .show()
+                                        State.ERROR_INVALID_CREDENTIALS -> Snackbar.make(binding.root, "Неверные учётные данные.", Snackbar.LENGTH_SHORT)
+                                            .show()
+                                        else -> {}
+                                    }
 
                                     progressBar.setVisibilityAfterHide(View.GONE)
                                     progressBar.hide()
@@ -111,8 +123,8 @@ class LoginFragment : Fragment() {
                         }
                     }
                 }
-            }
 
+            }
         }
 
         return binding.root

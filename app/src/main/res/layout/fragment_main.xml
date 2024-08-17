@@ -6,7 +6,7 @@
     android:id="@+id/mainFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.main.MainFragment">
+    tools:context=".ui.fragments.MainFragment">
 
     <Button
         android:id="@+id/buttonInf"

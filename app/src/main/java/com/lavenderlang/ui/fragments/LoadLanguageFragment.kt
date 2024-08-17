@@ -1,5 +1,6 @@
 package com.lavenderlang.ui.fragments
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,10 +14,10 @@ import androidx.navigation.fragment.findNavController
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.StorageType
 import com.lavenderlang.R
-import com.lavenderlang.backend.dao.language.LanguageDao
-import com.lavenderlang.backend.dao.language.LanguageDaoImpl
+import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.domain.exception.FileWorkException
 import com.lavenderlang.databinding.FragmentLoadLanguageBinding
+import com.lavenderlang.domain.usecase.language.GetLanguageFromFileUseCase
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.runBlocking
 
@@ -45,8 +46,6 @@ class LoadLanguageFragment : Fragment() {
         binding.buttonHome.setOnClickListener {
             findNavController().navigate(R.id.action_loadLanguageFragment_to_mainFragment)
         }
-
-        val languageDao: LanguageDao = LanguageDaoImpl()
 
         var accessiblePathsRaw = DocumentFileCompat.getAccessibleAbsolutePaths(requireContext())
         val accessible = arrayListOf<String>()
@@ -96,9 +95,16 @@ class LoadLanguageFragment : Fragment() {
                 return@setOnClickListener
             }
             Log.d("path", "${accessible[pathPositionSpinner]}/${path}")
+            val prefs = requireContext().getSharedPreferences("pref", MODE_PRIVATE)
+            val id = prefs.getInt("nextLanguageId", -1)
+            Log.d("LoadLanguageFragment", "next id = $id")
             try {
                 runBlocking {
-                    languageDao.getLanguageFromFile("${accessible[pathPositionSpinner]}/${path}", requireContext())
+                    MyApp.language = GetLanguageFromFileUseCase.execute(
+                        "${accessible[pathPositionSpinner]}/${path}", id,
+                        LanguageRepositoryImpl(), requireContext())
+                    prefs.edit().putInt("lang", id).apply()
+                    prefs.edit().putInt("nextLanguageId", id + 1).apply()
                 }
             } catch (e: FileWorkException) {
                 Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()

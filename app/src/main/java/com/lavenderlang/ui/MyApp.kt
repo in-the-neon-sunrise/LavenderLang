@@ -10,7 +10,6 @@ class MyApp : Application() {
     companion object {
         private var instance : MyApp? = null
         var storageHelper : SimpleStorageHelper? = null
-        var nextLanguageId : Int = -1
         var language : LanguageEntity? = null
         var lifecycleScope: LifecycleCoroutineScope? = null
         fun getInstance() : MyApp {
@@ -25,6 +24,5 @@ class MyApp : Application() {
         super.onCreate()
         Log.d("MyApp", "onCreate")
         setInstance(this)
-        Log.d("MyApp", "instance set $nextLanguageId")
     }
 }

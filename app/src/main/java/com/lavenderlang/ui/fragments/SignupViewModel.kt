@@ -1,4 +1,4 @@
-package com.lavenderlang.ui.fragments.signup
+package com.lavenderlang.ui.fragments
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException

@@ -1,4 +1,4 @@
-package com.lavenderlang.ui.fragments.main
+package com.lavenderlang.ui.fragments
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
@@ -10,7 +10,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.anggrayudi.storage.SimpleStorageHelper
 import com.chaquo.python.Python
@@ -22,7 +21,6 @@ import com.lavenderlang.databinding.FragmentMainBinding
 import com.lavenderlang.domain.usecase.language.GetShortLanguagesUseCase
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
