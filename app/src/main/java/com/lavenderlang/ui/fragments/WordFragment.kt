@@ -152,8 +152,8 @@ class WordFragment : Fragment() {
             updateAttrs()
             try {
                 val oldWord = MyApp.language!!.dictionary.dict[idWord]
-                val newWord = binding.editConlangWord.text.toString()
-                val newTranslation = binding.editRussianWord.text.toString()
+                val newWord = binding.editConlangWord.editText?.text.toString()
+                val newTranslation = binding.editRussianWord.editText?.text.toString()
                 val newImmutableAttrs = immutableAttrs
                 val newPartOfSpeech = partOfSpeech
                 val newWordEntity = when (newPartOfSpeech) {
