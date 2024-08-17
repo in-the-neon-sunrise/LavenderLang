@@ -43,18 +43,6 @@ class WordFormationFragment : Fragment() {
             )
         }
 
-        //bottom navigation menu
-        binding.buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_wordFormationFragment_to_mainFragment)
-        }
-
-        binding.buttonLanguage.setOnClickListener {
-            findNavController().navigate(R.id.action_wordFormationFragment_to_languageFragment)
-        }
-
-        binding.buttonTranslator.setOnClickListener {
-            findNavController().navigate(R.id.action_wordFormationFragment_to_translatorFragment)
-        }
         //how it was started?
         when (val lang = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("lang", -1)) {
             -1 -> {

@@ -65,18 +65,6 @@ class WordFragment : Fragment() {
                 argsToSend
             )
         }
-        //bottom navigation menu
-        binding.buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_wordFragment_to_mainFragment)
-        }
-
-        binding.buttonLanguage.setOnClickListener {
-            findNavController().navigate(R.id.action_wordFragment_to_languageFragment)
-        }
-
-        binding.buttonTranslator.setOnClickListener {
-            findNavController().navigate(R.id.action_wordFragment_to_translatorFragment)
-        }
 
         //how it was started?
         when (val lang = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("lang", -1)) {
@@ -110,8 +98,8 @@ class WordFragment : Fragment() {
 
         Log.d("full", MyApp.language!!.dictionary.fullDict.toString())
 
-        binding.editConlangWord.setText(MyApp.language!!.dictionary.dict[idWord].word)
-        binding.editRussianWord.setText(MyApp.language!!.dictionary.dict[idWord].translation)
+        binding.editConlangWord.editText?.setText(MyApp.language!!.dictionary.dict[idWord].word)
+        binding.editRussianWord.editText?.setText(MyApp.language!!.dictionary.dict[idWord].translation)
 
         partOfSpeech = MyApp.language!!.dictionary.dict[idWord].partOfSpeech
         idPartOfSpeech = when (partOfSpeech){
@@ -152,8 +140,8 @@ class WordFragment : Fragment() {
             updateAttrs()
             try {
                 wordDao.updateWord(
-                    MyApp.language!!.dictionary.dict[idWord], binding.editConlangWord.text.toString(),
-                    binding.editRussianWord.text.toString(), immutableAttrs, partOfSpeech
+                    MyApp.language!!.dictionary.dict[idWord], binding.editConlangWord.editText?.text.toString(),
+                    binding.editRussianWord.editText?.text.toString(), immutableAttrs, partOfSpeech
                 )
             } catch (e: ForbiddenSymbolsException) {
                 Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
