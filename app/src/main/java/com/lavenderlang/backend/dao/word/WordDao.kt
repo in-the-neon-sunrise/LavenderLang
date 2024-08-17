@@ -18,85 +18,11 @@ import com.lavenderlang.domain.model.word.VerbParticipleEntity
 import com.lavenderlang.ui.MyApp
 
 interface WordDao {
-    fun updateWord(word : IWordEntity, newWord : String)
-    fun updateTranslation(word : IWordEntity, newTranslation : String)
-    fun updateImmutableAttrs(word : IWordEntity, args : MutableMap<Attributes, Int>)
-    fun updatePartOfSpeech(word : IWordEntity, newPartOfSpeech : PartOfSpeech)
     fun updateWord(word: IWordEntity, newWord: String, newTranslation: String, newImmutableAttrs: MutableMap<Attributes, Int>, newPartOfSpeech: PartOfSpeech)
     fun getImmutableAttrsInfo(word : IWordEntity) : String
 }
 
 class WordDaoImpl : WordDao {
-    override fun updateWord(word: IWordEntity, newWord: String) {
-        for (letter in newWord) {
-            if (!MyApp.language!!.vowels.contains(letter.lowercase()) &&
-                !MyApp.language!!.consonants.contains(letter.lowercase())) {
-                throw ForbiddenSymbolsException("Letter $letter is not in language")
-            }
-        }
-        word.word = newWord
-    }
-
-    override fun updateTranslation(word: IWordEntity, newTranslation: String) {
-        word.translation = newTranslation
-    }
-    override fun updateImmutableAttrs(word: IWordEntity, args: MutableMap<Attributes, Int>) {
-        word.immutableAttrs = args
-    }
-
-    override fun updatePartOfSpeech(word: IWordEntity, newPartOfSpeech: PartOfSpeech) {
-        val newWord = when (newPartOfSpeech) {
-            PartOfSpeech.NOUN -> NounEntity(
-                word.languageId,
-                word.word,
-                word.translation
-            )
-            PartOfSpeech.VERB -> VerbEntity(
-                word.languageId,
-                word.word,
-                word.translation
-            )
-            PartOfSpeech.ADJECTIVE -> AdjectiveEntity(
-                word.languageId,
-                word.word,
-                word.translation
-            )
-            PartOfSpeech.ADVERB -> AdverbEntity(
-                word.languageId,
-                word.word,
-                word.translation
-            )
-            PartOfSpeech.PARTICIPLE -> ParticipleEntity(
-                word.languageId,
-                word.word,
-                word.translation
-            )
-            PartOfSpeech.VERB_PARTICIPLE -> VerbParticipleEntity(
-                word.languageId,
-                word.word,
-                word.translation
-            )
-            PartOfSpeech.PRONOUN -> PronounEntity(
-                word.languageId,
-                word.word,
-                word.translation
-            )
-            PartOfSpeech.NUMERAL -> NumeralEntity(
-                word.languageId,
-                word.word,
-                word.translation
-            )
-            PartOfSpeech.FUNC_PART -> FuncPartEntity(
-                word.languageId,
-                word.word,
-                word.translation
-            )
-        }
-        val dictionaryHandler = DictionaryDaoImpl()
-        dictionaryHandler.deleteWord(MyApp.language!!.dictionary, word)
-        dictionaryHandler.addWord(MyApp.language!!.dictionary, newWord)
-    }
-
     override fun updateWord(word: IWordEntity, newWord: String, newTranslation: String, newImmutableAttrs: MutableMap<Attributes, Int>, newPartOfSpeech: PartOfSpeech) {
         val newWordEntity = when (newPartOfSpeech) {
             PartOfSpeech.NOUN -> NounEntity(
