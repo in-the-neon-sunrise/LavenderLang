@@ -74,6 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/md_theme_light_primary"
+        android:alpha="0.5"
         android:visibility="gone"
         />
 

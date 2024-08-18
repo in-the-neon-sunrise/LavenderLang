@@ -103,6 +103,8 @@ class LanguageFragment: Fragment() {
             -1 -> {
                 // get nextLanguageId from shared preferences
                 idLang = preferences.getInt("nextLanguageId", 0)
+                binding.blockingView.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.VISIBLE
                 runBlocking {
                     withContext(Dispatchers.IO) {
                         MyApp.language = CreateLanguageUseCase.execute(
@@ -113,12 +115,20 @@ class LanguageFragment: Fragment() {
                         )
                     }
                 }
+                binding.blockingView.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
                 preferences.edit().putInt("lang", idLang).apply()
                 preferences.edit().putInt("nextLanguageId", idLang + 1).apply()
             }
 
+            MyApp.language?.languageId ?: -2 -> {
+                idLang = lang
+            }
+
             else -> {
                 idLang = lang
+                binding.blockingView.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.VISIBLE
                 runBlocking(Dispatchers.IO) {
                     MyApp.language = GetLanguageUseCase.execute(lang, LanguageRepositoryImpl())
                     if (MyApp.language == null) {
@@ -133,6 +143,8 @@ class LanguageFragment: Fragment() {
                     }
                     preferences.edit().putInt("lang", idLang).apply()
                 }
+                binding.blockingView.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
             }
         }
         binding.editLanguageName.editText?.setText(MyApp.language!!.name)

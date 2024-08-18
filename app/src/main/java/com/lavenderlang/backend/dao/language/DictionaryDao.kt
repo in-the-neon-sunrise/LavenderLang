@@ -2,13 +2,13 @@ package com.lavenderlang.backend.dao.language
 
 import android.util.Log
 import com.lavenderlang.backend.dao.help.MascDaoImpl
-import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.backend.data.LanguageRepositoryDEPRECATED
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.domain.model.language.DictionaryEntity
 import com.lavenderlang.domain.model.word.IWordEntity
+import com.lavenderlang.domain.usecase.grammar.WordFormationTransformByRuleUseCase
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ interface DictionaryDao {
 
 }
 class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = DictionaryHelperDaoImpl(),
-    private val languageRepositoryDEPRECATED: LanguageRepositoryDEPRECATED = LanguageRepositoryDEPRECATED()
+                        private val languageRepositoryDEPRECATED: LanguageRepositoryDEPRECATED = LanguageRepositoryDEPRECATED()
 ) : DictionaryDao {
     override fun addWord(dictionary: DictionaryEntity, word: IWordEntity) {
         for (letter in word.word) {
@@ -60,11 +60,10 @@ class DictionaryDaoImpl(private val helper : DictionaryHelperDaoImpl = Dictionar
 
     override fun createWordsFromExisting(dictionary: DictionaryEntity, word: IWordEntity): List<Pair<String, IWordEntity>> {
         val possibleWords: ArrayList<Pair<String, IWordEntity>> = arrayListOf()
-        val wfrHandler = WordFormationRuleDaoImpl()
         val mascHandler = MascDaoImpl()
         for (rule in MyApp.language!!.grammar.wordFormationRules) {
             if (!mascHandler.fits(rule.masc, word)) continue
-            val posWord = wfrHandler.wordFormationTransformByRule(word, rule)
+            val posWord = WordFormationTransformByRuleUseCase.execute(word, rule)
             if (dictionary.fullDict.containsKey("${posWord.word} ${posWord.translation}")) continue
             possibleWords.add(Pair(rule.description, posWord))
         }

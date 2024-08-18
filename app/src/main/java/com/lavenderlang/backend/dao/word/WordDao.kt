@@ -1,8 +1,8 @@
 package com.lavenderlang.backend.dao.word
 
 import android.util.Log
-import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
-import com.lavenderlang.domain.exception.ForbiddenSymbolsException
+import com.lavenderlang.data.LanguageRepositoryImpl
+import com.lavenderlang.data.PythonHandlerImpl
 import com.lavenderlang.domain.model.help.Attributes
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.word.AdjectiveEntity
@@ -15,7 +15,12 @@ import com.lavenderlang.domain.model.word.ParticipleEntity
 import com.lavenderlang.domain.model.word.PronounEntity
 import com.lavenderlang.domain.model.word.VerbEntity
 import com.lavenderlang.domain.model.word.VerbParticipleEntity
+import com.lavenderlang.domain.usecase.dictionary.AddWordUseCase
+import com.lavenderlang.domain.usecase.dictionary.DeleteWordUseCase
 import com.lavenderlang.ui.MyApp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 interface WordDao {
     fun updateWord(word: IWordEntity, newWord: String, newTranslation: String, newImmutableAttrs: MutableMap<Attributes, Int>, newPartOfSpeech: PartOfSpeech)
@@ -80,10 +85,14 @@ class WordDaoImpl : WordDao {
                 immutableAttrs = newImmutableAttrs
             )
         }
-        val dictionaryHandler = DictionaryDaoImpl()
-        dictionaryHandler.deleteWord(MyApp.language!!.dictionary, word)
-        dictionaryHandler.addWord(MyApp.language!!.dictionary, newWordEntity)
-        Log.d("update word", newWordEntity.word + " " + newWordEntity.translation)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            DeleteWordUseCase.execute(MyApp.language!!.dictionary, word,
+                LanguageRepositoryImpl(), PythonHandlerImpl())
+            AddWordUseCase.execute(MyApp.language!!, newWordEntity,
+                LanguageRepositoryImpl(), PythonHandlerImpl())
+            Log.d("update word", newWordEntity.word + " " + newWordEntity.translation)
+        }
     }
     override fun getImmutableAttrsInfo(word: IWordEntity): String {
         var res = ""

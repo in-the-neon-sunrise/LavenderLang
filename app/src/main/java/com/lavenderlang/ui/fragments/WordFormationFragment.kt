@@ -11,10 +11,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
-import com.lavenderlang.backend.dao.rule.WordFormationRuleDao
-import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.domain.model.rule.WordFormationRuleEntity
 import com.lavenderlang.databinding.FragmentWordFormationBinding
+import com.lavenderlang.domain.getOrigInfo
+import com.lavenderlang.domain.getResultInfo
 import com.lavenderlang.ui.MyApp
 
 class WordFormationFragment : Fragment() {
@@ -78,9 +78,7 @@ class WordFormationFragment : Fragment() {
 private class WordFormationRuleAdapter(context: Context, listOfRules: MutableList<WordFormationRuleEntity>) :
     ArrayAdapter<WordFormationRuleEntity>(context,
         R.layout.word_formation_rule_line_activity, listOfRules) {
-    companion object{
-        val wordFormationRuleDao: WordFormationRuleDao = WordFormationRuleDaoImpl()
-    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var newView = convertView
@@ -91,9 +89,9 @@ private class WordFormationRuleAdapter(context: Context, listOfRules: MutableLis
 
         //textview is visible
         val unchangeableAttributes: TextView = newView!!.findViewById(R.id.textViewUnchangeableAttributes)
-        val changeableAttributes: TextView = newView!!.findViewById(R.id.textViewChangeableAttributes)
-        unchangeableAttributes.text = wordFormationRuleDao.getOrigInfo(wordFormationRule!!)
-        changeableAttributes.text = wordFormationRuleDao.getResultInfo(wordFormationRule!!)
+        val changeableAttributes: TextView = newView.findViewById(R.id.textViewChangeableAttributes)
+        unchangeableAttributes.text = getOrigInfo(wordFormationRule!!)
+        changeableAttributes.text = getResultInfo(wordFormationRule)
 
         return newView
     }

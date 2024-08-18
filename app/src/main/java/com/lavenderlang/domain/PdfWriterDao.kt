@@ -10,8 +10,6 @@ import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.openOutputStream
-import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
-import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.language.LanguageEntity
 
@@ -467,11 +465,10 @@ class PdfWriterDaoImpl : PdfWriterDao {
         paint.setColor(Color.BLACK)
         y += lineSpacing
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        val grammarRuleHandler = GrammarRuleDaoImpl()
         var grammarRuleNumber = 1
         for (rule in language.grammar.grammarRules) {
             text =
-                "${grammarRuleNumber++}. НАЧАЛЬНОЕ СЛОВО: ${grammarRuleHandler.getOrigInfo(rule)}. "
+                "${grammarRuleNumber++}. НАЧАЛЬНОЕ СЛОВО: ${getOrigInfo(rule)}. "
             text += "Слово должно удовлетворять регулярному выражению: \"${rule.masc.regex}\""
             y = drawMultipleLines(
                 canvas,
@@ -510,7 +507,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
                 y = lineStart
             }
             y += lineSpacing
-            text = "ИТОГОВОЕ СЛОВО: ${grammarRuleHandler.getResultInfo(rule)}"
+            text = "ИТОГОВОЕ СЛОВО: ${getResultInfo(rule)}"
             y = drawMultipleLines(
                 canvas,
                 paint,
@@ -545,7 +542,6 @@ class PdfWriterDaoImpl : PdfWriterDao {
         paint.setColor(Color.BLACK)
         y += lineSpacing
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        val wordFormationRuleHandler = WordFormationRuleDaoImpl()
         var wordFormationRuleNumber = 1
         for (rule in language.grammar.wordFormationRules) {
             text = "${wordFormationRuleNumber++}. ОПИСАНИЕ ПРАВИЛА: ${rule.description}"
@@ -566,7 +562,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
                 y = lineStart
             }
             y += lineSpacing
-            text = "НАЧАЛЬНОЕ СЛОВО: ${wordFormationRuleHandler.getOrigInfo(rule)}. "
+            text = "НАЧАЛЬНОЕ СЛОВО: ${getOrigInfo(rule)}. "
             text += "Слово должно удовлетворять регулярному выражению: \"${rule.masc.regex}\""
             y = drawMultipleLines(
                 canvas,
@@ -605,7 +601,7 @@ class PdfWriterDaoImpl : PdfWriterDao {
                 y = lineStart
             }
             y += lineSpacing
-            text = "ИТОГОВОЕ СЛОВО: ${wordFormationRuleHandler.getResultInfo(rule)}"
+            text = "ИТОГОВОЕ СЛОВО: ${getResultInfo(rule)}"
             y = drawMultipleLines(
                 canvas,
                 paint,

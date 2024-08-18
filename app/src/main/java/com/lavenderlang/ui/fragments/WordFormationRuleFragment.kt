@@ -11,22 +11,24 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.language.GrammarDao
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
-import com.lavenderlang.backend.dao.rule.WordFormationRuleDao
-import com.lavenderlang.backend.dao.rule.WordFormationRuleDaoImpl
+import com.lavenderlang.data.LanguageRepositoryImpl
+import com.lavenderlang.data.PythonHandlerImpl
 import com.lavenderlang.domain.model.help.Attributes
 import com.lavenderlang.domain.model.help.MascEntity
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.help.TransformationEntity
 import com.lavenderlang.domain.model.rule.WordFormationRuleEntity
-import com.lavenderlang.domain.exception.ForbiddenSymbolsException
-import com.lavenderlang.domain.exception.IncorrectRegexException
 import com.lavenderlang.databinding.FragmentWordFormationRuleBinding
+import com.lavenderlang.domain.usecase.grammar.UpdateWordFormationRuleUseCase
 import com.lavenderlang.ui.MyApp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WordFormationRuleFragment : Fragment() {
     private lateinit var binding: FragmentWordFormationRuleBinding
@@ -50,7 +52,6 @@ class WordFormationRuleFragment : Fragment() {
 
         val mascDao = MascDaoImpl()
         val grammarDao: GrammarDao = GrammarDaoImpl()
-        val wordFormationRuleDao: WordFormationRuleDao = WordFormationRuleDaoImpl()
 
         var startFlagIsFirst = false
         var finishFlagIsFirst = false
@@ -353,8 +354,7 @@ class WordFormationRuleFragment : Fragment() {
             ) {
                 when(positionSpinner){
                     0->{
-                        wordFormationRuleDao.updatePartOfSpeech(
-                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule], PartOfSpeech.NOUN)
+                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].partOfSpeech = PartOfSpeech.NOUN
                         binding.spinnerFinishGender.visibility= View.VISIBLE
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
@@ -369,8 +369,7 @@ class WordFormationRuleFragment : Fragment() {
                         updateFinishSpinners()
                     }
                     1->{
-                        wordFormationRuleDao.updatePartOfSpeech(
-                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule], PartOfSpeech.VERB)
+                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].partOfSpeech = PartOfSpeech.VERB
                         binding.spinnerFinishGender.visibility= View.GONE
                         binding.spinnerFinishType.visibility= View.VISIBLE
                         binding.spinnerFinishVoice.visibility= View.VISIBLE
@@ -385,8 +384,7 @@ class WordFormationRuleFragment : Fragment() {
                         updateFinishSpinners()
                     }
                     2->{
-                        wordFormationRuleDao.updatePartOfSpeech(
-                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule], PartOfSpeech.ADJECTIVE)
+                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].partOfSpeech = PartOfSpeech.ADJECTIVE
                         binding.spinnerFinishGender.visibility= View.GONE
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
@@ -401,8 +399,7 @@ class WordFormationRuleFragment : Fragment() {
                         updateFinishSpinners()
                     }
                     3->{
-                        wordFormationRuleDao.updatePartOfSpeech(
-                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule], PartOfSpeech.ADVERB)
+                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].partOfSpeech = PartOfSpeech.ADVERB
                         binding.spinnerFinishGender.visibility= View.GONE
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
@@ -417,8 +414,7 @@ class WordFormationRuleFragment : Fragment() {
                         updateFinishSpinners()
                     }
                     4->{
-                        wordFormationRuleDao.updatePartOfSpeech(
-                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule], PartOfSpeech.PARTICIPLE)
+                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].partOfSpeech = PartOfSpeech.PARTICIPLE
                         binding.spinnerFinishGender.visibility= View.GONE
                         binding.spinnerFinishType.visibility= View.VISIBLE
                         binding.spinnerFinishVoice.visibility= View.VISIBLE
@@ -433,8 +429,7 @@ class WordFormationRuleFragment : Fragment() {
                         updateFinishSpinners()
                     }
                     5->{
-                        wordFormationRuleDao.updatePartOfSpeech(
-                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule], PartOfSpeech.VERB_PARTICIPLE)
+                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].partOfSpeech = PartOfSpeech.VERB_PARTICIPLE
                         binding.spinnerFinishGender.visibility= View.GONE
                         binding.spinnerFinishType.visibility= View.VISIBLE
                         binding.spinnerFinishVoice.visibility= View.GONE
@@ -449,8 +444,7 @@ class WordFormationRuleFragment : Fragment() {
                         updateFinishSpinners()
                     }
                     6->{
-                        wordFormationRuleDao.updatePartOfSpeech(
-                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule], PartOfSpeech.PRONOUN)
+                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].partOfSpeech = PartOfSpeech.PRONOUN
                         binding.spinnerFinishGender.visibility= View.VISIBLE
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
@@ -465,8 +459,7 @@ class WordFormationRuleFragment : Fragment() {
                         updateFinishSpinners()
                     }
                     7->{
-                        wordFormationRuleDao.updatePartOfSpeech(
-                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule], PartOfSpeech.NUMERAL)
+                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].partOfSpeech = PartOfSpeech.NUMERAL
                         binding.spinnerFinishGender.visibility= View.GONE
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
@@ -481,8 +474,7 @@ class WordFormationRuleFragment : Fragment() {
                         updateFinishSpinners()
                     }
                     else->{
-                        wordFormationRuleDao.updatePartOfSpeech(
-                            MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule], PartOfSpeech.FUNC_PART)
+                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].partOfSpeech = PartOfSpeech.FUNC_PART
                         binding.spinnerFinishGender.visibility= View.GONE
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
@@ -548,7 +540,7 @@ class WordFormationRuleFragment : Fragment() {
             else-> PartOfSpeech.FUNC_PART
         }
         try {
-            var newMasc = MascEntity(partOfSpeech, attrs, regex)
+            val newMasc = MascEntity(partOfSpeech, attrs, regex)
             partOfSpeech = when (finishIdPartOfSpeech) {
                 0 -> PartOfSpeech.NOUN
                 1 -> PartOfSpeech.VERB
@@ -560,28 +552,62 @@ class WordFormationRuleFragment : Fragment() {
                 7 -> PartOfSpeech.NUMERAL
                 else -> PartOfSpeech.FUNC_PART
             }
-            var newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
+            val newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
 
-            wordFormationRuleDao.updateRule(
-                MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule],
-                newMasc,
-                newTransformation,
-                description,
-                finishAttrs,
-                partOfSpeech
-            )
-        }
-        catch(e: IncorrectRegexException){
-            Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
-        }
-        catch (e: ForbiddenSymbolsException){
-            Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+            try {
+                newMasc.regex.toRegex()
+            } catch (e: Exception) {
+                Toast.makeText(
+                    requireContext(),
+                    "Неверное регулярное выражение!",
+                    Toast.LENGTH_LONG
+                ).show()
+                return
+            }
+
+            for (letter in newTransformation.addToBeginning) {
+                if (!MyApp.language!!.vowels.contains(letter.lowercase()) &&
+                    !MyApp.language!!.consonants.contains(letter.lowercase())
+                ) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Буква $letter не находится в алфавите языка!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return
+                }
+            }
+            for (letter in newTransformation.addToEnd) {
+                if (!MyApp.language!!.vowels.contains(letter.lowercase()) &&
+                    !MyApp.language!!.consonants.contains(letter.lowercase())
+                ) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Буква $letter не находится в алфавите языка!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return
+                }
+            }
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                UpdateWordFormationRuleUseCase.execute(
+                    MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule],
+                    newMasc,
+                    newTransformation,
+                    description,
+                    GrammarRuleFragment.mutableAttrs,
+                    partOfSpeech,
+                    MyApp.language!!.grammar,
+                    LanguageRepositoryImpl()
+                )
+            }
         }
         catch (e:Exception){
             Toast.makeText(requireContext(), "какая-то беда", Toast.LENGTH_LONG).show()
         }
     }
-    fun listenSpinners(){
+    private fun listenSpinners(){
 
         val genderNames = MyApp.language!!.grammar.varsGender.values.map { it.name }
         val genderAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, genderNames)

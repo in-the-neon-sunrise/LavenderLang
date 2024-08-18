@@ -2,6 +2,7 @@ package com.lavenderlang.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,10 @@ import com.lavenderlang.R
 import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.databinding.FragmentPunctuationBinding
-import com.lavenderlang.domain.usecase.UpdatePuncSymbolUseCase
+import com.lavenderlang.domain.usecase.UpdatePuncSymbolsUseCase
 import com.lavenderlang.ui.MyApp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class PunctuationFragment : Fragment() {
@@ -34,7 +37,7 @@ class PunctuationFragment : Fragment() {
         binding.buttonPrev.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.buttonInf.setOnClickListener{
+        binding.buttonInf.setOnClickListener {
             val argsToSend = Bundle()
             argsToSend.putInt("block", 5)
             findNavController().navigate(
@@ -43,7 +46,8 @@ class PunctuationFragment : Fragment() {
             )
         }
         //how it was started?
-        when (val lang = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("lang", -1)) {
+        when (val lang = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE)
+            .getInt("lang", -1)) {
             -1 -> {
                 findNavController().navigate(R.id.action_punctuationFragment_to_languageFragment)
             }
@@ -77,144 +81,51 @@ class PunctuationFragment : Fragment() {
 
         // save symbols
         binding.buttonSavePunctuation.setOnClickListener {
-            try{
-                runBlocking {
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        0,
-                        binding.editTextConlangSymbol1.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        1,
-                        binding.editTextConlangSymbol2.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        2,
-                        binding.editTextConlangSymbol3.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        3,
-                        binding.editTextConlangSymbol4.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        4,
-                        binding.editTextConlangSymbol5.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        5,
-                        binding.editTextConlangSymbol6.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        6,
-                        binding.editTextConlangSymbol7.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        7,
-                        binding.editTextConlangSymbol8.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        8,
-                        binding.editTextConlangSymbol9.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        9,
-                        binding.editTextConlangSymbol10.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        10,
-                        binding.editTextConlangSymbol11.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        11,
-                        binding.editTextConlangSymbol12.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        12,
-                        binding.editTextConlangSymbol13.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        13,
-                        binding.editTextConlangSymbol14.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        14,
-                        binding.editTextConlangSymbol15.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        15,
-                        binding.editTextConlangSymbol16.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        16,
-                        binding.editTextConlangSymbol17.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        17,
-                        binding.editTextConlangSymbol18.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
-                    UpdatePuncSymbolUseCase.execute(
-                        MyApp.language!!,
-                        18,
-                        binding.editTextConlangSymbol19.editText?.text.toString(),
-                        LanguageRepositoryImpl(),
-                        lifecycleScope
-                    )
+            var i = 0
+            for (editText in listOf(
+                binding.editTextConlangSymbol1,
+                binding.editTextConlangSymbol2,
+                binding.editTextConlangSymbol3,
+                binding.editTextConlangSymbol4,
+                binding.editTextConlangSymbol5,
+                binding.editTextConlangSymbol6,
+                binding.editTextConlangSymbol7,
+                binding.editTextConlangSymbol8,
+                binding.editTextConlangSymbol9,
+                binding.editTextConlangSymbol10,
+                binding.editTextConlangSymbol11,
+                binding.editTextConlangSymbol12,
+                binding.editTextConlangSymbol13,
+                binding.editTextConlangSymbol14,
+                binding.editTextConlangSymbol15,
+                binding.editTextConlangSymbol16,
+                binding.editTextConlangSymbol17,
+                binding.editTextConlangSymbol18,
+                binding.editTextConlangSymbol19
+            )) {
+                val newSymbol = editText.editText?.text.toString()
+                Log.d("newSymbol", newSymbol)
+
+                for (letter in newSymbol) {
+                    if (MyApp.language!!.vowels.contains(letter.lowercase()) ||
+                        MyApp.language!!.consonants.contains(letter.lowercase())
+                    ) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Буква $letter уже находится в алфавите языка!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setOnClickListener
+                    }
                 }
-            }catch (e: ForbiddenSymbolsException){
-                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                MyApp.language!!.puncSymbols[MyApp.language!!.puncSymbols.keys.toList()[i]] =
+                    newSymbol
+                i += 1
+            }
+            lifecycleScope.launch(Dispatchers.IO) {
+                UpdatePuncSymbolsUseCase.execute(
+                    MyApp.language!!.languageId, MyApp.language!!.puncSymbols, LanguageRepositoryImpl()
+                )
             }
         }
         return binding.root

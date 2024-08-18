@@ -5,22 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
-import com.lavenderlang.backend.dao.language.WritingDao
-import com.lavenderlang.backend.dao.language.WritingDaoImpl
+import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.databinding.FragmentWritingBinding
+import com.lavenderlang.domain.usecase.UpdateWritingUseCase
 import com.lavenderlang.ui.MyApp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WritingFragment : Fragment() {
     private lateinit var binding: FragmentWritingBinding
     companion object {
         var idLang: Int = 0
-        val writingDao: WritingDao = WritingDaoImpl()
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,39 +73,60 @@ class WritingFragment : Fragment() {
         if(MyApp.language!!.capitalizedPartsOfSpeech.contains(PartOfSpeech.FUNC_PART)) binding.checkBoxFuncPart.isChecked = true
 
         binding.buttonSave.setOnClickListener {
-            try{
-                writingDao.changeVowels(MyApp.language!!, binding.editTextVowels.editText?.text.toString())
-                writingDao.changeConsonants(MyApp.language!!, binding.editTextConsonants.editText?.text.toString())
-            }catch (e: ForbiddenSymbolsException){
-                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+            val newVowels = binding.editTextVowels.editText?.text.toString()
+            val newConsonants = binding.editTextConsonants.editText?.text.toString()
+            val language = MyApp.language!!
+            for (letter in newVowels.lowercase()) {
+                if (letter == ' ') continue
+                if (language.consonants.contains(letter)) {
+                    throw ForbiddenSymbolsException("Буква $letter уже находится в согласных!")
+                }
+                for (ps in language.puncSymbols.values) {
+                    if (ps.lowercase().contains(letter)) {
+                        throw ForbiddenSymbolsException("Буква $letter уже находится в символах пунктуации!")
+                    }
+                }
+            }
+            language.vowels = newVowels.lowercase()
+
+            for (letter in newConsonants.lowercase()) {
+                if (letter == ' ') continue
+                if (language.vowels.contains(letter)) {
+                    throw ForbiddenSymbolsException("Буква $letter уже находится в гласных!")
+                }
+                for (ps in language.puncSymbols.values) {
+                    if (ps.lowercase().contains(letter)) {
+                        throw ForbiddenSymbolsException("Буква $letter уже находится в символах пунктуации!")
+                    }
+                }
+            }
+            language.consonants = newConsonants.lowercase()
+
+            val translation : Map<String, PartOfSpeech> = mapOf(
+                "СУЩЕСТВИТЕЛЬНОЕ" to PartOfSpeech.NOUN,
+                "ГЛАГОЛ" to PartOfSpeech.VERB,
+                "ПРИЛАГАТЕЛЬНОЕ" to PartOfSpeech.ADJECTIVE,
+                "НАРЕЧИЕ" to PartOfSpeech.ADVERB,
+                "ПРИЧАСТИЕ" to PartOfSpeech.PARTICIPLE,
+                "ДЕЕПРИЧАСТИЕ" to PartOfSpeech.VERB_PARTICIPLE,
+                "МЕСТОИМЕНИЕ" to PartOfSpeech.PRONOUN,
+                "ЧИСЛИТЕЛЬНОЕ" to PartOfSpeech.NUMERAL,
+                "СЛУЖЕБНОЕ СЛОВО" to PartOfSpeech.FUNC_PART)
+
+            for (checkBox in listOf(binding.checkBoxNoun, binding.checkBoxVerb, binding.checkBoxAdjective, binding.checkBoxAdverb, binding.checkBoxParticiple, binding.checkBoxVerbParticiple, binding.checkBoxPronoun, binding.checkBoxNumeral, binding.checkBoxFuncPart)) {
+                val partOfSpeech = translation[checkBox.text.toString().uppercase()]!!
+                if (checkBox.isChecked && !language.capitalizedPartsOfSpeech.contains(partOfSpeech))
+                    language.capitalizedPartsOfSpeech.add(partOfSpeech)
+                else if (!checkBox.isChecked)
+                    language.capitalizedPartsOfSpeech.remove(partOfSpeech)
             }
 
-            if(binding.checkBoxNoun.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.NOUN)
-            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.NOUN)
-
-            if(binding.checkBoxVerb.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.VERB)
-            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.VERB)
-
-            if(binding.checkBoxAdjective.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.ADJECTIVE)
-            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.ADJECTIVE)
-
-            if(binding.checkBoxAdverb.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.ADVERB)
-            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.ADVERB)
-
-            if(binding.checkBoxParticiple.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.PARTICIPLE)
-            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.PARTICIPLE)
-
-            if(binding.checkBoxVerbParticiple.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.VERB_PARTICIPLE)
-            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.VERB_PARTICIPLE)
-
-            if(binding.checkBoxPronoun.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.PRONOUN)
-            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.PRONOUN)
-
-            if(binding.checkBoxNumeral.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.NUMERAL)
-            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.NUMERAL)
-
-            if(binding.checkBoxFuncPart.isChecked) writingDao.addCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.FUNC_PART)
-            else writingDao.deleteCapitalizedPartOfSpeech(MyApp.language!!, PartOfSpeech.FUNC_PART)
+            lifecycleScope.launch(Dispatchers.IO) {
+                UpdateWritingUseCase.execute(
+                    newVowels, newConsonants, language.capitalizedPartsOfSpeech,
+                    language.languageId, LanguageRepositoryImpl()
+                )
+            }
         }
 
         return binding.root

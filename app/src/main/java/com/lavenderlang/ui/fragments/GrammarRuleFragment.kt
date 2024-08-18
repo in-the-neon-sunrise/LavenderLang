@@ -12,20 +12,24 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.domain.model.help.MascEntity
 import com.lavenderlang.domain.model.help.TransformationEntity
-import com.lavenderlang.domain.exception.ForbiddenSymbolsException
-import com.lavenderlang.domain.exception.IncorrectRegexException
 import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
+import com.lavenderlang.data.LanguageRepositoryImpl
+import com.lavenderlang.data.PythonHandlerImpl
 import com.lavenderlang.domain.model.help.Attributes
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.rule.GrammarRuleEntity
 import com.lavenderlang.databinding.FragmentGrammarRuleBinding
+import com.lavenderlang.domain.usecase.grammar.UpdateGrammarRuleUseCase
 import com.lavenderlang.ui.MyApp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class GrammarRuleFragment : Fragment() {
     private lateinit var binding: FragmentGrammarRuleBinding
@@ -43,7 +47,6 @@ class GrammarRuleFragment : Fragment() {
         var addBack=""
 
         val grammarDao = GrammarDaoImpl()
-        val grammarRuleDao = GrammarRuleDaoImpl()
         val mascDao = MascDaoImpl()
     }
     override fun onCreateView(
@@ -412,35 +415,74 @@ class GrammarRuleFragment : Fragment() {
         return binding.root
     }
 
-    fun updateRule(){
-        var partOfSpeech=when(idPartOfSpeech){
-            0-> PartOfSpeech.NOUN
-            1-> PartOfSpeech.VERB
-            2-> PartOfSpeech.ADJECTIVE
-            3-> PartOfSpeech.ADVERB
-            4-> PartOfSpeech.PARTICIPLE
-            5-> PartOfSpeech.VERB_PARTICIPLE
-            6-> PartOfSpeech.PRONOUN
-            7-> PartOfSpeech.NUMERAL
-            else-> PartOfSpeech.FUNC_PART
+    fun updateRule() {
+        val partOfSpeech = when (idPartOfSpeech) {
+            0 -> PartOfSpeech.NOUN
+            1 -> PartOfSpeech.VERB
+            2 -> PartOfSpeech.ADJECTIVE
+            3 -> PartOfSpeech.ADVERB
+            4 -> PartOfSpeech.PARTICIPLE
+            5 -> PartOfSpeech.VERB_PARTICIPLE
+            6 -> PartOfSpeech.PRONOUN
+            7 -> PartOfSpeech.NUMERAL
+            else -> PartOfSpeech.FUNC_PART
         }
         try {
-            var newMasc = MascEntity(partOfSpeech, attrs, regex)
-            var newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
-            grammarRuleDao.updateRule(
-                MyApp.language!!.grammar.grammarRules.toMutableList()[idRule],
-                newMasc,
-                newTransformation,
-                mutableAttrs
+            val newMasc = MascEntity(partOfSpeech, attrs, regex)
+            val newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
+
+            try {
+                newMasc.regex.toRegex()
+            } catch (e: Exception) {
+                Toast.makeText(
+                    requireContext(),
+                    "Неверное регулярное выражение!",
+                    Toast.LENGTH_LONG
+                ).show()
+                return
+            }
+
+            for (letter in newTransformation.addToBeginning) {
+                if (!MyApp.language!!.vowels.contains(letter.lowercase()) &&
+                    !MyApp.language!!.consonants.contains(letter.lowercase())
+                ) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Буква $letter не находится в алфавите языка!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return
+                }
+            }
+            for (letter in newTransformation.addToEnd) {
+                if (!MyApp.language!!.vowels.contains(letter.lowercase()) &&
+                    !MyApp.language!!.consonants.contains(letter.lowercase())
+                ) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Буква $letter не находится в алфавите языка!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return
+                }
+            }
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                UpdateGrammarRuleUseCase.execute(
+                    MyApp.language!!.grammar.grammarRules.toMutableList()[idRule],
+                    newMasc,
+                    newTransformation,
+                    mutableAttrs,
+                    MyApp.language!!,
+                    LanguageRepositoryImpl(),
+                    PythonHandlerImpl()
+                )
+            }
+            Log.d(
+                "rule in frag",
+                "rule: ${MyApp.language!!.grammar.grammarRules.toMutableList()[idRule]}"
             )
-            Log.d("rule in frag", "rule: ${MyApp.language!!.grammar.grammarRules.toMutableList()[idRule]}")
-        }catch (e: IncorrectRegexException){
-            Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
-        }
-        catch (e: ForbiddenSymbolsException){
-            Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
             Toast.makeText(requireContext(), "какая-то беда", Toast.LENGTH_LONG).show()
         }
     }

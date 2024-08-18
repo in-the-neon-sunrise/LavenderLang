@@ -25,6 +25,8 @@ import com.lavenderlang.domain.model.help.CharacteristicEntity
 import com.lavenderlang.domain.model.language.GrammarEntity
 import com.lavenderlang.domain.model.rule.GrammarRuleEntity
 import com.lavenderlang.databinding.FragmentGrammarBinding
+import com.lavenderlang.domain.getOrigInfo
+import com.lavenderlang.domain.getResultInfo
 import com.lavenderlang.domain.rusCase
 import com.lavenderlang.domain.rusDegreeOfComparison
 import com.lavenderlang.domain.rusGender
@@ -867,13 +869,12 @@ private class GrammarRuleAdapter(context: Context, listOfRules: MutableList<Gram
                 LayoutInflater.from(context).inflate(R.layout.grammar_rule_line_activity, null)
         }
 
-        val grammarRuleDao: GrammarRuleDao = GrammarRuleDaoImpl()
         //textview is visible
         val unchangeableAttributes: TextView =
             newView!!.findViewById(R.id.textViewUnchangeableAttributes)
         val changeableAttributes: TextView = newView.findViewById(R.id.textViewChangeableAttributes)
-        unchangeableAttributes.text = grammarRuleDao.getOrigInfo(grammarRule!!)
-        changeableAttributes.text = grammarRuleDao.getResultInfo(grammarRule)
+        unchangeableAttributes.text = getOrigInfo(grammarRule!!)
+        changeableAttributes.text = getResultInfo(grammarRule)
 
         return newView
     }

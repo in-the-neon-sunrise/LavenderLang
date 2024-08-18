@@ -13,16 +13,17 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.language.DictionaryDao
 import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.data.LanguageRepositoryImpl
+import com.lavenderlang.data.PythonHandlerImpl
 import com.lavenderlang.domain.model.help.Attributes
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.word.IWordEntity
 import com.lavenderlang.domain.model.word.NounEntity
-import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.databinding.FragmentWordBinding
 import com.lavenderlang.domain.model.word.AdjectiveEntity
 import com.lavenderlang.domain.model.word.AdverbEntity
@@ -35,8 +36,9 @@ import com.lavenderlang.domain.model.word.VerbParticipleEntity
 import com.lavenderlang.domain.usecase.dictionary.AddWordUseCase
 import com.lavenderlang.domain.usecase.dictionary.DeleteWordUseCase
 import com.lavenderlang.ui.MyApp
-import com.lavenderlang.ui.MyApp.Companion.lifecycleScope
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class WordFragment : Fragment() {
     private lateinit var binding: FragmentWordBinding
@@ -84,18 +86,17 @@ class WordFragment : Fragment() {
         }
 
         // get word from argsToSend
-        var word = arguments?.getInt("word", -1) ?: -1
+        val word = arguments?.getInt("word", -1) ?: -1
         when (word) {
             -1 -> {
                 idWord = MyApp.language!!.dictionary.dict.size
-                runBlocking {
+                MyApp.language!!.dictionary.dict.add(NounEntity(
+                    MyApp.language!!.languageId, "", "-"))
+                lifecycleScope.launch(Dispatchers.IO) {
                     AddWordUseCase.execute(
-                        MyApp.language!!.dictionary,
+                        MyApp.language!!,
                         NounEntity(MyApp.language!!.languageId, "", "-"),
-                        MyApp.language!!.grammar.grammarRules,
-                        LanguageRepositoryImpl(),
-                        lifecycleScope!!
-                    )
+                        LanguageRepositoryImpl(), PythonHandlerImpl())
                 }
                 Log.d("create word", MyApp.language!!.dictionary.dict[idWord].word)
             }
@@ -137,122 +138,137 @@ class WordFragment : Fragment() {
         }
 
         binding.buttonSave.setOnClickListener {
-            partOfSpeech = when(idPartOfSpeech){
-                0-> PartOfSpeech.NOUN
-                1-> PartOfSpeech.VERB
-                2-> PartOfSpeech.ADJECTIVE
-                3-> PartOfSpeech.ADVERB
-                4-> PartOfSpeech.PARTICIPLE
-                5-> PartOfSpeech.VERB_PARTICIPLE
-                6-> PartOfSpeech.PRONOUN
-                7-> PartOfSpeech.NUMERAL
-                8-> PartOfSpeech.FUNC_PART
-                else-> PartOfSpeech.NOUN
+            partOfSpeech = when (idPartOfSpeech) {
+                0 -> PartOfSpeech.NOUN
+                1 -> PartOfSpeech.VERB
+                2 -> PartOfSpeech.ADJECTIVE
+                3 -> PartOfSpeech.ADVERB
+                4 -> PartOfSpeech.PARTICIPLE
+                5 -> PartOfSpeech.VERB_PARTICIPLE
+                6 -> PartOfSpeech.PRONOUN
+                7 -> PartOfSpeech.NUMERAL
+                8 -> PartOfSpeech.FUNC_PART
+                else -> PartOfSpeech.NOUN
             }
             updateAttrs()
-            try {
-                val oldWord = MyApp.language!!.dictionary.dict[idWord]
-                val newWord = binding.editConlangWord.editText?.text.toString()
-                val newTranslation = binding.editRussianWord.editText?.text.toString()
-                val newImmutableAttrs = immutableAttrs
-                val newPartOfSpeech = partOfSpeech
-                val newWordEntity = when (newPartOfSpeech) {
-                    PartOfSpeech.NOUN -> NounEntity(
-                        oldWord.languageId,
-                        newWord,
-                        newTranslation,
-                        immutableAttrs = newImmutableAttrs
-                    )
+            val oldWordEntity = MyApp.language!!.dictionary.dict[idWord]
+            val newWord = binding.editConlangWord.editText?.text.toString()
 
-                    PartOfSpeech.VERB -> VerbEntity(
-                        oldWord.languageId,
-                        newWord,
-                        newTranslation,
-                        immutableAttrs = newImmutableAttrs
-                    )
-
-                    PartOfSpeech.ADJECTIVE -> AdjectiveEntity(
-                        oldWord.languageId,
-                        newWord,
-                        newTranslation,
-                        immutableAttrs = newImmutableAttrs
-                    )
-
-                    PartOfSpeech.ADVERB -> AdverbEntity(
-                        oldWord.languageId,
-                        newWord,
-                        newTranslation,
-                        immutableAttrs = newImmutableAttrs
-                    )
-
-                    PartOfSpeech.PARTICIPLE -> ParticipleEntity(
-                        oldWord.languageId,
-                        newWord,
-                        newTranslation,
-                        immutableAttrs = newImmutableAttrs
-                    )
-
-                    PartOfSpeech.VERB_PARTICIPLE -> VerbParticipleEntity(
-                        oldWord.languageId,
-                        newWord,
-                        newTranslation,
-                        immutableAttrs = newImmutableAttrs
-                    )
-
-                    PartOfSpeech.PRONOUN -> PronounEntity(
-                        oldWord.languageId,
-                        newWord,
-                        newTranslation,
-                        immutableAttrs = newImmutableAttrs
-                    )
-
-                    PartOfSpeech.NUMERAL -> NumeralEntity(
-                        oldWord.languageId,
-                        newWord,
-                        newTranslation,
-                        immutableAttrs = newImmutableAttrs
-                    )
-
-                    PartOfSpeech.FUNC_PART -> FuncPartEntity(
-                        oldWord.languageId,
-                        newWord,
-                        newTranslation,
-                        immutableAttrs = newImmutableAttrs
-                    )
+            for (letter in newWord) {
+                if (!MyApp.language!!.vowels.contains(letter.lowercase()) &&
+                    !MyApp.language!!.consonants.contains(letter.lowercase())
+                ) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Буква $letter не находится в алфавите языка!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
                 }
+            }
 
-                    runBlocking {
-                        DeleteWordUseCase.execute(
-                            MyApp.language!!.dictionary,
-                            oldWord,
-                            LanguageRepositoryImpl(),
-                            lifecycleScope!!
-                        )
-                        AddWordUseCase.execute(
-                            MyApp.language!!.dictionary, newWordEntity, MyApp.language!!.grammar.grammarRules,
-                            LanguageRepositoryImpl(), lifecycleScope!!
-                        )
-                    }
-            } catch (e: ForbiddenSymbolsException) {
-                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+            val newTranslation = binding.editRussianWord.editText?.text.toString()
+            val newImmutableAttrs = immutableAttrs
+            val newPartOfSpeech = partOfSpeech
+            val newWordEntity = when (newPartOfSpeech) {
+                PartOfSpeech.NOUN -> NounEntity(
+                    oldWordEntity.languageId,
+                    newWord,
+                    newTranslation,
+                    immutableAttrs = newImmutableAttrs
+                )
+
+                PartOfSpeech.VERB -> VerbEntity(
+                    oldWordEntity.languageId,
+                    newWord,
+                    newTranslation,
+                    immutableAttrs = newImmutableAttrs
+                )
+
+                PartOfSpeech.ADJECTIVE -> AdjectiveEntity(
+                    oldWordEntity.languageId,
+                    newWord,
+                    newTranslation,
+                    immutableAttrs = newImmutableAttrs
+                )
+
+                PartOfSpeech.ADVERB -> AdverbEntity(
+                    oldWordEntity.languageId,
+                    newWord,
+                    newTranslation,
+                    immutableAttrs = newImmutableAttrs
+                )
+
+                PartOfSpeech.PARTICIPLE -> ParticipleEntity(
+                    oldWordEntity.languageId,
+                    newWord,
+                    newTranslation,
+                    immutableAttrs = newImmutableAttrs
+                )
+
+                PartOfSpeech.VERB_PARTICIPLE -> VerbParticipleEntity(
+                    oldWordEntity.languageId,
+                    newWord,
+                    newTranslation,
+                    immutableAttrs = newImmutableAttrs
+                )
+
+                PartOfSpeech.PRONOUN -> PronounEntity(
+                    oldWordEntity.languageId,
+                    newWord,
+                    newTranslation,
+                    immutableAttrs = newImmutableAttrs
+                )
+
+                PartOfSpeech.NUMERAL -> NumeralEntity(
+                    oldWordEntity.languageId,
+                    newWord,
+                    newTranslation,
+                    immutableAttrs = newImmutableAttrs
+                )
+
+                PartOfSpeech.FUNC_PART -> FuncPartEntity(
+                    oldWordEntity.languageId,
+                    newWord,
+                    newTranslation,
+                    immutableAttrs = newImmutableAttrs
+                )
+            }
+
+            MyApp.language!!.dictionary.dict.remove(oldWordEntity)
+            if (!MyApp.language!!.dictionary.dict.contains(newWordEntity)) {
+                MyApp.language!!.dictionary.dict.add(newWordEntity)
+            }
+            Log.d("WordFrag upd", MyApp.language!!.dictionary.dict.toString())
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                DeleteWordUseCase.execute(
+                    MyApp.language!!.dictionary,
+                    oldWordEntity,
+                    LanguageRepositoryImpl(), PythonHandlerImpl())
+                AddWordUseCase.execute(
+                    MyApp.language!!,
+                    newWordEntity,
+                    LanguageRepositoryImpl(), PythonHandlerImpl())
             }
         }
 
 
         binding.buttonDelete.setOnClickListener {
-            runBlocking {
+            val oldWordEntity = MyApp.language!!.dictionary.dict[idWord]
+            MyApp.language!!.dictionary.dict.removeAt(idWord)
+            lifecycleScope.launch(Dispatchers.IO) {
                 DeleteWordUseCase.execute(
                     MyApp.language!!.dictionary,
-                    MyApp.language!!.dictionary.dict[idWord],
-                    LanguageRepositoryImpl(),
-                    lifecycleScope!!
-                )
+                    oldWordEntity,
+                    LanguageRepositoryImpl(), PythonHandlerImpl())
             }
+            Log.d("WordFrag del", MyApp.language!!.dictionary.dict.toString())
             findNavController().popBackStack()
         }
         return binding.root
     }
-    fun setSpinners() {
+    private fun setSpinners() {
         val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, mutableListOf(
             "Существительное",
             "Глагол",
@@ -267,7 +283,7 @@ class WordFragment : Fragment() {
         spinnerAdapter.notifyDataSetChanged()
 
         val genderNames = MyApp.language!!.grammar.varsGender.values.map { it.name }
-        var genderAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, genderNames)
+        val genderAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, genderNames)
         binding.spinnerGender.adapter = genderAdapter
         genderAdapter.notifyDataSetChanged()
 
@@ -307,7 +323,7 @@ class WordFragment : Fragment() {
             else->{}
         }
     }
-    fun setPartOfSpeechListener(){
+    private fun setPartOfSpeechListener(){
         binding.spinnerPartOfSpeech.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentSpinner: AdapterView<*>?,
@@ -427,7 +443,7 @@ class WordFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
     }
-    fun updateAttrs(){
+    private fun updateAttrs() {
         when(idPartOfSpeech) {
             0->{
                 immutableAttrs[Attributes.GENDER]=binding.spinnerGender.selectedItemPosition
@@ -452,7 +468,7 @@ class WordFragment : Fragment() {
             else->{}
         }
     }
-    fun updateWordForms(){
+    private fun updateWordForms() {
         val wordForms = dictionaryDao.getWordForms(MyApp.language!!.dictionary, MyApp.language!!.dictionary.dict[idWord].word)
         Log.d("wordForms", wordForms.toString())
         val adapterWordForms: ArrayAdapter<IWordEntity> = WordAdapter(requireContext(), wordForms)
@@ -493,16 +509,21 @@ private class NewWordAdapter(context: Context, listOfWords: MutableList<Pair<Str
         buttonSave.setOnClickListener {
             if (position == buttonSave.tag) {
                 val language = MyApp.language!!
-                try {
-                    runBlocking {
-                        AddWordUseCase.execute(
-                            language.dictionary, word, language.grammar.grammarRules,
-                            LanguageRepositoryImpl(), lifecycleScope!!
-                        )
+                for (letter in word.word) {
+                    if (!language.vowels.contains(letter.lowercase()) &&
+                        !language.consonants.contains(letter.lowercase())) {
+                        Toast.makeText(context, "Буква $letter не находится в алфавите языка!", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
                     }
-                } catch (e: ForbiddenSymbolsException) {
-                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                 }
+                language.dictionary.dict.add(word)
+                // fixme: global scope :<
+                GlobalScope.launch(Dispatchers.IO) {
+                        AddWordUseCase.execute(
+                            language, word,
+                            LanguageRepositoryImpl(), PythonHandlerImpl())
+
+                    }
             }
         }
 
