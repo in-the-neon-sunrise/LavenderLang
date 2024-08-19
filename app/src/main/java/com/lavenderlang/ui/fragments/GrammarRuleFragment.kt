@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.domain.model.help.MascEntity
 import com.lavenderlang.domain.model.help.TransformationEntity
-import com.lavenderlang.backend.dao.help.MascDaoImpl
 import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.data.PythonHandlerImpl
 import com.lavenderlang.domain.model.help.Attributes
@@ -48,7 +46,6 @@ class GrammarRuleFragment : Fragment() {
         var addFront=""
         var addBack=""
 
-        val mascDao = MascDaoImpl()
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -152,8 +149,7 @@ class GrammarRuleFragment : Fragment() {
             ) {
                 when(positionSpinner){
                     0->{
-                        mascDao.changePartOfSpeech(
-                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.NOUN)
+                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.NOUN
                         binding.spinnerGender.visibility=View.VISIBLE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -177,8 +173,7 @@ class GrammarRuleFragment : Fragment() {
                         updateSpinners()
                     }
                     1->{
-                        mascDao.changePartOfSpeech(
-                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.VERB)
+                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.VERB
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.VISIBLE
                         binding.spinnerVoice.visibility=View.VISIBLE
@@ -199,8 +194,7 @@ class GrammarRuleFragment : Fragment() {
                         updateSpinners()
                     }
                     2->{
-                        mascDao.changePartOfSpeech(
-                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.ADJECTIVE)
+                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.ADJECTIVE
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -221,8 +215,7 @@ class GrammarRuleFragment : Fragment() {
                         updateSpinners()
                     }
                     3->{
-                        mascDao.changePartOfSpeech(
-                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.ADVERB)
+                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.ADVERB
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -243,8 +236,7 @@ class GrammarRuleFragment : Fragment() {
                         updateSpinners()
                     }
                     4->{
-                        mascDao.changePartOfSpeech(
-                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.PARTICIPLE)
+                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.PARTICIPLE
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.VISIBLE
                         binding.spinnerVoice.visibility=View.VISIBLE
@@ -265,8 +257,7 @@ class GrammarRuleFragment : Fragment() {
                         updateSpinners()
                     }
                     5->{
-                        mascDao.changePartOfSpeech(
-                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.VERB_PARTICIPLE)
+                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.VERB_PARTICIPLE
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.VISIBLE
                         binding.spinnerVoice.visibility=View.GONE
@@ -287,8 +278,7 @@ class GrammarRuleFragment : Fragment() {
                         updateSpinners()
                     }
                     6->{
-                        mascDao.changePartOfSpeech(
-                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.PRONOUN)
+                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.PRONOUN
                         binding.spinnerGender.visibility=View.VISIBLE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -309,8 +299,7 @@ class GrammarRuleFragment : Fragment() {
                         updateSpinners()
                     }
                     7->{
-                        mascDao.changePartOfSpeech(
-                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.NUMERAL)
+                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.NUMERAL
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -331,8 +320,7 @@ class GrammarRuleFragment : Fragment() {
                         updateSpinners()
                     }
                     else->{
-                        mascDao.changePartOfSpeech(
-                            MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.FUNC_PART)
+                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.FUNC_PART
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -356,8 +344,7 @@ class GrammarRuleFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                mascDao.changePartOfSpeech(
-                    MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc, PartOfSpeech.NOUN)
+                MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.NOUN
             }
         }
 

@@ -1,15 +1,8 @@
 package com.lavenderlang.domain.usecase.dictionary
 
-import androidx.lifecycle.LifecycleCoroutineScope
-import com.chaquo.python.Python
-import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.domain.db.LanguageRepository
 import com.lavenderlang.domain.db.PythonHandler
 import com.lavenderlang.domain.model.language.DictionaryEntity
 import com.lavenderlang.domain.model.word.IWordEntity
-import com.lavenderlang.ui.MyApp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class DeleteWordUseCase {
     companion object {

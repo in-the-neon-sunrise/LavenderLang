@@ -3,7 +3,7 @@ package com.lavenderlang.domain.usecase.language
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.domain.Serializer
 import com.lavenderlang.domain.model.language.LanguageEntity
 import java.io.BufferedWriter
 import java.io.OutputStreamWriter

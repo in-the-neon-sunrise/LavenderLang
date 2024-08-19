@@ -1,6 +1,7 @@
 package com.lavenderlang.domain.usecase.grammar
 
 import com.lavenderlang.domain.model.help.PartOfSpeech
+import com.lavenderlang.domain.model.help.TransformationEntity
 import com.lavenderlang.domain.model.rule.WordFormationRuleEntity
 import com.lavenderlang.domain.model.word.AdjectiveEntity
 import com.lavenderlang.domain.model.word.AdverbEntity
@@ -12,7 +13,6 @@ import com.lavenderlang.domain.model.word.ParticipleEntity
 import com.lavenderlang.domain.model.word.PronounEntity
 import com.lavenderlang.domain.model.word.VerbEntity
 import com.lavenderlang.domain.model.word.VerbParticipleEntity
-import com.lavenderlang.domain.transformWord
 
 class WordFormationTransformByRuleUseCase {
     companion object {
@@ -28,7 +28,10 @@ class WordFormationTransformByRuleUseCase {
                 PartOfSpeech.NUMERAL -> NumeralEntity()
                 PartOfSpeech.FUNC_PART -> FuncPartEntity()
             }
-            val newWord = transformWord(rule.transformation, word.word)
+            val newWord = rule.transformation.addToBeginning + word.word.slice(
+                IntRange(rule.transformation.delFromBeginning,
+                    word.word.length - rule.transformation.delFromEnd - 1)) +
+                    rule.transformation.addToEnd
             transformedWord.word = newWord
             transformedWord.translation = "" // мы сами "кошечка" из "кошка" не образуем
             transformedWord.immutableAttrs = rule.immutableAttrs

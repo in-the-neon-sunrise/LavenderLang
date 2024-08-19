@@ -1,15 +1,14 @@
 package com.lavenderlang.domain.usecase.grammar
 
 import android.util.Log
-import com.lavenderlang.backend.dao.help.MascDaoImpl
-import com.lavenderlang.backend.service.Serializer
-import com.lavenderlang.domain.db.LanguageRepository
 import com.lavenderlang.domain.db.PythonHandler
+import com.lavenderlang.domain.fits
 import com.lavenderlang.domain.model.help.Attributes
 import com.lavenderlang.domain.model.help.MascEntity
 import com.lavenderlang.domain.model.help.TransformationEntity
 import com.lavenderlang.domain.model.language.LanguageEntity
 import com.lavenderlang.domain.model.rule.GrammarRuleEntity
+import com.lavenderlang.domain.model.word.IWordEntity
 
 class UpdateGrammarRuleUseCase {
     companion object {
@@ -24,7 +23,6 @@ class UpdateGrammarRuleUseCase {
             rule.mutableAttrs = newAttrs
 
             val dictionary = language.dictionary
-            val mascHandler = MascDaoImpl()
             var copyDict = HashMap(dictionary.fullDict)
 
             Log.d("updateRule", "full ${language.dictionary.fullDict}")
@@ -33,7 +31,7 @@ class UpdateGrammarRuleUseCase {
                 for (key in copyDict.keys) {
                     if (language.dictionary.fullDict[key]!!.size < 2) continue
                     val keyWord = language.dictionary.fullDict[key]!![0]
-                    if (!mascHandler.fits(rule.masc, keyWord)) continue
+                    if (!fits(rule.masc, keyWord)) continue
                     val copyOfWords = ArrayList(
                         dictionary.fullDict[key]!!.subList(
                             1,
@@ -59,7 +57,7 @@ class UpdateGrammarRuleUseCase {
                 for (key in copyDict.keys) {
                     if (language.dictionary.fullDict[key]!!.isEmpty()) continue
                     val keyWord = language.dictionary.fullDict[key]!![0]
-                    if (mascHandler.fits(rule.masc, keyWord)) {
+                    if (fits(rule.masc, keyWord)) {
                         dictionary.fullDict[key]!!.add(
                             GrammarTransformByRuleUseCase.execute(
                                 rule,

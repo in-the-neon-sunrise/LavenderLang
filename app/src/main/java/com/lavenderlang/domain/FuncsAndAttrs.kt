@@ -1,12 +1,9 @@
 package com.lavenderlang.domain
 
-import com.lavenderlang.domain.exception.WordNotFoundException
 import com.lavenderlang.domain.model.help.Attributes
+import com.lavenderlang.domain.model.help.MascEntity
 import com.lavenderlang.domain.model.help.PartOfSpeech
-import com.lavenderlang.domain.model.help.TransformationEntity
-import com.lavenderlang.domain.model.language.LanguageEntity
 import com.lavenderlang.domain.model.rule.GrammarRuleEntity
-import com.lavenderlang.domain.model.rule.IRuleEntity
 import com.lavenderlang.domain.model.rule.WordFormationRuleEntity
 import com.lavenderlang.domain.model.word.IWordEntity
 import com.lavenderlang.ui.MyApp
@@ -22,50 +19,6 @@ val rusMood : ArrayList<String> = arrayListOf("изъявительное", "п�
 val rusType : ArrayList<String> = arrayListOf("совершенный", "несовершенный")
 val rusVoice : ArrayList<String> = arrayListOf("действительный", "страдательный")
 val rusDegreeOfComparison : ArrayList<String> = arrayListOf("положительная", "сравнительная", "превосходная")
-
-fun getImmutableAttrsInfo(word: IWordEntity): String {
-    var res = ""
-    for (attr in word.immutableAttrs.keys) {
-        res += when (attr) {
-            Attributes.GENDER -> "род: ${MyApp.language!!.grammar.varsGender[word.immutableAttrs[attr]!!]?.name}, "
-            Attributes.TYPE -> "вид: ${MyApp.language!!.grammar.varsType[word.immutableAttrs[attr]!!]?.name}, "
-            Attributes.VOICE -> "залог: ${MyApp.language!!.grammar.varsVoice[word.immutableAttrs[attr]!!]?.name}, "
-            else -> ""
-        }
-    }
-    if (res.length < 2) return ""
-    return res.slice(0 until res.length - 2)
-}
-
-fun conlangToRusAttr(language: LanguageEntity, attr: Attributes, id: Int): Int {
-    return try {
-        when (attr) {
-            Attributes.GENDER -> language.grammar.varsGender[id]!!.russianId
-            Attributes.NUMBER -> language.grammar.varsNumber[id]!!.russianId
-            Attributes.CASE -> language.grammar.varsCase[id]!!.russianId
-            Attributes.TIME -> language.grammar.varsTime[id]!!.russianId
-            Attributes.PERSON -> language.grammar.varsPerson[id]!!.russianId
-            Attributes.MOOD -> language.grammar.varsMood[id]!!.russianId
-            Attributes.TYPE -> language.grammar.varsType[id]!!.russianId
-            Attributes.VOICE -> language.grammar.varsVoice[id]!!.russianId
-            Attributes.DEGREE_OF_COMPARISON -> language.grammar.varsDegreeOfComparison[id]!!.russianId
-            Attributes.IS_INFINITIVE -> id
-        }
-    } catch (e: Exception) {
-        0
-    }
-}
-
-fun capitalizeWord(word: String): String {
-    return word[0].uppercaseChar() + word.substring(1)
-}
-
-fun transformWord(transformation: TransformationEntity, word: String): String {
-    return transformation.addToBeginning + word.slice(
-        IntRange(transformation.delFromBeginning,
-            word.length - transformation.delFromEnd - 1)) +
-            transformation.addToEnd
-}
 
 fun getOrigInfo(rule: GrammarRuleEntity): String {
     var res = when (rule.masc.partOfSpeech) {
@@ -154,4 +107,15 @@ fun getResultInfo(rule: WordFormationRuleEntity): String {
     }
     if (res.length < 2) return res
     return res.slice(0 until res.length - 2)
+}
+
+fun fits(masc : MascEntity, word : IWordEntity) : Boolean {
+    if (masc.partOfSpeech != word.partOfSpeech) return false
+    for (attr in masc.immutableAttrs.keys) {
+        if (!word.immutableAttrs.containsKey(attr) ||
+            word.immutableAttrs[attr] != masc.immutableAttrs[attr]) {
+            return false
+        }
+    }
+    return word.word.matches(masc.regex.toRegex())
 }

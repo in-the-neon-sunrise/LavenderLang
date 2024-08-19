@@ -14,8 +14,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
-import com.lavenderlang.domain.PdfWriterDaoImpl
+import com.lavenderlang.domain.PdfWriter
 import com.lavenderlang.data.LanguageRepositoryImpl
+import com.lavenderlang.data.PdfWriterImpl
 import com.lavenderlang.domain.exception.FileWorkException
 import com.lavenderlang.databinding.FragmentLanguageBinding
 import com.lavenderlang.domain.usecase.update.UpdateDescriptionUseCase
@@ -62,7 +63,7 @@ class LanguageFragment: Fragment() {
         createPDFLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
             Log.d("pdf start write", "result")
             if (uri != null) {
-                WriteToPdfUseCase.execute(uri, MyApp.language!!, requireContext())
+                WriteToPdfUseCase.execute(uri, MyApp.language!!, requireContext(), PdfWriterImpl())
             } else {
                 Log.d("pdf write", "uri is null")
             }
@@ -180,7 +181,7 @@ class LanguageFragment: Fragment() {
 
         binding.buttonFile.setOnClickListener {
             try {
-                createJSONLauncher.launch("${PdfWriterDaoImpl().translitName(
+                createJSONLauncher.launch("${PdfWriterImpl().translitName(
                     MyApp.language!!.name)}.json")
             } catch (e: FileWorkException) {
                 Toast.makeText(this.requireContext(), e.message, Toast.LENGTH_LONG).show()
@@ -191,7 +192,7 @@ class LanguageFragment: Fragment() {
         binding.buttonPDF.setOnClickListener {
             try {
                 createPDFLauncher.launch(
-                    "${PdfWriterDaoImpl().translitName(
+                    "${PdfWriterImpl().translitName(
                         MyApp.language!!.name)}.pdf")
             } catch (e: FileWorkException) {
                 Toast.makeText(this.requireContext(), e.message, Toast.LENGTH_LONG).show()

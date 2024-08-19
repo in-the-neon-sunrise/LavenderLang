@@ -1,4 +1,4 @@
-package com.lavenderlang.backend.service
+package com.lavenderlang.domain
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lavenderlang.domain.db.LanguageItem

@@ -3,7 +3,7 @@ package com.lavenderlang.data
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.domain.Serializer
 import com.lavenderlang.domain.db.LanguageIdAndName
 import com.lavenderlang.domain.db.LanguageItem
 import com.lavenderlang.domain.db.LanguageRepository

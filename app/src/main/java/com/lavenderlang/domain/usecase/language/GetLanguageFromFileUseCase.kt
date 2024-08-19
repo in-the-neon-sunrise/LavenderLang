@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.anggrayudi.storage.file.DocumentFileCompat
 import com.anggrayudi.storage.file.openInputStream
-import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.domain.Serializer
 import com.lavenderlang.domain.db.LanguageRepository
 import com.lavenderlang.domain.exception.FileWorkException
 import com.lavenderlang.domain.model.language.LanguageEntity

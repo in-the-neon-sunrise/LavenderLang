@@ -1,6 +1,6 @@
 package com.lavenderlang.domain.usecase.update
 
-import com.lavenderlang.backend.service.Serializer
+import com.lavenderlang.domain.Serializer
 import com.lavenderlang.domain.db.LanguageRepository
 import com.lavenderlang.domain.model.language.GrammarEntity
 

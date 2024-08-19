@@ -1,7 +1,7 @@
 package com.lavenderlang.domain.usecase.grammar
 
-import com.lavenderlang.domain.conlangToRusAttr
 import com.lavenderlang.domain.db.PythonHandler
+import com.lavenderlang.domain.model.help.Attributes
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.language.LanguageEntity
 import com.lavenderlang.domain.model.rule.GrammarRuleEntity
@@ -15,7 +15,6 @@ import com.lavenderlang.domain.model.word.ParticipleEntity
 import com.lavenderlang.domain.model.word.PronounEntity
 import com.lavenderlang.domain.model.word.VerbEntity
 import com.lavenderlang.domain.model.word.VerbParticipleEntity
-import com.lavenderlang.domain.transformWord
 class GrammarTransformByRuleUseCase {
     companion object {
         fun execute(
@@ -37,7 +36,10 @@ class GrammarTransformByRuleUseCase {
             }
             transformedWord.languageId = word.languageId
             transformedWord.immutableAttrs = word.immutableAttrs
-            transformedWord.word = transformWord(rule.transformation, word.word)
+            transformedWord.word = rule.transformation.addToBeginning + word.word.slice(
+                IntRange(rule.transformation.delFromBeginning,
+                    word.word.length - rule.transformation.delFromEnd - 1)) +
+                    rule.transformation.addToEnd
             for (attr in rule.mutableAttrs.keys) {
                 transformedWord.mutableAttrs[attr] = rule.mutableAttrs[attr]!!
             }
@@ -78,6 +80,25 @@ class GrammarTransformByRuleUseCase {
             transformedWord.translation = res
 
             return transformedWord
+        }
+
+        private fun conlangToRusAttr(language: LanguageEntity, attr: Attributes, id: Int): Int {
+            return try {
+                when (attr) {
+                    Attributes.GENDER -> language.grammar.varsGender[id]!!.russianId
+                    Attributes.NUMBER -> language.grammar.varsNumber[id]!!.russianId
+                    Attributes.CASE -> language.grammar.varsCase[id]!!.russianId
+                    Attributes.TIME -> language.grammar.varsTime[id]!!.russianId
+                    Attributes.PERSON -> language.grammar.varsPerson[id]!!.russianId
+                    Attributes.MOOD -> language.grammar.varsMood[id]!!.russianId
+                    Attributes.TYPE -> language.grammar.varsType[id]!!.russianId
+                    Attributes.VOICE -> language.grammar.varsVoice[id]!!.russianId
+                    Attributes.DEGREE_OF_COMPARISON -> language.grammar.varsDegreeOfComparison[id]!!.russianId
+                    Attributes.IS_INFINITIVE -> id
+                }
+            } catch (e: Exception) {
+                0
+            }
         }
     }
 }
