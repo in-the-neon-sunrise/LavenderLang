@@ -1,6 +1,7 @@
 package com.lavenderlang.ui.fragments
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -44,6 +46,18 @@ class MainFragment : Fragment() {
         val userId = FirebaseAuth.getInstance().currentUser
         if (userId == null) {
             findNavController().navigate(R.id.action_mainFragment_to_loginFragment)
+        }
+
+        if( requireContext().getSharedPreferences
+                ("pref", Context.MODE_PRIVATE).getInt("nextLanguageId", 0)==0){
+            runBlocking(Dispatchers.IO) {
+                requireContext().getSharedPreferences("pref", AppCompatActivity.MODE_PRIVATE).edit()
+                    .putInt("nextLanguageId",
+                        try {
+                            LanguageRepositoryImpl().getMaxId() + 1}
+                        catch (e : Exception) {0}
+                    ).apply()
+            }
         }
 
         //button new lang listener

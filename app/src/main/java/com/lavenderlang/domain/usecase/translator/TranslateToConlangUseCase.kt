@@ -10,7 +10,7 @@ class TranslateToConlangUseCase {
         private fun translateWordToConlang(language: LanguageEntity, word: String): String {
             val py = Python.getInstance()
             val module = py.getModule("pm3")
-            val normalForm = module.callAttr("getNormalForm", word.lowercase()).toString()
+            val normalForm = module.callAttr("get_normal_form", word.lowercase()).toString()
             for (key in language.dictionary.fullDict.keys) {
                 val keyWord = key.split(":")[0]
                 val keyTranslation = key.split(":")[1]

@@ -40,30 +40,42 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewGrammarRule"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:gravity="center"
-                android:text="Грамматические правила:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <Button
                 android:id="@+id/buttonNewGrammarRule"
                 style="@style/Widget.Material3.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
-                android:layout_marginTop="8dp"
-                app:icon="@drawable/add_circle"
                 android:text="Новое грамматическое правило"
+                app:icon="@drawable/add_circle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewGrammarRule"/>
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintHorizontal_weight="1"
+                android:text="Характеристики слова"
+                android:textSize="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/buttonNewGrammarRule" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintHorizontal_weight="1"
+                android:text="Новая форма слова"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView1"
+                app:layout_constraintTop_toBottomOf="@+id/buttonNewGrammarRule" />
 
             <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewGrammarRules"
