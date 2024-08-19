@@ -28,9 +28,6 @@ class InstructionFragment : Fragment() {
 
         binding = FragmentInstructionBinding.inflate(inflater, container, false)
 
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
         idLang = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("lang", -1)
         requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("block", 0)
 

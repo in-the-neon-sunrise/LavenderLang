@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -90,27 +91,45 @@ class MainActivity2: AppCompatActivity() {
                 when (destination.id) {
                     R.id.loginFragment, R.id.signupFragment, R.id.startingFragment -> {
                         navView.visibility = View.GONE
+                        binding.topAppBar.visibility = View.GONE
                     }
 
                     R.id.mainFragment -> {
                         navView.visibility = View.VISIBLE
+                        binding.topAppBar.visibility = View.VISIBLE
                         navView.setSelectedItemId(R.id.main)
                     }
 
                     R.id.languageFragment -> {
                         navView.visibility = View.VISIBLE
+                        binding.topAppBar.visibility = View.VISIBLE
                         navView.setSelectedItemId(R.id.language)
                     }
 
                     R.id.translatorFragment -> {
                         navView.visibility = View.VISIBLE
+                        binding.topAppBar.visibility = View.VISIBLE
                         navView.setSelectedItemId(R.id.translator)
                     }
 
                     else -> {
                         navView.visibility = View.VISIBLE
+                        binding.topAppBar.visibility = View.VISIBLE
                     }
                 }
+        }
+
+        binding.topAppBar.setNavigationOnClickListener {
+            if(navController.currentDestination?.id != R.id.mainFragment) navController.popBackStack()
+        }
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            if(navController.currentDestination?.id == R.id.mainFragment){
+                navController.navigate(R.id.informationFragment)
+            }
+            else{
+                navController.navigate(R.id.instructionFragment)
+            }
+            true
         }
 
         currentFragmentId = getSharedPreferences(

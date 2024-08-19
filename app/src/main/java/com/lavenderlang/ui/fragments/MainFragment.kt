@@ -74,10 +74,6 @@ class MainFragment : Fragment() {
             findNavController().navigate(R.id.action_mainFragment_to_loadLanguageFragment)
         }
 
-        //go to information
-        binding.buttonInf.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_informationFragment)
-        }
         Log.d("meow", "we're here")
 
         binding.blockingView.setOnClickListener(null)

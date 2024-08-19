@@ -6,33 +6,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.PunctuationFragment">
 
-    <Button
-        android:id="@+id/buttonInf"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/info"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonPrev"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <ScrollView
         android:id="@+id/scrollView4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
-        android:layout_marginBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -83,19 +62,19 @@
                 app:layout_constraintTop_toBottomOf="@id/textViewInf1" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol1"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol1"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol1"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -119,19 +98,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol1" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol2"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol2"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol2"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol2">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -155,19 +134,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol2" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol3"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol3"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol3"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol3">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -191,19 +170,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol3" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol4"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol4"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol4"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol4">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -227,19 +206,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol4" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol5"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol5"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol5"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol5">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -263,19 +242,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol5" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol6"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol6"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol6"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol6">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -299,19 +278,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol6" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol7"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol7"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol7"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol7">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -335,19 +314,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol7" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol8"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol8"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol8"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol8">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -371,19 +350,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol8" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol9"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol9"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol9"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol9">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -407,19 +386,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol9" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol10"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol10"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol10"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol10">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -443,19 +422,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol10" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol11"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol11"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol11"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol11">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -479,19 +458,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol11" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol12"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol12"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol12"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol12">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -515,19 +494,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol12" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol13"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol13"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol13"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol13">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -551,19 +530,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol13" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol14"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol14"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol14"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol14">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -587,19 +566,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol14" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol15"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol15"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol15"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol15">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -623,19 +602,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol15" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol16"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol16"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol16"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol16">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -659,19 +638,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol16" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol17"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol17"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol17"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol17">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -695,19 +674,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol17" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol18"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol18"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol18"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol18">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -731,19 +710,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewRusSymbol18" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editTextConlangSymbol19"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
+                android:hint="знак"
+                android:inputType="text"
+                android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toEndOf="@+id/textViewRusSymbol19"
-                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol19"
-                android:hint="знак"
-                android:textSize="34sp"
-                android:inputType="text">
+                app:layout_constraintTop_toTopOf="@+id/textViewRusSymbol19">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"

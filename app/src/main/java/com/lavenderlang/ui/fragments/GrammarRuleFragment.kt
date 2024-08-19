@@ -55,19 +55,6 @@ class GrammarRuleFragment : Fragment() {
 
         binding = FragmentGrammarRuleBinding.inflate(inflater, container, false)
 
-        //top navigation menu
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.buttonInf.setOnClickListener {
-            val argsToSend = Bundle()
-            argsToSend.putInt("block", 8)
-            findNavController().navigate(
-                R.id.action_grammarRuleFragment_to_instructionFragment,
-                argsToSend
-            )
-        }
-
         //val editMasc: EditText = findViewById(R.id.editMasc)
         //how it was started?
         when (val lang =

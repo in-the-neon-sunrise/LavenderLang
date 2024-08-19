@@ -31,18 +31,6 @@ class LoadLanguageFragment : Fragment() {
 
         binding = FragmentLoadLanguageBinding.inflate(inflater, container, false)
 
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.buttonInf.setOnClickListener{
-            val argsToSend = Bundle()
-            argsToSend.putInt("block", 11)
-            findNavController().navigate(
-                R.id.action_loadLanguageFragment_to_instructionFragment,
-                argsToSend
-            )
-        }
-
         var accessiblePathsRaw = DocumentFileCompat.getAccessibleAbsolutePaths(requireContext())
         val accessible = arrayListOf<String>()
         for (key in  accessiblePathsRaw.keys) {

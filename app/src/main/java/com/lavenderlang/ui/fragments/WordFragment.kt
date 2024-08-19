@@ -60,20 +60,6 @@ class WordFragment : Fragment() {
 
         binding = FragmentWordBinding.inflate(inflater, container, false)
 
-        //top navigation menu
-
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.buttonInf.setOnClickListener{
-            val argsToSend = Bundle()
-            argsToSend.putInt("block", 7)
-            findNavController().navigate(
-                R.id.action_wordFragment_to_instructionFragment,
-                argsToSend
-            )
-        }
-
         //how it was started?
         when (val lang = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("lang", -1)) {
             -1 -> {

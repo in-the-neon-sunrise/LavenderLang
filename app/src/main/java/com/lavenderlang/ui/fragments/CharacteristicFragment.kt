@@ -101,20 +101,6 @@ class CharacteristicFragment : Fragment() {
     ): View {
         binding = FragmentCharacteristicBinding.inflate(inflater, container, false)
 
-
-        //top navigation menu
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.buttonInf.setOnClickListener {
-            val argsToSend = Bundle()
-            argsToSend.putInt("block", 8)
-            findNavController().navigate(
-                R.id.action_dictionaryFragment_to_instructionFragment,
-                argsToSend
-            )
-        }
-
         binding.buttonSave.setOnClickListener {
             var name: String
             var rusId: Int

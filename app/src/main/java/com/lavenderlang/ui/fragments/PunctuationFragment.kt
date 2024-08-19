@@ -31,18 +31,6 @@ class PunctuationFragment : Fragment() {
 
         binding = FragmentPunctuationBinding.inflate(inflater, container, false)
 
-        //top navigation menu
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.buttonInf.setOnClickListener {
-            val argsToSend = Bundle()
-            argsToSend.putInt("block", 5)
-            findNavController().navigate(
-                R.id.action_punctuationFragment_to_instructionFragment,
-                argsToSend
-            )
-        }
         //how it was started?
         when (val lang = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE)
             .getInt("lang", -1)) {

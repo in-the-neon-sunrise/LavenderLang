@@ -35,20 +35,6 @@ class DictionaryFragment : Fragment() {
 
         binding = FragmentDictionaryBinding.inflate(inflater, container, false)
 
-        //top navigation menu
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.buttonInf.setOnClickListener {
-            val argsToSend = Bundle()
-            argsToSend.putInt("block", 7)
-            findNavController().navigate(
-                R.id.action_dictionaryFragment_to_instructionFragment,
-                argsToSend
-            )
-        }
-
         binding.buttonNewWord.setOnClickListener {
             val argsToSend = Bundle()
             argsToSend.putInt("word", -1)

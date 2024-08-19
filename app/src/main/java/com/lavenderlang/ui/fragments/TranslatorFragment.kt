@@ -39,17 +39,6 @@ class TranslatorFragment : Fragment() {
 
         binding = FragmentTranslatorBinding.inflate(inflater, container, false)
 
-        //top navigation menu
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.buttonInf.setOnClickListener{
-            val argsToSend = Bundle()
-            argsToSend.putInt("block", 10)
-            findNavController().navigate(R.id.action_translatorFragment_to_instructionFragment, argsToSend)
-        }
-
         flagIsSpinnerSelected = false
 
 

@@ -7,32 +7,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.fragments.WordFragment">
 
-    <Button
-        android:id="@+id/buttonInf"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/info"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonPrev"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
-        android:layout_marginBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -43,44 +22,42 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editConlangWord"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
                 android:gravity="center"
-                app:layout_constraintTop_toTopOf="parent"
+                android:hint="Слово на конланге"
+                android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:hint="Слово на конланге"
-                android:inputType="textMultiLine">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                />
+                    android:layout_height="match_parent" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputFilledStyle"
                 android:id="@+id/editRussianWord"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
                 android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@+id/editConlangWord"
+                android:hint="Перевод слова"
+                android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:hint="Перевод слова"
-                android:inputType="textMultiLine">
+                app:layout_constraintTop_toBottomOf="@+id/editConlangWord">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
+                    android:layout_height="match_parent" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Spinner
@@ -112,8 +89,8 @@
                 android:id="@+id/spinnerGender"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -124,8 +101,8 @@
                 android:id="@+id/spinnerType"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -136,8 +113,8 @@
                 android:id="@+id/spinnerVoice"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -162,19 +139,19 @@
                 android:id="@+id/listWordForms"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewWordForms"/>
+                app:layout_constraintTop_toBottomOf="@id/textViewWordForms" />
 
             <TextView
                 android:id="@+id/textViewNewWords"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:gravity="center"
                 android:text="Слова, полученные правилами словообразования"
@@ -204,7 +181,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonCreateWords"/>
+                app:layout_constraintTop_toBottomOf="@+id/buttonCreateWords" />
 
             <Button
                 android:id="@+id/buttonSave"

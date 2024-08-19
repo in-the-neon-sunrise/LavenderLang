@@ -6,31 +6,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.GrammarFragment">
 
-    <Button
-        android:id="@+id/buttonInf"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/info"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonPrev"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
-        android:layout_marginBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -57,11 +36,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
-                app:layout_constraintHorizontal_weight="1"
                 android:text="Характеристики слова"
                 android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/textView2"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonNewGrammarRule" />
 
             <TextView
@@ -70,10 +49,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
-                app:layout_constraintHorizontal_weight="1"
                 android:text="Новая форма слова"
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/textView1"
                 app:layout_constraintTop_toBottomOf="@+id/buttonNewGrammarRule" />
 
@@ -81,12 +60,12 @@
                 android:id="@+id/listViewGrammarRules"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/buttonNewGrammarRule"/>
+                app:layout_constraintTop_toBottomOf="@id/textView2" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

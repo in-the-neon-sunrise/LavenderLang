@@ -25,10 +25,6 @@ class InformationFragment : Fragment() {
 
         binding = FragmentInformationBinding.inflate(inflater, container, false)
 
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
         binding.buttonGuide.setOnClickListener {
             findNavController().navigate(R.id.action_informationFragment_to_instructionFragment)
         }

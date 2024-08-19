@@ -31,19 +31,6 @@ class WritingFragment : Fragment() {
 
         binding = FragmentWritingBinding.inflate(inflater, container, false)
 
-        //top navigation menu
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.buttonInf.setOnClickListener{
-            val argsToSend = Bundle()
-            argsToSend.putInt("lang", idLang)
-            argsToSend.putInt("block", 4)
-            findNavController().navigate(
-                R.id.action_writingFragment_to_instructionFragment,
-                argsToSend
-            )
-        }
         //how it was started?
         when (val lang =
             requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("lang", -1)) {

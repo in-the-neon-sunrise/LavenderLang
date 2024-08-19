@@ -58,18 +58,6 @@ class WordFormationRuleFragment : Fragment() {
     ): View {
 
         binding = FragmentWordFormationRuleBinding.inflate(inflater, container, false)
-        //top navigation menu
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.buttonInf.setOnClickListener{
-            val argsToSend = Bundle()
-            argsToSend.putInt("block", 9)
-            findNavController().navigate(
-                R.id.action_grammarRuleFragment_to_instructionFragment,
-                argsToSend
-            )
-        }
 
         when(val lang = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("lang", -1)){
             -1 -> {

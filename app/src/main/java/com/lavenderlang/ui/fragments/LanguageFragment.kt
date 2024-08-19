@@ -69,16 +69,6 @@ class LanguageFragment: Fragment() {
             }
         }
 
-        //top navigation menu
-        binding.buttonPrev.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.buttonInf.setOnClickListener{
-            val argsToSend = Bundle()
-            argsToSend.putInt("block", 2)
-            findNavController().navigate(R.id.action_languageFragment_to_instructionFragment, argsToSend)
-        }
-
         //parts of language
         binding.buttonDictionary.setOnClickListener {
             Log.d("language", "dictionary: ${MyApp.language!!.languageId}")
