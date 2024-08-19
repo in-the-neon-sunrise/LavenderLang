@@ -5,8 +5,10 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -27,6 +29,7 @@ class MainActivity2: AppCompatActivity() {
     private lateinit var binding: ActivityMain2Binding
     private lateinit var navController: NavController
     private var currentFragmentId: Int = R.id.mainFragment
+    private  var isCustom = false
     override fun onCreate(savedInstanceState: Bundle?) {
         val isDarkTheme = getSharedPreferences("pref", MODE_PRIVATE).getBoolean("Theme", false)
         Log.d("Theme", "start. $isDarkTheme")
@@ -63,22 +66,51 @@ class MainActivity2: AppCompatActivity() {
         )
         navController = navHostFragment.navController
 
+
         navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.mainFragment -> {
+                R.id.main -> {
                     Log.d("BottomNav", "Navigating to mainFragment")
-                    navController.navigate(R.id.mainFragment)
+                    if(navController.currentDestination?.id != R.id.mainFragment) navController.navigate(R.id.mainFragment)
                 }
-                R.id.languageFragment -> {
+                R.id.language -> {
                     Log.d("BottomNav", "Navigating to languageFragment")
-                    navController.navigate(R.id.languageFragment)
+                    if(navController.currentDestination?.id != R.id.languageFragment) navController.navigate(R.id.languageFragment)
                 }
-                R.id.translatorFragment -> {
+                R.id.translator -> {
                     Log.d("BottomNav", "Navigating to translatorFragment")
-                    navController.navigate(R.id.translatorFragment)
+                    if(navController.currentDestination?.id != R.id.translatorFragment) navController.navigate(R.id.translatorFragment)
                 }
             }
             true
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+
+                when (destination.id) {
+                    R.id.loginFragment, R.id.signupFragment, R.id.startingFragment -> {
+                        navView.visibility = View.GONE
+                    }
+
+                    R.id.mainFragment -> {
+                        navView.visibility = View.VISIBLE
+                        navView.setSelectedItemId(R.id.main)
+                    }
+
+                    R.id.languageFragment -> {
+                        navView.visibility = View.VISIBLE
+                        navView.setSelectedItemId(R.id.language)
+                    }
+
+                    R.id.translatorFragment -> {
+                        navView.visibility = View.VISIBLE
+                        navView.setSelectedItemId(R.id.translator)
+                    }
+
+                    else -> {
+                        navView.visibility = View.VISIBLE
+                    }
+                }
         }
 
         currentFragmentId = getSharedPreferences(

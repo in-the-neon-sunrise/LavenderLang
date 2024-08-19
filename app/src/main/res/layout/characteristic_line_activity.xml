@@ -40,10 +40,11 @@
 
     <Button
         android:id="@+id/buttonDel"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        style="?attr/materialIconButtonFilledTonalStyle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/cancel"
+        app:icon="@drawable/cancel"
         app:layout_constraintBottom_toBottomOf="@+id/spinnerRusAttribute"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
