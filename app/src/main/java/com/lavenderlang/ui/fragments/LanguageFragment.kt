@@ -84,6 +84,9 @@ class LanguageFragment: Fragment() {
             Log.d("language", "dictionary: ${MyApp.language!!.languageId}")
             findNavController().navigate(R.id.action_languageFragment_to_dictionaryFragment)
         }
+        binding.buttonCharacteristic.setOnClickListener {
+            findNavController().navigate(R.id.action_languageFragment_to_characteristicFragment)
+        }
         binding.buttonGrammar.setOnClickListener {
             findNavController().navigate(R.id.action_languageFragment_to_grammarFragment)
         }

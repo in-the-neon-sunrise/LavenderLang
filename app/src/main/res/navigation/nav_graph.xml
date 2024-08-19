@@ -72,6 +72,28 @@
     </fragment>
 
     <fragment
+        android:id="@+id/characteristicFragment"
+        android:name="com.lavenderlang.ui.fragments.CharacteristicFragment"
+        android:label="fragment_characteristic"
+        tools:layout="@layout/fragment_grammar" >
+        <action
+            android:id="@+id/action_characteristicFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_characteristicFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_characteristicFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_characteristicFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_characteristicFragment_to_grammarRuleFragment"
+            app:destination="@id/grammarRuleFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/grammarRuleFragment"
         android:name="com.lavenderlang.ui.fragments.GrammarRuleFragment"
         android:label="fragment_grammar_rule"
@@ -136,6 +158,9 @@
         <action
             android:id="@+id/action_languageFragment_to_grammarFragment"
             app:destination="@id/grammarFragment" />
+        <action
+            android:id="@+id/action_languageFragment_to_characteristicFragment"
+            app:destination="@id/characteristicFragment" />
         <action
             android:id="@+id/action_languageFragment_to_dictionaryFragment"
             app:destination="@id/dictionaryFragment" />
