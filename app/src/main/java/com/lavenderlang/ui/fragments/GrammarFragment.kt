@@ -106,22 +106,6 @@ class GrammarFragment : Fragment() {
                 argsToSend
             )
         }
-        //bottom navigation menu
-        binding.buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_grammarFragment_to_mainFragment)
-        }
-
-        binding.buttonLanguage.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_grammarFragment_to_languageFragment
-            )
-        }
-
-        binding.buttonTranslator.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_grammarFragment_to_translatorFragment
-            )
-        }
 
         binding.buttonSave.setOnClickListener {
             var name: String
@@ -593,7 +577,7 @@ class AttributeAdapter(
         }
 
         GrammarFragment.isFirst = true
-        var editTextName: EditText = newView!!.findViewById(R.id.editTextNameAttribute)
+        var editTextName: EditText = newView!!.findViewById(R.id.editTextNameAttribute1)
         val spinnerRus: Spinner = newView.findViewById(R.id.spinnerRusAttribute)
 
         //edittext is visible
@@ -609,7 +593,6 @@ class AttributeAdapter(
                 if (positionAttribute == editTextTag as Int) {
                     when (idAttribute) {
                         0 -> {
-
                             GrammarFragment.genderNames[positionAttribute] = updatedText
                         }
 
@@ -753,7 +736,7 @@ class AttributeAdapter(
         //button del is working
         val buttonDel: Button = newView.findViewById(R.id.buttonDel)
         if (positionAttribute == 0) {
-            buttonDel.visibility = View.GONE
+            buttonDel.visibility = View.INVISIBLE
         } else {
             buttonDel.visibility = View.VISIBLE
         }

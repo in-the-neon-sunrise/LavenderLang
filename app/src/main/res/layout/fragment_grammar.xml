@@ -8,29 +8,29 @@
 
     <Button
         android:id="@+id/buttonInf"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/ic_info"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonPrev"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/ic_arrow_back"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -42,26 +42,24 @@
 
             <TextView
                 android:id="@+id/textViewGender"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="24dp"
                 android:gravity="center_vertical"
                 android:text="Род"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                app:layout_constraintHorizontal_weight="4"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/buttonNewGender"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/ic_plus"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginEnd="24dp"
+                app:icon="@drawable/add_circle"
+                android:text="Добавить"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textViewGender"
                 app:layout_constraintTop_toTopOf="@+id/textViewGender" />
 
             <com.lavenderlang.ui.NonScrollListView
@@ -74,27 +72,25 @@
 
             <TextView
                 android:id="@+id/textViewNumber"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
                 android:text="Число"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                app:layout_constraintHorizontal_weight="4"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewGender" />
 
             <Button
                 android:id="@+id/buttonNewNumber"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/ic_plus"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginEnd="24dp"
+                app:icon="@drawable/add_circle"
+                android:text="Добавить"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textViewNumber"
                 app:layout_constraintTop_toTopOf="@+id/textViewNumber" />
 
             <com.lavenderlang.ui.NonScrollListView
@@ -107,27 +103,25 @@
 
             <TextView
                 android:id="@+id/textViewCase"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
                 android:text="Падеж"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                app:layout_constraintHorizontal_weight="4"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewNumber" />
 
             <Button
                 android:id="@+id/buttonNewCase"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/ic_plus"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginEnd="24dp"
+                app:icon="@drawable/add_circle"
+                android:text="Добавить"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textViewCase"
                 app:layout_constraintTop_toTopOf="@+id/textViewCase" />
 
             <com.lavenderlang.ui.NonScrollListView
@@ -140,27 +134,25 @@
 
             <TextView
                 android:id="@+id/textViewTime"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
                 android:text="Время"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                app:layout_constraintHorizontal_weight="4"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewCase" />
 
             <Button
                 android:id="@+id/buttonNewTime"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/ic_plus"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginEnd="24dp"
+                app:icon="@drawable/add_circle"
+                android:text="Добавить"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textViewTime"
                 app:layout_constraintTop_toTopOf="@+id/textViewTime" />
 
             <com.lavenderlang.ui.NonScrollListView
@@ -173,27 +165,25 @@
 
             <TextView
                 android:id="@+id/textViewPerson"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
                 android:text="Лицо"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                app:layout_constraintHorizontal_weight="4"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewTime" />
 
             <Button
                 android:id="@+id/buttonNewPerson"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/ic_plus"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginEnd="24dp"
+                app:icon="@drawable/add_circle"
+                android:text="Добавить"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textViewPerson"
                 app:layout_constraintTop_toTopOf="@+id/textViewPerson" />
 
             <com.lavenderlang.ui.NonScrollListView
@@ -206,27 +196,25 @@
 
             <TextView
                 android:id="@+id/textViewMood"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
                 android:text="Наклонение"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                app:layout_constraintHorizontal_weight="4"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewPerson" />
 
             <Button
                 android:id="@+id/buttonNewMood"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/ic_plus"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginEnd="24dp"
+                app:icon="@drawable/add_circle"
+                android:text="Добавить"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textViewMood"
                 app:layout_constraintTop_toTopOf="@+id/textViewMood" />
 
             <com.lavenderlang.ui.NonScrollListView
@@ -239,27 +227,25 @@
 
             <TextView
                 android:id="@+id/textViewType"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
                 android:text="Вид"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                app:layout_constraintHorizontal_weight="4"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewMood" />
 
             <Button
                 android:id="@+id/buttonNewType"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/ic_plus"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginEnd="24dp"
+                app:icon="@drawable/add_circle"
+                android:text="Добавить"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textViewType"
                 app:layout_constraintTop_toTopOf="@+id/textViewType" />
 
             <com.lavenderlang.ui.NonScrollListView
@@ -272,27 +258,25 @@
 
             <TextView
                 android:id="@+id/textViewVoice"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
                 android:text="Залог"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                app:layout_constraintHorizontal_weight="4"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewType" />
 
             <Button
                 android:id="@+id/buttonNewVoice"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/ic_plus"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginEnd="24dp"
+                app:icon="@drawable/add_circle"
+                android:text="Добавить"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textViewVoice"
                 app:layout_constraintTop_toTopOf="@+id/textViewVoice" />
 
             <com.lavenderlang.ui.NonScrollListView
@@ -305,27 +289,25 @@
 
             <TextView
                 android:id="@+id/textViewDegreeOfComparison"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
                 android:text="Степень сравнения"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintEnd_toStartOf="@+id/buttonNewGender"
-                app:layout_constraintHorizontal_weight="4"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewVoice" />
 
             <Button
                 android:id="@+id/buttonNewDegreeOfComparison"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/ic_plus"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginEnd="24dp"
+                app:icon="@drawable/add_circle"
+                android:text="Добавить"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textViewDegreeOfComparison"
                 app:layout_constraintTop_toTopOf="@+id/textViewDegreeOfComparison" />
 
             <com.lavenderlang.ui.NonScrollListView
@@ -338,10 +320,12 @@
 
             <Button
                 android:id="@+id/buttonSave"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/ic_save"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:text="Сохранить изменения"
+                app:icon="@drawable/save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listViewDegreeOfComparison" />
@@ -362,18 +346,23 @@
 
             <Button
                 android:id="@+id/buttonNewGrammarRule"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/ic_plus"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                app:icon="@drawable/add_circle"
+                android:text="Новое грамматическое правило"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewGrammarRule" />
+                app:layout_constraintTop_toBottomOf="@id/textViewGrammarRule"/>
 
             <com.lavenderlang.ui.NonScrollListView
                 android:id="@+id/listViewGrammarRules"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
                 android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/buttonNewGrammarRule"/>
@@ -382,36 +371,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-
-
-    <Button
-        android:id="@+id/buttonHome"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/ic_home"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/buttonLanguage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/ic_language"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonTranslator"
-        app:layout_constraintStart_toEndOf="@+id/buttonHome" />
-
-    <Button
-        android:id="@+id/buttonTranslator"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/ic_translator"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

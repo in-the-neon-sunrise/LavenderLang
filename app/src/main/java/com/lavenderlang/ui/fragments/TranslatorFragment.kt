@@ -50,15 +50,6 @@ class TranslatorFragment : Fragment() {
             findNavController().navigate(R.id.action_translatorFragment_to_instructionFragment, argsToSend)
         }
 
-        //bottom navigation menu
-        binding.buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_translatorFragment_to_mainFragment)
-        }
-
-        binding.buttonLanguage.setOnClickListener {
-            findNavController().navigate(R.id.action_translatorFragment_to_languageFragment)
-        }
-
         flagIsSpinnerSelected = false
 
 
@@ -77,9 +68,15 @@ class TranslatorFragment : Fragment() {
         flagIsSpinnerSelected =true
         val stupidId = languages.indexOfFirst { it.id == idLang }
         if(idLang !=-1) binding.spinnerChooseLanguage.setSelection(stupidId)
-        binding.radioButtonFromConlang.isChecked = true//перевод с конланга
-        binding.radioGroupTranslate.setOnCheckedChangeListener { _, checkedId ->
-            translationOnConlang = checkedId != binding.radioButtonFromConlang.id
+        binding.toggleButton.check(R.id.buttonFromConlang)//перевод с конланга
+
+        binding.buttonFromConlang.setOnClickListener {
+            translationOnConlang = false
+            binding.toggleButton.uncheck(R.id.buttonOnConlang)
+        }
+        binding.buttonOnConlang.setOnClickListener {
+            translationOnConlang = true
+            binding.toggleButton.uncheck(R.id.buttonFromConlang)
         }
 
         binding.spinnerChooseLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -115,7 +112,7 @@ class TranslatorFragment : Fragment() {
 
     private fun translate() {
 
-        val inputText: String = binding.editTextText.text.toString()
+        val inputText: String = binding.editTextText.editText?.text.toString()
 
         if (!translationOnConlang) {
             binding.textViewTranslation.text =

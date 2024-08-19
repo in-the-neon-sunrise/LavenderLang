@@ -42,10 +42,6 @@ class LoadLanguageFragment : Fragment() {
                 argsToSend
             )
         }
-        //bottom navigation menu
-        binding.buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_loadLanguageFragment_to_mainFragment)
-        }
 
         var accessiblePathsRaw = DocumentFileCompat.getAccessibleAbsolutePaths(requireContext())
         val accessible = arrayListOf<String>()
@@ -88,7 +84,7 @@ class LoadLanguageFragment : Fragment() {
         }
         binding.buttonOpen.setOnClickListener {
             Log.d("restore", accessible.toString())
-            val path = binding.editTextPath.text.toString()
+            val path = binding.editTextPath.editText?.text.toString()
             val pathPositionSpinner = binding.spinnerPath.selectedItemPosition
             if (pathPositionSpinner == Spinner.INVALID_POSITION) {
                 Toast.makeText(requireContext(), "Папка не выбрана, сохранение невозможно", Toast.LENGTH_LONG).show()

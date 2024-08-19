@@ -70,18 +70,6 @@ class GrammarRuleFragment : Fragment() {
             )
         }
 
-        //bottom navigation menu
-        binding.buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_grammarRuleFragment_to_mainFragment)
-        }
-
-        binding.buttonLanguage.setOnClickListener {
-            findNavController().navigate(R.id.action_grammarRuleFragment_to_languageFragment)
-        }
-
-        binding.buttonTranslator.setOnClickListener {
-            findNavController().navigate(R.id.action_grammarRuleFragment_to_translatorFragment)
-        }
         //val editMasc: EditText = findViewById(R.id.editMasc)
         //how it was started?
         when (val lang =
@@ -104,11 +92,11 @@ class GrammarRuleFragment : Fragment() {
                 val newRule = GrammarRuleEntity(idLang)
                 grammarDao.addGrammarRule(MyApp.language!!.grammar, newRule)
                 idRule = MyApp.language!!.grammar.grammarRules.size-1
-                binding.editMasc.setText(newRule.masc.regex)
+                binding.editMasc.editText?.setText(newRule.masc.regex)
             }
             else -> {
                 idRule = rule
-                binding.editMasc.setText(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.regex)
+                binding.editMasc.editText?.setText(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.regex)
             }
         }
 
@@ -373,10 +361,10 @@ class GrammarRuleFragment : Fragment() {
         numberBack = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].transformation.delFromEnd
         addFront = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].transformation.addToBeginning
         addBack = MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].transformation.addToEnd
-        (binding.editTextNumberFront as TextView).setText(numberFront.toString())
-        (binding.editTextNumberBack as TextView).setText(numberBack.toString())
-        (binding.editTextAddFront as TextView).setText(addFront)
-        (binding.editTextAddBack as TextView).setText(addBack)
+        binding.editTextNumberFront.editText?.setText(numberFront.toString())
+        binding.editTextNumberBack.editText?.setText(numberBack.toString())
+        binding.editTextAddFront.editText?.setText(addFront)
+        binding.editTextAddBack.editText?.setText(addBack)
 
 
         binding.buttonSaveGrammarRule.setOnClickListener{
@@ -385,7 +373,7 @@ class GrammarRuleFragment : Fragment() {
             if(binding.spinnerType.isVisible) attrs[Attributes.TYPE] = binding.spinnerType.selectedItemPosition
             if(binding.spinnerVoice.isVisible) attrs[Attributes.VOICE] = binding.spinnerVoice.selectedItemPosition
 
-            regex =binding.editMasc.text.toString()
+            regex =binding.editMasc.editText?.text.toString()
 
             if(binding.spinnerFinishGender.isVisible) mutableAttrs[Attributes.GENDER] = binding.spinnerFinishGender.selectedItemPosition
             if(binding.spinnerFinishNumber.isVisible) mutableAttrs[Attributes.NUMBER] = binding.spinnerFinishNumber.selectedItemPosition
@@ -395,13 +383,13 @@ class GrammarRuleFragment : Fragment() {
             if(binding.spinnerFinishMood.isVisible) mutableAttrs[Attributes.MOOD] = binding.spinnerFinishMood.selectedItemPosition
             if(binding.spinnerFinishDegreeOfComparison.isVisible) mutableAttrs[Attributes.DEGREE_OF_COMPARISON] = binding.spinnerFinishDegreeOfComparison.selectedItemPosition
 
-            addBack =binding.editTextAddBack.text.toString()
-            addFront =binding.editTextAddFront.text.toString()
-            numberFront = if (binding.editTextNumberFront.text.toString().isNotEmpty())
-                binding.editTextNumberFront.text.toString().toInt()
+            addBack =binding.editTextAddBack.editText?.text.toString()
+            addFront =binding.editTextAddFront.editText?.text.toString()
+            numberFront = if (binding.editTextNumberFront.editText?.text.toString().isNotEmpty())
+                binding.editTextNumberFront.editText?.text.toString().toInt()
             else 0
-            numberBack = if (binding.editTextNumberBack.text.toString().isNotEmpty())
-                binding.editTextNumberBack.text.toString().toInt()
+            numberBack = if (binding.editTextNumberBack.editText?.text.toString().isNotEmpty())
+                binding.editTextNumberBack.editText?.text.toString().toInt()
             else 0
 
             updateRule()

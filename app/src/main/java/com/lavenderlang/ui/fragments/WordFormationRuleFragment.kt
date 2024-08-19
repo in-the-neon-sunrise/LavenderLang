@@ -75,18 +75,6 @@ class WordFormationRuleFragment : Fragment() {
                 argsToSend
             )
         }
-        //bottom navigation menu
-        binding.buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_grammarRuleFragment_to_mainFragment)
-        }
-
-        binding.buttonLanguage.setOnClickListener {
-            findNavController().navigate(R.id.action_grammarRuleFragment_to_languageFragment)
-        }
-
-        binding.buttonTranslator.setOnClickListener {
-            findNavController().navigate(R.id.action_wordFormationRuleFragment_to_translatorFragment)
-        }
 
         when(val lang = requireContext().getSharedPreferences("pref", Context.MODE_PRIVATE).getInt("lang", -1)){
             -1 -> {
@@ -102,11 +90,11 @@ class WordFormationRuleFragment : Fragment() {
                 var newRule = WordFormationRuleEntity(idLang)
                 grammarDao.addWordFormationRule(MyApp.language!!.grammar, newRule)
                 idRule = MyApp.language!!.grammar.wordFormationRules.size-1
-                binding.editMasc.setText(newRule.masc.regex)
+                binding.editMasc.editText?.setText(newRule.masc.regex)
             }
             else -> {
                 idRule = rule
-                binding.editMasc.setText(MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.regex)
+                binding.editMasc.editText?.setText(MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.regex)
             }
         }
         startFlagIsFirst =true
@@ -153,12 +141,12 @@ class WordFormationRuleFragment : Fragment() {
         updateStartSpinners()
         updateFinishSpinners()
 
-        binding.editTextDescriptionRule.setText(description)
+        binding.editTextDescriptionRule.editText?.setText(description)
 
-        (binding.editTextNumberFront as TextView).text = numberFront.toString()
-        (binding.editTextNumberBack as TextView).text = numberBack.toString()
-        (binding.editTextAddFront as TextView).text = addFront
-        (binding.editTextAddBack as TextView).text = addBack
+        binding.editTextNumberFront.editText?.setText(numberFront.toString())
+        binding.editTextNumberBack.editText?.setText(numberBack.toString())
+        binding.editTextAddFront.editText?.setText(addFront)
+        binding.editTextAddBack.editText?.setText(addBack)
 
         val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, mutableListOf(
             "Существительное",
@@ -502,21 +490,21 @@ class WordFormationRuleFragment : Fragment() {
             if(binding.spinnerType.isVisible) attrs[Attributes.TYPE] = binding.spinnerType.selectedItemPosition
             if(binding.spinnerVoice.isVisible) attrs[Attributes.VOICE] = binding.spinnerVoice.selectedItemPosition
 
-            regex = binding.editMasc.text.toString()
-            description = binding.editTextDescriptionRule.text.toString()
+            regex = binding.editMasc.editText?.text.toString()
+            description = binding.editTextDescriptionRule.editText?.text.toString()
 
             if(binding.spinnerFinishGender.isVisible) finishAttrs[Attributes.GENDER] = binding.spinnerFinishGender.selectedItemPosition
             if(binding.spinnerFinishType.isVisible) finishAttrs[Attributes.TYPE] = binding.spinnerFinishType.selectedItemPosition
             if(binding.spinnerFinishVoice.isVisible) finishAttrs[Attributes.VOICE] = binding.spinnerFinishVoice.selectedItemPosition
 
-            numberFront = if (binding.editTextNumberFront.text.toString().isNotEmpty())
-                binding.editTextNumberFront.text.toString().toInt()
+            numberFront = if (binding.editTextNumberFront.editText?.text.toString().isNotEmpty())
+                binding.editTextNumberFront.editText?.text.toString().toInt()
             else 0
-            numberBack = if (binding.editTextNumberBack.text.toString().isNotEmpty())
-                binding.editTextNumberBack.text.toString().toInt()
+            numberBack = if (binding.editTextNumberBack.editText?.text.toString().isNotEmpty())
+                binding.editTextNumberBack.editText?.text.toString().toInt()
             else 0
-            addFront = binding.editTextAddFront.text.toString()
-            addBack = binding.editTextAddBack.text.toString()
+            addFront = binding.editTextAddFront.editText?.text.toString()
+            addBack = binding.editTextAddBack.editText?.text.toString()
 
             updateRule()
         }
