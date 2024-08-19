@@ -14,16 +14,13 @@ import com.lavenderlang.domain.model.rule.WordFormationRuleEntity
 
 class UpdateWordFormationRuleUseCase {
     companion object {
-        suspend fun execute(rule: WordFormationRuleEntity, masc: MascEntity, transformation: TransformationEntity,
-                            description: String, newAttrs: MutableMap<Attributes, Int>, partOfSpeech: PartOfSpeech,
-                            grammar: GrammarEntity, repo: LanguageRepository
-        ) {
+        fun execute(rule: WordFormationRuleEntity, masc: MascEntity, transformation: TransformationEntity,
+                            description: String, newAttrs: MutableMap<Attributes, Int>, partOfSpeech: PartOfSpeech) {
             rule.masc = masc
             rule.transformation = transformation
             rule.description = description
             rule.immutableAttrs = newAttrs
             rule.partOfSpeech = partOfSpeech
-            repo.updateGrammar(grammar.languageId, Serializer.getInstance().serializeGrammar(grammar))
         }
     }
 }

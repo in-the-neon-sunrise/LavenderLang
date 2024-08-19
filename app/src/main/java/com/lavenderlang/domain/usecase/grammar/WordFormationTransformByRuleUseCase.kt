@@ -30,8 +30,7 @@ class WordFormationTransformByRuleUseCase {
             }
             val newWord = transformWord(rule.transformation, word.word)
             transformedWord.word = newWord
-            transformedWord.translation =
-                "Введите перевод" // мы сами "кошечка" из "кошка" не образуем
+            transformedWord.translation = "" // мы сами "кошечка" из "кошка" не образуем
             transformedWord.immutableAttrs = rule.immutableAttrs
             return transformedWord
         }

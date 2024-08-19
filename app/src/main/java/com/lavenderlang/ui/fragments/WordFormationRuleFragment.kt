@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -15,17 +14,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.backend.dao.help.MascDaoImpl
-import com.lavenderlang.backend.dao.language.GrammarDao
-import com.lavenderlang.backend.dao.language.GrammarDaoImpl
 import com.lavenderlang.data.LanguageRepositoryImpl
-import com.lavenderlang.data.PythonHandlerImpl
 import com.lavenderlang.domain.model.help.Attributes
 import com.lavenderlang.domain.model.help.MascEntity
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.help.TransformationEntity
 import com.lavenderlang.domain.model.rule.WordFormationRuleEntity
 import com.lavenderlang.databinding.FragmentWordFormationRuleBinding
+import com.lavenderlang.domain.usecase.grammar.AddWordFormationRuleUseCase
+import com.lavenderlang.domain.usecase.grammar.DeleteWordFormationRuleUseCase
 import com.lavenderlang.domain.usecase.grammar.UpdateWordFormationRuleUseCase
+import com.lavenderlang.domain.usecase.update.UpdateGrammarUseCase
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,7 +50,6 @@ class WordFormationRuleFragment : Fragment() {
         var description: String = ""
 
         val mascDao = MascDaoImpl()
-        val grammarDao: GrammarDao = GrammarDaoImpl()
 
         var startFlagIsFirst = false
         var finishFlagIsFirst = false
@@ -88,7 +86,10 @@ class WordFormationRuleFragment : Fragment() {
         when(rule){
             -1 -> {
                 var newRule = WordFormationRuleEntity(idLang)
-                grammarDao.addWordFormationRule(MyApp.language!!.grammar, newRule)
+                AddWordFormationRuleUseCase.execute(newRule, MyApp.language!!.grammar)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
+                }
                 idRule = MyApp.language!!.grammar.wordFormationRules.size-1
                 binding.editMasc.editText?.setText(newRule.masc.regex)
             }
@@ -507,9 +508,15 @@ class WordFormationRuleFragment : Fragment() {
             addBack = binding.editTextAddBack.editText?.text.toString()
 
             updateRule()
+            lifecycleScope.launch(Dispatchers.IO) {
+                UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
+            }
         }
         binding.buttonDelete.setOnClickListener{
-            grammarDao.deleteWordFormationRule(MyApp.language!!.grammar, MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule])
+            DeleteWordFormationRuleUseCase.execute(MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule], MyApp.language!!.grammar)
+            lifecycleScope.launch(Dispatchers.IO) {
+                UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
+            }
             findNavController().popBackStack()
         }
 
@@ -578,18 +585,14 @@ class WordFormationRuleFragment : Fragment() {
                 }
             }
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                UpdateWordFormationRuleUseCase.execute(
+            UpdateWordFormationRuleUseCase.execute(
                     MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule],
                     newMasc,
                     newTransformation,
                     description,
                     GrammarRuleFragment.mutableAttrs,
-                    partOfSpeech,
-                    MyApp.language!!.grammar,
-                    LanguageRepositoryImpl()
+                    partOfSpeech
                 )
-            }
         }
         catch (e:Exception){
             Toast.makeText(requireContext(), "какая-то беда", Toast.LENGTH_LONG).show()

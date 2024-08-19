@@ -13,10 +13,9 @@ import com.lavenderlang.domain.model.rule.GrammarRuleEntity
 
 class UpdateGrammarRuleUseCase {
     companion object {
-        suspend fun execute(
+        fun execute(
             rule: GrammarRuleEntity, masc: MascEntity, transformation: TransformationEntity,
-            newAttrs: MutableMap<Attributes, Int>, language: LanguageEntity,
-            repo: LanguageRepository, py: PythonHandler
+            newAttrs: MutableMap<Attributes, Int>, language: LanguageEntity, py: PythonHandler
         ) {
             Log.d("updateRule", "oldRule: $rule")
 
@@ -26,7 +25,10 @@ class UpdateGrammarRuleUseCase {
 
             val dictionary = language.dictionary
             val mascHandler = MascDaoImpl()
-            val copyDict = HashMap(dictionary.fullDict)
+            var copyDict = HashMap(dictionary.fullDict)
+
+            Log.d("updateRule", "full ${language.dictionary.fullDict}")
+
             synchronized(dictionary) {
                 for (key in copyDict.keys) {
                     if (language.dictionary.fullDict[key]!!.size < 2) continue
@@ -52,7 +54,7 @@ class UpdateGrammarRuleUseCase {
                 }
             }
 
-
+            copyDict = HashMap(dictionary.fullDict)
             synchronized(dictionary) {
                 for (key in copyDict.keys) {
                     if (language.dictionary.fullDict[key]!!.isEmpty()) continue
@@ -70,14 +72,7 @@ class UpdateGrammarRuleUseCase {
                 }
             }
 
-            repo.updateGrammar(
-                rule.languageId,
-                Serializer.getInstance().serializeGrammar(language.grammar)
-            )
-            repo.updateDictionary(
-                rule.languageId,
-                Serializer.getInstance().serializeDictionary(language.dictionary)
-            )
+            Log.d("updateRule", "new full ${language.dictionary.fullDict}")
         }
     }
 }

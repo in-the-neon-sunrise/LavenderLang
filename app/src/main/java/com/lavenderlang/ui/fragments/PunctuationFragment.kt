@@ -12,13 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.data.LanguageRepositoryImpl
-import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.databinding.FragmentPunctuationBinding
-import com.lavenderlang.domain.usecase.UpdatePuncSymbolsUseCase
+import com.lavenderlang.domain.usecase.update.UpdatePuncSymbolsUseCase
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class PunctuationFragment : Fragment() {
     private lateinit var binding: FragmentPunctuationBinding

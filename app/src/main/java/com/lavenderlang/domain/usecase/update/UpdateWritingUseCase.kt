@@ -1,4 +1,4 @@
-package com.lavenderlang.domain.usecase
+package com.lavenderlang.domain.usecase.update
 
 import com.lavenderlang.backend.service.Serializer
 import com.lavenderlang.domain.db.LanguageRepository

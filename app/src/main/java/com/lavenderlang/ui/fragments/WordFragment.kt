@@ -16,8 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
-import com.lavenderlang.backend.dao.language.DictionaryDao
-import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.data.PythonHandlerImpl
 import com.lavenderlang.domain.model.help.Attributes
@@ -25,6 +23,7 @@ import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.word.IWordEntity
 import com.lavenderlang.domain.model.word.NounEntity
 import com.lavenderlang.databinding.FragmentWordBinding
+import com.lavenderlang.domain.model.language.DictionaryEntity
 import com.lavenderlang.domain.model.word.AdjectiveEntity
 import com.lavenderlang.domain.model.word.AdverbEntity
 import com.lavenderlang.domain.model.word.FuncPartEntity
@@ -34,7 +33,9 @@ import com.lavenderlang.domain.model.word.PronounEntity
 import com.lavenderlang.domain.model.word.VerbEntity
 import com.lavenderlang.domain.model.word.VerbParticipleEntity
 import com.lavenderlang.domain.usecase.dictionary.AddWordUseCase
+import com.lavenderlang.domain.usecase.dictionary.CreateWordsFromExistingUseCase
 import com.lavenderlang.domain.usecase.dictionary.DeleteWordUseCase
+import com.lavenderlang.domain.usecase.update.UpdateDictionaryUseCase
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -50,8 +51,6 @@ class WordFragment : Fragment() {
         var idPartOfSpeech: Int = 0
         var partOfSpeech: PartOfSpeech = PartOfSpeech.NOUN
         var flagIsFirst:Boolean = true
-
-        val dictionaryDao: DictionaryDao = DictionaryDaoImpl()
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,8 +94,10 @@ class WordFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     AddWordUseCase.execute(
                         MyApp.language!!,
-                        NounEntity(MyApp.language!!.languageId, "", "-"),
-                        LanguageRepositoryImpl(), PythonHandlerImpl())
+                        NounEntity(MyApp.language!!.languageId, "", "-"), PythonHandlerImpl())
+                    UpdateDictionaryUseCase.execute(
+                        MyApp.language!!.dictionary,
+                        LanguageRepositoryImpl())
                 }
                 Log.d("create word", MyApp.language!!.dictionary.dict[idWord].word)
             }
@@ -245,11 +246,14 @@ class WordFragment : Fragment() {
                 DeleteWordUseCase.execute(
                     MyApp.language!!.dictionary,
                     oldWordEntity,
-                    LanguageRepositoryImpl(), PythonHandlerImpl())
+                    PythonHandlerImpl())
                 AddWordUseCase.execute(
                     MyApp.language!!,
                     newWordEntity,
-                    LanguageRepositoryImpl(), PythonHandlerImpl())
+                    PythonHandlerImpl())
+                UpdateDictionaryUseCase.execute(
+                    MyApp.language!!.dictionary,
+                    LanguageRepositoryImpl())
             }
         }
 
@@ -261,7 +265,8 @@ class WordFragment : Fragment() {
                 DeleteWordUseCase.execute(
                     MyApp.language!!.dictionary,
                     oldWordEntity,
-                    LanguageRepositoryImpl(), PythonHandlerImpl())
+                    PythonHandlerImpl())
+                UpdateDictionaryUseCase.execute(MyApp.language!!.dictionary, LanguageRepositoryImpl())
             }
             Log.d("WordFrag del", MyApp.language!!.dictionary.dict.toString())
             findNavController().popBackStack()
@@ -468,8 +473,16 @@ class WordFragment : Fragment() {
             else->{}
         }
     }
+
+    private fun getWordForms(dictionary: DictionaryEntity, word: String): ArrayList<IWordEntity> {
+        for (key in dictionary.fullDict.keys) {
+            if (key.split(":")[0] == word) return dictionary.fullDict[key]!!
+        }
+        return arrayListOf()
+    }
+
     private fun updateWordForms() {
-        val wordForms = dictionaryDao.getWordForms(MyApp.language!!.dictionary, MyApp.language!!.dictionary.dict[idWord].word)
+        val wordForms = getWordForms(MyApp.language!!.dictionary, MyApp.language!!.dictionary.dict[idWord].word)
         Log.d("wordForms", wordForms.toString())
         val adapterWordForms: ArrayAdapter<IWordEntity> = WordAdapter(requireContext(), wordForms)
         binding.listWordForms.adapter = adapterWordForms
@@ -478,8 +491,9 @@ class WordFragment : Fragment() {
 
     fun updateNewWords(){
         //list of new words
-        val list: MutableList<Pair<String, IWordEntity>> = dictionaryDao.createWordsFromExisting(
-            MyApp.language!!.dictionary, MyApp.language!!.dictionary.dict[idWord]).toMutableList()
+        val list: MutableList<Pair<String, IWordEntity>> = CreateWordsFromExistingUseCase.execute(
+            MyApp.language!!.dictionary.dict[idWord],
+            MyApp.language!!.grammar.wordFormationRules).toMutableList()
         val adapter: ArrayAdapter<Pair<String, IWordEntity>> = NewWordAdapter(requireContext(), list)
         binding.listViewNewWords.adapter = adapter
         adapter.notifyDataSetChanged()
@@ -519,11 +533,12 @@ private class NewWordAdapter(context: Context, listOfWords: MutableList<Pair<Str
                 language.dictionary.dict.add(word)
                 // fixme: global scope :<
                 GlobalScope.launch(Dispatchers.IO) {
-                        AddWordUseCase.execute(
-                            language, word,
-                            LanguageRepositoryImpl(), PythonHandlerImpl())
-
-                    }
+                    AddWordUseCase.execute(
+                        language, word,
+                        PythonHandlerImpl()
+                    )
+                    UpdateDictionaryUseCase.execute(language.dictionary, LanguageRepositoryImpl())
+                }
             }
         }
 

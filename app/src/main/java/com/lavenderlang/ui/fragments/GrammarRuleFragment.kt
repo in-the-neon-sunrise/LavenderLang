@@ -18,15 +18,17 @@ import com.lavenderlang.R
 import com.lavenderlang.domain.model.help.MascEntity
 import com.lavenderlang.domain.model.help.TransformationEntity
 import com.lavenderlang.backend.dao.help.MascDaoImpl
-import com.lavenderlang.backend.dao.language.GrammarDaoImpl
-import com.lavenderlang.backend.dao.rule.GrammarRuleDaoImpl
 import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.data.PythonHandlerImpl
 import com.lavenderlang.domain.model.help.Attributes
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.rule.GrammarRuleEntity
 import com.lavenderlang.databinding.FragmentGrammarRuleBinding
+import com.lavenderlang.domain.usecase.grammar.AddGrammarRuleUseCase
+import com.lavenderlang.domain.usecase.grammar.DeleteGrammarRuleUseCase
 import com.lavenderlang.domain.usecase.grammar.UpdateGrammarRuleUseCase
+import com.lavenderlang.domain.usecase.update.UpdateDictionaryUseCase
+import com.lavenderlang.domain.usecase.update.UpdateGrammarUseCase
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,7 +48,6 @@ class GrammarRuleFragment : Fragment() {
         var addFront=""
         var addBack=""
 
-        val grammarDao = GrammarDaoImpl()
         val mascDao = MascDaoImpl()
     }
     override fun onCreateView(
@@ -90,7 +91,12 @@ class GrammarRuleFragment : Fragment() {
         when(rule) {
             -1 -> {
                 val newRule = GrammarRuleEntity(idLang)
-                grammarDao.addGrammarRule(MyApp.language!!.grammar, newRule)
+                MyApp.language!!.grammar.grammarRules.add(newRule)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    AddGrammarRuleUseCase.execute(newRule, MyApp.language!!, PythonHandlerImpl())
+                    UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
+                    UpdateDictionaryUseCase.execute(MyApp.language!!.dictionary, LanguageRepositoryImpl())
+                }
                 idRule = MyApp.language!!.grammar.grammarRules.size-1
                 binding.editMasc.editText?.setText(newRule.masc.regex)
             }
@@ -397,7 +403,12 @@ class GrammarRuleFragment : Fragment() {
         }
 
         binding.buttonDelete.setOnClickListener{
-            grammarDao.deleteGrammarRule(MyApp.language!!.grammar, MyApp.language!!.grammar.grammarRules.toMutableList()[idRule])
+            MyApp.language!!.grammar.grammarRules.removeAt(idRule)
+            lifecycleScope.launch(Dispatchers.IO) {
+                DeleteGrammarRuleUseCase.execute(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule], MyApp.language!!)
+                UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
+                UpdateDictionaryUseCase.execute(MyApp.language!!.dictionary, LanguageRepositoryImpl())
+            }
             findNavController().popBackStack()
         }
         return binding.root
@@ -462,9 +473,10 @@ class GrammarRuleFragment : Fragment() {
                     newTransformation,
                     mutableAttrs,
                     MyApp.language!!,
-                    LanguageRepositoryImpl(),
                     PythonHandlerImpl()
                 )
+                UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
+                UpdateDictionaryUseCase.execute(MyApp.language!!.dictionary, LanguageRepositoryImpl())
             }
             Log.d(
                 "rule in frag",
@@ -474,10 +486,10 @@ class GrammarRuleFragment : Fragment() {
             Toast.makeText(requireContext(), "какая-то беда", Toast.LENGTH_LONG).show()
         }
     }
-    fun listenSpinners(){
+    private fun listenSpinners(){
 
         val genderNames = MyApp.language!!.grammar.varsGender.values.map { it.name }
-        var genderAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, genderNames)
+        val genderAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, genderNames)
         binding.spinnerGender.adapter = genderAdapter
         genderAdapter.notifyDataSetChanged()
 

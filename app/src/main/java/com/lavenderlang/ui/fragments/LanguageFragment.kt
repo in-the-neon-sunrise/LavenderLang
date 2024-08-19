@@ -18,8 +18,8 @@ import com.lavenderlang.domain.PdfWriterDaoImpl
 import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.domain.exception.FileWorkException
 import com.lavenderlang.databinding.FragmentLanguageBinding
-import com.lavenderlang.domain.usecase.language.ChangeDescriptionUseCase
-import com.lavenderlang.domain.usecase.language.ChangeNameUseCase
+import com.lavenderlang.domain.usecase.update.UpdateDescriptionUseCase
+import com.lavenderlang.domain.usecase.update.UpdateNameUseCase
 import com.lavenderlang.domain.usecase.language.CopyLanguageUseCase
 import com.lavenderlang.domain.usecase.language.CreateLanguageUseCase
 import com.lavenderlang.domain.usecase.language.DeleteLanguageUseCase
@@ -159,8 +159,9 @@ class LanguageFragment: Fragment() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
+                MyApp.language!!.name = binding.editLanguageName.editText?.text.toString()
                 runBlocking {
-                    ChangeNameUseCase.execute(MyApp.language!!, binding.editLanguageName.editText?.text.toString(), LanguageRepositoryImpl())
+                    UpdateNameUseCase.execute(MyApp.language!!.languageId, binding.editLanguageName.editText?.text.toString(), LanguageRepositoryImpl())
                 }
             }
         })
@@ -170,8 +171,9 @@ class LanguageFragment: Fragment() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
+                MyApp.language!!.description = binding.editDescription.editText?.text.toString()
                 runBlocking {
-                    ChangeDescriptionUseCase.execute(MyApp.language!!, binding.editDescription.editText?.text.toString(), LanguageRepositoryImpl())
+                    UpdateDescriptionUseCase.execute(MyApp.language!!.languageId, binding.editDescription.editText?.text.toString(), LanguageRepositoryImpl())
                 }
             }
         })

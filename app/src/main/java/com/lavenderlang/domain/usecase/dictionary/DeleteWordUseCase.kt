@@ -13,19 +13,20 @@ import kotlinx.coroutines.launch
 
 class DeleteWordUseCase {
     companion object {
-        suspend fun execute(
-            dictionary: DictionaryEntity, word: IWordEntity, repo: LanguageRepository, py: PythonHandler
+        fun execute(
+            dictionary: DictionaryEntity, word: IWordEntity, py: PythonHandler
         ) {
+            if (dictionary.dict.contains(word)) {
+                synchronized(dictionary) {
+                    dictionary.dict.remove(word)
+                }
+            }
             val normalForm = py.getNormalForm(word.translation.lowercase())
             val key = "${word.word}:${normalForm}"
             synchronized(dictionary) {
                 dictionary.fullDict.remove(key)
             }
 
-            repo.updateDictionary(
-                dictionary.languageId,
-                Serializer.getInstance().serializeDictionary(dictionary)
-            )
         }
     }
 }

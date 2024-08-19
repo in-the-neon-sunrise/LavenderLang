@@ -13,7 +13,7 @@ import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.databinding.FragmentWritingBinding
-import com.lavenderlang.domain.usecase.UpdateWritingUseCase
+import com.lavenderlang.domain.usecase.update.UpdateWritingUseCase
 import com.lavenderlang.ui.MyApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

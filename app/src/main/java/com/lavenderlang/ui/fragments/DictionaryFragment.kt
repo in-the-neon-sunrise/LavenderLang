@@ -13,8 +13,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
-import com.lavenderlang.backend.dao.language.DictionaryDao
-import com.lavenderlang.backend.dao.language.DictionaryDaoImpl
 import com.lavenderlang.domain.model.help.PartOfSpeech
 import com.lavenderlang.domain.model.language.DictionaryEntity
 import com.lavenderlang.domain.model.word.IWordEntity
@@ -25,7 +23,6 @@ class DictionaryFragment : Fragment() {
     private lateinit var binding: FragmentDictionaryBinding
     companion object {
         var idLang: Int = 0
-        val dictionaryDao: DictionaryDao = DictionaryDaoImpl()
         var sort: Int = 0
         var filter: Int = 0
         lateinit var dictionary: DictionaryEntity
@@ -130,52 +127,49 @@ class DictionaryFragment : Fragment() {
         var list = dictionary.dict.toList()
         if (sort == 0) {
             when (filter) {
-                0 -> list = dictionaryDao.sortDictByWord(dictionary)
-                1 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.NOUN)
-                2 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.VERB)
-                3 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.ADJECTIVE)
-                4 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.ADVERB)
-                5 -> list =
-                    dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.PARTICIPLE)
+                0 -> list = sortDictByWord(dictionary)
+                1 -> list = sortDictByWordFiltered(dictionary, PartOfSpeech.NOUN)
+                2 -> list = sortDictByWordFiltered(dictionary, PartOfSpeech.VERB)
+                3 -> list = sortDictByWordFiltered(dictionary, PartOfSpeech.ADJECTIVE)
+                4 -> list = sortDictByWordFiltered(dictionary, PartOfSpeech.ADVERB)
+                5 -> list = sortDictByWordFiltered(dictionary, PartOfSpeech.PARTICIPLE)
 
-                6 -> list =
-                    dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.VERB_PARTICIPLE)
+                6 -> list = sortDictByWordFiltered(dictionary, PartOfSpeech.VERB_PARTICIPLE)
 
-                7 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.PRONOUN)
-                8 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.NUMERAL)
-                9 -> list = dictionaryDao.sortDictByWordFiltered(dictionary, PartOfSpeech.FUNC_PART)
+                7 -> list = sortDictByWordFiltered(dictionary, PartOfSpeech.PRONOUN)
+                8 -> list = sortDictByWordFiltered(dictionary, PartOfSpeech.NUMERAL)
+                9 -> list = sortDictByWordFiltered(dictionary, PartOfSpeech.FUNC_PART)
             }
         } else {
             when (filter) {
-                0 -> list = dictionaryDao.sortDictByTranslation(dictionary)
-                1 -> list =
-                    dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.NOUN)
+                0 -> list = sortDictByTranslation(dictionary)
+                1 -> list = sortDictByTranslationFiltered(dictionary, PartOfSpeech.NOUN)
 
                 2 -> list =
-                    dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.VERB)
+                    sortDictByTranslationFiltered(dictionary, PartOfSpeech.VERB)
 
                 3 -> list =
-                    dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.ADJECTIVE)
+                    sortDictByTranslationFiltered(dictionary, PartOfSpeech.ADJECTIVE)
 
                 4 -> list =
-                    dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.ADVERB)
+                    sortDictByTranslationFiltered(dictionary, PartOfSpeech.ADVERB)
 
                 5 -> list =
-                    dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.PARTICIPLE)
+                    sortDictByTranslationFiltered(dictionary, PartOfSpeech.PARTICIPLE)
 
-                6 -> list = dictionaryDao.sortDictByTranslationFiltered(
+                6 -> list = sortDictByTranslationFiltered(
                     dictionary,
                     PartOfSpeech.VERB_PARTICIPLE
                 )
 
                 7 -> list =
-                    dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.PRONOUN)
+                    sortDictByTranslationFiltered(dictionary, PartOfSpeech.PRONOUN)
 
                 8 -> list =
-                    dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.NUMERAL)
+                    sortDictByTranslationFiltered(dictionary, PartOfSpeech.NUMERAL)
 
                 9 -> list =
-                    dictionaryDao.sortDictByTranslationFiltered(dictionary, PartOfSpeech.FUNC_PART)
+                    sortDictByTranslationFiltered(dictionary, PartOfSpeech.FUNC_PART)
             }
         }
 
@@ -193,6 +187,52 @@ class DictionaryFragment : Fragment() {
                 findNavController().navigate(R.id.action_dictionaryFragment_to_wordFragment, argsToSend)
             }
     }
+
+
+    private fun filterDictByPartOfSpeech(dictionary: DictionaryEntity, partOfSpeech: PartOfSpeech): List<IWordEntity> {
+        val filteredDict: ArrayList<IWordEntity> = arrayListOf()
+        for (word in dictionary.dict) {
+            if (word.partOfSpeech == partOfSpeech) {
+                filteredDict.add(word)
+            }
+        }
+        return filteredDict
+    }
+
+    private fun sortDictByWord(dictionary: DictionaryEntity): List<IWordEntity> {
+        return dictionary.dict.sortedBy { it.word }
+    }
+
+    private fun sortDictByTranslation(dictionary: DictionaryEntity): List<IWordEntity> {
+        return dictionary.dict.sortedBy { it.translation }
+    }
+
+    private fun sortDictByWordFiltered(
+        dictionary: DictionaryEntity,
+        partOfSpeech: PartOfSpeech
+    ): List<IWordEntity> {
+        val filteredDict: ArrayList<IWordEntity> = arrayListOf()
+        for (word in dictionary.dict) {
+            if (word.partOfSpeech == partOfSpeech) {
+                filteredDict.add(word)
+            }
+        }
+        return filteredDict.sortedBy { it.word }
+    }
+
+    private fun sortDictByTranslationFiltered(
+        dictionary: DictionaryEntity,
+        partOfSpeech: PartOfSpeech
+    ): List<IWordEntity> {
+        val filteredDict: ArrayList<IWordEntity> = arrayListOf()
+        for (word in dictionary.dict) {
+            if (word.partOfSpeech == partOfSpeech) {
+                filteredDict.add(word)
+            }
+        }
+        return filteredDict.sortedBy { it.translation }
+    }
+    
 }
 
 class WordAdapter(context: Context, listOfWords: MutableList<IWordEntity>) :
