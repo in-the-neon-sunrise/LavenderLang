@@ -11,19 +11,19 @@ types = ['perf', 'impf']
 voices = ['actv', 'pssv']
 
 
-def inflectAttrs(word, partOfSpeech, attrs):
+def inflect_attrs(word, part_of_speech, attrs):
     w = morph.parse(word)[0]
     res = []
     comp = False
     attrs = list(map(int, attrs[1:-1].split(", ")))
     
-    if partOfSpeech == 'NOUN' or partOfSpeech == 'PRONOUN':
+    if part_of_speech == 'NOUN' or part_of_speech == 'PRONOUN':
         if attrs[0] < len(numbers):
             res.append(numbers[attrs[0]])
         if attrs[1] < len(cases):
             res.append(cases[attrs[1]])
     
-    elif partOfSpeech == 'VERB':
+    elif part_of_speech == 'VERB':
         time, number, gender, person, mood, isinf = attrs
         
         if isinf == 0:
@@ -44,7 +44,7 @@ def inflectAttrs(word, partOfSpeech, attrs):
         if mood < len(moods):
             res.append(moods[mood])
     
-    elif partOfSpeech == 'ADJECTIVE':
+    elif part_of_speech == 'ADJECTIVE':
         if attrs[0] < len(genders):
             res.append(genders[attrs[0]])
         if attrs[1] < len(numbers):
@@ -56,7 +56,7 @@ def inflectAttrs(word, partOfSpeech, attrs):
         elif attrs[3] == 2:
             res.append('Supr')
     
-    elif partOfSpeech == 'PARTICIPLE':
+    elif part_of_speech == 'PARTICIPLE':
         if attrs[0] < len(times):
             res.append(times[attrs[0]])
         if attrs[1] < len(numbers):
@@ -66,7 +66,7 @@ def inflectAttrs(word, partOfSpeech, attrs):
         if attrs[3] < len(cases):
             res.append(cases[attrs[3]])
 
-    elif partOfSpeech == 'ADVERB':
+    elif part_of_speech == 'ADVERB':
         if attrs[0] == 1:
             comp = True
         elif attrs[0] == 2:
@@ -80,5 +80,7 @@ def inflectAttrs(word, partOfSpeech, attrs):
     
     return 'более ' * int(comp) + inflected_word.word
 
-def getNormalForm(word):
+def get_normal_form(word):
+    if ' ' in word:
+            return ' '.join([get_normal_form(w) for w in word.split()])
     return morph.parse(word)[0].normal_form

@@ -3,27 +3,345 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainActivity">
+    app:startDestination="@id/startingFragment">
 
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.lavenderlang.frontend.MainActivity"
-        android:label="start_activity"
-        tools:layout="@layout/start_activity" />
-    <activity
-        android:id="@+id/languageActivity"
-        android:name="com.lavenderlang.frontend.LanguageActivity"
-        android:label="language_activity"
-        tools:layout="@layout/language_activity" />
-    <action
-        android:id="@+id/action_global_languageActivity2"
-        app:destination="@id/languageActivity" />
-    <activity
-        android:id="@+id/informationActivity"
-        android:name="com.lavenderlang.frontend.InformationActivity"
-        android:label="information_activity"
-        tools:layout="@layout/information_activity" />
-    <action
-        android:id="@+id/action_global_informationActivity"
-        app:destination="@id/informationActivity" />
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.lavenderlang.ui.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_loadLanguageFragment"
+            app:destination="@id/loadLanguageFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_informationFragment"
+            app:destination="@id/informationFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dictionaryFragment"
+        android:name="com.lavenderlang.ui.fragments.DictionaryFragment"
+        android:label="fragment_dictionary"
+        tools:layout="@layout/fragment_dictionary" >
+        <action
+            android:id="@+id/action_dictionaryFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_dictionaryFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_dictionaryFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_dictionaryFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_dictionaryFragment_to_wordFragment"
+            app:destination="@id/wordFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/grammarFragment"
+        android:name="com.lavenderlang.ui.fragments.GrammarFragment"
+        android:label="fragment_grammar"
+        tools:layout="@layout/fragment_grammar" >
+        <action
+            android:id="@+id/action_grammarFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_grammarFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_grammarFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_grammarFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_grammarFragment_to_grammarRuleFragment"
+            app:destination="@id/grammarRuleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/characteristicFragment"
+        android:name="com.lavenderlang.ui.fragments.CharacteristicFragment"
+        android:label="fragment_characteristic"
+        tools:layout="@layout/fragment_grammar" >
+        <action
+            android:id="@+id/action_characteristicFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_characteristicFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_characteristicFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_characteristicFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_characteristicFragment_to_grammarRuleFragment"
+            app:destination="@id/grammarRuleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/grammarRuleFragment"
+        android:name="com.lavenderlang.ui.fragments.GrammarRuleFragment"
+        android:label="fragment_grammar_rule"
+        tools:layout="@layout/fragment_grammar_rule" >
+        <action
+            android:id="@+id/action_grammarRuleFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_grammarRuleFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_grammarRuleFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_grammarRuleFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/informationFragment"
+        android:name="com.lavenderlang.ui.fragments.InformationFragment"
+        android:label="fragment_information"
+        tools:layout="@layout/fragment_information" >
+        <action
+            android:id="@+id/action_informationFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_informationFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_informationFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/instructionFragment"
+        android:name="com.lavenderlang.ui.fragments.InstructionFragment"
+        android:label="fragment_instruction"
+        tools:layout="@layout/fragment_instruction" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.lavenderlang.ui.fragments.LanguageFragment"
+        android:label="fragment_language"
+        tools:layout="@layout/fragment_language" >
+        <action
+            android:id="@+id/action_languageFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_languageFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_languageFragment_to_punctuationFragment"
+            app:destination="@id/punctuationFragment" />
+        <action
+            android:id="@+id/action_languageFragment_to_wordFormationFragment"
+            app:destination="@id/wordFormationFragment" />
+        <action
+            android:id="@+id/action_languageFragment_to_writingFragment"
+            app:destination="@id/writingFragment" />
+        <action
+            android:id="@+id/action_languageFragment_to_grammarFragment"
+            app:destination="@id/grammarFragment" />
+        <action
+            android:id="@+id/action_languageFragment_to_characteristicFragment"
+            app:destination="@id/characteristicFragment" />
+        <action
+            android:id="@+id/action_languageFragment_to_dictionaryFragment"
+            app:destination="@id/dictionaryFragment" />
+        <action
+            android:id="@+id/action_languageFragment_to_translatorFragment2"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_languageFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loadLanguageFragment"
+        android:name="com.lavenderlang.ui.fragments.LoadLanguageFragment"
+        android:label="fragment_load_language"
+        tools:layout="@layout/fragment_load_language" >
+        <action
+            android:id="@+id/action_loadLanguageFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_loadLanguageFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_loadLanguageFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/punctuationFragment"
+        android:name="com.lavenderlang.ui.fragments.PunctuationFragment"
+        android:label="fragment_punctuation"
+        tools:layout="@layout/fragment_punctuation" >
+        <action
+            android:id="@+id/action_punctuationFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_punctuationFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_punctuationFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_punctuationFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/translatorFragment"
+        android:name="com.lavenderlang.ui.fragments.TranslatorFragment"
+        android:label="fragment_translator"
+        tools:layout="@layout/fragment_translator" >
+        <action
+            android:id="@+id/action_translatorFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_translatorFragment_to_languageFragment2"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_translatorFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_translatorFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/wordFragment"
+        android:name="com.lavenderlang.ui.fragments.WordFragment"
+        android:label="fragment_word"
+        tools:layout="@layout/fragment_word" >
+        <action
+            android:id="@+id/action_wordFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_wordFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_wordFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_wordFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/wordFormationFragment"
+        android:name="com.lavenderlang.ui.fragments.WordFormationFragment"
+        android:label="fragment_word_formation"
+        tools:layout="@layout/fragment_word_formation" >
+        <action
+            android:id="@+id/action_wordFormationFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_wordFormationFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_wordFormationFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+        <action
+            android:id="@+id/action_wordFormationFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_wordFormationFragment_to_wordFormationRuleFragment"
+            app:destination="@id/wordFormationRuleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/wordFormationRuleFragment"
+        android:name="com.lavenderlang.ui.fragments.WordFormationRuleFragment"
+        android:label="fragment_word_formation_rule"
+        tools:layout="@layout/fragment_word_formation_rule" >
+        <action
+            android:id="@+id/action_wordFormationRuleFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_wordFormationRuleFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_wordFormationRuleFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_wordFormationRuleFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/writingFragment"
+        android:name="com.lavenderlang.ui.fragments.WritingFragment"
+        android:label="fragment_writing"
+        tools:layout="@layout/fragment_writing" >
+        <action
+            android:id="@+id/action_writingFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_writingFragment_to_translatorFragment"
+            app:destination="@id/translatorFragment" />
+        <action
+            android:id="@+id/action_writingFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_writingFragment_to_instructionFragment"
+            app:destination="@id/instructionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/startingFragment"
+        android:name="com.lavenderlang.ui.fragments.StartingFragment"
+        android:label="fragment_starting"
+        tools:layout="@layout/fragment_starting" >
+        <action
+            android:id="@+id/action_startingFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_startingFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.lavenderlang.ui.fragments.SignupFragment"
+        android:label="fragment_auth"
+        tools:layout="@layout/fragment_signup" >
+        <action
+            android:id="@+id/action_signupFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_signupFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.lavenderlang.ui.fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+    </fragment>
+
 </navigation>

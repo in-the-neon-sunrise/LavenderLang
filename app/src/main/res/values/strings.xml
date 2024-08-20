@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">LavenderLang</string>
     <string name="new_language">Новый язык</string>
-    <string name="stupid_text">Сочувствуем.</string>
     <string name="name">Name</string>
     <string name="description">Описание</string>
     <string name="p">P</string>
@@ -283,4 +282,8 @@
         кнопку. Затем Вам нужно написать название файла, включая расширение “.json”, и нажать на кнопку
         восстановления языка.\n
     </string>
+    <string name="home">Домой</string>
+    <string name="language">Язык</string>
+    <string name="translator">Переводчик</string>
+
 </resources>
