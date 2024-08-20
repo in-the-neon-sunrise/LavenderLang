@@ -29,6 +29,12 @@ class DeleteGrammarRuleUseCase {
                                 break
                             }
                         }
+                        for (attr in word.mutableAttrs.keys) {
+                            if (!rule.mutableAttrs.contains(attr) || rule.mutableAttrs[attr] != word.mutableAttrs[attr]) {
+                                check = false
+                                break
+                            }
+                        }
                         if (!check) continue
                         dictionary.fullDict[key]!!.remove(word)
                     }

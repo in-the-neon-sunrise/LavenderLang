@@ -11,12 +11,7 @@ import java.io.OutputStreamWriter
 class WriteToPdfUseCase {
     companion object {
         fun execute(uri: Uri, language: LanguageEntity, context: Context, pdfWriter: PdfWriter) {
-            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                val writer = BufferedWriter(OutputStreamWriter(outputStream))
-                writer.use { it.write(Serializer.getInstance().serializeLanguage(language)) }
-            }
             pdfWriter.fullWriteToPdf(context, language, uri)
         }
     }
-
   }

@@ -65,8 +65,12 @@ class GrammarFragment : Fragment() {
 
         //button new grammar rule listener
         binding.buttonNewGrammarRule.setOnClickListener {
+            // send arguments to the next fragment
+            val argsToSend = Bundle()
+            argsToSend.putInt("rule", -1)
             findNavController().navigate(
                 R.id.action_grammarFragment_to_grammarRuleFragment,
+                argsToSend
             )
         }
 

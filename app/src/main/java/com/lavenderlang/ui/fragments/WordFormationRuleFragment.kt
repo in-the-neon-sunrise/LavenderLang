@@ -103,16 +103,16 @@ class WordFormationRuleFragment : Fragment() {
         regex = MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.regex
 
         partOfSpeech= MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].partOfSpeech
-        when (partOfSpeech){
-            PartOfSpeech.NOUN-> finishIdPartOfSpeech =0
-            PartOfSpeech.VERB-> finishIdPartOfSpeech =1
-            PartOfSpeech.ADJECTIVE-> finishIdPartOfSpeech =2
-            PartOfSpeech.ADVERB-> finishIdPartOfSpeech =3
-            PartOfSpeech.PARTICIPLE-> finishIdPartOfSpeech =4
-            PartOfSpeech.VERB_PARTICIPLE-> finishIdPartOfSpeech =5
-            PartOfSpeech.PRONOUN-> finishIdPartOfSpeech =6
-            PartOfSpeech.NUMERAL-> finishIdPartOfSpeech =7
-            PartOfSpeech.FUNC_PART-> finishIdPartOfSpeech =8
+        finishIdPartOfSpeech = when (partOfSpeech) {
+            PartOfSpeech.NOUN-> 0
+            PartOfSpeech.VERB-> 1
+            PartOfSpeech.ADJECTIVE-> 2
+            PartOfSpeech.ADVERB-> 3
+            PartOfSpeech.PARTICIPLE-> 4
+            PartOfSpeech.VERB_PARTICIPLE-> 5
+            PartOfSpeech.PRONOUN-> 6
+            PartOfSpeech.NUMERAL-> 7
+            PartOfSpeech.FUNC_PART-> 8
         }
         finishAttrs = MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].immutableAttrs
 
@@ -161,7 +161,7 @@ class WordFormationRuleFragment : Fragment() {
             ) {
                 when(positionSpinner){
                     0->{
-                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.NOUN
+                        partOfSpeech = PartOfSpeech.NOUN
                         binding.spinnerGender.visibility= View.VISIBLE
                         binding.spinnerType.visibility= View.GONE
                         binding.spinnerVoice.visibility= View.GONE
@@ -172,11 +172,10 @@ class WordFormationRuleFragment : Fragment() {
                         }
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
-                        updateRule()
                         updateStartSpinners()
                     }
                     1->{
-                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.VERB
+                        partOfSpeech = PartOfSpeech.VERB
                         binding.spinnerGender.visibility= View.GONE
                         binding.spinnerType.visibility= View.VISIBLE
                         binding.spinnerVoice.visibility= View.VISIBLE
@@ -187,11 +186,10 @@ class WordFormationRuleFragment : Fragment() {
                         }
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
-                        updateRule()
                         updateStartSpinners()
                     }
                     2->{
-                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.ADJECTIVE
+                        partOfSpeech = PartOfSpeech.ADJECTIVE
                         binding.spinnerGender.visibility= View.GONE
                         binding.spinnerType.visibility= View.GONE
                         binding.spinnerVoice.visibility= View.GONE
@@ -203,11 +201,10 @@ class WordFormationRuleFragment : Fragment() {
                         }
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
-                        updateRule()
                         updateStartSpinners()
                     }
                     3->{
-                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.ADVERB
+                        partOfSpeech = PartOfSpeech.ADVERB
                         binding.spinnerGender.visibility= View.GONE
                         binding.spinnerType.visibility= View.GONE
                         binding.spinnerVoice.visibility= View.GONE
@@ -219,11 +216,10 @@ class WordFormationRuleFragment : Fragment() {
                         }
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
-                        updateRule()
                         updateStartSpinners()
                     }
                     4->{
-                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.PARTICIPLE
+                        partOfSpeech = PartOfSpeech.PARTICIPLE
                         binding.spinnerGender.visibility= View.GONE
                         binding.spinnerType.visibility= View.VISIBLE
                         binding.spinnerVoice.visibility= View.VISIBLE
@@ -235,11 +231,10 @@ class WordFormationRuleFragment : Fragment() {
                         }
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
-                        updateRule()
                         updateStartSpinners()
                     }
                     5->{
-                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.VERB_PARTICIPLE
+                        partOfSpeech = PartOfSpeech.VERB_PARTICIPLE
                         binding.spinnerGender.visibility= View.GONE
                         binding.spinnerType.visibility= View.VISIBLE
                         binding.spinnerVoice.visibility= View.GONE
@@ -251,11 +246,10 @@ class WordFormationRuleFragment : Fragment() {
                         }
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
-                        updateRule()
                         updateStartSpinners()
                     }
                     6->{
-                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.PRONOUN
+                        partOfSpeech = PartOfSpeech.PRONOUN
                         binding.spinnerGender.visibility= View.VISIBLE
                         binding.spinnerType.visibility= View.GONE
                         binding.spinnerVoice.visibility= View.GONE
@@ -267,11 +261,10 @@ class WordFormationRuleFragment : Fragment() {
                         }
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
-                        updateRule()
                         updateStartSpinners()
                     }
                     7->{
-                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.NUMERAL
+                        partOfSpeech = PartOfSpeech.NUMERAL
                         binding.spinnerGender.visibility= View.GONE
                         binding.spinnerType.visibility= View.GONE
                         binding.spinnerVoice.visibility= View.GONE
@@ -283,11 +276,10 @@ class WordFormationRuleFragment : Fragment() {
                         }
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
-                        updateRule()
                         updateStartSpinners()
                     }
                     else->{
-                        MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.FUNC_PART
+                        partOfSpeech = PartOfSpeech.FUNC_PART
                         binding.spinnerGender.visibility= View.GONE
                         binding.spinnerType.visibility= View.GONE
                         binding.spinnerVoice.visibility= View.GONE
@@ -299,14 +291,13 @@ class WordFormationRuleFragment : Fragment() {
                         }
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
-                        updateRule()
                         updateStartSpinners()
                     }
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.NOUN
+                partOfSpeech = PartOfSpeech.NOUN
             }
         }
         binding.spinnerFinishPartOfSpeech.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -323,13 +314,12 @@ class WordFormationRuleFragment : Fragment() {
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
 
-                        if(positionSpinner == idPartOfSpeech || finishFlagIsFirst){
+                        if(positionSpinner == finishIdPartOfSpeech || finishFlagIsFirst){
                             finishFlagIsFirst =false
                             return
                         }
                         finishIdPartOfSpeech = positionSpinner
                         finishAttrs = mutableMapOf()
-                        updateRule()
                         updateFinishSpinners()
                     }
                     1->{
@@ -338,13 +328,12 @@ class WordFormationRuleFragment : Fragment() {
                         binding.spinnerFinishType.visibility= View.VISIBLE
                         binding.spinnerFinishVoice.visibility= View.VISIBLE
 
-                        if(positionSpinner == idPartOfSpeech || finishFlagIsFirst){
+                        if(positionSpinner == finishIdPartOfSpeech || finishFlagIsFirst){
                             finishFlagIsFirst =false
                             return
                         }
                         finishIdPartOfSpeech = positionSpinner
                         finishAttrs = mutableMapOf()
-                        updateRule()
                         updateFinishSpinners()
                     }
                     2->{
@@ -353,13 +342,12 @@ class WordFormationRuleFragment : Fragment() {
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
 
-                        if(positionSpinner == idPartOfSpeech || finishFlagIsFirst){
+                        if(positionSpinner == finishIdPartOfSpeech || finishFlagIsFirst){
                             finishFlagIsFirst =false
                             return
                         }
                         finishIdPartOfSpeech = positionSpinner
                         finishAttrs = mutableMapOf()
-                        updateRule()
                         updateFinishSpinners()
                     }
                     3->{
@@ -368,13 +356,12 @@ class WordFormationRuleFragment : Fragment() {
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
 
-                        if(positionSpinner == idPartOfSpeech || finishFlagIsFirst){
+                        if(positionSpinner == finishIdPartOfSpeech || finishFlagIsFirst){
                             finishFlagIsFirst =false
                             return
                         }
                         finishIdPartOfSpeech = positionSpinner
                         finishAttrs = mutableMapOf()
-                        updateRule()
                         updateFinishSpinners()
                     }
                     4->{
@@ -383,13 +370,12 @@ class WordFormationRuleFragment : Fragment() {
                         binding.spinnerFinishType.visibility= View.VISIBLE
                         binding.spinnerFinishVoice.visibility= View.VISIBLE
 
-                        if(positionSpinner == idPartOfSpeech || finishFlagIsFirst){
+                        if(positionSpinner == finishIdPartOfSpeech || finishFlagIsFirst){
                             finishFlagIsFirst =false
                             return
                         }
                         finishIdPartOfSpeech = positionSpinner
                         finishAttrs = mutableMapOf()
-                        updateRule()
                         updateFinishSpinners()
                     }
                     5->{
@@ -398,13 +384,12 @@ class WordFormationRuleFragment : Fragment() {
                         binding.spinnerFinishType.visibility= View.VISIBLE
                         binding.spinnerFinishVoice.visibility= View.GONE
 
-                        if(positionSpinner == idPartOfSpeech || finishFlagIsFirst){
+                        if(positionSpinner == finishIdPartOfSpeech || finishFlagIsFirst){
                             finishFlagIsFirst =false
                             return
                         }
                         finishIdPartOfSpeech = positionSpinner
                         finishAttrs = mutableMapOf()
-                        updateRule()
                         updateFinishSpinners()
                     }
                     6->{
@@ -413,13 +398,12 @@ class WordFormationRuleFragment : Fragment() {
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
 
-                        if(positionSpinner == idPartOfSpeech || finishFlagIsFirst){
+                        if(positionSpinner == finishIdPartOfSpeech || finishFlagIsFirst){
                             finishFlagIsFirst =false
                             return
                         }
                         finishIdPartOfSpeech = positionSpinner
                         finishAttrs = mutableMapOf()
-                        updateRule()
                         updateFinishSpinners()
                     }
                     7->{
@@ -428,13 +412,12 @@ class WordFormationRuleFragment : Fragment() {
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
 
-                        if(positionSpinner == idPartOfSpeech || finishFlagIsFirst){
+                        if(positionSpinner == finishIdPartOfSpeech || finishFlagIsFirst){
                             finishFlagIsFirst =false
                             return
                         }
                         finishIdPartOfSpeech = positionSpinner
                         finishAttrs = mutableMapOf()
-                        updateRule()
                         updateFinishSpinners()
                     }
                     else->{
@@ -443,13 +426,12 @@ class WordFormationRuleFragment : Fragment() {
                         binding.spinnerFinishType.visibility= View.GONE
                         binding.spinnerFinishVoice.visibility= View.GONE
 
-                        if(positionSpinner == idPartOfSpeech || finishFlagIsFirst){
+                        if(positionSpinner == finishIdPartOfSpeech || finishFlagIsFirst){
                             finishFlagIsFirst =false
                             return
                         }
                         finishIdPartOfSpeech = positionSpinner
                         finishAttrs = mutableMapOf()
-                        updateRule()
                         updateFinishSpinners()
                     }
                 }
@@ -461,6 +443,7 @@ class WordFormationRuleFragment : Fragment() {
         }
 
         binding.buttonSaveWordFormationRule.setOnClickListener{
+            attrs = mutableMapOf()
             if(binding.spinnerGender.isVisible) attrs[Attributes.GENDER] = binding.spinnerGender.selectedItemPosition
             if(binding.spinnerType.isVisible) attrs[Attributes.TYPE] = binding.spinnerType.selectedItemPosition
             if(binding.spinnerVoice.isVisible) attrs[Attributes.VOICE] = binding.spinnerVoice.selectedItemPosition
@@ -468,6 +451,7 @@ class WordFormationRuleFragment : Fragment() {
             regex = binding.editMasc.editText?.text.toString()
             description = binding.editTextDescriptionRule.editText?.text.toString()
 
+            finishAttrs = mutableMapOf()
             if(binding.spinnerFinishGender.isVisible) finishAttrs[Attributes.GENDER] = binding.spinnerFinishGender.selectedItemPosition
             if(binding.spinnerFinishType.isVisible) finishAttrs[Attributes.TYPE] = binding.spinnerFinishType.selectedItemPosition
             if(binding.spinnerFinishVoice.isVisible) finishAttrs[Attributes.VOICE] = binding.spinnerFinishVoice.selectedItemPosition
@@ -481,7 +465,40 @@ class WordFormationRuleFragment : Fragment() {
             addFront = binding.editTextAddFront.editText?.text.toString()
             addBack = binding.editTextAddBack.editText?.text.toString()
 
-            updateRule()
+            if (!updateRule()) return@setOnClickListener
+
+            partOfSpeech = when(idPartOfSpeech){
+                0-> PartOfSpeech.NOUN
+                1-> PartOfSpeech.VERB
+                2-> PartOfSpeech.ADJECTIVE
+                3-> PartOfSpeech.ADVERB
+                4-> PartOfSpeech.PARTICIPLE
+                5-> PartOfSpeech.VERB_PARTICIPLE
+                6-> PartOfSpeech.PRONOUN
+                7-> PartOfSpeech.NUMERAL
+                else-> PartOfSpeech.FUNC_PART
+            }
+            val newMasc = MascEntity(partOfSpeech, attrs, regex)
+            val newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
+            val finishPartOfSpeech = when(finishIdPartOfSpeech){
+                0-> PartOfSpeech.NOUN
+                1-> PartOfSpeech.VERB
+                2-> PartOfSpeech.ADJECTIVE
+                3-> PartOfSpeech.ADVERB
+                4-> PartOfSpeech.PARTICIPLE
+                5-> PartOfSpeech.VERB_PARTICIPLE
+                6-> PartOfSpeech.PRONOUN
+                7-> PartOfSpeech.NUMERAL
+                else-> PartOfSpeech.FUNC_PART
+            }
+            UpdateWordFormationRuleUseCase.execute(
+                MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule],
+                newMasc,
+                newTransformation,
+                description,
+                finishAttrs,
+                finishPartOfSpeech
+            )
             lifecycleScope.launch(Dispatchers.IO) {
                 UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
             }
@@ -496,8 +513,8 @@ class WordFormationRuleFragment : Fragment() {
 
         return binding.root
     }
-    fun updateRule(){
-        var partOfSpeech=when(idPartOfSpeech){
+    private fun updateRule() : Boolean {
+        val partOfSpeech=when(idPartOfSpeech){
             0-> PartOfSpeech.NOUN
             1-> PartOfSpeech.VERB
             2-> PartOfSpeech.ADJECTIVE
@@ -510,17 +527,6 @@ class WordFormationRuleFragment : Fragment() {
         }
         try {
             val newMasc = MascEntity(partOfSpeech, attrs, regex)
-            partOfSpeech = when (finishIdPartOfSpeech) {
-                0 -> PartOfSpeech.NOUN
-                1 -> PartOfSpeech.VERB
-                2 -> PartOfSpeech.ADJECTIVE
-                3 -> PartOfSpeech.ADVERB
-                4 -> PartOfSpeech.PARTICIPLE
-                5 -> PartOfSpeech.VERB_PARTICIPLE
-                6 -> PartOfSpeech.PRONOUN
-                7 -> PartOfSpeech.NUMERAL
-                else -> PartOfSpeech.FUNC_PART
-            }
             val newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
 
             try {
@@ -531,7 +537,7 @@ class WordFormationRuleFragment : Fragment() {
                     "Неверное регулярное выражение!",
                     Toast.LENGTH_LONG
                 ).show()
-                return
+                return false
             }
 
             for (letter in newTransformation.addToBeginning) {
@@ -543,7 +549,7 @@ class WordFormationRuleFragment : Fragment() {
                         "Буква $letter не находится в алфавите языка!",
                         Toast.LENGTH_LONG
                     ).show()
-                    return
+                    return false
                 }
             }
             for (letter in newTransformation.addToEnd) {
@@ -555,22 +561,15 @@ class WordFormationRuleFragment : Fragment() {
                         "Буква $letter не находится в алфавите языка!",
                         Toast.LENGTH_LONG
                     ).show()
-                    return
+                    return false
                 }
             }
-
-            UpdateWordFormationRuleUseCase.execute(
-                    MyApp.language!!.grammar.wordFormationRules.toMutableList()[idRule],
-                    newMasc,
-                    newTransformation,
-                    description,
-                    GrammarRuleFragment.mutableAttrs,
-                    partOfSpeech
-                )
         }
         catch (e:Exception){
             Toast.makeText(requireContext(), "какая-то беда", Toast.LENGTH_LONG).show()
+            return false
         }
+        return true
     }
     private fun listenSpinners(){
 

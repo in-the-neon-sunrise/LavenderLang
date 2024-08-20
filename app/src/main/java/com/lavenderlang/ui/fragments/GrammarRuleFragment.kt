@@ -79,7 +79,6 @@ class GrammarRuleFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     AddGrammarRuleUseCase.execute(newRule, MyApp.language!!, PythonHandlerImpl())
                     UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
-                    UpdateDictionaryUseCase.execute(MyApp.language!!.dictionary, LanguageRepositoryImpl())
                 }
                 idRule = MyApp.language!!.grammar.grammarRules.size-1
                 binding.editMasc.editText?.setText(newRule.masc.regex)
@@ -114,16 +113,16 @@ class GrammarRuleFragment : Fragment() {
         spinnerAdapter.notifyDataSetChanged()
 
         var partOfSpeech= MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech
-        when (partOfSpeech){
-            PartOfSpeech.NOUN-> idPartOfSpeech =0
-            PartOfSpeech.VERB-> idPartOfSpeech =1
-            PartOfSpeech.ADJECTIVE-> idPartOfSpeech =2
-            PartOfSpeech.ADVERB-> idPartOfSpeech =3
-            PartOfSpeech.PARTICIPLE-> idPartOfSpeech =4
-            PartOfSpeech.VERB_PARTICIPLE-> idPartOfSpeech =5
-            PartOfSpeech.PRONOUN-> idPartOfSpeech =6
-            PartOfSpeech.NUMERAL-> idPartOfSpeech =7
-            PartOfSpeech.FUNC_PART-> idPartOfSpeech =8
+        idPartOfSpeech = when (partOfSpeech){
+            PartOfSpeech.NOUN-> 0
+            PartOfSpeech.VERB-> 1
+            PartOfSpeech.ADJECTIVE-> 2
+            PartOfSpeech.ADVERB-> 3
+            PartOfSpeech.PARTICIPLE-> 4
+            PartOfSpeech.VERB_PARTICIPLE-> 5
+            PartOfSpeech.PRONOUN-> 6
+            PartOfSpeech.NUMERAL-> 7
+            PartOfSpeech.FUNC_PART-> 8
         }
         binding.spinnerPartOfSpeech.setSelection(idPartOfSpeech)
 
@@ -136,7 +135,7 @@ class GrammarRuleFragment : Fragment() {
             ) {
                 when(positionSpinner){
                     0->{
-                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.NOUN
+                        partOfSpeech = PartOfSpeech.NOUN
                         binding.spinnerGender.visibility=View.VISIBLE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -156,11 +155,10 @@ class GrammarRuleFragment : Fragment() {
                         idPartOfSpeech = positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateRule()
                         updateSpinners()
                     }
                     1->{
-                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.VERB
+                        partOfSpeech = PartOfSpeech.VERB
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.VISIBLE
                         binding.spinnerVoice.visibility=View.VISIBLE
@@ -177,11 +175,10 @@ class GrammarRuleFragment : Fragment() {
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateRule()
                         updateSpinners()
                     }
                     2->{
-                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.ADJECTIVE
+                        partOfSpeech = PartOfSpeech.ADJECTIVE
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -198,11 +195,10 @@ class GrammarRuleFragment : Fragment() {
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateRule()
                         updateSpinners()
                     }
                     3->{
-                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.ADVERB
+                        partOfSpeech = PartOfSpeech.ADVERB
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -219,11 +215,10 @@ class GrammarRuleFragment : Fragment() {
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateRule()
                         updateSpinners()
                     }
                     4->{
-                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.PARTICIPLE
+                        partOfSpeech = PartOfSpeech.PARTICIPLE
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.VISIBLE
                         binding.spinnerVoice.visibility=View.VISIBLE
@@ -240,11 +235,10 @@ class GrammarRuleFragment : Fragment() {
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateRule()
                         updateSpinners()
                     }
                     5->{
-                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.VERB_PARTICIPLE
+                        partOfSpeech = PartOfSpeech.VERB_PARTICIPLE
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.VISIBLE
                         binding.spinnerVoice.visibility=View.GONE
@@ -261,11 +255,10 @@ class GrammarRuleFragment : Fragment() {
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateRule()
                         updateSpinners()
                     }
                     6->{
-                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.PRONOUN
+                        partOfSpeech = PartOfSpeech.PRONOUN
                         binding.spinnerGender.visibility=View.VISIBLE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -282,11 +275,10 @@ class GrammarRuleFragment : Fragment() {
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateRule()
                         updateSpinners()
                     }
                     7->{
-                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.NUMERAL
+                        partOfSpeech = PartOfSpeech.NUMERAL
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -303,11 +295,10 @@ class GrammarRuleFragment : Fragment() {
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateRule()
                         updateSpinners()
                     }
                     else->{
-                        MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.FUNC_PART
+                        partOfSpeech = PartOfSpeech.FUNC_PART
                         binding.spinnerGender.visibility=View.GONE
                         binding.spinnerType.visibility=View.GONE
                         binding.spinnerVoice.visibility=View.GONE
@@ -324,14 +315,13 @@ class GrammarRuleFragment : Fragment() {
                         idPartOfSpeech =positionSpinner
                         attrs = mutableMapOf()
                         mutableAttrs = mutableMapOf()
-                        updateRule()
                         updateSpinners()
                     }
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                MyApp.language!!.grammar.grammarRules.toMutableList()[idRule].masc.partOfSpeech = PartOfSpeech.NOUN
+                partOfSpeech = PartOfSpeech.NOUN
             }
         }
 
@@ -349,12 +339,14 @@ class GrammarRuleFragment : Fragment() {
 
         binding.buttonSaveGrammarRule.setOnClickListener{
             Log.d("save", "save grammar rule")
+            attrs = mutableMapOf()
             if(binding.spinnerGender.isVisible) attrs[Attributes.GENDER] = binding.spinnerGender.selectedItemPosition
             if(binding.spinnerType.isVisible) attrs[Attributes.TYPE] = binding.spinnerType.selectedItemPosition
             if(binding.spinnerVoice.isVisible) attrs[Attributes.VOICE] = binding.spinnerVoice.selectedItemPosition
 
             regex =binding.editMasc.editText?.text.toString()
 
+            mutableAttrs = mutableMapOf()
             if(binding.spinnerFinishGender.isVisible) mutableAttrs[Attributes.GENDER] = binding.spinnerFinishGender.selectedItemPosition
             if(binding.spinnerFinishNumber.isVisible) mutableAttrs[Attributes.NUMBER] = binding.spinnerFinishNumber.selectedItemPosition
             if(binding.spinnerFinishCase.isVisible) mutableAttrs[Attributes.CASE] = binding.spinnerFinishCase.selectedItemPosition
@@ -371,9 +363,37 @@ class GrammarRuleFragment : Fragment() {
             numberBack = if (binding.editTextNumberBack.editText?.text.toString().isNotEmpty())
                 binding.editTextNumberBack.editText?.text.toString().toInt()
             else 0
+            Log.d("save", "rule: ${MyApp.language!!.grammar.grammarRules.toMutableList()[idRule]}")
 
-            updateRule()
-
+            if (!updateRule()) return@setOnClickListener
+            partOfSpeech = when (idPartOfSpeech) {
+                0 -> PartOfSpeech.NOUN
+                1 -> PartOfSpeech.VERB
+                2 -> PartOfSpeech.ADJECTIVE
+                3 -> PartOfSpeech.ADVERB
+                4 -> PartOfSpeech.PARTICIPLE
+                5 -> PartOfSpeech.VERB_PARTICIPLE
+                6 -> PartOfSpeech.PRONOUN
+                7 -> PartOfSpeech.NUMERAL
+                else -> PartOfSpeech.FUNC_PART
+            }
+            val newMasc = MascEntity(partOfSpeech, attrs, regex)
+            val newTransformation = TransformationEntity(numberFront, numberBack, addFront, addBack)
+            lifecycleScope.launch(Dispatchers.IO) {
+                UpdateGrammarRuleUseCase.execute(
+                    MyApp.language!!.grammar.grammarRules.toMutableList()[idRule],
+                    newMasc,
+                    newTransformation,
+                    mutableAttrs,
+                    MyApp.language!!,
+                    PythonHandlerImpl()
+                )
+                UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
+                UpdateDictionaryUseCase.execute(
+                    MyApp.language!!.dictionary,
+                    LanguageRepositoryImpl()
+                )
+            }
         }
 
         binding.buttonDelete.setOnClickListener{
@@ -388,7 +408,7 @@ class GrammarRuleFragment : Fragment() {
         return binding.root
     }
 
-    fun updateRule() {
+    private fun updateRule() : Boolean {
         val partOfSpeech = when (idPartOfSpeech) {
             0 -> PartOfSpeech.NOUN
             1 -> PartOfSpeech.VERB
@@ -412,7 +432,7 @@ class GrammarRuleFragment : Fragment() {
                     "Неверное регулярное выражение!",
                     Toast.LENGTH_LONG
                 ).show()
-                return
+                return false
             }
 
             for (letter in newTransformation.addToBeginning) {
@@ -424,7 +444,7 @@ class GrammarRuleFragment : Fragment() {
                         "Буква $letter не находится в алфавите языка!",
                         Toast.LENGTH_LONG
                     ).show()
-                    return
+                    return false
                 }
             }
             for (letter in newTransformation.addToEnd) {
@@ -436,29 +456,20 @@ class GrammarRuleFragment : Fragment() {
                         "Буква $letter не находится в алфавите языка!",
                         Toast.LENGTH_LONG
                     ).show()
-                    return
+                    return false
                 }
             }
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                UpdateGrammarRuleUseCase.execute(
-                    MyApp.language!!.grammar.grammarRules.toMutableList()[idRule],
-                    newMasc,
-                    newTransformation,
-                    mutableAttrs,
-                    MyApp.language!!,
-                    PythonHandlerImpl()
-                )
-                UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
-                UpdateDictionaryUseCase.execute(MyApp.language!!.dictionary, LanguageRepositoryImpl())
-            }
             Log.d(
-                "rule in frag",
+                "rule in upd",
                 "rule: ${MyApp.language!!.grammar.grammarRules.toMutableList()[idRule]}"
             )
+
         } catch (e: Exception) {
             Toast.makeText(requireContext(), "какая-то беда", Toast.LENGTH_LONG).show()
+            return false
         }
+        return true
     }
     private fun listenSpinners(){
 

@@ -18,10 +18,6 @@ class UpdateGrammarRuleUseCase {
         ) {
             Log.d("updateRule", "oldRule: $rule")
 
-            rule.masc = masc
-            rule.transformation = transformation
-            rule.mutableAttrs = newAttrs
-
             val dictionary = language.dictionary
             var copyDict = HashMap(dictionary.fullDict)
 
@@ -46,11 +42,22 @@ class UpdateGrammarRuleUseCase {
                                 break
                             }
                         }
+                        for (attr in word.mutableAttrs.keys) {
+                            if (!rule.mutableAttrs.contains(attr) || rule.mutableAttrs[attr] != word.mutableAttrs[attr]) {
+                                check = false
+                                break
+                            }
+                        }
                         if (!check) continue
+                        Log.d("updateRule", "remove $word")
                         dictionary.fullDict[key]!!.remove(word)
                     }
                 }
             }
+
+            rule.masc = masc
+            rule.transformation = transformation
+            rule.mutableAttrs = newAttrs
 
             copyDict = HashMap(dictionary.fullDict)
             synchronized(dictionary) {

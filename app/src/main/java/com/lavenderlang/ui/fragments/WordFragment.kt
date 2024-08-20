@@ -516,7 +516,7 @@ private class NewWordAdapter(context: Context, listOfWords: MutableList<Pair<Str
                         return@setOnClickListener
                     }
                 }
-                language.dictionary.dict.add(word)
+                word.translation = editTextRussianWord.text.toString()
                 // fixme: global scope :<
                 GlobalScope.launch(Dispatchers.IO) {
                     AddWordUseCase.execute(
