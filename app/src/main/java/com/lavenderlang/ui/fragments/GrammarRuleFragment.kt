@@ -397,9 +397,9 @@ class GrammarRuleFragment : Fragment() {
         }
 
         binding.buttonDelete.setOnClickListener{
-            MyApp.language!!.grammar.grammarRules.removeAt(idRule)
+            //MyApp.language!!.grammar.grammarRules.removeAt(idRule)
+            DeleteGrammarRuleUseCase.execute(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule], MyApp.language!!)
             lifecycleScope.launch(Dispatchers.IO) {
-                DeleteGrammarRuleUseCase.execute(MyApp.language!!.grammar.grammarRules.toMutableList()[idRule], MyApp.language!!)
                 UpdateGrammarUseCase.execute(MyApp.language!!.grammar, LanguageRepositoryImpl())
                 UpdateDictionaryUseCase.execute(MyApp.language!!.dictionary, LanguageRepositoryImpl())
             }
