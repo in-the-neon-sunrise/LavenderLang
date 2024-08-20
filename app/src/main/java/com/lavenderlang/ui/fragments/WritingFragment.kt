@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lavenderlang.R
 import com.lavenderlang.data.LanguageRepositoryImpl
 import com.lavenderlang.domain.model.help.PartOfSpeech
-import com.lavenderlang.domain.exception.ForbiddenSymbolsException
 import com.lavenderlang.databinding.FragmentWritingBinding
 import com.lavenderlang.domain.usecase.update.UpdateWritingUseCase
 import com.lavenderlang.ui.MyApp
@@ -66,11 +66,21 @@ class WritingFragment : Fragment() {
             for (letter in newVowels.lowercase()) {
                 if (letter == ' ') continue
                 if (language.consonants.contains(letter)) {
-                    throw ForbiddenSymbolsException("Буква $letter уже находится в согласных!")
+                    Toast.makeText(
+                        context,
+                        "Буква $letter уже находится в согласных!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
                 }
                 for (ps in language.puncSymbols.values) {
                     if (ps.lowercase().contains(letter)) {
-                        throw ForbiddenSymbolsException("Буква $letter уже находится в символах пунктуации!")
+                        Toast.makeText(
+                            context,
+                            "Буква $letter уже находится в символах пунктуации!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setOnClickListener
                     }
                 }
             }
@@ -79,11 +89,21 @@ class WritingFragment : Fragment() {
             for (letter in newConsonants.lowercase()) {
                 if (letter == ' ') continue
                 if (language.vowels.contains(letter)) {
-                    throw ForbiddenSymbolsException("Буква $letter уже находится в гласных!")
+                    Toast.makeText(
+                        context,
+                        "Буква $letter уже находится в гласных!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
                 }
                 for (ps in language.puncSymbols.values) {
                     if (ps.lowercase().contains(letter)) {
-                        throw ForbiddenSymbolsException("Буква $letter уже находится в символах пунктуации!")
+                        Toast.makeText(
+                            context,
+                            "Буква $letter уже находится в символах пунктуации!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setOnClickListener
                     }
                 }
             }
