@@ -96,7 +96,7 @@ class MainActivity2: AppCompatActivity() {
 
                     R.id.mainFragment -> {
                         navView.visibility = View.VISIBLE
-                        binding.topAppBar.visibility = View.VISIBLE
+                        binding.topAppBar.visibility = View.GONE
                         navView.setSelectedItemId(R.id.main)
                     }
 
@@ -120,15 +120,10 @@ class MainActivity2: AppCompatActivity() {
         }
 
         binding.topAppBar.setNavigationOnClickListener {
-            if(navController.currentDestination?.id != R.id.mainFragment) navController.popBackStack()
+            navController.popBackStack()
         }
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
-            if(navController.currentDestination?.id == R.id.mainFragment){
-                navController.navigate(R.id.informationFragment)
-            }
-            else{
-                navController.navigate(R.id.instructionFragment)
-            }
+            if(navController.currentDestination?.id != R.id.instructionFragment) navController.navigate(R.id.instructionFragment)
             true
         }
 

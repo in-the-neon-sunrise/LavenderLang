@@ -59,7 +59,9 @@ class MainFragment : Fragment() {
                     ).apply()
             }
         }
-
+        binding.buttonInformation.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_informationFragment)
+        }
         //button new lang listener
         binding.buttonNewLang.setOnClickListener {
             val preferences = requireContext().getSharedPreferences("pref", MODE_PRIVATE)
