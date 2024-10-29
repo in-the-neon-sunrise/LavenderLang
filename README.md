@@ -1,7 +1,6 @@
 # LavenderLang
 ## APK файл
-[LavenderLang
-](https://drive.google.com/file/d/1-iYuIVeQNI_rum8GP6AwBTgNe5rKDd9D/view?usp=sharing)
+[LavenderLang](https://drive.google.com/file/d/19ure25Gv6pNXBE-9j-73ZEBKXwYVRtYH/view?usp=drive_link)
 ## НАЗНАЧЕНИЕ ПРОГРАММЫ
 1. Функциональное назначение
 
